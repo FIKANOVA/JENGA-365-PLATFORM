@@ -1,0 +1,8 @@
+{
+  "crons": [
+    { "path": "/api/cron/three-strikes",    "schedule": "0 0 1 1,4,7,10 *" },
+    { "path": "/api/cron/power-hour-check", "schedule": "0 0 1 * *" },
+    { "path": "/api/cron/corporate-unlock", "schedule": "0 2 * * *" },
+    { "path": "/api/cron/impact-report",    "schedule": "0 1 * * *" }
+  ]
+}
