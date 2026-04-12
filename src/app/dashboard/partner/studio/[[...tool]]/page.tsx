@@ -5,7 +5,7 @@ export const dynamic = "force-static";
 export default function PartnerStudioPage() {
     return (
         <div className="w-full h-[calc(100vh-64px)] overflow-hidden">
-            <Studio />
+            <Studio basePath="/dashboard/partner/studio" />
         </div>
     );
 }

@@ -13,7 +13,7 @@ const engines = [
         tagline: "Mentorship. Resilience. Financial Literacy.",
         body: "We pair athletes and young professionals with world-class mentors using AI-driven matching. Our platform builds mental resilience, financial literacy, and career pathways — giving every member 365 days of structured growth support.",
         stats: [{ val: "12,000+", label: "Mentors" }, { val: "5 roles", label: "Platform access" }, { val: "AI-matched", label: "Pairing engine" }],
-        cta: { label: "Find a Mentor", href: "/mentors" },
+        cta: { label: "Find a Mentor", href: "/register" },
         color: "var(--primary-green)",
     },
     {

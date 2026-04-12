@@ -116,7 +116,7 @@ export default function PublicHeader() {
                 <nav className="max-w-7xl mx-auto px-6 md:px-12 h-full flex items-center justify-between gap-6">
                     {/* Brand */}
                     <Link href="/" className="flex items-center gap-3 shrink-0">
-                        <Logo variant="symbol" showText theme="premium" height={34} />
+                        <Logo variant="premium" theme="premium" height={36} />
                     </Link>
 
                     {/* Grouped nav — desktop */}
@@ -145,10 +145,18 @@ export default function PublicHeader() {
                         </Link>
 
                         {!isAuthenticated ? (
-                            <Link href="/login" className="btn-primary flex items-center gap-2 shadow-md">
-                                Login
-                                <ArrowRight size={13} strokeWidth={2.5} />
-                            </Link>
+                            <>
+                                <Link
+                                    href="/register"
+                                    className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.2em] font-bold px-4 py-2 border border-border text-foreground hover:bg-accent transition-all"
+                                >
+                                    Register
+                                </Link>
+                                <Link href="/login" className="btn-primary flex items-center gap-2 shadow-md">
+                                    Login
+                                    <ArrowRight size={13} strokeWidth={2.5} />
+                                </Link>
+                            </>
                         ) : (
                             <Link
                                 href="/dashboard"
@@ -182,7 +190,7 @@ export default function PublicHeader() {
                         className="fixed inset-0 z-[60] bg-background flex flex-col"
                     >
                         <div className="flex justify-between items-center px-8 h-20 border-b border-border shrink-0">
-                            <Logo variant="symbol" showText theme="premium" height={30} />
+                            <Logo variant="premium" theme="premium" height={32} />
                             <button onClick={() => setMobileOpen(false)} className="p-2 border border-foreground" aria-label="Close menu">
                                 <X size={22} className="text-foreground" />
                             </button>
@@ -212,27 +220,36 @@ export default function PublicHeader() {
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-3 border-t border-border shrink-0">
+                        <div className="grid grid-cols-4 border-t border-border shrink-0">
                             <Link
                                 href="/donate"
                                 onClick={() => setMobileOpen(false)}
-                                className="py-8 text-center text-[var(--secondary)] font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-[var(--secondary)]/10 transition-colors flex items-center justify-center gap-2"
+                                className="py-6 text-center text-[var(--secondary)] font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-[var(--secondary)]/10 transition-colors flex items-center justify-center gap-1.5"
                             >
-                                <Heart size={12} /> Donate
+                                <Heart size={11} /> Donate
                             </Link>
                             <Link
                                 href="/shop"
                                 onClick={() => setMobileOpen(false)}
-                                className="py-8 text-center text-foreground font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-accent transition-colors flex items-center justify-center gap-2"
+                                className="py-6 text-center text-foreground font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-accent transition-colors flex items-center justify-center gap-1.5"
                             >
-                                <ShoppingCart size={12} /> Shop
+                                <ShoppingCart size={11} /> Shop
                             </Link>
+                            {!isAuthenticated && (
+                                <Link
+                                    href="/register"
+                                    onClick={() => setMobileOpen(false)}
+                                    className="py-6 text-center text-foreground font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-accent transition-all flex items-center justify-center"
+                                >
+                                    Register
+                                </Link>
+                            )}
                             <Link
-                                href={isAuthenticated ? "/dashboard" : "/register"}
+                                href={isAuthenticated ? "/dashboard" : "/login"}
                                 onClick={() => setMobileOpen(false)}
-                                className="py-8 text-center bg-foreground text-background font-mono font-bold uppercase tracking-widest text-[9px] hover:bg-primary hover:text-white transition-all"
+                                className={`py-6 text-center bg-foreground text-background font-mono font-bold uppercase tracking-widest text-[9px] hover:bg-primary hover:text-white transition-all flex items-center justify-center ${isAuthenticated ? "col-span-2" : ""}`}
                             >
-                                {isAuthenticated ? "Dashboard" : "Join Now"}
+                                {isAuthenticated ? "Dashboard" : "Login"}
                             </Link>
                         </div>
                     </motion.div>

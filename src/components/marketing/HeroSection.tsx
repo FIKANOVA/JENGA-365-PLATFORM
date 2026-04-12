@@ -122,34 +122,45 @@ export default function HeroSection() {
                         initial="hidden"
                         animate="show"
                         custom={3}
-                        className="flex flex-wrap gap-3 pt-2"
+                        className="flex flex-col gap-4 pt-2"
                     >
-                        <Link
-                            href="/register"
-                            className="btn-primary flex items-center gap-2 shadow-xl shadow-primary/30"
-                        >
-                            Join Free <ArrowRight size={14} strokeWidth={2.5} />
-                        </Link>
-                        <Link
-                            href="/donate"
-                            className="flex items-center gap-2 px-6 py-3 border border-[var(--secondary)] text-[var(--secondary)] font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-[var(--secondary)] hover:text-white transition-all"
-                        >
-                            <Heart size={13} strokeWidth={2} />
-                            Donate
-                        </Link>
-                        <Link
-                            href="/shop"
-                            className="flex items-center gap-2 px-6 py-3 border border-white/30 text-white font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-white/10 transition-all"
-                        >
-                            <ShoppingCart size={13} strokeWidth={1.5} />
-                            Store
-                        </Link>
-                        <Link
-                            href="/about"
-                            className="flex items-center gap-2 px-6 py-3 text-white/60 font-mono text-[10px] uppercase tracking-widest font-bold hover:text-white transition-all underline-offset-4 hover:underline"
-                        >
-                            Explore
-                        </Link>
+                        <div className="flex flex-wrap gap-3">
+                            <Link
+                                href="/register"
+                                className="btn-primary flex items-center gap-2 shadow-xl shadow-primary/30"
+                            >
+                                Join Free <ArrowRight size={14} strokeWidth={2.5} />
+                            </Link>
+                            <Link
+                                href="/donate"
+                                className="flex items-center gap-2 px-6 py-3 border border-[var(--secondary)] text-[var(--secondary)] font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-[var(--secondary)] hover:text-white transition-all"
+                            >
+                                <Heart size={13} strokeWidth={2} />
+                                Donate
+                            </Link>
+                            <Link
+                                href="/shop"
+                                className="flex items-center gap-2 px-6 py-3 border border-white/50 text-white font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-white/15 hover:border-white transition-all"
+                            >
+                                <ShoppingCart size={13} strokeWidth={1.5} />
+                                Store
+                            </Link>
+                            <div className="flex flex-col items-center">
+                                <Link
+                                    href="/about"
+                                    className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white/80 font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-white/10 hover:text-white hover:border-white/40 transition-all"
+                                >
+                                    Explore
+                                </Link>
+                                <motion.div
+                                    animate={{ y: [0, 5, 0] }}
+                                    transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                                    className="mt-1.5 text-white/50"
+                                >
+                                    <ChevronDown size={16} strokeWidth={1.5} />
+                                </motion.div>
+                            </div>
+                        </div>
                     </motion.div>
                 </div>
 

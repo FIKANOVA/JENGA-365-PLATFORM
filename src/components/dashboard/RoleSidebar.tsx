@@ -12,6 +12,9 @@ import {
     LibraryBig,
     BookOpen,
     BrainCircuit,
+    PenSquare,
+    CalendarDays,
+    Package,
 } from "lucide-react";
 import { signOut } from "@/lib/auth/client";
 
@@ -23,10 +26,19 @@ const ROLE_DASHBOARD: Record<string, string> = {
     SuperAdmin: "/dashboard/admin",
 };
 
+const ROLE_STUDIO: Record<string, string> = {
+    Mentee: "/dashboard/mentee/studio",
+    Mentor: "/dashboard/mentor/studio",
+    CorporatePartner: "/dashboard/partner/studio",
+    Moderator: "/dashboard/moderator/studio",
+    SuperAdmin: "/dashboard/admin/studio",
+};
+
 export default function RoleSidebar({ role }: { role: string }) {
     const pathname = usePathname();
     const router = useRouter();
     const dashboardHref = ROLE_DASHBOARD[role] ?? "/dashboard";
+    const studioHref = ROLE_STUDIO[role] ?? "/dashboard/admin/studio";
 
     const links = [
         { href: dashboardHref, label: "Dashboard", icon: LayoutDashboard },
@@ -35,11 +47,17 @@ export default function RoleSidebar({ role }: { role: string }) {
             href: role === "Mentor" ? "/dashboard/mentor/mentees" : "/dashboard/people",
             label: role === "Mentor" ? "Mentees" : "Mentors",
             icon: Users,
+            roles: ["Mentee", "Mentor"],
         },
         { href: "/dashboard/content", label: "Resources", icon: LibraryBig },
         { href: "/dashboard/journal", label: "Journal", icon: BookOpen, roles: ["Mentee"] },
         { href: "/dashboard/stats", label: "Impact Stats", icon: BarChart3, roles: ["Mentor", "CorporatePartner", "SuperAdmin"] },
         { href: "/dashboard/profile", label: "AI Interview", icon: BrainCircuit, roles: ["Mentee", "Mentor", "CorporatePartner"] },
+        // ── Content Studio (all roles — article creation & editing)
+        { href: studioHref, label: "Content Studio", icon: PenSquare },
+        // ── Admin & Moderator tools
+        { href: "/events", label: "Events", icon: CalendarDays, roles: ["SuperAdmin", "Moderator"] },
+        { href: "/dashboard/moderator/inventory", label: "Shop Inventory", icon: Package, roles: ["SuperAdmin", "Moderator"] },
         { href: "/dashboard/settings", label: "Settings", icon: Settings },
     ].filter(link => !link.roles || link.roles.includes(role));
 
