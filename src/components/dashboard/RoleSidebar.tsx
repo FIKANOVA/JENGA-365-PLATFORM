@@ -32,7 +32,7 @@ const ROLE_STUDIO: Record<string, string> = {
     Mentee: "/dashboard/mentee/studio",
     Mentor: "/dashboard/mentor/studio",
     CorporatePartner: "/dashboard/partner/studio",
-    NGO: "/dashboard/partner/studio",
+    NGO: "/dashboard/ngo/studio",
     Moderator: "/dashboard/moderator/studio",
     SuperAdmin: "/dashboard/admin/studio",
 };
