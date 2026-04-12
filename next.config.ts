@@ -28,8 +28,8 @@ const nextConfig: NextConfig = {
               "font-src 'self' fonts.gstatic.com",
               // img-src: all image hosts used across the platform
               "img-src 'self' data: blob: *.sanity.io *.r2.cloudflarestorage.com *.cloudfront.net *.mapbox.com images.unsplash.com jenga365.com *.jenga365.com lh3.googleusercontent.com api.qrserver.com *.stripe.com",
-              // connect-src: APIs and real-time services
-              "connect-src 'self' *.stripe.com *.mapbox.com api.anthropic.com *.sanity.io *.neon.tech *.paystack.com wss://*.paystack.com",
+              // connect-src: APIs and real-time services (include Vercel preview URLs for auth)
+              `connect-src 'self' ${process.env.NEXT_PUBLIC_APP_URL ?? ''} *.vercel.app *.stripe.com *.mapbox.com api.anthropic.com *.sanity.io *.neon.tech *.paystack.com wss://*.paystack.com`,
               // frame-src: payment iframes + Google Maps
               "frame-src *.stripe.com *.paystack.com maps.google.com *.google.com",
               "object-src 'none'",
