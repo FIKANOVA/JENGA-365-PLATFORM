@@ -1,7 +1,7 @@
-// Re-exported utilities from root middleware for testability in vitest.
-// The root middleware.ts imports and re-exports these.
-// Next.js requires middleware.ts at the project root — this file provides
-// the pure functions that can be unit-tested without Edge Runtime constraints.
+/**
+ * Pure middleware utility functions — kept separate from middleware.ts so they
+ * can be unit-tested in Vitest without Edge Runtime constraints.
+ */
 
 /**
  * Checks whether a Better Auth session_data cache cookie has expired.

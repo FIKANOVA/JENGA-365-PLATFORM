@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { isSessionExpired } from "./src/middleware";
+import { isSessionExpired } from "./src/lib/middleware-utils";
 
 // ── Jenga365 Middleware ─────────────────────────────────────────────────────
 // Implements: NDA Gate, Auth Guard, Role-based Dashboard Protection

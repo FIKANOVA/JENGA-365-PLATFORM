@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isSessionExpired } from '../../middleware'
+import { isSessionExpired } from '@/lib/middleware-utils'
 
 describe('isSessionExpired', () => {
   it('returns true when expiresAt is in the past', () => {
