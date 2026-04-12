@@ -135,6 +135,17 @@ export default function Footer() {
                             Terms
                         </Link>
                         <span className="font-sans text-[11px] text-white/15 italic">Nairobi, Kenya</span>
+                        <span className="hidden md:inline font-sans text-[11px] text-white/20">
+                            Site by{" "}
+                            <a
+                                href="https://www.fikanova.co.ke/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white/35 hover:text-white/70 transition-colors"
+                            >
+                                Fikanova
+                            </a>
+                        </span>
                     </div>
                 </div>
             </div>

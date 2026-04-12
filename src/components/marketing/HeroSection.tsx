@@ -145,21 +145,14 @@ export default function HeroSection() {
                                 <ShoppingCart size={13} strokeWidth={1.5} />
                                 Store
                             </Link>
-                            <div className="flex flex-col items-center">
-                                <Link
-                                    href="/about"
-                                    className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white/80 font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-white/10 hover:text-white hover:border-white/40 transition-all"
-                                >
-                                    Explore
-                                </Link>
-                                <motion.div
-                                    animate={{ y: [0, 5, 0] }}
-                                    transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                                    className="mt-1.5 text-white/50"
-                                >
-                                    <ChevronDown size={16} strokeWidth={1.5} />
-                                </motion.div>
-                            </div>
+                            <Link
+                                href="/about"
+                                className="flex items-center gap-2 px-1 py-3 text-white/60 font-mono text-[10px] uppercase tracking-widest font-bold hover:text-white transition-colors group"
+                            >
+                                Explore
+                                <span className="inline-block w-6 h-px bg-white/50 group-hover:w-10 group-hover:bg-white transition-all duration-300" />
+                                <ArrowRight size={12} strokeWidth={1.5} className="opacity-60 group-hover:opacity-100 -ml-1.5 transition-opacity" />
+                            </Link>
                         </div>
                     </motion.div>
                 </div>
