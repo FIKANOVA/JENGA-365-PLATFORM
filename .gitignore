@@ -57,3 +57,9 @@ graphify-out/
 
 # Local AI tooling session data
 .superpowers/
+
+# Admin-only scripts — reveal override mechanisms, keep off public repos
+src/scripts/
+
+# Internal planning docs — not relevant to contributors
+plans/

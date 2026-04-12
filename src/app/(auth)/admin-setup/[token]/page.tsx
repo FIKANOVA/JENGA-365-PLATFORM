@@ -7,10 +7,8 @@ import { Shield, Lock, Key, Check, Loader2, AlertCircle } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { signNDA } from "@/lib/actions/nda";
 import { validateAdminInvite, finishAdminInvite } from "@/lib/actions/auth";
+import { bootstrapAdminSetPassword } from "@/lib/actions/adminBootstrap";
 import { toast } from "sonner";
-
-// One-time bootstrap password — must match SUPERADMIN_PASSWORD used when running seed-superadmin-only.ts
-const BOOTSTRAP_PASS = "beabfb603bf81e8773800363";
 
 export default function AdminSetupPage() {
     const params = useParams();
@@ -74,26 +72,10 @@ export default function AdminSetupPage() {
         
         setIsLoading(true);
         try {
-            // 1. Sign in with the temporary bootstrap password to get a session
-            const signInRes = await authClient.signIn.email({
-                email: email,
-                password: BOOTSTRAP_PASS,
-            });
-
-            if (signInRes.error) {
-                throw new Error("Bootstrap authentication failed. Contact developer.");
-            }
-
-            // 2. Change the password from bootstrap to the admin's chosen password
-            const changePassRes = await authClient.changePassword({
-                newPassword: password,
-                currentPassword: BOOTSTRAP_PASS,
-                revokeOtherSessions: true,
-            });
-
-            if (changePassRes.error) {
-                throw new Error(changePassRes.error.message || "Password change failed.");
-            }
+            // 1+2. Server action: signs in with SUPERADMIN_BOOTSTRAP_PASSWORD (env-only),
+            //      changes to the admin's chosen password, sets session cookies.
+            //      The bootstrap password never touches the client bundle.
+            await bootstrapAdminSetPassword(email, password);
 
             // 3. Mark the invite as completed/used on the server
             await finishAdminInvite(token);
