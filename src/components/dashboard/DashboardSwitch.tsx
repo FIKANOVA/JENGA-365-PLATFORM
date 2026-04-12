@@ -17,7 +17,7 @@ export default async function DashboardSwitch() {
 
     switch (role) {
         case "SuperAdmin":
-            return <AdminDashboard />;
+            return <AdminDashboard currentUserId={session.user.id} />;
         case "Moderator":
             return <ModeratorDashboard />;
         case "Mentor":
