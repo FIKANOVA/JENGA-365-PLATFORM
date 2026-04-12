@@ -19,11 +19,13 @@
 
 /* ── Tailwind v4 @theme — shadcn + Jenga Crest integration ───────────────── */
 @theme inline {
-  /* Typography — quad-font system */
-  --font-sans: var(--font-montserrat);
-  --font-serif: var(--font-playfair);
-  --font-mono: var(--font-dm-mono);
-  --font-brand: var(--font-montserrat);
+  /* Typography — Modern Premium palette
+     Big Shoulders Display (H1/H2) · Barlow Semi Condensed (H3/nav) · Plus Jakarta Sans (body) · DM Mono (labels)
+  */
+  --font-sans: var(--font-jakarta);           /* Plus Jakarta Sans → body, UI */
+  --font-serif: var(--font-display);          /* Big Shoulders Display → H1/H2 (font-serif classes) */
+  --font-mono: var(--font-dm-mono);           /* DM Mono → labels, badges */
+  --font-brand: var(--font-montserrat);       /* Montserrat → buttons, CTAs */
 
   /* ── shadcn semantic color tokens ───────────────────────────────────────── */
   --color-background: var(--background);

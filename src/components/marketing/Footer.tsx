@@ -1,101 +1,140 @@
 "use client";
 
 import Link from "next/link";
+import { Linkedin, Mail, Globe, ArrowRight } from "lucide-react";
 import Logo from "@/components/shared/Logo";
+
+const footerNav = [
+    {
+        title: "Platform",
+        links: [
+            { label: "About Us", href: "/about" },
+            { label: "Impact", href: "/impact" },
+            { label: "Events", href: "/events" },
+            { label: "Contact", href: "/contact" },
+        ],
+    },
+    {
+        title: "Community",
+        links: [
+            { label: "Mentors", href: "/mentors" },
+            { label: "Mentees", href: "/mentees" },
+            { label: "Articles", href: "/articles" },
+            { label: "Resources", href: "/resources" },
+        ],
+    },
+    {
+        title: "Get Involved",
+        links: [
+            { label: "Join Free", href: "/register" },
+            { label: "Donate", href: "/donate" },
+            { label: "Shop", href: "/shop" },
+            { label: "Become a Partner", href: "/register" },
+        ],
+    },
+];
+
+const socials = [
+    { icon: Linkedin, href: "https://linkedin.com/company/jenga365", label: "LinkedIn" },
+    { icon: Mail, href: "mailto:hello@jenga365.com", label: "Email" },
+    { icon: Globe, href: "https://jenga365.com", label: "Website" },
+];
 
 export default function Footer() {
     return (
-        <footer className="bg-foreground py-32 border-t border-background/5 relative overflow-hidden">
-            {/* Background Accent */}
-            <div className="absolute right-[-10%] bottom-[-10%] w-[500px] h-[500px] bg-primary opacity-[0.03] blur-[100px] pointer-events-none" />
+        <footer className="bg-black border-t border-white/5 relative overflow-hidden">
+            {/* Subtle red glow */}
+            <div className="absolute right-[-10%] bottom-[-10%] w-[500px] h-[500px] bg-primary opacity-[0.04] blur-[120px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-20 mb-32">
-                    {/* Brand Info */}
-                    <div className="md:col-span-5 space-y-12">
-                        <Link href="/" className="inline-block group">
-                            <Logo variant="symbol" showText theme="dark" height={40} />
+                {/* Top section */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-16 py-20 border-b border-white/5">
+                    {/* Brand */}
+                    <div className="md:col-span-4 space-y-8">
+                        <Link href="/">
+                            <Logo variant="white" theme="dark" height={40} />
                         </Link>
-                        <div className="space-y-6 max-w-sm">
-                            <p className="font-serif font-bold text-4xl text-background leading-none uppercase tracking-tighter">
-                                Building <br />
-                                <span className="text-primary group-hover:text-secondary transition-colors duration-500">Growth.</span>
-                            </p>
-                            <p className="font-sans font-light text-lg text-background/40 leading-relaxed border-l-2 border-background/5 pl-8 py-2">
-                                Bridging potential and performance through premium mentorship and strategic networking. Est. 2024.
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            {['linkedin', 'alternate_email', 'public'].map((icon, i) => (
-                                <a key={i} href="/" className="w-14 h-14 bg-background/[0.03] border border-background/5 flex items-center justify-center text-background/20 hover:bg-black hover:text-white hover:border-secondary transition-all duration-700 group">
-                                    <span className="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">{icon}</span>
+                        <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs">
+                            Kenya&apos;s dual-engine AI platform — building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
+                        </p>
+                        <div className="flex items-center gap-3">
+                            {socials.map(({ icon: Icon, href, label }) => (
+                                <a
+                                    key={label}
+                                    href={href}
+                                    aria-label={label}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:border-white/40 transition-all duration-300"
+                                >
+                                    <Icon size={15} strokeWidth={1.5} />
                                 </a>
                             ))}
                         </div>
                     </div>
 
-                    {/* Navigation Columns */}
-                    <div className="md:col-span-2 space-y-10">
-                        <h4 className="section-label">Resources</h4>
-                        <ul className="space-y-6">
-                            {['Mentors', 'Mentees', 'Resources', 'About Us'].map((item) => (
-                                <li key={item}>
-                                    <Link href="/" className="font-mono text-[10px] uppercase tracking-[0.4em] text-background/30 hover:text-background transition-all">
-                                        {item}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="md:col-span-2 space-y-10">
-                        <h4 className="section-label">Connect</h4>
-                        <ul className="space-y-6">
-                            {['Upcoming Events', 'Impact Stories', 'Rugby Base', 'Global Store'].map((item) => (
-                                <li key={item}>
-                                    <Link href="/" className="font-mono text-[10px] uppercase tracking-[0.4em] text-background/30 hover:text-background transition-all">
-                                        {item}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="md:col-span-3 space-y-10">
-                        <div className="space-y-4">
-                            <h4 className="section-label">Jenga Journal</h4>
-                            <p className="font-sans font-light text-background/40 leading-relaxed text-sm">Join the selected group of 2,400+ members in our monthly growth circle.</p>
+                    {/* Nav columns */}
+                    {footerNav.map((col) => (
+                        <div key={col.title} className="md:col-span-2 space-y-6">
+                            <h4 className="font-mono text-[9px] uppercase tracking-[0.35em] text-white/25 font-bold">
+                                {col.title}
+                            </h4>
+                            <ul className="space-y-4">
+                                {col.links.map((link) => (
+                                    <li key={link.label}>
+                                        <Link
+                                            href={link.href}
+                                            className="font-sans text-sm text-white/50 hover:text-white transition-colors"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                        <div className="space-y-8">
-                            <input 
-                                type="email" 
-                                placeholder="COMMUNICATIONS EMAIL" 
-                                className="bg-transparent text-[10px] font-mono text-background placeholder:text-background/10 focus:outline-none border-b border-background/10 pb-4 w-full uppercase tracking-[0.4em] focus:border-primary transition-colors"
+                    ))}
+
+                    {/* Newsletter */}
+                    <div className="md:col-span-2 space-y-6">
+                        <h4 className="font-mono text-[9px] uppercase tracking-[0.35em] text-white/25 font-bold">
+                            Jenga Journal
+                        </h4>
+                        <p className="font-sans text-sm text-white/40 leading-relaxed">
+                            Monthly insights for mentors, mentees and partners.
+                        </p>
+                        <div className="space-y-3">
+                            <input
+                                type="email"
+                                placeholder="Your email"
+                                className="w-full bg-transparent border-b border-white/10 pb-3 text-sm font-sans text-white placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors"
                             />
-                            <button className="flex items-center gap-4 text-background font-mono text-[10px] uppercase tracking-[0.4em] hover:text-secondary transition-all font-bold group">
-                                Subscribe Protocol
-                                <span className="w-8 h-px bg-background/20 group-hover:bg-secondary transition-all" />
+                            <button className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.3em] text-white/50 hover:text-white transition-colors font-bold group">
+                                Subscribe
+                                <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="pt-16 border-t border-background/5 flex flex-col md:flex-row justify-between items-center gap-10">
-                    <div className="flex flex-col md:flex-row items-center gap-12">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-background/10 font-bold">
-                            © 2024 Jenga365. Protocol v1.0
+                {/* Bottom bar */}
+                <div className="py-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="flex items-center gap-8">
+                        <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/20">
+                            © 2024 Jenga365
                         </span>
-                        <div className="flex items-center gap-12 font-mono text-[9px] uppercase tracking-[0.4em] font-bold">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--md-primary-container)] shadow-[0_0_8px_var(--md-primary-container)] animate-pulse" />
-                            <span className="text-background/80">Jenga365 Live</span>
+                        <div className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/30">Live</span>
                         </div>
                     </div>
-                    
-                    <div className="flex items-center gap-12 font-mono text-[9px] uppercase tracking-[0.4em] font-bold">
-                        <Link href="/privacy" className="text-background/10 hover:text-secondary transition-all underline decoration-transparent hover:decoration-secondary">Privacy</Link>
-                        <Link href="/terms" className="text-background/10 hover:text-secondary transition-all underline decoration-transparent hover:decoration-secondary">Terms</Link>
-                        <span className="text-background/40 font-serif italic">Nairobi, Kenya</span>
+                    <div className="flex items-center gap-8">
+                        <Link href="/privacy" className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/20 hover:text-white/60 transition-colors">
+                            Privacy
+                        </Link>
+                        <Link href="/terms" className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/20 hover:text-white/60 transition-colors">
+                            Terms
+                        </Link>
+                        <span className="font-sans text-[11px] text-white/15 italic">Nairobi, Kenya</span>
                     </div>
                 </div>
             </div>

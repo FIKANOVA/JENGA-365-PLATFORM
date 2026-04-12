@@ -1,19 +1,37 @@
 import type { Metadata } from "next";
-import { Playfair_Display, DM_Mono, Lato, Inter, Montserrat } from "next/font/google";
+import { Big_Shoulders_Display, Plus_Jakarta_Sans, DM_Mono, Barlow_Semi_Condensed, Montserrat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cartContext";
 
-// ── Jenga365 Design System Fonts ──────────────────────────────────────────────
-// Playfair Display → headings, hero text, stat values, pull quotes
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+// ── Jenga365 Design System Fonts — "Modern Premium" palette ──────────────────
+// Big Shoulders Display → H1/H2 hero headings (free alt for Europa Grotesk Extended)
+// Extended, cinematic, architectural — adds a "luxe" feel to large headings
+const bigShoulders = Big_Shoulders_Display({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  style: ["normal", "italic"],
+  weight: ["400", "600", "700", "800", "900"],
   display: "swap",
 });
 
-// DM Mono → labels, buttons, badges, nav, metadata, timestamps
+// Barlow Semi Condensed → H3, navigation, section titles (free alt for Britanica)
+// Maintains the wide feel with strong scanning weight
+const barlowSemiCondensed = Barlow_Semi_Condensed({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Plus Jakarta Sans → body copy, descriptions, UI text (free alt for Helvetica Now)
+// Optimised for digital screens, highly legible at small sizes
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+// DM Mono → labels, buttons, badges, nav metadata, timestamps
 const dmMono = DM_Mono({
   variable: "--font-dm-mono",
   subsets: ["latin"],
@@ -21,26 +39,11 @@ const dmMono = DM_Mono({
   display: "swap",
 });
 
-// Lato → body copy, descriptions, article body, form helper text
-const lato = Lato({
-  variable: "--font-lato",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
-  display: "swap",
-});
-
-// Montserrat → brand/extended font (matches Jenga365 logotype)
+// Montserrat → buttons, CTAs, UI interactive elements
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
-
-// Inter → system/UI fallback only
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -64,7 +67,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${playfair.variable} ${dmMono.variable} ${lato.variable} ${montserrat.variable} ${inter.variable} antialiased`}
+        className={`${bigShoulders.variable} ${barlowSemiCondensed.variable} ${plusJakarta.variable} ${dmMono.variable} ${montserrat.variable} antialiased`}
       >
         {/* Scroll Progress Bar */}
         <div id="scrollProgress" className="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-red-600 to-green-600" />
