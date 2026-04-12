@@ -123,6 +123,7 @@ export async function getMentorMatches(params: {
             insights: {
                 profileMatch: Math.round((Number(r.profileScore) || 0) * 100),
                 goalAlignment: goalAlignmentPoints,
+                deepSkillMatch: goalAlignmentPoints,
             },
         };
     });
