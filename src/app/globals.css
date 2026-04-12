@@ -1,0 +1,590 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   JENGA365 DESIGN SYSTEM — "JENGA CREST"
+   ─────────────────────────────────────────────────────────────────────────────
+   Creative North Star: "The Disciplined Architect"
+   Organic Brutalism: sharp 2px corners, bold serif headings, warm surfaces.
+
+   Palette: Kenya Green Primary (#006600) · Kenya Red Secondary (#BB0000)
+   Surface: Warm Off-White (#FDF9F0) — editorial, bespoke, never generic.
+   Fonts:   Playfair Display (headlines) · Lato (body) · DM Mono (labels/UI)
+
+   Source: Stitch Design System "Jenga Crest" (asset 73a6000b...)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tailwind v4 @theme — shadcn + Jenga Crest integration ───────────────── */
+@theme inline {
+  /* Typography — quad-font system */
+  --font-sans: var(--font-montserrat);
+  --font-serif: var(--font-playfair);
+  --font-mono: var(--font-dm-mono);
+  --font-brand: var(--font-montserrat);
+
+  /* ── shadcn semantic color tokens ───────────────────────────────────────── */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Charts */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ── Border radius — 2px max for all non-circular elements ─────────────── */
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+  --radius-4xl: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SECTION 1: CSS CUSTOM PROPERTIES — Material Design 3 Named Colors
+   Source: Stitch "Jenga Crest" namedColors + designMd
+   ═══════════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* ── kenya flag brand colors ───────────────────────────────────────────── */
+  --kenya-green: #006600;
+  --kenya-red: #BB0000;
+  --kenya-black: #1A1A1A;
+  --kenya-white: #FFFFFF;
+
+  /* ── MD3 primary scale (Kenya Green) ───────────────────────────────────── */
+  --md-primary: #004b00;
+  --md-primary-container: #006600;
+  --md-on-primary: #ffffff;
+  --md-on-primary-container: #88e274;
+  --md-primary-fixed: #9cf987;
+  --md-primary-fixed-dim: #81db6e;
+  --md-on-primary-fixed: #002200;
+  --md-on-primary-fixed-variant: #005300;
+  --md-inverse-primary: #81db6e;
+
+  /* ── MD3 secondary scale (Kenya Red) ───────────────────────────────────── */
+  --md-secondary: #bc0100;
+  --md-secondary-container: #e1291a;
+  --md-on-secondary: #ffffff;
+  --md-on-secondary-container: #fffbff;
+  --md-secondary-fixed: #ffdad4;
+  --md-secondary-fixed-dim: #ffb4a8;
+  --md-on-secondary-fixed: #410000;
+  --md-on-secondary-fixed-variant: #930000;
+
+  /* ── MD3 tertiary scale (Neutral Dark) ─────────────────────────────────── */
+  --md-tertiary: #404040;
+  --md-tertiary-container: #585757;
+  --md-on-tertiary: #ffffff;
+  --md-on-tertiary-container: #d0cdcc;
+  --md-tertiary-fixed: #e5e2e1;
+  --md-tertiary-fixed-dim: #c8c6c5;
+  --md-on-tertiary-fixed: #1c1b1b;
+  --md-on-tertiary-fixed-variant: #474746;
+
+  /* ── MD3 surface hierarchy (tonal layering) ────────────────────────────── */
+  --md-surface: #fdf9f0;            /* Level 0 — base "warm paper" */
+  --md-surface-dim: #dddad1;
+  --md-surface-bright: #fdf9f0;
+  --md-surface-container-lowest: #ffffff;  /* Level 2 — card "lift" */
+  --md-surface-container-low: #f7f3ea;    /* Level 1 — section bg */
+  --md-surface-container: #f1ede5;
+  --md-surface-container-high: #ece8df;   /* input fill (recessed) */
+  --md-surface-container-highest: #e6e2da;
+  --md-surface-tint: #106e09;
+  --md-surface-variant: #e6e2da;
+  --md-on-surface: #1c1c17;          /* primary text */
+  --md-on-surface-variant: #404a3b;  /* secondary text */
+  --md-inverse-surface: #31302b;
+  --md-inverse-on-surface: #f4f0e8;
+
+  /* ── MD3 outline ───────────────────────────────────────────────────────── */
+  --md-outline: #707a6a;
+  --md-outline-variant: #bfcab7;
+
+  /* ── MD3 error ─────────────────────────────────────────────────────────── */
+  --md-error: #ba1a1a;
+  --md-error-container: #ffdad6;
+  --md-on-error: #ffffff;
+  --md-on-error-container: #93000a;
+
+  /* ── semantic shortcuts (for components) ───────────────────────────────── */
+  --primary-green: var(--md-primary-container);
+  --accent-green: #008800;
+  --text-primary: var(--md-on-surface);
+  --text-secondary: var(--md-on-surface-variant);
+  --text-muted: #8a8a8a;
+  --off-white: var(--md-surface);
+  --warm-white: var(--md-surface-container-low);
+
+  /* ── easing curves ─────────────────────────────────────────────────────── */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── ambient shadow (from designMd — no heavy drop shadows) ────────── */
+  --shadow-ambient: 0px 12px 32px rgba(28, 28, 23, 0.06);
+  --shadow-none: none;
+
+  /* ── ghost border (from designMd — 20% opacity outline_variant) ──────── */
+  --ghost-border: 1px solid rgba(191, 202, 183, 0.20);
+
+  /* ── shadcn light mode ─────────────────────────────────────────────────── */
+  --background: var(--md-surface);
+  --foreground: var(--md-on-surface);
+  --primary: var(--md-primary);
+  --primary-foreground: var(--md-on-primary);
+  --secondary: var(--md-secondary);
+  --secondary-foreground: var(--md-on-secondary);
+  --muted: var(--md-surface-container);
+  --muted-foreground: var(--md-on-surface-variant);
+  --accent: var(--md-surface-container-low);
+  --accent-foreground: var(--md-on-surface);
+  --destructive: var(--md-error);
+  --border: var(--md-outline-variant);
+  --input: var(--md-surface-container-high);
+  --ring: var(--md-primary-container);
+  --card: var(--md-surface-container-lowest);
+  --card-foreground: var(--md-on-surface);
+  --popover: var(--md-surface-container-lowest);
+  --popover-foreground: var(--md-on-surface);
+
+  /* charts — kenya-themed */
+  --chart-1: var(--md-primary-container);
+  --chart-2: var(--md-secondary);
+  --chart-3: var(--md-tertiary);
+  --chart-4: var(--md-primary-fixed-dim);
+  --chart-5: var(--md-secondary-fixed-dim);
+
+  /* sidebar */
+  --sidebar: var(--md-surface-container-low);
+  --sidebar-foreground: var(--md-on-surface);
+  --sidebar-primary: var(--md-primary-container);
+  --sidebar-primary-foreground: var(--md-on-primary);
+  --sidebar-accent: var(--md-surface-container);
+  --sidebar-accent-foreground: var(--md-on-surface);
+  --sidebar-border: var(--md-outline-variant);
+  --sidebar-ring: var(--md-primary-container);
+}
+
+/* ── Dark mode overrides ─────────────────────────────────────────────────────── */
+.dark {
+  --background: #1a1a17;
+  --foreground: #e6e2da;
+  --primary: #81db6e;
+  --primary-foreground: #003a00;
+  --secondary: #ffb4a8;
+  --secondary-foreground: #690000;
+  --muted: #31302b;
+  --muted-foreground: #c8c5bd;
+  --accent: #31302b;
+  --accent-foreground: #e6e2da;
+  --destructive: #ffb4ab;
+  --border: #4a4a42;
+  --input: #31302b;
+  --ring: #81db6e;
+  --card: #252521;
+  --card-foreground: #e6e2da;
+  --popover: #252521;
+  --popover-foreground: #e6e2da;
+
+  --chart-1: #81db6e;
+  --chart-2: #ffb4a8;
+  --chart-3: #c8c6c5;
+  --chart-4: #9cf987;
+  --chart-5: #ffdad4;
+
+  --sidebar: #252521;
+  --sidebar-foreground: #e6e2da;
+  --sidebar-primary: #81db6e;
+  --sidebar-primary-foreground: #003a00;
+  --sidebar-accent: #31302b;
+  --sidebar-accent-foreground: #e6e2da;
+  --sidebar-border: #4a4a42;
+  --sidebar-ring: #81db6e;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SECTION 2: BASE LAYER — Typography & Global Defaults
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@layer base {
+  html {
+    @apply antialiased;
+    font-size: 15px;
+    color: var(--md-on-surface);
+  }
+
+  body {
+    @apply font-sans leading-relaxed;
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
+  }
+
+  /* ── Editorial heading system (DM Mono) ────────────── */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-mono font-bold uppercase tracking-tight;
+    color: var(--md-on-surface);
+  }
+
+  /* ── Default border color ──────────────────────────────────────────── */
+  * {
+    @apply border-border;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SECTION 3: DESIGN SYSTEM COMPONENT CLASSES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@layer base {
+
+  /* ── Section label (technical/mono) ──────────────────────────────────── */
+  .section-label {
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--md-primary-container);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  /* ── UI labels use mono ─────────────────────────────────────────────── */
+  button,
+  .btn-label,
+  .badge-text,
+  .nav-link,
+  .tab-label {
+    font-family: var(--font-dm-mono), monospace;
+  }
+
+  /* ── Cards — tonal layering (designMd "no-line" rule) ───────────────── */
+  .jenga-card {
+    background: var(--md-surface-container-lowest);
+    border: var(--ghost-border);
+    border-radius: 2px;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .jenga-card:hover {
+    background: var(--md-surface-bright);
+    box-shadow: var(--shadow-ambient);
+    transform: translateY(-3px);
+  }
+
+  /* Featured card — red left accent */
+  .jenga-card-featured {
+    border-left: 4px solid var(--md-secondary);
+  }
+
+  /* Mentorship-specific card — green left accent */
+  .jenga-card-mentorship {
+    border-left: 4px solid var(--md-primary-container);
+  }
+
+  .jenga-card-mentorship:hover {
+    border-color: var(--md-primary-container);
+  }
+
+  /* ── Sidebar active item ────────────────────────────────────────────── */
+  .sidebar-item-active {
+    background: var(--md-surface-container-lowest);
+    color: var(--md-secondary);
+    border-left: 3px solid var(--md-secondary);
+  }
+
+  /* ── Role-based badges (mono label, 2px corners) ────────────────────── */
+  .badge-mentee {
+    background: var(--md-primary-fixed);
+    color: var(--md-on-primary-fixed);
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 0.75rem;
+    border-radius: 2px;
+    padding: 2px 8px;
+  }
+
+  .badge-mentor {
+    background: var(--md-secondary-fixed);
+    color: var(--md-on-secondary-fixed);
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 0.75rem;
+    border-radius: 2px;
+    padding: 2px 8px;
+  }
+
+  .badge-corporate {
+    background: var(--md-tertiary-fixed);
+    color: var(--md-on-tertiary-fixed);
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 0.75rem;
+    border-radius: 2px;
+    padding: 2px 8px;
+  }
+
+  /* ── Semantic text helpers ──────────────────────────────────────────── */
+  .text-mentorship {
+    color: var(--md-primary-container);
+  }
+
+  .bg-mentorship {
+    background-color: var(--md-primary-container);
+  }
+
+  .border-mentorship {
+    border-color: var(--md-primary-container);
+  }
+
+  .text-red {
+    color: var(--md-secondary);
+  }
+
+  .text-green {
+    color: var(--md-primary-container);
+  }
+
+  .text-muted {
+    color: var(--text-muted);
+  }
+
+  /* ── Focus states — green ring ─────────────────────────────────────── */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--md-primary-container);
+    box-shadow: 0 0 0 3px rgba(0, 102, 0, 0.08);
+  }
+
+  /* ── Input fields — recessed appearance (designMd) ─────────────────── */
+  .jenga-input {
+    background: var(--md-surface-container-high);
+    border: none;
+    border-bottom: 2px solid var(--md-outline);
+    border-radius: 2px;
+    color: var(--md-on-surface);
+    transition: border-color 0.2s ease;
+  }
+
+  .jenga-input:focus {
+    border-bottom-color: var(--md-primary-container);
+    box-shadow: none;
+  }
+
+  /* ── Glass navigation (designMd) ───────────────────────────────────── */
+  .glass-nav {
+    background: rgba(253, 249, 240, 0.80);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .dark .glass-nav {
+    background: rgba(26, 26, 23, 0.80);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SECTION 4: BUTTONS (Sharp & Technical — designMd spec)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@layer components {
+  /* Primary CTA: Kenya Red background */
+  .btn-primary {
+    background: var(--md-secondary);
+    color: var(--md-on-secondary);
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    background: #a30000;
+    transform: translateY(-1px);
+  }
+
+  /* Secondary CTA: Kenya Green background */
+  .btn-secondary {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .btn-secondary:hover {
+    background: #003d00;
+    transform: translateY(-1px);
+  }
+
+  /* Tertiary CTA: Ghost (designMd — no bg, ghost border) */
+  .btn-ghost {
+    background: transparent;
+    color: var(--md-on-surface);
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 12px 24px;
+    border: var(--ghost-border);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn-ghost:hover {
+    background: var(--md-surface-container-low);
+    border-color: var(--md-outline);
+  }
+
+  /* CTA Gradient (large CTAs — designMd primary→primary_container) */
+  .btn-gradient {
+    background: linear-gradient(135deg, var(--md-primary), var(--md-primary-container));
+    color: var(--md-on-primary);
+    font-family: var(--font-dm-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 14px 28px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+  }
+
+  .btn-gradient:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SECTION 5: MICRO-ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(187, 0, 0, 0.20); }
+  50% { box-shadow: 0 0 0 6px rgba(187, 0, 0, 0); }
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 0, 0.20); }
+  50% { box-shadow: 0 0 0 6px rgba(0, 102, 0, 0); }
+}
+
+@keyframes bell-shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-10deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-6deg); }
+  80% { transform: rotate(6deg); }
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progress-fill {
+  from { width: 0; }
+  to { width: var(--progress, 100%); }
+}
+
+@keyframes modal-open {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1.00); }
+}
+
+@keyframes micro-bounce {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1.00); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Animation utility classes ────────────────────────────────────────────── */
+.animate-pulse-red { animation: pulse-red 2s infinite; }
+.animate-pulse-green { animation: pulse-green 2s infinite; }
+.animate-bell-shake { animation: bell-shake 0.5s ease; }
+.animate-ticker { animation: ticker-scroll 30s linear infinite; }
+.animate-ticker:hover { animation-play-state: paused; }
+.animate-fade-up { animation: fade-up 0.5s ease forwards; }
+.animate-modal-open { animation: modal-open 0.2s ease forwards; }
+.animate-bounce-in { animation: micro-bounce 0.3s ease forwards; }
+.animate-progress-fill { animation: progress-fill 1.5s var(--ease-out) forwards; }
+.animate-slide-in { animation: slide-in 0.3s ease forwards; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SECTION 6: THIRD-PARTY OVERRIDES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Leaflet map popup overrides ─────────────────────────────────────────── */
+.leaflet-container {
+  font-family: var(--font-lato) !important;
+}
+
+.jenga-popup .leaflet-popup-content-wrapper {
+  border-radius: 2px !important;
+  border: 1px solid var(--md-on-surface);
+  padding: 0 !important;
+}
+
+.jenga-popup .leaflet-popup-content {
+  margin: 0 !important;
+  width: 240px !important;
+}
+
+.jenga-popup .leaflet-popup-tip {
+  background: var(--md-on-surface);
+}
