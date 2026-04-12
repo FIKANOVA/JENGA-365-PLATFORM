@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Big_Shoulders_Display, Plus_Jakarta_Sans, DM_Mono, Barlow_Semi_Condensed, Montserrat } from "next/font/google";
+import { Big_Shoulders, Plus_Jakarta_Sans, DM_Mono, Barlow_Semi_Condensed, Montserrat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cartContext";
 
 // ── Jenga365 Design System Fonts — "Modern Premium" palette ──────────────────
-// Big Shoulders Display → H1/H2 hero headings (free alt for Europa Grotesk Extended)
+// Big Shoulders → H1/H2 hero headings (free alt for Europa Grotesk Extended)
 // Extended, cinematic, architectural — adds a "luxe" feel to large headings
-const bigShoulders = Big_Shoulders_Display({
+const bigShoulders = Big_Shoulders({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["400", "600", "700", "800", "900"],
