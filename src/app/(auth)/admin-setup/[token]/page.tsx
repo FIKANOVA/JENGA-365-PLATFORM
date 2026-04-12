@@ -9,8 +9,8 @@ import { signNDA } from "@/lib/actions/nda";
 import { validateAdminInvite, finishAdminInvite } from "@/lib/actions/auth";
 import { toast } from "sonner";
 
-// This is the temporary bootstrap password from the seed script
-const BOOTSTRAP_PASS = "TempPass123!@#";
+// One-time bootstrap password — must match SUPERADMIN_PASSWORD used when running seed-superadmin-only.ts
+const BOOTSTRAP_PASS = "beabfb603bf81e8773800363";
 
 export default function AdminSetupPage() {
     const params = useParams();

@@ -1,11 +1,18 @@
 /**
  * SuperAdmin Seed Script - Jenga365 AI Platform
- * 
+ *
  * Run with: npx tsx src/scripts/seed-superadmin-only.ts
- * 
+ *
+ * Required env vars in .env.local:
+ *   SUPERADMIN_EMAIL        — the admin email address
+ *   SUPERADMIN_PASSWORD     — must match BOOTSTRAP_PASS in admin-setup/[token]/page.tsx
+ *   SUPERADMIN_NAME         — display name (optional, defaults to "Super Admin")
+ *   DATABASE_URL            — Neon production connection string
+ *   BETTER_AUTH_URL         — production URL e.g. https://jenga365.vercel.app
+ *
  * Creates:
- * - SuperAdmin user with email nya.onmoseti@gmail.com
- * - Invite link token for password setup
+ * - SuperAdmin user account
+ * - Invite link token for one-time setup at /admin-setup/[token]
  */
 
 import "dotenv/config";
@@ -27,7 +34,8 @@ if (!process.env.BETTER_AUTH_URL) {
 const client = postgres(process.env.DATABASE_URL, { ssl: 'require' });
 const db = drizzle(client, { schema });
 
-const SUPERADMIN_EMAIL = "nya.onmoseti@gmail.com";
+const SUPERADMIN_EMAIL = process.env.SUPERADMIN_EMAIL;
+if (!SUPERADMIN_EMAIL) throw new Error("SUPERADMIN_EMAIL is not set in .env");
 
 async function main() {
     console.log("🌱 Creating SuperAdmin...\n");
