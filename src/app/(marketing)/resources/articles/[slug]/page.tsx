@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params;
     const article = await fetchArticleBySlug(slug).catch(() => null);
     if (!article) {
-        const mock = ARTICLES.find((a) => a.id === slug || a.slug === slug);
+        const mock = ARTICLES.find((a) => a.id === slug || (a as any).slug === slug);
         return { title: mock ? `${mock.title} — Jenga365` : "Article — Jenga365" };
     }
     return {
