@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const ORG_TYPES = [
     { id: "tech", label: "Tech" },
     { id: "finance", label: "Finance" },
-    { id: "ngo", label: "NGO" },
+    { id: "NGO", label: "NGO" },
     { id: "govt", label: "Government" },
     { id: "manufacturing", label: "Manufacturing" },
 ];

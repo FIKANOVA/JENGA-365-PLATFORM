@@ -15,6 +15,7 @@ import {
     PenSquare,
     CalendarDays,
     Package,
+    FileText,
 } from "lucide-react";
 import { signOut } from "@/lib/auth/client";
 
@@ -22,6 +23,7 @@ const ROLE_DASHBOARD: Record<string, string> = {
     Mentee: "/dashboard/mentee",
     Mentor: "/dashboard/mentor",
     CorporatePartner: "/dashboard/partner",
+    NGO: "/dashboard/ngo",
     Moderator: "/dashboard/moderator",
     SuperAdmin: "/dashboard/admin",
 };
@@ -30,6 +32,7 @@ const ROLE_STUDIO: Record<string, string> = {
     Mentee: "/dashboard/mentee/studio",
     Mentor: "/dashboard/mentor/studio",
     CorporatePartner: "/dashboard/partner/studio",
+    NGO: "/dashboard/partner/studio",
     Moderator: "/dashboard/moderator/studio",
     SuperAdmin: "/dashboard/admin/studio",
 };
@@ -51,8 +54,9 @@ export default function RoleSidebar({ role }: { role: string }) {
         },
         { href: "/dashboard/content", label: "Resources", icon: LibraryBig },
         { href: "/dashboard/journal", label: "Journal", icon: BookOpen, roles: ["Mentee"] },
-        { href: "/dashboard/stats", label: "Impact Stats", icon: BarChart3, roles: ["Mentor", "CorporatePartner", "SuperAdmin"] },
-        { href: "/dashboard/profile", label: "AI Interview", icon: BrainCircuit, roles: ["Mentee", "Mentor", "CorporatePartner"] },
+        { href: "/dashboard/ngo/mou", label: "MOU Agreement", icon: FileText, roles: ["NGO"] },
+        { href: "/dashboard/stats", label: "Impact Stats", icon: BarChart3, roles: ["Mentor", "CorporatePartner", "NGO", "SuperAdmin"] },
+        { href: "/dashboard/profile", label: "AI Interview", icon: BrainCircuit, roles: ["Mentee", "Mentor", "CorporatePartner", "NGO"] },
         // ── Content Studio (all roles — article creation & editing)
         { href: studioHref, label: "Content Studio", icon: PenSquare },
         // ── Admin & Moderator tools
@@ -104,7 +108,9 @@ export default function RoleSidebar({ role }: { role: string }) {
                     </div>
                     <div className="flex-1 min-w-0">
                         <p className="font-lato font-bold text-sm text-white truncate">My Account</p>
-                        <p className="font-mono text-xs text-gray-400 truncate">{role}</p>
+                        <p className="font-mono text-xs text-gray-400 truncate">
+                            {role === "NGO" ? "NGO Partner" : role}
+                        </p>
                     </div>
                     <button
                         onClick={handleSignOut}

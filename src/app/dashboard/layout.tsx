@@ -31,30 +31,34 @@ export default async function DashboardLayout({
         CorporatePartner: "/dashboard/partner",
     };
 
-    const correctDashboard = roleDashboardMap[userRole] || "/dashboard/mentee";
+    let correctDashboard = roleDashboardMap[userRole] || "/dashboard/mentee";
+    // effectiveRole is passed to the sidebar — NGOs get "NGO" so they see NGO-specific nav
+    let effectiveRole = userRole;
+
+    // NGO partners share CorporatePartner role but own /dashboard/ngo
+    if (userRole === "CorporatePartner") {
+        const dbUser = await db.query.users.findFirst({
+            where: eq(users.id, session.user.id),
+            columns: { metadata: true },
+        });
+        if (dbUser?.metadata?.orgType === "NGO") {
+            correctDashboard = "/dashboard/ngo";
+            effectiveRole = "NGO";
+        }
+    }
 
     // Use the x-pathname header set by middleware (falls back to no check if missing)
     const headersList = await headers();
     const pathname = headersList.get("x-pathname") || headersList.get("x-invoke-path") || "";
 
-    // Gate 1: Intake must be complete for Mentees
+    // Gate: Intake must be complete for Mentees
     const intakeCompleted = (session.user as any).intakeCompleted ?? false;
     if (userRole === "Mentee" && !intakeCompleted) {
         redirect("/onboarding/intake");
     }
 
-    // Gate 2: AI Interview must be complete for Mentees (embedding must exist).
-    // Mentees who skip the AI Interviewer have no embedding and get zero matches.
-    // Redirect them back to complete the interview.
-    if (userRole === "Mentee" && intakeCompleted) {
-        const dbUser = await db.query.users.findFirst({
-            where: eq(users.id, session.user.id),
-            columns: { embedding: true },
-        });
-        if (!dbUser?.embedding) {
-            redirect("/onboarding?reason=interview_required");
-        }
-    }
+    // Note: AI Interview is no longer a hard gate. It is surfaced in-dashboard
+    // via the AI Interview nav link for profile enhancement and matching improvement.
 
     // Only enforce redirect when we have a reliable pathname AND the user is on the wrong dashboard
     // Exempt: /dashboard/settings (shared across all roles), /dashboard/[role]/studio
@@ -65,7 +69,7 @@ export default async function DashboardLayout({
 
     return (
         <div className="flex min-h-screen bg-muted/5">
-            <RoleSidebar role={userRole} />
+            <RoleSidebar role={effectiveRole} />
             <div className="flex-1 flex flex-col">
                 <DashboardHeader />
                 <main className="flex-1 overflow-y-auto">

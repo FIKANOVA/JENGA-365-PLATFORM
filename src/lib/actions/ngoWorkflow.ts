@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { ngoMouAgreements, resourceExchangeLog, users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { headers } from "next/headers";
 
 /**
@@ -22,6 +22,84 @@ async function assertNgoPartner(userId: string): Promise<void> {
     if (!user || user.metadata?.orgType !== "NGO") {
         throw new Error("NGO_ONLY");
     }
+}
+
+/**
+ * Returns the most recent MOU agreement for the current NGO user, or null if none.
+ * Used to gate the NGO dashboard — unapproved NGOs without an MOU are shown the signing flow.
+ */
+export async function getNgoMouStatus(): Promise<{
+    signed: boolean;
+    signedAt: Date | null;
+    resourceTypes: string[] | null;
+    expiresAt: Date | null;
+} | null> {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session) return null;
+
+    const user = await db
+        .select({ metadata: users.metadata, partnerId: users.partnerId })
+        .from(users)
+        .where(eq(users.id, session.user.id))
+        .limit(1)
+        .then((rows) => rows[0]);
+
+    if (!user || user.metadata?.orgType !== "NGO" || !user.partnerId) {
+        return null;
+    }
+
+    const mou = await db
+        .select()
+        .from(ngoMouAgreements)
+        .where(eq(ngoMouAgreements.partnerId, user.partnerId))
+        .orderBy(desc(ngoMouAgreements.signedAt))
+        .limit(1)
+        .then((rows) => rows[0]);
+
+    if (!mou) return { signed: false, signedAt: null, resourceTypes: null, expiresAt: null };
+
+    return {
+        signed: true,
+        signedAt: mou.signedAt,
+        resourceTypes: mou.resourceTypes,
+        expiresAt: mou.expiresAt,
+    };
+}
+
+/**
+ * Returns the resource exchange log for the current NGO partner.
+ */
+export async function getNgoExchangeLog(): Promise<Array<{
+    id: string;
+    resourceType: string;
+    quantity: number | null;
+    notes: string | null;
+    exchangedAt: Date | null;
+}>> {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session) return [];
+
+    const user = await db
+        .select({ partnerId: users.partnerId })
+        .from(users)
+        .where(eq(users.id, session.user.id))
+        .limit(1)
+        .then((rows) => rows[0]);
+
+    if (!user?.partnerId) return [];
+
+    return db
+        .select({
+            id: resourceExchangeLog.id,
+            resourceType: resourceExchangeLog.resourceType,
+            quantity: resourceExchangeLog.quantity,
+            notes: resourceExchangeLog.notes,
+            exchangedAt: resourceExchangeLog.exchangedAt,
+        })
+        .from(resourceExchangeLog)
+        .where(eq(resourceExchangeLog.fromPartnerId, user.partnerId))
+        .orderBy(desc(resourceExchangeLog.exchangedAt))
+        .limit(20);
 }
 
 /**
