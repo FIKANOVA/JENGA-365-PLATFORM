@@ -57,7 +57,7 @@ function DropdownMenu({ group, pathname }: { group: typeof navGroups[0]; pathnam
                 onMouseLeave={() => setOpen(false)}
                 onClick={() => setOpen((v) => !v)}
                 className={`flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.2em] px-3 py-2 transition-colors ${
-                    isGroupActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                    isGroupActive ? "text-white" : "text-white/55 hover:text-white"
                 }`}
             >
                 {group.label}
@@ -112,11 +112,11 @@ export default function PublicHeader() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 glass-nav border-b border-border h-20 transition-all duration-500">
+            <header className="sticky top-0 z-50 bg-black/85 backdrop-blur-xl border-b border-white/8 h-16 transition-all duration-300">
                 <nav className="max-w-7xl mx-auto px-6 md:px-12 h-full flex items-center justify-between gap-6">
                     {/* Brand */}
                     <Link href="/" className="flex items-center gap-3 shrink-0">
-                        <Logo variant="premium" theme="premium" height={36} />
+                        <Logo variant="white" theme="dark" height={32} />
                     </Link>
 
                     {/* Grouped nav — desktop */}
@@ -127,54 +127,61 @@ export default function PublicHeader() {
                     </div>
 
                     {/* Actions — desktop */}
-                    <div className="hidden lg:flex items-center gap-3 shrink-0">
+                    <div className="hidden lg:flex items-center gap-2 shrink-0">
+                        {/* Store — ghost */}
                         <Link
                             href="/shop"
-                            className={`flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.2em] font-bold px-3 py-2 transition-colors ${pathname === "/shop" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+                            className={`flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.2em] font-bold px-3 py-2 transition-colors ${pathname === "/shop" ? "text-white" : "text-white/50 hover:text-white"}`}
                         >
-                            <ShoppingCart size={14} strokeWidth={1.5} />
+                            <ShoppingCart size={13} strokeWidth={1.5} />
                             Store
                         </Link>
 
+                        {/* Donate — red outline */}
                         <Link
                             href="/donate"
-                            className="flex items-center gap-2 px-4 py-2 border border-[var(--secondary)] text-[var(--secondary)] font-mono text-[9px] uppercase tracking-widest font-bold hover:bg-[var(--secondary)] hover:text-white transition-all"
+                            className="flex items-center gap-1.5 px-4 py-[7px] border border-[#bc0100]/60 text-[#ff4444] font-mono text-[9px] uppercase tracking-widest font-bold hover:bg-[#bc0100] hover:text-white hover:border-[#bc0100] transition-all duration-200"
                         >
-                            <Heart size={12} strokeWidth={2} />
+                            <Heart size={11} strokeWidth={2} />
                             Donate
                         </Link>
 
                         {!isAuthenticated ? (
                             <>
+                                {/* Register — white outline */}
                                 <Link
                                     href="/register"
-                                    className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.2em] font-bold px-4 py-2 border border-border text-foreground hover:bg-accent transition-all"
+                                    className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest font-bold px-4 py-[7px] border border-white/25 text-white/75 hover:border-white/60 hover:text-white transition-all duration-200"
                                 >
                                     Register
                                 </Link>
-                                <Link href="/login" className="btn-primary flex items-center gap-2 shadow-md">
+                                {/* Login — solid red */}
+                                <Link
+                                    href="/login"
+                                    className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest font-bold px-5 py-[7px] bg-[#bc0100] text-white hover:bg-[#a00000] transition-colors duration-200"
+                                >
                                     Login
-                                    <ArrowRight size={13} strokeWidth={2.5} />
+                                    <ArrowRight size={12} strokeWidth={2.5} />
                                 </Link>
                             </>
                         ) : (
                             <Link
                                 href="/dashboard"
-                                className="btn-primary flex items-center gap-2 shadow-md"
+                                className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest font-bold px-5 py-[7px] bg-[#bc0100] text-white hover:bg-[#a00000] transition-colors duration-200"
                             >
                                 Dashboard
-                                <ArrowRight size={13} strokeWidth={2.5} />
+                                <ArrowRight size={12} strokeWidth={2.5} />
                             </Link>
                         )}
                     </div>
 
                     {/* Mobile toggle */}
                     <button
-                        className="lg:hidden p-2 text-foreground ml-auto"
+                        className="lg:hidden p-2 text-white/70 hover:text-white ml-auto transition-colors"
                         onClick={() => setMobileOpen(true)}
                         aria-label="Open menu"
                     >
-                        <Menu size={24} strokeWidth={1.5} />
+                        <Menu size={22} strokeWidth={1.5} />
                     </button>
                 </nav>
             </header>
@@ -187,11 +194,11 @@ export default function PublicHeader() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ type: "spring", damping: 26, stiffness: 220 }}
-                        className="fixed inset-0 z-[60] bg-background flex flex-col"
+                        className="fixed inset-0 z-[60] bg-[#0a0a0a] flex flex-col"
                     >
-                        <div className="flex justify-between items-center px-8 h-20 border-b border-border shrink-0">
-                            <Logo variant="premium" theme="premium" height={32} />
-                            <button onClick={() => setMobileOpen(false)} className="p-2 border border-foreground" aria-label="Close menu">
+                        <div className="flex justify-between items-center px-8 h-16 border-b border-white/10 shrink-0">
+                            <Logo variant="white" theme="dark" height={30} />
+                            <button onClick={() => setMobileOpen(false)} className="p-2 border border-white/20 text-white/70 hover:text-white transition-colors" aria-label="Close menu">
                                 <X size={22} className="text-foreground" />
                             </button>
                         </div>
@@ -199,8 +206,8 @@ export default function PublicHeader() {
                         <div className="flex-1 overflow-y-auto">
                             {/* Group labels */}
                             {navGroups.map((group) => (
-                                <div key={group.label} className="border-b border-border">
-                                    <p className="px-8 pt-5 pb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-bold">
+                                <div key={group.label} className="border-b border-white/8">
+                                    <p className="px-8 pt-5 pb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold">
                                         {group.label}
                                     </p>
                                     {group.items.map((item) => (
@@ -209,7 +216,7 @@ export default function PublicHeader() {
                                             href={item.href}
                                             onClick={() => setMobileOpen(false)}
                                             className={`flex items-center justify-between px-8 py-4 font-serif font-bold text-2xl uppercase tracking-tight transition-colors ${
-                                                pathname === item.href ? "text-primary" : "text-foreground hover:text-primary"
+                                                pathname === item.href ? "text-white" : "text-white/70 hover:text-white"
                                             }`}
                                         >
                                             {item.label}
@@ -220,18 +227,18 @@ export default function PublicHeader() {
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-4 border-t border-border shrink-0">
+                        <div className="grid grid-cols-4 border-t border-white/10 shrink-0">
                             <Link
                                 href="/donate"
                                 onClick={() => setMobileOpen(false)}
-                                className="py-6 text-center text-[var(--secondary)] font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-[var(--secondary)]/10 transition-colors flex items-center justify-center gap-1.5"
+                                className="py-5 text-center text-[#ff4444] font-mono font-bold uppercase tracking-widest text-[9px] border-r border-white/10 hover:bg-[#bc0100]/15 transition-colors flex items-center justify-center gap-1.5"
                             >
                                 <Heart size={11} /> Donate
                             </Link>
                             <Link
                                 href="/shop"
                                 onClick={() => setMobileOpen(false)}
-                                className="py-6 text-center text-foreground font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-accent transition-colors flex items-center justify-center gap-1.5"
+                                className="py-5 text-center text-white/60 font-mono font-bold uppercase tracking-widest text-[9px] border-r border-white/10 hover:text-white hover:bg-white/5 transition-colors flex items-center justify-center gap-1.5"
                             >
                                 <ShoppingCart size={11} /> Shop
                             </Link>
@@ -239,7 +246,7 @@ export default function PublicHeader() {
                                 <Link
                                     href="/register"
                                     onClick={() => setMobileOpen(false)}
-                                    className="py-6 text-center text-foreground font-mono font-bold uppercase tracking-widest text-[9px] border-r border-border hover:bg-accent transition-all flex items-center justify-center"
+                                    className="py-5 text-center text-white/70 font-mono font-bold uppercase tracking-widest text-[9px] border-r border-white/10 hover:text-white hover:bg-white/5 transition-all flex items-center justify-center"
                                 >
                                     Register
                                 </Link>
@@ -247,9 +254,10 @@ export default function PublicHeader() {
                             <Link
                                 href={isAuthenticated ? "/dashboard" : "/login"}
                                 onClick={() => setMobileOpen(false)}
-                                className={`py-6 text-center bg-foreground text-background font-mono font-bold uppercase tracking-widest text-[9px] hover:bg-primary hover:text-white transition-all flex items-center justify-center ${isAuthenticated ? "col-span-2" : ""}`}
+                                className={`py-5 text-center bg-[#bc0100] text-white font-mono font-bold uppercase tracking-widest text-[9px] hover:bg-[#a00000] transition-colors flex items-center justify-center gap-1.5 ${isAuthenticated ? "col-span-2" : ""}`}
                             >
                                 {isAuthenticated ? "Dashboard" : "Login"}
+                                <ArrowRight size={10} strokeWidth={2.5} />
                             </Link>
                         </div>
                     </motion.div>

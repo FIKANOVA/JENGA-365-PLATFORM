@@ -44,7 +44,13 @@ Please review the status and the implemented logic to audit for production readi
 - [ ] **6.3 Embedding Generation & 6.4 AI Matchmaking:** SQL/Drizzle cosine similarity queries structure are established but need live data tests.
 
 ## Phase 7: Dashboard Finalization
-- [ ] All dashboards (Mentee, Mentor, Corporate, Admin) possess the architectural shell but require comprehensive testing of complex user-flows (matching logic, logs, moderation).
+- [x] **NGO Dashboard** — Fully separated from Corporate Partner dashboard (2026-04-13).
+  - NGO users (CorporatePartner + orgType=NGO) route to `/dashboard/ngo` automatically.
+  - Resource Exchange MOU signing at `/dashboard/ngo/mou` — session-aware, no manual ID entry.
+  - `getNgoMouStatus()` gates dashboard; unsigned NGOs are redirected to MOU page.
+  - NGO sidebar: "NGO Partner" role label, MOU Agreement nav link, filtered nav.
+  - Bug fixed: orgType case mismatch (`"ngo"` → `"NGO"`) that broke all `createMouAgreement` calls.
+- [ ] Mentee, Mentor, Corporate, Admin dashboards — architectural shells present; complex user-flows (matching, logs, moderation) need testing.
 
 ## Phase 8: Testing, QA, and Deployment
 - [ ] **8.1 End-to-End Manual Testing:** Awaiting audit and sign-off on the first 4 fully implemented phases.
