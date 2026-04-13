@@ -57,11 +57,22 @@ const originalFetch = global.fetch;
 };
 // ------------------------------------------
 
-const databaseUrl = process.env.DATABASE_URL; // Use standard pooled URL for HTTP
-if (!databaseUrl) {
-    throw new Error('DATABASE_URL is not set');
+// Lazily initialised — defers the missing-env check to first db access so
+// Next.js build-time static analysis can import this module without crashing.
+let _db: ReturnType<typeof drizzle<typeof schema>> | undefined;
+
+function getInstance() {
+    if (!_db) {
+        const url = process.env.DATABASE_URL;
+        if (!url) throw new Error('DATABASE_URL is not set');
+        _db = drizzle(neon(url), { schema });
+    }
+    return _db;
 }
 
-const sql = neon(databaseUrl);
-export const db = drizzle(sql, { schema });
+export const db = new Proxy({} as ReturnType<typeof drizzle<typeof schema>>, {
+    get(_, prop, receiver) {
+        return Reflect.get(getInstance(), prop, receiver);
+    }
+});
 
