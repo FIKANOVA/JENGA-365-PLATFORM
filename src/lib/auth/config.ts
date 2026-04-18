@@ -164,11 +164,14 @@ export const auth = betterAuth({
         },
     },
 
-    // Trusted origins — add your production domain here before deploying
+    // Trusted origins — all configured URLs so sign-in works on every
+    // deployment (local, preview, production) without code changes.
+    // Better Auth also auto-trusts baseURL, but we list it explicitly here too.
     trustedOrigins: [
         "http://localhost:3000",
-        process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-    ],
+        process.env.BETTER_AUTH_URL,
+        process.env.NEXT_PUBLIC_APP_URL,
+    ].filter(Boolean) as string[],
 });
 
 // Export inferred types for use in server components and actions

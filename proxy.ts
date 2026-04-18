@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { isSessionExpired } from "./src/lib/middleware-utils";
 
-// ── Jenga365 Middleware ─────────────────────────────────────────────────────
+// ── Jenga365 Proxy ──────────────────────────────────────────────────────────
 // Implements: NDA Gate, Auth Guard, Role-based Dashboard Protection
 // Per: SCREEN_FLOW_V2.md, MODULE_1_TO_8_SPEC.md, MODULE_11_SPEC.md
 //
+// Next.js 16+: middleware.ts → proxy.ts, `middleware()` → `proxy()`, `config` → `proxyConfig`
+//
 // Note: Better Auth uses opaque session tokens (not JWTs), so we cannot verify
-// the token itself in Edge Runtime without a DB call. Instead, we use the
+// the token itself in Node.js runtime without a DB call. Instead, we use the
 // better-auth.session_data cache cookie (base64 JSON, set when cookieCache is
 // enabled) to check expiry. The dashboard layout does a full DB session check.
-
-export { isSessionExpired };
 
 const publicRoutes = [
     "/", "/about", "/articles", "/events", "/resources",
@@ -21,6 +21,7 @@ const authOnlyRoutes = ["/login", "/register"];
 const onboardingRoutes = [
     "/legal/nda", "/onboarding", "/onboarding/intake", "/verify-email",
     "/pending-approval", "/pending", "/moderator-invite", "/admin-setup", "/email-test",
+    "/forgot-password", "/reset-password",
 ];
 
 function parseSessionDataCookie(cookieValue: string): { expiresAt?: string } | null {
@@ -34,10 +35,10 @@ function parseSessionDataCookie(cookieValue: string): { expiresAt?: string } | n
     }
 }
 
-export async function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Skip middleware for API routes, static assets, and Next.js internals
+    // Skip proxy for API routes, static assets, and Next.js internals
     if (
         pathname.startsWith("/api") ||
         pathname.startsWith("/_next") ||
@@ -91,6 +92,6 @@ export async function middleware(request: NextRequest) {
     return response;
 }
 
-export const config = {
+export const proxyConfig = {
     matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico).*)"],
 };
