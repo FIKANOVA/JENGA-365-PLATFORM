@@ -112,6 +112,8 @@ export const corporatePartners = pgTable("corporate_partners", {
     impactTreesPlanted: integer("impact_trees_planted").default(0),
     impactHoursContributed: integer("impact_hours_contributed").default(0),
     stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+    lookerReportId: text("looker_report_id"),
+    lookerShareUrl: text("looker_share_url"),
     isActive: boolean("is_active").default(true).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
