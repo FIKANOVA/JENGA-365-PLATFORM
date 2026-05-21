@@ -24,7 +24,6 @@ export const userRoleEnum = pgEnum("user_role", [
     "CorporatePartner",
     "Mentor",
     "Mentee",
-    "user",
 ]);
 
 export const mentorStatusEnum = pgEnum("mentor_status", [
@@ -39,6 +38,7 @@ export const mentorshipStatusEnum = pgEnum("mentorship_status", [
     "active",
     "completed",
     "declined",
+    "suspended",
 ]);
 
 export const eventTypeEnum = pgEnum("event_type", ["Webinar", "Clinic"]);
@@ -156,7 +156,7 @@ export const users = pgTable("users", {
     status: varchar("status", { length: 50 }).default("pending").notNull(), // pending, active, suspended
     isMentorVerified: boolean("is_mentor_verified").default(false),
     // Role-specific registration data (meetingPreference, orgType, contributionType, etc.)
-    metadata: jsonb("metadata").$type<Record<string, string>>(),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
     // Mentor specialisation tags used for goal-alignment matching (e.g. ['entrepreneur','finance'])
     mentorSpecialisations: text("mentor_specialisations").array(),
     banned: boolean("banned").default(false).notNull(),
@@ -373,6 +373,9 @@ export const moderationLog = pgTable("moderation_log", {
     targetType: varchar("target_type", { length: 50 }).notNull(),
     requiresCosign: boolean("requires_cosign").default(false),
     notes: text("notes"),
+    capability: text("capability"),
+    cosignerId: uuid("cosigner_id").references(() => users.id, { onDelete: 'set null' }),
+    cosignedAt: timestamp("cosigned_at", { withTimezone: true }),
     actionedAt: timestamp("actioned_at").defaultNow().notNull(),
 });
 
@@ -703,15 +706,20 @@ export const treeSurvivalChecks = pgTable("tree_survival_checks", {
 export const giveBackTracking = pgTable("give_back_tracking", {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-    quarter: text("quarter").notNull(),           // e.g. '2026-Q2'
+    quarter: text("quarter").notNull(),
     activityCompleted: boolean("activity_completed").default(false),
-    activityType: text("activity_type"),           // 'tree_planting' | 'book_drive' | etc.
+    activityType: text("activity_type"),
     activityDescription: text("activity_description"),
     strikeCount: integer("strike_count").default(0),
     suspended: boolean("suspended").default(false),
+    geoLat: decimal("geo_lat", { precision: 10, scale: 7 }),
+    geoLng: decimal("geo_lng", { precision: 10, scale: 7 }),
+    koboSubmissionId: text("kobo_submission_id"),
+    photoUrl: text("photo_url"),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 }, (table) => ({
     userQuarterIdx: index("give_back_user_quarter_idx").on(table.userId, table.quarter),
+    koboSubmissionIdIdx: uniqueIndex("give_back_kobo_submission_id_idx").on(table.koboSubmissionId),
 }));
 
 /**
@@ -857,3 +865,98 @@ export const vTreeSurvivalTimeSeries = pgView("v_tree_survival_time_series").as(
         })
         .from(treeSurvivalChecks)
 );
+
+// ─── Engine B: Audit + Cosign Tables ─────────────────────────────────────────
+
+export const suspensionCosignStatusEnum = pgEnum("suspension_cosign_status", [
+    "pending",
+    "cosigned",
+    "expired",
+]);
+
+export const suspensionCosigns = pgTable("suspension_cosigns", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    requestedBy: uuid("requested_by").notNull().references(() => users.id, { onDelete: "cascade" }),
+    reason: text("reason").notNull(),
+    strikeCount: integer("strike_count").notNull(),
+    status: suspensionCosignStatusEnum("status").notNull().default("pending"),
+    cosignerId: uuid("cosigner_id").references(() => users.id, { onDelete: "set null" }),
+    cosignedAt: timestamp("cosigned_at", { withTimezone: true }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+}, (t) => [
+    check("suspension_cosigns_strike_count_check", sql`${t.strikeCount} >= 3`),
+]);
+
+export const treeSurvivalAuditActionEnum = pgEnum("tree_survival_audit_action", [
+    "ingested",
+    "verified",
+]);
+
+export const treeSurvivalAudits = pgTable("tree_survival_audits", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    checkId: uuid("check_id").notNull().references(() => treeSurvivalChecks.id, { onDelete: "cascade" }),
+    action: treeSurvivalAuditActionEnum("action").notNull(),
+    actorId: uuid("actor_id").references(() => users.id, { onDelete: "set null" }),
+    actorRole: text("actor_role"),
+    newSurvivalRate: decimal("new_survival_rate", { precision: 5, scale: 2 }),
+    notes: text("notes"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const corporateUnlockTriggerKindEnum = pgEnum("corporate_unlock_trigger_kind", [
+    "manual_override",
+    "verified_unlock",
+]);
+
+export const corporateUnlockTriggers = pgTable("corporate_unlock_triggers", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    milestoneId: uuid("milestone_id").notNull().references(() => corporateUnlockMilestones.id, { onDelete: "cascade" }),
+    kind: corporateUnlockTriggerKindEnum("kind").notNull(),
+    triggeredBy: uuid("triggered_by").notNull().references(() => users.id, { onDelete: "cascade" }),
+    triggeredByRole: text("triggered_by_role").notNull(),
+    previousStatus: text("previous_status"),
+    newStatus: text("new_status").notNull(),
+    evidenceUrl: text("evidence_url"),
+    notes: text("notes"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const vResilienceDelta = pgView("v_resilience_delta", {
+    userId: uuid("user_id").notNull(),
+    baselineScore: integer("baseline_score").notNull(),
+    latestScore: integer("latest_score"),
+    delta: integer("delta"),
+    baselineAt: timestamp("baseline_at", { withTimezone: true }).notNull(),
+    latestAt: timestamp("latest_at", { withTimezone: true }),
+    reassessmentDueDate: timestamp("reassessment_due_date"),
+}).as(sql`
+    SELECT
+        r_base.user_id,
+        r_base.score                    AS baseline_score,
+        r_latest.score                  AS latest_score,
+        r_latest.score - r_base.score   AS delta,
+        r_base.assessed_at              AS baseline_at,
+        r_latest.assessed_at            AS latest_at,
+        r_latest.reassessment_due_date
+    FROM resilience_assessments r_base
+    INNER JOIN LATERAL (
+        SELECT * FROM resilience_assessments r2
+        WHERE r2.user_id = r_base.user_id
+          AND r2.is_baseline = false
+        ORDER BY r2.assessed_at DESC
+        LIMIT 1
+    ) r_latest ON true
+    WHERE r_base.is_baseline = true
+`);
+
+// ─── Rate Limit Buckets ───────────────────────────────────────────────────────
+
+export const rateLimitBuckets = pgTable("rate_limit_buckets", {
+    key: text("key").primaryKey(),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+    count: integer("count").default(0),
+}, (table) => ({
+    windowIdx: index("rate_limit_window_idx").on(table.windowStart),
+}));
