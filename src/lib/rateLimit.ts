@@ -1,46 +1,30 @@
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
+import { db } from "@/lib/db";
+import { rateLimitBuckets } from "@/lib/db/schema";
+import { sql } from "drizzle-orm";
 
-// Only initialize if environment variables are present
-const redis = process.env.UPSTASH_REDIS_REST_URL
-    ? new Redis({
-        url: process.env.UPSTASH_REDIS_REST_URL,
-        token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-    })
-    : null;
+export async function checkRate(
+    key: string,
+    limit: number,
+    windowSec: number
+): Promise<boolean> {
+    const windowStart = sql`to_timestamp(floor(extract(epoch from now()) / ${windowSec}) * ${windowSec})`;
 
-export const authRateLimit = redis
-    ? new Ratelimit({
-        redis,
-        limiter: Ratelimit.slidingWindow(5, "15 m"),
-        analytics: true,
-        prefix: "jenga_auth",
-    })
-    : null;
+    const rows = await db
+        .insert(rateLimitBuckets)
+        .values({
+            key,
+            windowStart: windowStart as unknown as Date,
+            count: 1,
+        })
+        .onConflictDoUpdate({
+            target: rateLimitBuckets.key,
+            set: {
+                count: sql`case when ${rateLimitBuckets.windowStart} = excluded.window_start then ${rateLimitBuckets.count} + 1 else 1 end`,
+                windowStart: sql`excluded.window_start`,
+            },
+        })
+        .returning({ count: rateLimitBuckets.count });
 
-export const registerRateLimit = redis
-    ? new Ratelimit({
-        redis,
-        limiter: Ratelimit.slidingWindow(3, "1 h"),
-        analytics: true,
-        prefix: "jenga_register",
-    })
-    : null;
-
-export const aiRateLimit = redis
-    ? new Ratelimit({
-        redis,
-        limiter: Ratelimit.slidingWindow(10, "1 m"),
-        analytics: true,
-        prefix: "jenga_ai",
-    })
-    : null;
-
-export const generalRateLimit = redis
-    ? new Ratelimit({
-        redis,
-        limiter: Ratelimit.slidingWindow(100, "1 m"),
-        analytics: true,
-        prefix: "jenga_api",
-    })
-    : null;
+    const newCount = rows[0]?.count ?? 0;
+    return (newCount ?? 0) <= limit;
+}
