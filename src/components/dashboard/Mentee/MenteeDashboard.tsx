@@ -9,7 +9,7 @@ interface MentorMatch {
     name: string | null;
     locationRegion: string | null;
     matchPercentage: number;
-    insights: { profileMatch: number; deepSkillMatch: number };
+    insights: { profileMatch: number; deepSkillMatch?: number; goalAlignment?: number };
 }
 
 interface PathwayData {

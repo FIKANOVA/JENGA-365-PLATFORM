@@ -5,7 +5,7 @@ interface MentorMatch {
     name: string | null;
     locationRegion: string | null;
     matchPercentage: number;
-    insights: { profileMatch: number; deepSkillMatch: number };
+    insights: { profileMatch: number; deepSkillMatch?: number; goalAlignment?: number };
 }
 
 interface AiMentorMatchesProps {
@@ -46,9 +46,16 @@ export default function AiMentorMatches({ matches = [] }: AiMentorMatchesProps) 
                                 <span className="bg-muted px-2 py-1 rounded-md border border-border/20">
                                     Profile {mentor.insights.profileMatch}%
                                 </span>
-                                <span className="bg-muted px-2 py-1 rounded-md border border-border/20">
-                                    Skills {mentor.insights.deepSkillMatch}%
-                                </span>
+                                {mentor.insights.deepSkillMatch !== undefined ? (
+                                    <span className="bg-muted px-2 py-1 rounded-md border border-border/20">
+                                        Skills {mentor.insights.deepSkillMatch}%
+                                    </span>
+                                ) : null}
+                                {mentor.insights.goalAlignment !== undefined ? (
+                                    <span className="bg-muted px-2 py-1 rounded-md border border-border/20">
+                                        Goal {mentor.insights.goalAlignment}%
+                                    </span>
+                                ) : null}
                             </div>
                         </div>
                     ))}

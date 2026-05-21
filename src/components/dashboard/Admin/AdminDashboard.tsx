@@ -16,7 +16,7 @@ interface UserRow {
     isApproved: boolean;
     image?: string | null;
     locationRegion?: string | null;
-    metadata?: Record<string, string> | null;
+    metadata?: Record<string, unknown> | null;
     moderationScope?: string | null;
     createdAt: Date;
 }
@@ -87,11 +87,11 @@ function ExpandableUserRow({ user, onAction }: { user: UserRow; onAction: () => 
                                 )}
                             </div>
                             <div className="text-xs text-muted-foreground font-mono">{user.email}</div>
-                            {meta.professionalTitle && (
+                            {meta.professionalTitle ? (
                                 <div className="text-xs text-muted-foreground flex items-center gap-1">
-                                    <Briefcase className="w-3 h-3" />{meta.professionalTitle}{meta.orgName ? ` · ${meta.orgName}` : ""}
+                                    <Briefcase className="w-3 h-3" />{String(meta.professionalTitle)}{meta.orgName ? ` · ${String(meta.orgName)}` : ""}
                                 </div>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 </td>

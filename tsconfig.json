@@ -35,6 +35,9 @@
     "vitest.config.ts",
     "drizzle.config.ts",
     "postcss.config.mjs",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "src/scripts/**",
+    "scripts/**",
+    "src/__tests__/**"
   ]
 }

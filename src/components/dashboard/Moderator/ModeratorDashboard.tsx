@@ -20,7 +20,7 @@ interface PendingUser {
     role: string;
     image: string | null;
     locationRegion: string | null;
-    metadata: Record<string, string> | null;
+    metadata: Record<string, unknown> | null;
     createdAt: Date;
 }
 
@@ -74,12 +74,12 @@ function UserProfileCard({ user, onAction, actioning, actioned }: {
                         </div>
                         <h4 className="font-bold text-base text-foreground">{user.name ?? "Unnamed User"}</h4>
                         <p className="text-sm text-muted-foreground font-mono truncate">{user.email}</p>
-                        {meta.professionalTitle && (
+                        {meta.professionalTitle ? (
                             <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                                <Briefcase className="w-3 h-3" />{meta.professionalTitle}
-                                {meta.orgName && ` · ${meta.orgName}`}
+                                <Briefcase className="w-3 h-3" />{String(meta.professionalTitle)}
+                                {meta.orgName ? ` · ${String(meta.orgName)}` : ""}
                             </p>
-                        )}
+                        ) : null}
                     </div>
                 </div>
 

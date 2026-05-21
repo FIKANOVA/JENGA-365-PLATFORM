@@ -17,7 +17,7 @@ const KoboTreeSchema = z.object({
     project_location_id: z.string().uuid().optional(),
     _geolocation: z.tuple([z.number(), z.number()]).optional(),
     _attachments: z.array(z.object({ download_url: z.string() })).optional(),
-    raw_payload: z.record(z.unknown()).optional(),
+    raw_payload: z.record(z.string(), z.unknown()).optional(),
 });
 
 const KoboGiveBackSchema = z.object({
