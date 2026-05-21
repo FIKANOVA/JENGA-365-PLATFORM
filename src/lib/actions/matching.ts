@@ -2,8 +2,8 @@
 
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
-import { userProfileAssets, users, menteeIntake } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { userProfileAssets, users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { synthesizeUserProfile } from "../ai/profileSynthesizer";
 import { getMentorMatches } from "../db/queries/matching";
@@ -76,14 +76,8 @@ export async function getAiMentorMatches() {
 
     if (!Array.isArray(user.embedding)) return [];
 
-    const intake = await db.query.menteeIntake.findFirst({
-        where: eq(menteeIntake.userId, session.user.id),
-        columns: { goalCategories: true },
-    });
-
     return getMentorMatches({
         menteeEmbedding: user.embedding as number[],
-        menteeGoalCategories: intake?.goalCategories ?? undefined,
         limit: 5,
     });
 }
@@ -108,16 +102,8 @@ export async function getAiMentorMatchesForUser(menteeId: string) {
         return [];
     }
 
-    const intake = await db.query.menteeIntake.findFirst({
-        where: eq(menteeIntake.userId, menteeId),
-        columns: { goalCategories: true },
-    });
-
-    const results = await getMentorMatches({
+    return getMentorMatches({
         menteeEmbedding: mentee.embedding as number[],
-        menteeGoalCategories: intake?.goalCategories ?? undefined,
         limit: 5,
     });
-
-    return results;
 }
