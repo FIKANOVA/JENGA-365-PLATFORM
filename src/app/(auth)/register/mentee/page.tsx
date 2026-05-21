@@ -100,7 +100,7 @@ export default function MenteeRegisterPage() {
                 </span>
             </div>
 
-            <Header minimalProps={{ currentStep: step, totalSteps: 3 }} />
+            <Header />
 
             <main className="flex-1 container mx-auto px-6 py-24 flex flex-col items-center relative z-10">
                 <AnimatePresence mode="wait">
