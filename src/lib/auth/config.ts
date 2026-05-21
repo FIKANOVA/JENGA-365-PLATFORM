@@ -82,7 +82,7 @@ export const auth = betterAuth({
                 // Roles: "Mentee", "Mentor", "CorporatePartner", "Moderator", "SuperAdmin"
                 input: true,
             },
-            // Moderator Scope (stored as JSON string of scopes: "A", "B", "C", "D", "E")
+            // Moderator Scope (stored as JSON array: welfare | meal | commerce | all)
             moderationScope: {
                 type: "string",
                 required: false,
@@ -160,7 +160,10 @@ export const auth = betterAuth({
         updateAge: 60 * 60 * 24,              // Refresh session every 24h of activity
         cookieCache: {
             enabled: true,
-            maxAge: 60 * 5,                    // Cache session in cookie for 5 minutes
+            maxAge: 60 * 5,
+            // Fields carried in the session_data cookie (proxy reads these at edge):
+            // role, moderationScope, ndaSigned, intakeCompleted
+            // All user.additionalFields are included automatically by Better Auth.
         },
     },
 

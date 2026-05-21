@@ -1,16 +1,3 @@
-/**
- * Jenga365 — Scoped Role Hierarchy (Module 11)
- *
- * 6 roles: Mentee → Mentor → CorporatePartner → Moderator → SuperAdmin
- * Moderators have scoped permissions: A, B, C, D, or E (full).
- *
- * Scope A — User Approvals
- * Scope B — Content Management
- * Scope C — Events Management
- * Scope D — Community Management
- * Scope E — Full Moderator (all scopes)
- */
-
 export type Role =
     | "Mentee"
     | "Mentor"
@@ -18,159 +5,103 @@ export type Role =
     | "Moderator"
     | "SuperAdmin";
 
-export type ModeratorScope = "A" | "B" | "C" | "D" | "E";
+export type ModeratorScope = "welfare" | "meal" | "commerce" | "all";
 
-export const SCOPE_LABELS: Record<ModeratorScope, string> = {
-    A: "User Approvals",
-    B: "Content Management",
-    C: "Events Management",
-    D: "Community Management",
-    E: "Full Moderator",
+export type Capability =
+    | "APPROVE_MENTOR_APPLICATION"
+    | "APPROVE_MENTEE_APPLICATION"
+    | "INITIATE_THREE_STRIKES_SUSPENSION"
+    | "APPROVE_RUGBY_CLINIC"
+    | "MANAGE_WEBINAR_LOGISTICS"
+    | "VET_CORPORATE_PARTNER"
+    | "INTAKE_SPATIAL_DATA"
+    | "VERIFY_TREE_SURVIVAL_AUDIT"
+    | "APPROVE_ARTICLE"
+    | "UPSERT_MERCHANDISE_STOCK"
+    | "GENERATE_CORPORATE_INVITE_JWT"
+    | "COSIGN_PERMANENT_SUSPENSION"
+    | "UNLOCK_CORPORATE_ESG_FUNDS"
+    | "ACCESS_SHADOW_VIEW"
+    | "CREATE_MODERATOR_ACCOUNT";
+
+// Scopes that grant each capability. Empty array = SuperAdmin only.
+export const CAPABILITIES: Record<Capability, ModeratorScope[]> = {
+    APPROVE_MENTOR_APPLICATION:         ["welfare", "all"],
+    APPROVE_MENTEE_APPLICATION:         ["welfare", "all"],
+    INITIATE_THREE_STRIKES_SUSPENSION:  ["welfare", "all"],
+    APPROVE_RUGBY_CLINIC:               ["welfare", "all"],
+    MANAGE_WEBINAR_LOGISTICS:           ["welfare", "all"],
+    VET_CORPORATE_PARTNER:              ["meal", "all"],
+    INTAKE_SPATIAL_DATA:                ["meal", "all"],
+    VERIFY_TREE_SURVIVAL_AUDIT:         ["meal", "all"],
+    APPROVE_ARTICLE:                    ["commerce", "all"],
+    UPSERT_MERCHANDISE_STOCK:           ["commerce", "all"],
+    GENERATE_CORPORATE_INVITE_JWT:      [],
+    COSIGN_PERMANENT_SUSPENSION:        [],
+    UNLOCK_CORPORATE_ESG_FUNDS:         [],
+    ACCESS_SHADOW_VIEW:                 [],
+    CREATE_MODERATOR_ACCOUNT:           [],
 };
 
-// ── Hierarchy ────────────────────────────────────────────────
-// Higher index = more privileged. Used for inheritance checks.
-const ROLE_HIERARCHY: Record<Role, number> = {
-    Mentee: 0,
-    Mentor: 1,
-    CorporatePartner: 2,
-    Moderator: 3,
-    SuperAdmin: 4,
-};
-
-/**
- * Check whether `userRole` is at least as privileged as `requiredRole`.
- * SuperAdmin passes every check.
- */
-export function hasRoleAccess(userRole: Role, requiredRole: Role): boolean {
-    return ROLE_HIERARCHY[userRole] >= ROLE_HIERARCHY[requiredRole];
-}
-
-// ── Scope Utilities ──────────────────────────────────────────
-
-/** Parse the JSON-encoded scope string stored in the user record. */
 export function parseScopes(scopeString?: string | null): ModeratorScope[] {
     if (!scopeString) return [];
     try {
         const parsed = JSON.parse(scopeString);
-        if (Array.isArray(parsed)) return parsed as ModeratorScope[];
-        return [];
+        if (!Array.isArray(parsed)) return [];
+        const valid: ModeratorScope[] = ["welfare", "meal", "commerce", "all"];
+        return parsed.filter((v): v is ModeratorScope => valid.includes(v));
     } catch {
         return [];
     }
 }
 
-/** Encode scopes into a JSON string for storage. */
 export function encodeScopes(scopes: ModeratorScope[]): string {
     return JSON.stringify([...new Set(scopes)]);
 }
 
-/** Check whether a moderator has a specific scope (or is Full/E). */
-export function hasScope(
-    scopes: ModeratorScope[],
-    required: ModeratorScope
-): boolean {
-    if (scopes.includes("E")) return true; // Full moderator
-    return scopes.includes(required);
-}
-
-/** SuperAdmins always have all scopes. Short-circuit check. */
 export function effectiveScopes(
     role: Role,
     scopeString?: string | null
 ): ModeratorScope[] {
-    if (role === "SuperAdmin") return ["A", "B", "C", "D", "E"];
+    if (role === "SuperAdmin") return ["welfare", "meal", "commerce", "all"];
     if (role !== "Moderator") return [];
     return parseScopes(scopeString);
 }
 
-// ── Route → Required Scope Map ───────────────────────────────
-// Used by middleware & sidebar to gate access.
-
-export const SCOPED_ROUTES: Record<string, ModeratorScope> = {
-    // Scope A — User Approvals
-    "/dashboard/moderator/approvals": "A",
-    "/dashboard/moderator/mentor-queue": "A",
-    "/dashboard/moderator/corporate-queue": "A",
-    "/dashboard/moderator/mentee-flags": "A",
-
-    // Scope B — Content
-    "/dashboard/moderator/articles": "B",
-    "/dashboard/moderator/resources": "B",
-    "/dashboard/moderator/inventory": "B",
-    "/dashboard/moderator/studio/articles": "B",
-    "/dashboard/moderator/studio/resources": "B",
-    "/dashboard/moderator/studio/product": "B",
-
-    // Scope C — Events
-    "/dashboard/moderator/events": "C",
-    "/dashboard/moderator/webinars": "C",
-    "/dashboard/moderator/clinics": "C",
-    "/dashboard/moderator/studio/events": "C",
-    "/dashboard/moderator/studio/clinics": "C",
-
-    // Scope D — Community
-    "/dashboard/moderator/partners": "D",
-    "/dashboard/moderator/people": "D",
-    "/dashboard/moderator/speakers": "D",
-    "/dashboard/moderator/coaches": "D",
-    "/dashboard/moderator/team": "D",
-    "/dashboard/moderator/studio/people": "D",
-    "/dashboard/moderator/studio/partners": "D",
-};
-
-// ── Sidebar Nav Items (rendered dynamically by scope) ────────
-
-export interface SidebarItem {
-    label: string;
-    href: string;
-    scope: ModeratorScope;
-    badge?: string; // e.g. pending count
-    isStudio?: boolean;
+export function hasCapability(
+    role: Role,
+    scopes: ModeratorScope[],
+    cap: Capability
+): boolean {
+    if (role === "SuperAdmin") return true;
+    if (role !== "Moderator") return false;
+    const allowed = CAPABILITIES[cap];
+    if (allowed.length === 0) return false;
+    return allowed.some((s) => scopes.includes(s));
 }
-
-export const MODERATOR_SIDEBAR: SidebarItem[] = [
-    // Scope A
-    { label: "Mentor Queue", href: "/dashboard/moderator/mentor-queue", scope: "A" },
-    { label: "Mentee Flags", href: "/dashboard/moderator/mentee-flags", scope: "A" },
-    { label: "Corporate Queue", href: "/dashboard/moderator/corporate-queue", scope: "A" },
-
-    // Scope B
-    { label: "Article Queue", href: "/dashboard/moderator/articles", scope: "B" },
-    { label: "Resource Library", href: "/dashboard/moderator/resources", scope: "B" },
-    { label: "Inventory Management", href: "/dashboard/moderator/inventory", scope: "B" },
-    { label: "Create Resource", href: "/dashboard/moderator/studio;resource", scope: "B", isStudio: true },
-    { label: "Sanity Studio → Articles", href: "/dashboard/moderator/studio/articles", scope: "B", isStudio: true },
-    { label: "Sanity Studio → Resources", href: "/dashboard/moderator/studio/resources", scope: "B", isStudio: true },
-    { label: "Sanity Studio → Products", href: "/dashboard/moderator/studio/product", scope: "B", isStudio: true },
-
-    // Scope C
-    { label: "Events & Clinics", href: "/dashboard/moderator/events", scope: "C" },
-    { label: "Webinars", href: "/dashboard/moderator/webinars", scope: "C" },
-    { label: "Sanity Studio → Events", href: "/dashboard/moderator/studio/events", scope: "C", isStudio: true },
-    { label: "Sanity Studio → Clinics", href: "/dashboard/moderator/studio/clinics", scope: "C", isStudio: true },
-
-    // Scope D
-    { label: "Partner Management", href: "/dashboard/moderator/partners", scope: "D" },
-    { label: "People Directory", href: "/dashboard/moderator/people", scope: "D" },
-    { label: "Speakers", href: "/dashboard/moderator/speakers", scope: "D" },
-    { label: "Coaches", href: "/dashboard/moderator/coaches", scope: "D" },
-    { label: "Team Members", href: "/dashboard/moderator/team", scope: "D" },
-    { label: "Sanity Studio → People", href: "/dashboard/moderator/studio/people", scope: "D", isStudio: true },
-    { label: "Sanity Studio → Partners", href: "/dashboard/moderator/studio/partners", scope: "D", isStudio: true },
-];
-
-/** Filter sidebar items to only those the user can access. */
-export function getVisibleSidebar(scopes: ModeratorScope[]): SidebarItem[] {
-    return MODERATOR_SIDEBAR.filter((item) => hasScope(scopes, item.scope));
-}
-
-// ── Approval Requirements ────────────────────────────────────
 
 export function requiresApproval(role: Role): boolean {
     return role === "Mentor" || role === "CorporatePartner";
 }
 
-export function isAutoApproved(role: Role): boolean {
-    return role === "Mentee";
+export const ROUTE_CAPABILITIES: Array<[string, Capability]> = [
+    ["/dashboard/moderator/mentor-queue",    "APPROVE_MENTOR_APPLICATION"],
+    ["/dashboard/moderator/mentee-flags",    "INITIATE_THREE_STRIKES_SUSPENSION"],
+    ["/dashboard/moderator/clinics",         "APPROVE_RUGBY_CLINIC"],
+    ["/dashboard/moderator/webinars",        "MANAGE_WEBINAR_LOGISTICS"],
+    ["/dashboard/moderator/corporate-queue", "VET_CORPORATE_PARTNER"],
+    ["/dashboard/moderator/spatial",         "INTAKE_SPATIAL_DATA"],
+    ["/dashboard/moderator/tree-audits",     "VERIFY_TREE_SURVIVAL_AUDIT"],
+    ["/dashboard/moderator/articles",        "APPROVE_ARTICLE"],
+    ["/dashboard/moderator/inventory",       "UPSERT_MERCHANDISE_STOCK"],
+    ["/dashboard/admin/shadow",              "ACCESS_SHADOW_VIEW"],
+    ["/dashboard/admin/cosign",              "COSIGN_PERMANENT_SUSPENSION"],
+    ["/dashboard/admin/corporate-invite",    "GENERATE_CORPORATE_INVITE_JWT"],
+    ["/dashboard/admin/esg-unlock",          "UNLOCK_CORPORATE_ESG_FUNDS"],
+    ["/dashboard/admin/moderators",          "CREATE_MODERATOR_ACCOUNT"],
+];
+
+export function capabilityForRoute(pathname: string): Capability | null {
+    const match = ROUTE_CAPABILITIES.find(([prefix]) => pathname.startsWith(prefix));
+    return match ? match[1] : null;
 }
