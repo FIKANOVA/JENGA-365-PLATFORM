@@ -962,3 +962,16 @@ export const rateLimitBuckets = pgTable("rate_limit_buckets", {
 }, (table) => ({
     windowIdx: index("rate_limit_window_idx").on(table.windowStart),
 }));
+
+// Normalized goal-tag table — drives the 10% goal-alignment term in matching.
+// See CLAUDE.md §4 / §10.2.
+export const userGoalTags = pgTable("user_goal_tags", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    category: text("category").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => ({
+    uniqueUserCategory: uniqueIndex("user_goal_tags_user_category_unique").on(table.userId, table.category),
+    categoryIdx: index("idx_user_goal_tags_category").on(table.category),
+    userIdx: index("idx_user_goal_tags_user").on(table.userId),
+}));

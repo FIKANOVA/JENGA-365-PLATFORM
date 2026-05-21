@@ -1,22 +1,25 @@
 import { db } from "../index";
-import { users, userProfileAssets, mentorshipPairs } from "../schema";
+import { users, userProfileAssets, mentorshipPairs, userGoalTags } from "../schema";
 import { and, eq, sql, desc, cosineDistance } from "drizzle-orm";
 
+// Founder-locked weights (Bruce 2026-05-20, CLAUDE.md §4). Sum = 100%.
 const W = {
-    semantic:     0.50,
+    semantic:     0.40,
     location:     0.20,
-    availability: 0.00, // hardcoded 0.0 until availability schema ships
+    availability: 0.15, // score is 0.0 until users.availability column ships — weight reserved
+    goal:         0.10,
     affiliation:  0.10,
     completeness: 0.05,
 } as const;
 
 export async function getMentorMatches(params: {
     menteeEmbedding: number[];
+    menteeId?: string;
     locationRegion?: string;
     partnerId?: string;
     limit?: number;
 }) {
-    const { menteeEmbedding, locationRegion, partnerId, limit = 5 } = params;
+    const { menteeEmbedding, menteeId, locationRegion, partnerId, limit = 5 } = params;
 
     const activePairCounts = db
         .select({
@@ -47,21 +50,48 @@ export async function getMentorMatches(params: {
 
     const completenessScore = sql<number>`least(coalesce(${assetCounts.assetCount}, 0) / 3.0, 1.0)`;
 
+    // Availability: column doesn't exist yet. Reserve the 15% weight; score = 0 for now.
+    const availabilityScore = sql<number>`0.0`;
+
+    // Goal-alignment: count of mentor's tags that intersect the mentee's tag set,
+    // normalized by the mentee's total tag count. If no menteeId or mentee has no
+    // tags, score is 0.
+    const goalScore = menteeId
+        ? sql<number>`
+            coalesce(
+                (select count(*)::float
+                 from ${userGoalTags} tg
+                 where tg.user_id = ${users.id}
+                   and tg.category in (
+                     select category from ${userGoalTags} where user_id = ${menteeId}
+                   )
+                ) / nullif(
+                    (select count(*)::float from ${userGoalTags} where user_id = ${menteeId}),
+                    0
+                ),
+                0
+            )
+        `
+        : sql<number>`0.0`;
+
+    const semanticScore = sql<number>`(1 - (${cosineDistance(users.embedding, menteeEmbedding)}))`;
+
     const totalScore = sql<number>`
-        (${W.semantic} * (1 - (${cosineDistance(users.embedding, menteeEmbedding)})))
+        (${W.semantic} * ${semanticScore})
         + (${W.location} * ${locationScore})
+        + (${W.availability} * ${availabilityScore})
+        + (${W.goal} * ${goalScore})
         + (${W.affiliation} * ${partnerScore})
         + (${W.completeness} * ${completenessScore})
     `;
-
-    const cosineSim = sql<number>`1 - (${cosineDistance(users.embedding, menteeEmbedding)})`;
 
     const results = await db
         .select({
             id: users.id,
             name: users.name,
             locationRegion: users.locationRegion,
-            profileScore: cosineSim,
+            profileScore: semanticScore,
+            goalScore,
             totalScore,
         })
         .from(users)
@@ -85,6 +115,7 @@ export async function getMentorMatches(params: {
         matchPercentage: Math.round((Number(r.totalScore) || 0) * 100),
         insights: {
             profileMatch: Math.round((Number(r.profileScore) || 0) * 100),
+            goalAlignment: Math.round((Number(r.goalScore) || 0) * 100),
         },
     }));
 }

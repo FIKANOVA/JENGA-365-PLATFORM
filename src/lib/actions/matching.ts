@@ -78,6 +78,7 @@ export async function getAiMentorMatches() {
 
     return getMentorMatches({
         menteeEmbedding: user.embedding as number[],
+        menteeId: session.user.id,
         limit: 5,
     });
 }
@@ -104,6 +105,7 @@ export async function getAiMentorMatchesForUser(menteeId: string) {
 
     return getMentorMatches({
         menteeEmbedding: mentee.embedding as number[],
+        menteeId,
         limit: 5,
     });
 }
