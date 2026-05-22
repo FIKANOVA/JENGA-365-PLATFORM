@@ -12,7 +12,7 @@ import {
     menteeDocuments,
     moderationLog
 } from "@/lib/db/schema";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, ne, sql } from "drizzle-orm";
 import { z } from "zod";
 import { headers } from "next/headers";
 import { createNotification } from "@/lib/notifications/service";
@@ -339,6 +339,24 @@ export async function assignMentor(input: z.infer<typeof assignMentorSchema>) {
 
     // 1. Transaction to ensure pair and pathway are created together
     return await db.transaction(async (tx) => {
+        // CLAUDE.md §5: a mentor may have at most 2 active mentees. Enforce at write time.
+        // Counts active pairs for this mentor excluding the (mentor, mentee) being upserted —
+        // re-activating an existing inactive pair must not be blocked.
+        const [{ count: activeOtherPairs } = { count: 0 }] = await tx
+            .select({ count: sql<number>`count(*)::int` })
+            .from(mentorshipPairs)
+            .where(
+                and(
+                    eq(mentorshipPairs.mentorId, parsed.mentorId),
+                    eq(mentorshipPairs.status, "active"),
+                    ne(mentorshipPairs.menteeId, parsed.menteeId),
+                ),
+            );
+
+        if (activeOtherPairs >= 2) {
+            throw new Error("MENTOR_CAPACITY_EXCEEDED");
+        }
+
         // Upsert the pair
         const [pair] = await tx.insert(mentorshipPairs)
             .values({
