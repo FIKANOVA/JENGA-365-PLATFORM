@@ -118,9 +118,9 @@ RETURNING *;
 
 If `RETURNING` is empty, the item is out of stock — fail the purchase. **Never** read-then-write; that allows overselling under concurrent load.
 
-## 9. Current Sprint Priorities — Backend + UI overhaul (UI freeze LIFTED 2026-05-22)
+## 9. Current Sprint Priorities — Beta rollout (ALL FREEZES LIFTED 2026-05-22)
 
-Moseti reopened UI/UX work on 2026-05-22 (the prior freeze was his own pause to focus on backend). Both tracks now active in parallel:
+All work tracks are active for beta. Marketing, dashboards, auth, and backend are all in scope. Previously deferred items (Phase 4 of IMPLEMENTATION_PLAN.md) are now in scope. The platform target is a beta release for external testers.
 
 ### Backend (continue from completed Phases 1 + 2)
 - Wire intake + mentor-profile flows to write `user_goal_tags` (backfill is in place).
@@ -141,7 +141,9 @@ Moseti reopened UI/UX work on 2026-05-22 (the prior freeze was his own pause to 
 
 ## 12. Design system pointer
 
-`DESIGN.md` at project root is the canonical UI source-of-truth. Components must consume tokens declared there via `globals.css` (e.g. `bg-background`, `text-foreground`, `text-display-md`). Avoid the legacy Modern Premium hooks (`.jenga-card`, `.btn-primary`, `font-serif`, `font-mono` for headings) — they were removed when the new system landed.
+`DESIGN.md` at project root is the canonical UI source-of-truth. Components must consume tokens declared there via `globals.css` (e.g. `bg-background`, `text-foreground`, `text-display-md`).
+
+**Beta rollout — legacy class-hook shims (2026-05-22):** to ship a coherent beta without rewriting ~95 files at once, `globals.css` re-emits the legacy hooks (`.jenga-card`, `.jenga-input`, `.jenga-label`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.section-label`, `font-serif`, `font-playfair`, `font-lato`, `.material-symbols-outlined`) as wrappers over the new tokens. **New components must still use the canonical tokens directly.** As each surface is hand-refactored to canonical tokens, drop the matching shim. Goal: shims gone by GA.
 
 ## 10. Phase 2 Implementation Directives (locked 2026-05-22)
 

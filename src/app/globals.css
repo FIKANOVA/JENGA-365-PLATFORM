@@ -320,6 +320,163 @@
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
+   Legacy class-hook compatibility shims (beta rollout — 2026-05-22)
+
+   DESIGN.md §13 calls for removing these hooks; until each surface is
+   hand-refactored, these shims map every legacy class to the new token
+   system so no page renders unstyled. Safe to remove a rule once every
+   call site for that class has been swept.
+   ─────────────────────────────────────────────────────────────────────────── */
+@layer components {
+  /* Surfaces */
+  .jenga-card,
+  .jenga-card-mentorship {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+  .jenga-card-mentorship {
+    border-color: color-mix(in srgb, var(--brand-green) 30%, var(--border));
+  }
+
+  /* Inputs */
+  .jenga-input {
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--foreground);
+    border-radius: var(--radius);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    transition: border-color 150ms ease;
+  }
+  .jenga-input::placeholder {
+    color: var(--foreground-subtle);
+  }
+  .jenga-input:focus {
+    outline: none;
+    border-color: var(--brand-green);
+    box-shadow: var(--shadow-ring);
+  }
+
+  /* Labels */
+  .jenga-label {
+    display: block;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--foreground);
+    margin-bottom: 0.375rem;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: var(--radius);
+    background: var(--brand-green);
+    color: var(--brand-green-fg);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: opacity 150ms ease;
+  }
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: background-color 150ms ease;
+  }
+  .btn-secondary:hover {
+    background: var(--surface-3);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--foreground);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: background-color 150ms ease;
+  }
+  .btn-ghost:hover {
+    background: var(--surface-2);
+  }
+
+  /* Eyebrows / section labels */
+  .section-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--foreground-muted);
+  }
+}
+
+/* Typography legacy shims — every legacy family token maps to Inter (font-sans). */
+.font-serif,
+.font-playfair,
+.font-lato,
+.font-body {
+  font-family: var(--font-sans);
+}
+
+/* Hide the literal "material-symbols-outlined" text label when the Google icon
+   font isn't loaded. Once a surface is swept to lucide-react, the class drops. */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined", "Material Icons", system-ui;
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  /* Fallback: if the font fails, render nothing instead of literal text. */
+  font-size: 0;
+}
+.material-symbols-outlined::before {
+  /* Visible at parent's font-size; renders a neutral square placeholder. */
+  font-size: 1rem;
+  content: "•";
+  color: var(--foreground-muted);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
    Third-party overrides
    ─────────────────────────────────────────────────────────────────────────── */
 .leaflet-container {
