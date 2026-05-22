@@ -40,8 +40,8 @@ export default function FAQSection() {
                     <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--brand-green)] block font-bold">
                         Common Questions
                     </span>
-                    <h2 className="font-serif font-bold text-4xl md:text-5xl text-black uppercase tracking-tighter">
-                        Frequently Asked <span className="italic text-[var(--brand-green)]">Questions.</span>
+                    <h2 className="text-display-lg text-foreground">
+                        Frequently asked <span className="italic" style={{ color: "var(--brand-green)" }}>questions.</span>
                     </h2>
                 </div>
 
@@ -59,7 +59,7 @@ export default function FAQSection() {
                                 onClick={() => toggleFaq(index)}
                                 className="w-full flex items-center justify-between p-6 md:p-8 text-left group"
                             >
-                                <span className="font-serif font-bold text-lg md:text-xl text-black pr-8 group-hover:text-[var(--brand-green)] transition-colors">
+                                <span className="text-headline text-foreground pr-8 group-hover:text-[var(--brand-green)] transition-colors">
                                     {item.question}
                                 </span>
                                 <Plus

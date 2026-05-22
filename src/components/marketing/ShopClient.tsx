@@ -183,15 +183,15 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                     <span className="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-[var(--brand-green)]">
                                                         {product.category || "General"}
                                                     </span>
-                                                    <h3 className="font-serif font-black text-xl text-black leading-tight group-hover:text-[var(--brand-green)] transition-colors duration-500 uppercase tracking-tighter">
+                                                    <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors duration-500">
                                                         {product.title}
                                                     </h3>
                                                 </div>
 
                                                 <div className="pt-6 border-t border-[var(--border)] flex flex-col gap-6">
                                                     <div className="flex items-end gap-3">
-                                                        <span className="font-serif font-bold text-[13px] text-[var(--foreground-subtle)] uppercase tracking-widest mb-1 italic">KES</span>
-                                                        <span className="font-serif font-black text-3xl text-black tracking-tighter transition-all duration-500 group-hover:text-[var(--brand-green)]">
+                                                        <span className="text-eyebrow text-foreground-subtle mb-1 italic">KES</span>
+                                                        <span className="text-display-sm text-foreground transition-all duration-500 group-hover:text-[var(--brand-green)]">
                                                             {product.price?.toLocaleString() || 0}
                                                         </span>
                                                         {product.discountPrice && (
@@ -221,7 +221,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                 <div className="flex flex-col items-center justify-center py-32 text-center space-y-8">
                                     <PackageX className="h-20 w-20 text-[var(--border)]" />
                                     <div className="space-y-3">
-                                        <h3 className="font-serif font-black text-4xl text-black uppercase tracking-tight">inventory empty</h3>
+                                        <h3 className="text-display-md text-foreground">Inventory empty</h3>
                                         <p className="text-[var(--foreground-subtle)] font-light text-lg">Your search didn&apos;t match any items in our vault.</p>
                                     </div>
                                     <button
@@ -247,7 +247,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                     <div className="absolute inset-0 bg-black/50" onClick={() => setIsCartOpen(false)} />
                     <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
                         <div className="p-6 border-b border-[var(--border)] flex justify-between items-center">
-                            <h2 className="font-serif font-black text-2xl uppercase">Your Cart</h2>
+                            <h2 className="text-display-sm text-foreground">Your cart</h2>
                             <button onClick={() => setIsCartOpen(false)} aria-label="Close cart" className="text-foreground-muted hover:text-[var(--brand-red)] transition-colors"><X className="h-5 w-5" /></button>
                         </div>
 
@@ -266,7 +266,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h4 className="font-serif font-bold text-sm uppercase leading-tight truncate">{item.product.title}</h4>
+                                            <h4 className="text-label text-foreground leading-tight truncate">{item.product.title}</h4>
                                             <p className="text-[12px] text-[var(--foreground-subtle)] mt-1">Qty: {item.quantity}</p>
                                         </div>
                                         <div className="flex flex-col items-end justify-between shrink-0">
@@ -280,7 +280,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
 
                         {cartItems.length > 0 && (
                             <div className="p-6 border-t border-[var(--border)] bg-[var(--surface-1)] space-y-6">
-                                <div className="flex justify-between font-serif font-black text-xl uppercase">
+                                <div className="flex justify-between text-headline text-foreground">
                                     <span>Total</span>
                                     <span>KES {cartTotal.toLocaleString()}</span>
                                 </div>
@@ -334,7 +334,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                         {/* Header */}
                         <div className="bg-[var(--brand-green)] p-8 text-white text-center space-y-3">
                             <CheckCircle className="mx-auto" size={48} strokeWidth={1.5} />
-                            <h2 className="font-serif font-black text-3xl uppercase tracking-tighter">Order Confirmed!</h2>
+                            <h2 className="text-display-md">Order confirmed!</h2>
                             <p className="font-mono text-[10px] uppercase tracking-widest opacity-80">Thank you for supporting the Jenga365 Impact Fund</p>
                         </div>
 
@@ -360,8 +360,8 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                             </div>
 
                             <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
-                                <span className="font-serif font-black text-lg uppercase">Total Paid</span>
-                                <span className="font-serif font-black text-2xl text-[var(--brand-green)]">KES {orderConfirmation.total.toLocaleString()}</span>
+                                <span className="text-headline text-foreground">Total paid</span>
+                                <span className="text-display-sm" style={{ color: "var(--brand-green)" }}>KES {orderConfirmation.total.toLocaleString()}</span>
                             </div>
 
                             <p className="font-sans text-sm text-[var(--foreground-subtle)] text-center leading-relaxed">

@@ -94,7 +94,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                             <Lock className="h-6 w-6" style={{ color: "var(--brand-green)" }} />
                         </div>
                         <div className="space-y-2">
-                            <p className="text-white font-serif font-black text-xl italic leading-tight uppercase tracking-tight">Access Locked.</p>
+                            <p className="text-white text-display-sm italic leading-tight">Access locked.</p>
                             <p className="text-[var(--foreground-subtle)] text-[11px] leading-relaxed max-w-[200px] mx-auto">Requires verified Jenga365 account to download strategic assets.</p>
                         </div>
                         <Link href="/register" className="w-full">
@@ -121,9 +121,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                         </span>
                     </div>
 
-                    <h3
-                        className="font-serif font-black text-2xl text-black leading-tight line-clamp-2 min-h-[2.8em] group-hover:text-[var(--brand-green)] transition-colors duration-500 uppercase tracking-tighter"
-                    >
+                    <h3 className="text-display-sm text-foreground leading-tight line-clamp-2 min-h-[2.8em] group-hover:text-[var(--brand-green)] transition-colors duration-500">
                         {title}
                     </h3>
                 </div>
@@ -135,7 +133,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                                 <div className="w-8 h-8 rounded-sm bg-[var(--surface-1)] border border-[var(--border)] flex items-center justify-center">
                                     <User className="h-4 w-4 text-[var(--foreground-subtle)]" />
                                 </div>
-                                <p className="font-serif font-bold text-[13px] text-black">
+                                <p className="text-body-sm font-medium text-foreground">
                                     {author}
                                 </p>
                             </div>

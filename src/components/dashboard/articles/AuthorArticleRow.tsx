@@ -41,7 +41,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                         </span>
                         <span className="text-[10px] font-mono text-[#8A8A8A]">{date}</span>
                     </div>
-                    <h3 className="text-xl font-serif font-black leading-tight text-[#1A1A1A] dark:text-white group-hover:text-[#BB0000] transition-colors">
+                    <h3 className="text-headline leading-tight text-foreground group-hover:text-[var(--brand-red)] transition-colors">
                         {title}
                     </h3>
                 </div>

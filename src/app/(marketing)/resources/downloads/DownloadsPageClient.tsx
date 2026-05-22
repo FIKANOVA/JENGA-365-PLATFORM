@@ -100,7 +100,7 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                             {/* Text */}
                             <div className="flex-1 space-y-3">
                                 <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold">{item.category}</span>
-                                <h3 className="font-serif font-black text-lg text-black uppercase tracking-tight leading-tight group-hover:text-[var(--brand-green)] transition-colors">
+                                <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors">
                                     {item.title}
                                 </h3>
                                 <p className="font-sans font-light text-sm text-[var(--foreground-muted)] leading-relaxed">

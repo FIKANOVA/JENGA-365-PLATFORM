@@ -10,7 +10,7 @@ export default function ArticleAuthGate() {
             <div className="relative z-10 space-y-6">
                 <Lock className="h-8 w-8 mx-auto" style={{ color: "var(--brand-green)" }} />
                 <div className="space-y-2">
-                    <h4 className="font-serif font-black text-2xl text-white uppercase italic tracking-tight">Access Locked.</h4>
+                    <h4 className="text-display-sm text-white italic">Access locked.</h4>
                     <p className="text-[var(--foreground-subtle)] text-[13px] leading-relaxed max-w-[200px] mx-auto">
                         Join the Jenga365 community to unlock deep-dive insights, mentor connections, and platform tools.
                     </p>

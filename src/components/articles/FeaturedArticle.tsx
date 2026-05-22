@@ -60,7 +60,7 @@ export default function FeaturedArticle({
                         <span>{readTime}</span>
                     </div>
 
-                    <h2 className="font-serif font-bold text-4xl text-black leading-[1.1] uppercase group-hover:text-[var(--brand-green)] transition-colors duration-500">
+                    <h2 className="text-display-md text-foreground leading-[1.1] group-hover:text-[var(--brand-green)] transition-colors duration-500">
                         {title}
                     </h2>
 
@@ -75,7 +75,7 @@ export default function FeaturedArticle({
                             <User className="h-5 w-5 text-[var(--foreground-subtle)]" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-serif font-bold text-sm text-black">{author}</span>
+                            <span className="text-body-sm font-medium text-foreground">{author}</span>
                             <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)]">{date}</span>
                         </div>
                     </div>

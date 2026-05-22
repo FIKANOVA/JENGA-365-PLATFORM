@@ -34,7 +34,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                         </div>
                         <div className="space-y-3">
                             <div className="space-y-1">
-                                <h3 className="font-serif font-bold text-2xl text-black">{author.name}</h3>
+                                <h3 className="text-display-sm text-foreground">{author.name}</h3>
                                 <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold block">
                                     {author.role}
                                 </span>
@@ -66,7 +66,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
             </aside>
 
             {/* Main Content Area */}
-            <article className="flex-1 w-full prose prose-pre:bg-black prose-pre:text-white prose-headings:font-serif prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-p:font-light prose-p:text-[16px] prose-p:leading-[1.8] prose-p:text-[var(--foreground-muted)] prose-strong:font-bold prose-strong:text-black max-w-none">
+            <article className="flex-1 w-full prose prose-pre:bg-black prose-pre:text-white prose-headings:font-medium prose-headings:text-foreground prose-p:font-light prose-p:text-[16px] prose-p:leading-[1.8] prose-p:text-[var(--foreground-muted)] prose-strong:font-bold prose-strong:text-foreground max-w-none">
                 {content ? (
                     <PortableText
                         value={content}
@@ -99,7 +99,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                     />
                 ) : (
                     <>
-                        <div className="font-serif italic text-2xl text-black leading-relaxed border-l-[3px] border-[var(--brand-green)] pl-8 mb-16 py-2">
+                        <div className="text-display-sm italic text-foreground leading-relaxed border-l-[3px] border-[var(--brand-green)] pl-8 mb-16 py-2">
                             "Strategic foresight in mentorship creates ripples that transform not just one athlete, but an entire ecosystem of professional excellence."
                         </div>
 
@@ -127,7 +127,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                             The platform&apos;s AI-native matching engine ensures that every connection is built on a foundation of shared values and professional synergy. We are no longer just connecting people; we are curating pathways to success.
                         </p>
 
-                        <blockquote className="my-14 p-12 bg-[var(--surface-1)] border-l-[6px] border-[var(--brand-green)] rounded-sm text-2xl font-serif italic text-black leading-tight">
+                        <blockquote className="my-14 p-12 bg-[var(--surface-1)] border-l-[6px] border-[var(--brand-green)] rounded-sm text-display-sm italic text-foreground leading-tight">
                             &quot;Greatness is never achieved in isolation. The Jenga365 platform is the connective tissue for the next generation of global stars.&quot;
                         </blockquote>
                     </>

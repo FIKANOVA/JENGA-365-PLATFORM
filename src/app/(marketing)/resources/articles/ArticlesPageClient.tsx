@@ -119,8 +119,8 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                         className="mb-16 w-full p-10 flex flex-col md:flex-row items-center justify-between gap-8 border border-[var(--brand-green)]/20 bg-[var(--green-tint)]"
                     >
                         <div className="space-y-3">
-                            <h3 className="font-serif font-black text-2xl text-black uppercase tracking-tight">
-                                {isAuthenticated ? "Share Your Expertise" : "Join the Movement"}
+                            <h3 className="text-display-sm text-foreground">
+                                {isAuthenticated ? "Share your expertise" : "Join the movement"}
                             </h3>
                             <p className="font-light text-[15px] text-[var(--foreground-muted)] leading-relaxed max-w-xl">
                                 {isAuthenticated
@@ -143,7 +143,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                         ) : (
                             <div className="flex flex-col items-center justify-center py-24 text-center space-y-6">
                                 <SearchX className="h-16 w-16 text-[var(--border)]" />
-                                <h3 className="font-serif font-black text-3xl text-black">No Results Found</h3>
+                                <h3 className="text-display-md text-foreground">No results found</h3>
                                 <button
                                     onClick={() => { setSearchQuery(""); setActiveTopic("All Topics"); }}
                                     className="px-8 py-3 border border-[var(--border)] text-black font-mono text-[10px] uppercase tracking-widest hover:bg-black hover:text-white transition-all"

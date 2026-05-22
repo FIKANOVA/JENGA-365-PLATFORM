@@ -55,7 +55,7 @@ export default function ArticleCard({
                         <span className="text-[var(--foreground-subtle)]">{date}</span>
                     </div>
 
-                    <h3 className="font-serif font-black text-2xl text-black leading-tight group-hover:text-[var(--brand-green)] transition-colors duration-500 line-clamp-2 min-h-[2.8em] uppercase">
+                    <h3 className="text-display-sm text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors duration-500 line-clamp-2 min-h-[2.8em]">
                         {title}
                     </h3>
 
@@ -69,7 +69,7 @@ export default function ArticleCard({
                         <div className="w-8 h-8 bg-[var(--surface-1)] border border-[var(--border)] rounded-sm flex items-center justify-center overflow-hidden">
                             <User className="h-4 w-4 text-[var(--foreground-subtle)]" />
                         </div>
-                        <span className="font-serif font-bold text-[13px] text-black">{author}</span>
+                        <span className="text-body-sm font-medium text-foreground">{author}</span>
                     </div>
 
                     <div className="w-6 h-6 bg-[var(--brand-green)] rounded-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0">

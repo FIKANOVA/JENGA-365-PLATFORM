@@ -215,7 +215,7 @@ export default function PublicHeader() {
                                             key={item.href}
                                             href={item.href}
                                             onClick={() => setMobileOpen(false)}
-                                            className={`flex items-center justify-between px-8 py-4 font-serif font-bold text-2xl uppercase tracking-tight transition-colors ${
+                                            className={`flex items-center justify-between px-8 py-4 text-display-sm transition-colors ${
                                                 pathname === item.href ? "text-white" : "text-white/70 hover:text-white"
                                             }`}
                                         >

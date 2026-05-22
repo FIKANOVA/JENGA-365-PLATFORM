@@ -66,7 +66,7 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
                                     </span>
                                 </div>
 
-                                <h3 className="font-serif font-black text-2xl text-black leading-tight line-clamp-2 min-h-[2.8em] group-hover:text-[var(--brand-green)] transition-colors duration-500 uppercase tracking-tighter">
+                                <h3 className="text-display-sm text-foreground leading-tight line-clamp-2 min-h-[2.8em] group-hover:text-[var(--brand-green)] transition-colors duration-500">
                                     {event.title}
                                 </h3>
                                 

@@ -76,7 +76,7 @@ export default function AIChatInterface({
                         <div className="absolute -bottom-1 -right-1 size-4 bg-[#006600] rounded-full border-2 border-white" />
                     </div>
                     <div className="flex flex-col">
-                        <h3 className="font-serif font-black text-lg text-[#1A1A1A] leading-none mb-1">{agentName}</h3>
+                        <h3 className="text-headline text-foreground leading-none mb-1">{agentName}</h3>
                         <span className="font-mono text-[9px] font-bold text-[#8A8A8A] tracking-widest uppercase">{agentRole}</span>
                     </div>
                 </div>

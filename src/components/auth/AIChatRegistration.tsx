@@ -190,7 +190,7 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                         <Sparkles size={32} className="text-white" />
                     </div>
                     <div className="space-y-2">
-                        <h4 className="font-serif font-bold text-3xl text-white uppercase tracking-tighter">Protocol Finalized</h4>
+                        <h4 className="text-display-md text-white">Protocol finalized</h4>
                         <p className="font-mono text-[9px] text-white/50 uppercase tracking-[0.4em]">All identity nodes captured and verified.</p>
                     </div>
                     <button

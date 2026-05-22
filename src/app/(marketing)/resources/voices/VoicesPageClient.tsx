@@ -125,7 +125,7 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                                             </span>
                                         )}
                                     </div>
-                                    <h3 className="font-serif font-black text-xl text-black uppercase tracking-tight leading-tight group-hover:text-[var(--brand-green)] transition-colors">
+                                    <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors">
                                         {voice.title}
                                     </h3>
                                     <p className="font-sans font-light text-sm text-[var(--foreground-muted)] leading-relaxed max-w-2xl">
@@ -168,7 +168,7 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                 {/* Follow CTA */}
                 <div className="mt-16 border border-[var(--border)] p-10 flex flex-col md:flex-row items-center justify-between gap-8 bg-[var(--surface-1)]">
                     <div className="space-y-3">
-                        <h3 className="font-serif font-black text-2xl text-black uppercase tracking-tight">Stay in the Conversation</h3>
+                        <h3 className="text-display-sm text-foreground">Stay in the conversation</h3>
                         <p className="font-sans font-light text-[var(--foreground-muted)] max-w-xl">
                             Follow <strong className="text-black">@jenga365</strong> on X to get notified of live Spaces and new Threads as they publish.
                         </p>

@@ -95,7 +95,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                                     — {readTime}
                                 </span>
                             </div>
-                            <h1 className="text-white text-5xl md:text-8xl font-serif font-black uppercase leading-[0.9] tracking-tighter">
+                            <h1 className="text-white text-display-xl leading-tight">
                                 {article.title}
                             </h1>
                             {article.excerpt && (
@@ -139,8 +139,8 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                     <section className="bg-[var(--surface-1)] border-t border-[var(--border)] py-32 mt-20">
                         <div className="max-w-4xl mx-auto px-6 flex flex-col items-center text-center space-y-10">
                             <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--brand-green)]">Final Word</span>
-                            <h2 className="text-5xl md:text-6xl font-serif font-black text-black leading-tight uppercase">
-                                Ready to go <span className="italic text-[var(--brand-green)]">Deeper?</span>
+                            <h2 className="text-display-xl text-foreground leading-tight">
+                                Ready to go <span className="italic" style={{ color: "var(--brand-green)" }}>deeper?</span>
                             </h2>
                             <p className="text-lg text-[var(--foreground-muted)] font-light max-w-2xl leading-relaxed">
                                 Jenga365 is more than a platform; it's an ecosystem of excellence. Join thousands of high-performers today.

@@ -58,8 +58,8 @@ export default function LeadershipGrid({ team = fallbackTeam }: LeadershipGridPr
                     <span className="font-mono text-[10px] uppercase tracking-[0.6em] text-[var(--brand-green)] block font-bold">
                         The People
                     </span>
-                    <h2 className="font-serif font-bold text-5xl md:text-6xl text-black uppercase tracking-tighter">
-                        Architects of Change
+                    <h2 className="text-display-lg text-foreground">
+                        Architects of change.
                     </h2>
                     <p className="font-light text-lg text-[var(--foreground-muted)] leading-relaxed max-w-2xl">
                         Built with editorial heritage & technical precision by Kenya&apos;s finest sporting minds.
@@ -79,7 +79,7 @@ export default function LeadershipGrid({ team = fallbackTeam }: LeadershipGridPr
                             </div>
                             
                             <div className="space-y-3">
-                                <h3 className="font-serif font-bold text-3xl text-black uppercase tracking-tight group-hover:text-[var(--brand-green)] transition-colors duration-500">
+                                <h3 className="text-display-sm text-foreground group-hover:text-[var(--brand-green)] transition-colors duration-500">
                                     {member.name}
                                 </h3>
                                 <div className="h-px w-12 bg-[var(--brand-green)] group-hover:bg-[var(--brand-red)] transition-colors duration-500 mb-4" />

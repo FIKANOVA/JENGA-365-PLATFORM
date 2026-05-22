@@ -88,7 +88,7 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                                 <div className="flex flex-col items-center justify-center py-32 text-center space-y-8">
                                     <CalendarX className="h-20 w-20 text-[var(--border)]" />
                                     <div className="space-y-3">
-                                        <h3 className="font-serif font-bold text-4xl text-black uppercase tracking-tight">No Events Scheduled</h3>
+                                        <h3 className="text-display-md text-foreground">No events scheduled</h3>
                                         <p className="text-[var(--foreground-subtle)] font-light text-lg">We couldn&apos;t find any events matching your selection.</p>
                                     </div>
                                     <button

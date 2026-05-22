@@ -48,7 +48,7 @@ export default function WhyJenga() {
                         <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--brand-green)] font-bold block mb-3">
                             Our Differentiators
                         </span>
-                        <h2 className="font-serif font-black text-4xl md:text-5xl text-black uppercase tracking-tighter leading-none">
+                        <h2 className="text-display-lg text-foreground">
                             Why Jenga365?
                         </h2>
                     </div>
@@ -70,7 +70,7 @@ export default function WhyJenga() {
                                         <span className="font-mono text-[9px] uppercase tracking-widest text-[#999]">
                                             {String(i + 1).padStart(2, "0")}
                                         </span>
-                                        <span className="font-serif font-bold text-xl md:text-2xl text-black uppercase tracking-tight group-hover:text-[var(--brand-green)] transition-colors">
+                                        <span className="text-headline text-foreground group-hover:text-[var(--brand-green)] transition-colors">
                                             {reason.title}
                                         </span>
                                     </div>

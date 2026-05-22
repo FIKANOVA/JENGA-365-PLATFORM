@@ -99,7 +99,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                 </div>
                                 <div className="absolute bottom-0 left-0 right-0 p-8">
                                     <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--brand-green)] font-bold">{featuredVideo.category} · {featuredVideo.duration}</span>
-                                    <h2 className="font-serif font-black text-3xl md:text-4xl text-white uppercase tracking-tighter mt-2 leading-none">
+                                    <h2 className="text-display-md text-white mt-2 leading-tight">
                                         {featuredVideo.title}
                                     </h2>
                                 </div>
@@ -133,7 +133,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                     )}
                                 </div>
                                 <span className="font-mono text-[8px] uppercase tracking-widest text-[var(--brand-green)] font-bold">{video.category}</span>
-                                <h3 className="font-serif font-black text-lg text-black uppercase tracking-tight leading-tight group-hover:text-[var(--brand-green)] transition-colors mt-1">
+                                <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors mt-1">
                                     {video.title}
                                 </h3>
                                 <p className="font-sans font-light text-sm text-[var(--foreground-muted)] leading-relaxed mt-2">
