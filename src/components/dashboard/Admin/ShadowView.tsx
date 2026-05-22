@@ -9,19 +9,19 @@ import { Eye, EyeOff, Search, ChevronDown, Shield } from "lucide-react";
  * without modifying their session, for support/debugging purposes.
  */
 
-const MOCK_USERS = [
-    { id: "u1", name: "Alice Wanjiku", role: "Mentee", email: "alice@example.com" },
-    { id: "u2", name: "Brian Ochieng", role: "Mentor", email: "brian@example.com" },
-    { id: "u3", name: "Safaricom Foundation", role: "CorporatePartner", email: "csr@safaricom.co.ke" },
-    { id: "u4", name: "Grace Muthoni", role: "Moderator", email: "grace@jenga365.org" },
-];
+export type ShadowUser = {
+    id: string;
+    name: string;
+    role: string;
+    email: string;
+};
 
-export default function ShadowView() {
-    const [selectedUser, setSelectedUser] = useState<typeof MOCK_USERS[0] | null>(null);
+export default function ShadowView({ users }: { users: ShadowUser[] }) {
+    const [selectedUser, setSelectedUser] = useState<ShadowUser | null>(null);
     const [isActive, setIsActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const filtered = MOCK_USERS.filter(
+    const filtered = users.filter(
         (u) =>
             u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             u.email.toLowerCase().includes(searchQuery.toLowerCase())

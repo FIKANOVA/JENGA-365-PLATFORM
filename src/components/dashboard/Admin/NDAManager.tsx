@@ -8,14 +8,21 @@ import { FileText, Upload, Trash2, Clock, ShieldCheck, AlertTriangle } from "luc
  * Manage NDA document versions, view signing status, and upload new versions.
  */
 
-const MOCK_VERSIONS = [
-    { id: "v3", version: "3.0", uploadedAt: "2026-02-15", status: "active", signedCount: 1124, totalUsers: 1247 },
-    { id: "v2", version: "2.1", uploadedAt: "2025-09-01", status: "archived", signedCount: 987, totalUsers: 1050 },
-    { id: "v1", version: "1.0", uploadedAt: "2025-01-15", status: "archived", signedCount: 412, totalUsers: 500 },
-];
+export type NdaVersionRow = {
+    id: string;
+    version: string;
+    uploadedAt: string;
+    status: "active" | "archived";
+    signedCount: number;
+    totalUsers: number;
+};
 
-export default function NDAManager() {
-    const [versions] = useState(MOCK_VERSIONS);
+interface NDAManagerProps {
+    versions: NdaVersionRow[];
+}
+
+export default function NDAManager({ versions: initialVersions }: NDAManagerProps) {
+    const [versions] = useState(initialVersions);
 
     const activeVersion = versions.find((v) => v.status === "active");
     const unsignedCount = activeVersion ? activeVersion.totalUsers - activeVersion.signedCount : 0;
