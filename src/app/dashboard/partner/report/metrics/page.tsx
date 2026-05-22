@@ -1,5 +1,6 @@
-"use client";
-import ImpactMetricsSummary from "@/components/reports/ImpactMetricsSummary";
-export default function ImpactMetricsPage() {
-    return <ImpactMetricsSummary />;
+import { redirect } from "next/navigation";
+
+// CLAUDE.md §10.5 / §11: in-app partner reporting is deprecated.
+export default function PartnerReportMetricsPage() {
+    redirect("/dashboard/partner");
 }
