@@ -1005,3 +1005,14 @@ export const vProjectLocationPlantings = pgView("v_project_location_plantings").
         .from(treePlantingEvents)
         .groupBy(treePlantingEvents.projectLocationId)
 );
+
+// Public-facing Looker Studio source — unfiltered aggregates for marketing site.
+// See CLAUDE.md §11 (public site iframe) and drizzle/0013_public_impact_view.sql.
+export const vPublicImpactAggregate = pgView("v_public_impact_aggregate", {
+    treesPlantedTotal: integer("trees_planted_total"),
+    treesAliveLatestAudit: integer("trees_alive_latest_audit"),
+    survivalRatePct: decimal("survival_rate_pct"),
+    mentorshipHoursTotal: integer("mentorship_hours_total"),
+    youthEngagedActive: integer("youth_engaged_active"),
+    activeCorporatePartners: integer("active_corporate_partners"),
+}).existing();
