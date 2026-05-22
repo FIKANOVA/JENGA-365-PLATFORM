@@ -35,10 +35,10 @@ interface AdminDashboardProps {
 }
 
 const DEFAULT_STATS: StatItem[] = [
-    { label: "Total Users", value: "—", trend: "neutral", change: "" },
-    { label: "Pending Approval", value: "—", trend: "neutral", change: "" },
-    { label: "Active Mentors", value: "—", trend: "up", change: "" },
-    { label: "Active Mentees", value: "—", trend: "up", change: "" },
+    { label: "Total users", value: "—", trend: "neutral", change: "" },
+    { label: "Pending approval", value: "—", trend: "neutral", change: "" },
+    { label: "Active mentors", value: "—", trend: "up", change: "" },
+    { label: "Active mentees", value: "—", trend: "up", change: "" },
 ];
 
 const ROLES = ["All Roles", "SuperAdmin", "Moderator", "CorporatePartner", "Mentor", "Mentee"];
@@ -50,6 +50,9 @@ const SCOPE_OPTIONS = [
     { value: "C", label: "Tier 4 — Events & Community" },
     { value: "D", label: "Tier 4b — Community Manager" },
 ];
+
+const INPUT_CLASS =
+    "h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle focus:outline-none focus:border-[color:var(--border-strong,#D4D4D8)] focus:ring-2 focus:ring-[color:var(--brand-green-soft)]";
 
 function ExpandableUserRow({ user, onAction }: { user: UserRow; onAction: () => void }) {
     const [expanded, setExpanded] = useState(false);
@@ -66,46 +69,53 @@ function ExpandableUserRow({ user, onAction }: { user: UserRow; onAction: () => 
         user.moderationScope && { label: "Mod. Scope", value: SCOPE_TIER_LABELS[user.moderationScope] ?? user.moderationScope },
     ].filter(Boolean) as { label: string; value: string }[];
 
+    const statusPositive = user.isApproved;
+    const statusStyle = statusPositive
+        ? { background: "var(--brand-green-soft)", color: "var(--brand-green)", borderColor: "var(--brand-green)" }
+        : { background: "var(--brand-red-soft)", color: "var(--brand-red)", borderColor: "var(--brand-red)" };
+
     return (
         <>
-            <tr className="hover:bg-muted/30 transition-colors">
+            <tr className="transition-colors hover:bg-[color:var(--surface-1)]">
                 <td className="p-4">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center font-bold text-muted-foreground text-xs overflow-hidden shrink-0">
+                        <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs overflow-hidden shrink-0 text-foreground-muted"
+                            style={{ background: "var(--surface-2)" }}
+                        >
                             {user.image
                                 ? <img src={user.image} alt={user.name ?? ""} className="w-full h-full object-cover" />
                                 : (user.name ?? user.email).charAt(0).toUpperCase()
                             }
                         </div>
                         <div>
-                            <div className="font-medium text-foreground flex items-center gap-2">
+                            <div className="text-body-sm text-foreground font-medium flex items-center gap-2">
                                 {user.name ?? "—"}
                                 {user.locationRegion && (
-                                    <span className="font-mono text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                    <span className="text-eyebrow text-foreground-muted flex items-center gap-0.5">
                                         <MapPin className="w-3 h-3" />{user.locationRegion}
                                     </span>
                                 )}
                             </div>
-                            <div className="text-xs text-muted-foreground font-mono">{user.email}</div>
+                            <div className="text-body-sm text-foreground-muted">{user.email}</div>
                             {meta.professionalTitle ? (
-                                <div className="text-xs text-muted-foreground flex items-center gap-1">
+                                <div className="text-body-sm text-foreground-muted flex items-center gap-1">
                                     <Briefcase className="w-3 h-3" />{String(meta.professionalTitle)}{meta.orgName ? ` · ${String(meta.orgName)}` : ""}
                                 </div>
                             ) : null}
                         </div>
                     </div>
                 </td>
-                <td className="p-4 text-muted-foreground font-mono">{user.role}</td>
+                <td className="p-4 text-body-sm text-foreground-muted">{user.role}</td>
                 <td className="p-4">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase ${
-                        user.isApproved
-                            ? "bg-kenya-green/10 text-kenya-green border border-kenya-green/20"
-                            : "bg-kenya-red/10 text-kenya-red border border-kenya-red/20"
-                    }`}>
+                    <span
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-eyebrow border"
+                        style={{ ...statusStyle, borderColor: `${statusStyle.color}33` }}
+                    >
                         {user.isApproved ? user.status : "pending"}
                     </span>
                 </td>
-                <td className="p-4 text-muted-foreground font-mono">
+                <td className="p-4 text-body-sm text-foreground-muted">
                     {new Date(user.createdAt).toLocaleDateString()}
                 </td>
                 <td className="p-4 text-right">
@@ -113,7 +123,7 @@ function ExpandableUserRow({ user, onAction }: { user: UserRow; onAction: () => 
                         {profileFields.length > 0 && (
                             <button
                                 onClick={() => setExpanded(v => !v)}
-                                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                                className="text-foreground-muted hover:text-foreground transition-colors p-1"
                                 title="View profile"
                             >
                                 {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -124,13 +134,13 @@ function ExpandableUserRow({ user, onAction }: { user: UserRow; onAction: () => 
                 </td>
             </tr>
             {expanded && profileFields.length > 0 && (
-                <tr className="bg-muted/20">
-                    <td colSpan={5} className="px-6 py-3 border-t border-border/30">
+                <tr style={{ background: "var(--surface-1)" }}>
+                    <td colSpan={5} className="px-6 py-3 border-t border-border">
                         <dl className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5">
                             {profileFields.map(f => (
                                 <div key={f.label}>
-                                    <dt className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{f.label}</dt>
-                                    <dd className="text-sm text-foreground font-medium truncate">{f.value}</dd>
+                                    <dt className="text-eyebrow text-foreground-muted">{f.label}</dt>
+                                    <dd className="text-body-sm text-foreground font-medium truncate">{f.value}</dd>
                                 </div>
                             ))}
                         </dl>
@@ -172,28 +182,31 @@ function UserActionMenu({ userId, onAction }: { userId: string; onAction: () => 
             <button
                 onClick={() => setOpen(prev => !prev)}
                 disabled={isPending}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1 disabled:opacity-40"
+                className="text-foreground-muted hover:text-foreground transition-colors p-1 disabled:opacity-40"
             >
                 <MoreVertical className="w-4 h-4" />
             </button>
             {open && (
-                <div className="absolute right-0 top-8 z-20 bg-background border border-border/50 rounded-lg shadow-xl w-44 py-1 text-sm font-mono">
+                <div
+                    className="absolute right-0 top-8 z-20 bg-background border border-border rounded-md w-44 py-1 text-body-sm"
+                    style={{ boxShadow: "var(--shadow-lg)" }}
+                >
                     <button
                         onClick={() => run(() => approveUser(userId), "approved")}
-                        className="flex items-center gap-2 w-full px-4 py-2 hover:bg-kenya-green/10 hover:text-kenya-green transition-colors text-left"
+                        className="flex items-center gap-2 w-full px-4 py-2 text-foreground text-left transition-colors hover:bg-[color:var(--brand-green-soft)] hover:text-[color:var(--brand-green)]"
                     >
                         <CheckCircle className="w-4 h-4" /> Approve
                     </button>
                     <button
                         onClick={() => run(() => rejectUser(userId), "rejected")}
-                        className="flex items-center gap-2 w-full px-4 py-2 hover:bg-yellow-500/10 hover:text-yellow-600 transition-colors text-left"
+                        className="flex items-center gap-2 w-full px-4 py-2 text-foreground text-left transition-colors hover:bg-yellow-500/10 hover:text-yellow-600"
                     >
                         <XCircle className="w-4 h-4" /> Reject
                     </button>
-                    <div className="h-px bg-border/50 my-1" />
+                    <div className="h-px bg-border my-1" />
                     <button
                         onClick={() => run(() => suspendUser(userId), "suspended")}
-                        className="flex items-center gap-2 w-full px-4 py-2 hover:bg-kenya-red/10 hover:text-kenya-red transition-colors text-left"
+                        className="flex items-center gap-2 w-full px-4 py-2 text-foreground text-left transition-colors hover:bg-[color:var(--brand-red-soft)] hover:text-[color:var(--brand-red)]"
                     >
                         <Ban className="w-4 h-4" /> Suspend
                     </button>
@@ -247,43 +260,40 @@ function InviteModeratorModal({
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/60" onClick={handleClose} />
-            <div className="relative bg-background border border-border shadow-2xl w-full max-w-md p-8 space-y-6">
+            <div
+                className="relative bg-background border border-border rounded-lg w-full max-w-md p-8 space-y-6"
+                style={{ boxShadow: "var(--shadow-lg)" }}
+            >
                 <div className="flex items-center justify-between">
-                    <h2 className="font-playfair font-black text-xl text-foreground uppercase tracking-tight">
-                        Invite Moderator
-                    </h2>
-                    <button onClick={handleClose} className="text-muted-foreground hover:text-foreground transition-colors">
+                    <h2 className="text-display-sm text-foreground">Invite moderator</h2>
+                    <button onClick={handleClose} className="text-foreground-muted hover:text-foreground transition-colors">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
                 {!inviteUrl ? (
                     <div className="space-y-5">
-                        <p className="text-sm text-muted-foreground font-sans">
+                        <p className="text-body-sm text-foreground-muted">
                             Enter the email address and assign a moderation scope. An invite link will be sent to their inbox.
                         </p>
 
                         <div className="space-y-1.5">
-                            <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
-                                Email Address
-                            </label>
+                            <label className="text-eyebrow text-foreground-muted block">Email address</label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="jenga-input w-full"
+                                className={INPUT_CLASS}
                                 placeholder="moderator@example.com"
                             />
                         </div>
 
                         <div className="space-y-1.5">
-                            <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
-                                Moderation Scope
-                            </label>
+                            <label className="text-eyebrow text-foreground-muted block">Moderation scope</label>
                             <select
                                 value={scope}
                                 onChange={(e) => setScope(e.target.value)}
-                                className="jenga-input w-full bg-background"
+                                className={INPUT_CLASS}
                             >
                                 {SCOPE_OPTIONS.map((s) => (
                                     <option key={s.value} value={s.value}>{s.label}</option>
@@ -294,38 +304,47 @@ function InviteModeratorModal({
                         <button
                             onClick={handleSend}
                             disabled={!email || loading}
-                            className="w-full h-12 bg-foreground text-background font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-primary transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            className="w-full h-11 rounded-md text-label font-medium transition-opacity hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
+                            style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
                         >
-                            {loading ? "Sending…" : <><Send className="w-4 h-4" /> Send Invite</>}
+                            {loading ? "Sending…" : <><Send className="w-4 h-4" /> Send invite</>}
                         </button>
                     </div>
                 ) : (
                     <div className="space-y-5">
-                        <div className="bg-primary/10 border border-primary/30 p-4 space-y-2">
-                            <p className="font-mono text-[10px] uppercase tracking-widest text-primary font-bold">Invite Sent</p>
-                            <p className="text-sm text-muted-foreground">
-                                An email was sent to <strong>{email}</strong>. The invite expires in 7 days.
+                        <div
+                            className="rounded-md border p-4 space-y-2"
+                            style={{
+                                background: "var(--brand-green-soft)",
+                                borderColor: "var(--brand-green)",
+                            }}
+                        >
+                            <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Invite sent</p>
+                            <p className="text-body-sm text-foreground-muted">
+                                An email was sent to <strong className="text-foreground">{email}</strong>. The invite expires in 7 days.
                             </p>
                         </div>
                         <div className="space-y-1.5">
-                            <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
-                                Invite Link (backup)
-                            </label>
+                            <label className="text-eyebrow text-foreground-muted block">Invite link (backup)</label>
                             <div className="flex gap-2">
                                 <input
                                     readOnly
                                     value={inviteUrl}
-                                    className="jenga-input w-full text-xs"
+                                    className={INPUT_CLASS}
                                 />
                                 <button
                                     onClick={() => { navigator.clipboard.writeText(inviteUrl); toast.success("Copied!"); }}
-                                    className="px-3 border border-border hover:bg-muted transition-colors text-xs font-mono"
+                                    className="px-3 rounded-md border border-border text-body-sm text-foreground hover:bg-[color:var(--surface-2)] transition-colors"
                                 >
                                     Copy
                                 </button>
                             </div>
                         </div>
-                        <button onClick={handleClose} className="w-full h-12 bg-foreground text-background font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-primary transition-all">
+                        <button
+                            onClick={handleClose}
+                            className="w-full h-11 rounded-md text-label font-medium transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                        >
                             Done
                         </button>
                     </div>
@@ -357,40 +376,50 @@ export default function AdminDashboard({
             />
 
             <div className="p-6 md:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
-                <div>
-                    <h1 className="font-playfair text-3xl font-black text-foreground tracking-tight mb-2">System Control</h1>
-                    <p className="text-muted-foreground font-mono text-sm">SuperAdmin Overview Matrix</p>
-                </div>
+                <header className="space-y-1 border-b border-border pb-6">
+                    <p className="text-eyebrow text-foreground-muted">SuperAdmin overview matrix</p>
+                    <h1 className="text-display-md text-foreground">System control</h1>
+                </header>
 
                 {/* System Stats Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {stats.map((stat, i) => (
-                        <div key={i} className="p-6 border border-border/50 rounded-lg bg-card flex flex-col gap-2 shadow-sm relative overflow-hidden group hover:border-[#BB0000] transition-colors">
-                            <span className="text-xs text-muted-foreground uppercase tracking-wider font-mono">{stat.label}</span>
-                            <span className="font-playfair text-3xl font-black text-foreground">{stat.value}</span>
-                            <div className={`flex items-center text-xs mt-1 font-mono ${
-                                stat.trend === "up" ? "text-kenya-green" : stat.trend === "down" ? "text-kenya-red" : "text-muted-foreground"
-                            }`}>
-                                {stat.trend === "up" && <TrendingUp className="w-4 h-4 mr-1" />}
-                                {stat.trend === "down" && <AlertTriangle className="w-4 h-4 mr-1" />}
-                                {stat.trend === "neutral" && <Minus className="w-4 h-4 mr-1" />}
-                                <span>{stat.change}</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {stats.map((stat, i) => {
+                        const trendColor =
+                            stat.trend === "up"
+                                ? "var(--brand-green)"
+                                : stat.trend === "down"
+                                  ? "var(--brand-red)"
+                                  : "var(--foreground-muted)";
+                        return (
+                            <div
+                                key={i}
+                                className="rounded-lg border border-border bg-background p-6 flex flex-col gap-2 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <span className="text-eyebrow text-foreground-muted">{stat.label}</span>
+                                <span className="text-display-sm text-foreground">{stat.value}</span>
+                                <div className="flex items-center text-body-sm mt-1" style={{ color: trendColor }}>
+                                    {stat.trend === "up" && <TrendingUp className="w-4 h-4 mr-1" />}
+                                    {stat.trend === "down" && <AlertTriangle className="w-4 h-4 mr-1" />}
+                                    {stat.trend === "neutral" && <Minus className="w-4 h-4 mr-1" />}
+                                    <span>{stat.change}</span>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {/* User Management Table */}
-                <div className="border border-border/50 rounded-lg bg-card flex flex-col shadow-sm">
-                    <div className="p-5 border-b border-border/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <h2 className="font-playfair text-xl font-bold text-foreground">User Management</h2>
+                <div className="rounded-lg border border-border bg-background flex flex-col" style={{ boxShadow: "var(--shadow-sm)" }}>
+                    <div className="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <h2 className="text-headline text-foreground">User management</h2>
                         <div className="flex items-center gap-3">
                             <div className="relative">
-                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-subtle w-4 h-4" />
                                 <select
                                     value={roleFilter}
                                     onChange={(e) => setRoleFilter(e.target.value)}
-                                    className="pl-9 pr-8 py-1.5 h-9 rounded-md border border-input bg-transparent text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring font-mono appearance-none"
+                                    className="pl-9 pr-8 py-1.5 h-9 rounded-md border border-border bg-background text-body-sm text-foreground appearance-none focus:outline-none focus:border-[color:var(--border-strong,#D4D4D8)]"
                                 >
                                     {ROLES.map((r) => <option key={r}>{r}</option>)}
                                 </select>
@@ -401,18 +430,18 @@ export default function AdminDashboard({
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-muted/50 border-b border-border/50 text-xs uppercase text-muted-foreground font-mono">
-                                    <th className="p-4 font-bold tracking-wider">User</th>
-                                    <th className="p-4 font-bold tracking-wider">Role</th>
-                                    <th className="p-4 font-bold tracking-wider">Status</th>
-                                    <th className="p-4 font-bold tracking-wider">Joined</th>
-                                    <th className="p-4 font-bold tracking-wider text-right">Actions</th>
+                                <tr className="border-b border-border" style={{ background: "var(--surface-1)" }}>
+                                    <th className="p-4 text-eyebrow text-foreground-muted">User</th>
+                                    <th className="p-4 text-eyebrow text-foreground-muted">Role</th>
+                                    <th className="p-4 text-eyebrow text-foreground-muted">Status</th>
+                                    <th className="p-4 text-eyebrow text-foreground-muted">Joined</th>
+                                    <th className="p-4 text-eyebrow text-foreground-muted text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-sm divide-y divide-border/50">
+                            <tbody className="divide-y divide-border">
                                 {filtered.length === 0 ? (
                                     <tr>
-                                        <td colSpan={5} className="p-8 text-center text-muted-foreground font-mono text-sm">
+                                        <td colSpan={5} className="p-8 text-center text-body-sm text-foreground-muted">
                                             No users found.
                                         </td>
                                     </tr>
@@ -425,14 +454,14 @@ export default function AdminDashboard({
                         </table>
                     </div>
 
-                    <div className="p-4 border-t border-border/50 flex items-center justify-between text-sm text-muted-foreground font-mono">
+                    <div className="p-4 border-t border-border flex items-center justify-between text-body-sm text-foreground-muted">
                         <span>Showing {filtered.length} of {users.length} users</span>
                         <button
                             onClick={() => setInviteModalOpen(true)}
-                            className="flex items-center gap-2 px-4 py-1.5 bg-transparent border border-border/50 rounded-md text-sm font-bold font-mono hover:bg-muted transition-colors"
+                            className="inline-flex items-center gap-2 h-9 rounded-md border border-border bg-background px-4 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
                         >
                             <Plus className="w-4 h-4" />
-                            Invite Moderator
+                            Invite moderator
                         </button>
                     </div>
                 </div>
