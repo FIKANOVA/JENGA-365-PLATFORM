@@ -63,3 +63,7 @@ src/scripts/
 
 # Internal planning docs — not relevant to contributors
 plans/
+
+# Defensive catch-all for env files; explicit exception for the template
+.env*
+!.env.example
