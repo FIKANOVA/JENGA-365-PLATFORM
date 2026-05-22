@@ -2,7 +2,12 @@ import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
-import { BarChart3, Clock, Users, TrendingUp } from "lucide-react";
+import { BarChart3, Clock, Users, TrendingUp, Trees, Leaf } from "lucide-react";
+
+function fmt(n: number | undefined | null): string {
+    if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) return "—";
+    return n.toLocaleString();
+}
 
 export default async function StatsPage() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -13,30 +18,12 @@ export default async function StatsPage() {
     const stats = await getGlobalImpactStats();
 
     const statCards = [
-        {
-            label: "Mentorship Hours",
-            value: stats?.totalMentorshipHours?.toLocaleString() ?? "—",
-            icon: Clock,
-            color: "text-blue-500",
-        },
-        {
-            label: "Youth Engaged",
-            value: stats?.youthEngaged?.toLocaleString() ?? "—",
-            icon: Users,
-            color: "text-[var(--primary-green)]",
-        },
-        {
-            label: "Clinics Held",
-            value: stats?.clinicsHeld?.toLocaleString() ?? "—",
-            icon: TrendingUp,
-            color: "text-purple-500",
-        },
-        {
-            label: "Total Donations",
-            value: stats?.totalDonations ? `KES ${Number(stats.totalDonations).toLocaleString()}` : "—",
-            icon: BarChart3,
-            color: "text-amber-500",
-        },
+        { label: "Mentorship Hours",   value: fmt(stats?.mentorshipHoursTotal),    icon: Clock,       color: "text-blue-500" },
+        { label: "Youth Engaged",      value: fmt(stats?.youthEngagedActive),      icon: Users,       color: "text-[var(--brand-green)]" },
+        { label: "Active Mentors",     value: fmt(stats?.activeMentors),           icon: TrendingUp,  color: "text-purple-500" },
+        { label: "Trees Planted",      value: fmt(stats?.treesPlantedTotal),       icon: Trees,       color: "text-[var(--brand-green)]" },
+        { label: "Trees Alive (Audit)", value: fmt(stats?.treesAliveLatestAudit), icon: Leaf,         color: "text-emerald-600" },
+        { label: "Corporate Partners", value: fmt(stats?.activeCorporatePartners), icon: BarChart3,   color: "text-amber-500" },
     ];
 
     return (
@@ -45,11 +32,11 @@ export default async function StatsPage() {
                 <div>
                     <h1 className="font-playfair text-4xl font-black text-foreground mb-2">Impact Stats</h1>
                     <p className="text-muted-foreground font-mono text-sm">
-                        {stats?.reportPeriod ? `Report period: ${stats.reportPeriod}` : "Platform-wide impact metrics"}
+                        Live platform-wide impact metrics — sourced from v_public_impact_aggregate.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {statCards.map((card) => (
                         <div key={card.label} className="bg-card border border-border/50 rounded-lg p-6 space-y-3">
                             <card.icon className={`w-6 h-6 ${card.color}`} />

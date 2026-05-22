@@ -1,89 +1,96 @@
 import Link from "next/link";
+import { Trophy, Brain, Users, TrendingUp, ArrowRight } from "lucide-react";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PageHero from "@/components/shared/PageHero";
+import { getGlobalImpactStats } from "@/lib/actions/marketing";
 
 export const metadata = {
     title: "Mentors | Jenga365",
     description: "Meet the seasoned professionals who give back through Jenga365 — guiding the next generation of athletes, leaders, and entrepreneurs.",
 };
 
+function fmt(n: number | undefined | null): string {
+    if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) return "—";
+    return n.toLocaleString();
+}
+
 const MENTOR_QUALITIES = [
-    { icon: "emoji_events", title: "Proven Track Record", body: "Mentors are vetted professionals with at least 5 years of industry experience and a history of impact." },
-    { icon: "psychology", title: "Structured Guidance", body: "Each mentorship follows a structured 12-week pathway with clear milestones and accountability check-ins." },
-    { icon: "groups", title: "Community Network", body: "Gain access to an exclusive network of leaders across sport, business, health, and technology." },
-    { icon: "trending_up", title: "Career Acceleration", body: "Mentees report 3× faster career progression and significantly stronger professional networks." },
+    { Icon: Trophy,     title: "Proven Track Record",   body: "Mentors are vetted professionals with at least 5 years of industry experience and a history of impact." },
+    { Icon: Brain,      title: "Structured Guidance",   body: "Each mentorship follows a structured 12-week pathway with clear milestones and accountability check-ins." },
+    { Icon: Users,      title: "Community Network",     body: "Gain access to an exclusive network of leaders across sport, business, health, and technology." },
+    { Icon: TrendingUp, title: "Career Acceleration",   body: "Mentees report 3× faster career progression and significantly stronger professional networks." },
 ];
 
-const MENTOR_SECTORS = [
-    "Rugby & Elite Sport", "Business & Entrepreneurship", "Technology & Innovation",
-    "Health & Wellness", "Finance & Investment", "Law & Governance",
-    "Media & Communications", "Social Impact & NGO",
-];
+export default async function MentorsPage() {
+    const dbStats = await getGlobalImpactStats();
 
-export default function MentorsPage() {
+    const heroStats = [
+        { value: fmt(dbStats?.activeMentors),         label: "Active Mentors" },
+        { value: fmt(dbStats?.youthEngagedActive),    label: "Mentees Reached" },
+        { value: "12 wks",                            label: "Programme Duration" },
+        { value: fmt(dbStats?.mentorshipHoursTotal),  label: "Mentorship Hours" },
+    ];
+
     return (
-        <div className="flex flex-col bg-[var(--off-white)]">
-            {/* Hero */}
+        <div className="flex flex-col bg-background">
             <PageHero
                 eyebrow="The Guide"
-                heading={<>Become a<br /><span className="italic text-primary">Mentor.</span></>}
+                heading={<>Become a mentor.</>}
                 description="Share your expertise. Shape the next generation. Jenga365 mentors are the backbone of a movement building Total Athletes and purposeful leaders across Kenya."
-                bgImage="https://images.unsplash.com/photo-1559027615-cd4628902d4a?q=80&w=1920&auto=format&fit=crop"
-                bgFallback="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1920&auto=format&fit=crop"
             >
-                <div className="flex flex-wrap items-center gap-5">
-                    <Link href="/register" className="bg-primary text-white px-8 py-4 font-mono text-[10px] uppercase tracking-widest font-bold hover:brightness-110 transition-all shadow-xl">
-                        Apply as Mentor
+                <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                        href="/register"
+                        className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                        style={{ background: "var(--brand-green)" }}
+                    >
+                        Apply as mentor
+                        <ArrowRight className="h-4 w-4" />
                     </Link>
-                    <Link href="/about" className="font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-white transition-colors border-b border-white/30 pb-0.5">
-                        Our Mission →
+                    <Link
+                        href="/about"
+                        className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+                    >
+                        Our mission
                     </Link>
                 </div>
             </PageHero>
 
-            {/* Why Mentor */}
-            <section className="py-28 border-b border-[var(--border)]">
-                <div className="max-w-7xl mx-auto px-6 md:px-12">
-                    <div className="space-y-16">
-                        <div className="space-y-4 max-w-xl">
-                            <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--text-muted)]">Why it matters</span>
-                            <h2 className="font-serif font-black text-5xl uppercase tracking-tighter leading-[0.95]">
-                                The Mentor<br /><span className="italic text-[var(--primary-green)]">Advantage.</span>
-                            </h2>
-                        </div>
-                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--border)]">
-                            {MENTOR_QUALITIES.map((q) => (
-                                <div key={q.title} className="bg-[var(--off-white)] p-10 space-y-5 group hover:bg-white transition-colors">
-                                    <span className="material-symbols-outlined text-4xl text-[var(--primary-green)] group-hover:scale-110 transition-transform inline-block">{q.icon}</span>
-                                    <h3 className="font-serif font-black text-lg uppercase tracking-tight">{q.title}</h3>
-                                    <p className="text-sm text-[var(--text-secondary)] font-light leading-relaxed">{q.body}</p>
-                                </div>
-                            ))}
-                        </div>
+            <section className="py-20 lg:py-24 border-b border-border">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
+                    <div className="max-w-xl space-y-3">
+                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Why it matters</p>
+                        <h2 className="text-display-md text-foreground">The mentor advantage.</h2>
                     </div>
-                </div>
-            </section>
-
-            {/* Stats Bar */}
-            <section className="bg-black text-white py-16">
-                <div className="max-w-7xl mx-auto px-6 md:px-12">
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/10">
-                        {[
-                            { value: "120+", label: "Active Mentors" },
-                            { value: "94%", label: "Mentee Satisfaction" },
-                            { value: "12 wks", label: "Programme Duration" },
-                            { value: "8", label: "Sectors Covered" },
-                        ].map((stat) => (
-                            <div key={stat.label} className="px-12 py-10 bg-black text-center">
-                                <div className="font-serif font-black text-5xl text-white tracking-tighter">{stat.value}</div>
-                                <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/50 mt-2">{stat.label}</div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {MENTOR_QUALITIES.map(({ Icon, title, body }) => (
+                            <div
+                                key={title}
+                                className="rounded-lg border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-1)]"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <Icon className="h-5 w-5" style={{ color: "var(--brand-green)" }} />
+                                <h3 className="text-headline text-foreground">{title}</h3>
+                                <p className="text-body-sm text-foreground-muted">{body}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* CTA */}
+            <section className="py-16 lg:py-20" style={{ background: "var(--brand-black)" }}>
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+                        {heroStats.map((stat) => (
+                            <div key={stat.label} className="space-y-1.5 text-center">
+                                <div className="text-display-sm" style={{ color: "#FFFFFF" }}>{stat.value}</div>
+                                <div className="text-eyebrow" style={{ color: "rgba(255,255,255,0.6)" }}>{stat.label}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             <AboutCTAStrip />
         </div>
     );

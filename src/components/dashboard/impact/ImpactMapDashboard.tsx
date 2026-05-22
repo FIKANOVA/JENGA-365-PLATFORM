@@ -101,9 +101,9 @@ export default function ImpactMapDashboard({ role }: Props) {
                     <div className="pt-8 border-t border-border space-y-6">
                         <span className="section-label">Quick Summary</span>
                         <div className="grid grid-cols-1 gap-4">
-                            <SummaryItem label="Total Funded" value="KES 4.2M" color="text-primary" />
-                            <SummaryItem label="Active Projects" value="48" color="text-foreground" />
-                            <SummaryItem label="Youth Reached" value="1.2k" color="text-[#006600]" />
+                            <SummaryItem label="Total Funded" value="—" color="text-primary" />
+                            <SummaryItem label="Active Projects" value="—" color="text-foreground" />
+                            <SummaryItem label="Youth Reached" value="—" color="text-[#006600]" />
                         </div>
                         <button className="w-full py-3 text-center border border-primary text-primary font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-primary hover:text-white transition-all">
                             View Full Impact Report
