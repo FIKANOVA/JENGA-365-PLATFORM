@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Linkedin, Mail, Globe, ArrowRight } from "lucide-react";
 import Logo from "@/components/shared/Logo";
+import DonateButton from "@/components/shared/DonateButton";
 
 const footerNav = [
     {
@@ -82,12 +83,18 @@ export default function Footer() {
                             <ul className="space-y-4">
                                 {col.links.map((link) => (
                                     <li key={link.label}>
-                                        <Link
-                                            href={link.href}
-                                            className="font-sans text-sm text-white/50 hover:text-white transition-colors"
-                                        >
-                                            {link.label}
-                                        </Link>
+                                        {link.label === "Donate" ? (
+                                            <DonateButton className="font-sans text-sm text-white/50 hover:text-white transition-colors text-left">
+                                                Donate
+                                            </DonateButton>
+                                        ) : (
+                                            <Link
+                                                href={link.href}
+                                                className="font-sans text-sm text-white/50 hover:text-white transition-colors"
+                                            >
+                                                {link.label}
+                                            </Link>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

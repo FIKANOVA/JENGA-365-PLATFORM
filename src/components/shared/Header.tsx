@@ -8,6 +8,7 @@ import Logo from "@/components/shared/Logo";
 import UserAvatar from "@/components/shared/UserAvatar";
 import NotificationBell from "@/components/shared/NotificationBell";
 import RoleBadge from "@/components/shared/RoleBadge";
+import DonateButton from "@/components/shared/DonateButton";
 import { useSession, signOut } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
 
@@ -85,14 +86,13 @@ function PrimaryNav({ onItemClick }: { onItemClick?: () => void }) {
 function GlobalCTAs() {
     return (
         <>
-            <Link
-                href="/donate"
+            <DonateButton
                 className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label transition-colors hover:bg-surface-2"
                 style={{ color: "var(--brand-red)" }}
             >
                 <Heart className="h-4 w-4" aria-hidden />
                 Donate
-            </Link>
+            </DonateButton>
             <Link
                 href="/shop"
                 className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label hover:bg-surface-2 transition-colors"
@@ -291,14 +291,12 @@ function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; 
                     </Link>
                 ))}
                 <div className="h-px bg-border my-2" />
-                <Link
-                    href="/donate"
-                    onClick={onClose}
-                    className="flex items-center gap-2.5 px-3 py-3 rounded-md hover:bg-surface-2 text-body"
+                <DonateButton
+                    className="flex items-center gap-2.5 px-3 py-3 rounded-md hover:bg-surface-2 text-body text-left"
                     style={{ color: "var(--brand-red)" }}
                 >
                     <Heart className="h-4 w-4" aria-hidden /> Donate
-                </Link>
+                </DonateButton>
                 <Link
                     href="/shop"
                     onClick={onClose}
