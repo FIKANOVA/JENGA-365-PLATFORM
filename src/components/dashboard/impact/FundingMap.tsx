@@ -55,7 +55,6 @@ export default function FundingMap({ filters, role }: Props) {
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                // Or Mapbox using token from env
                 />
 
                 <ZoomControl position="topright" />
@@ -65,25 +64,28 @@ export default function FundingMap({ filters, role }: Props) {
                         key={f.properties.id}
                         position={[f.geometry.coordinates[1], f.geometry.coordinates[0]]}
                     >
-                        <Popup className="jenga-popup">
+                        <Popup>
                             <div className="p-2 space-y-2">
-                                <span className="font-mono text-[9px] uppercase tracking-widest text-primary font-bold">
-                                    {f.properties.projectType.replace('_', ' ')}
+                                <span
+                                    className="text-eyebrow"
+                                    style={{ color: "var(--brand-green)" }}
+                                >
+                                    {f.properties.projectType.replace("_", " ")}
                                 </span>
-                                <h4 className="font-playfair font-bold text-base leading-tight">
+                                <h4 className="text-label text-foreground leading-tight">
                                     {f.properties.name}
                                 </h4>
-                                <p className="font-lato text-xs text-muted-foreground">
+                                <p className="text-body-sm text-foreground-muted">
                                     {f.properties.description}
                                 </p>
                                 <div className="pt-2 border-t border-border flex justify-between">
                                     <div className="space-y-0.5">
-                                        <p className="font-mono text-[8px] uppercase tracking-tighter text-muted-foreground">Funded</p>
-                                        <p className="font-mono text-[10px] font-bold">KES {f.properties.amount}</p>
+                                        <p className="text-eyebrow text-foreground-muted">Funded</p>
+                                        <p className="text-label text-foreground">KES {f.properties.amount}</p>
                                     </div>
                                     <div className="space-y-0.5 text-right">
-                                        <p className="font-mono text-[8px] uppercase tracking-tighter text-muted-foreground">Reached</p>
-                                        <p className="font-mono text-[10px] font-bold">{f.properties.youthReached} Youth</p>
+                                        <p className="text-eyebrow text-foreground-muted">Reached</p>
+                                        <p className="text-label text-foreground">{f.properties.youthReached} Youth</p>
                                     </div>
                                 </div>
                             </div>

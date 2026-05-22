@@ -1,12 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Upload, Trash2, Clock, ShieldCheck, AlertTriangle } from "lucide-react";
-
-/**
- * NDA Manager — SuperAdmin only.
- * Manage NDA document versions, view signing status, and upload new versions.
- */
+import { FileText, Upload, Trash2, Clock, AlertTriangle } from "lucide-react";
 
 export type NdaVersionRow = {
     id: string;
@@ -28,43 +23,55 @@ export default function NDAManager({ versions: initialVersions }: NDAManagerProp
     const unsignedCount = activeVersion ? activeVersion.totalUsers - activeVersion.signedCount : 0;
 
     return (
-        <div className="min-h-screen bg-[#FAFAF8]">
+        <div className="min-h-screen bg-background">
             <div className="max-w-5xl mx-auto px-8 py-12">
                 {/* Header */}
                 <div className="mb-10">
-                    <p className="text-[10px] text-[#BB0000] uppercase tracking-[0.3em] font-bold mb-2" style={{ fontFamily: "var(--font-dm-mono)" }}>SuperAdmin Tool</p>
-                    <h1 className="text-4xl text-[#1A1A1A] mb-2" style={{ fontFamily: "var(--font-playfair)", fontWeight: 900 }}>NDA Manager</h1>
-                    <p className="text-gray-500" style={{ fontFamily: "var(--font-lato)" }}>Manage NDA document versions and track user signing compliance.</p>
+                    <p className="text-eyebrow mb-2" style={{ color: "var(--brand-red)" }}>SuperAdmin tool</p>
+                    <h1 className="text-display-md text-foreground mb-2">NDA manager</h1>
+                    <p className="text-body-sm text-foreground-muted">
+                        Manage NDA document versions and track user signing compliance.
+                    </p>
                 </div>
 
                 {/* Stats Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div className="bg-white border border-gray-100 p-6" style={{ borderRadius: 2 }}>
-                        <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2" style={{ fontFamily: "var(--font-dm-mono)" }}>Active Version</p>
-                        <p className="text-3xl font-bold text-[#006600]" style={{ fontFamily: "var(--font-dm-mono)" }}>v{activeVersion?.version}</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+                    <div className="rounded-lg border border-border bg-background p-6" style={{ boxShadow: "var(--shadow-sm)" }}>
+                        <p className="text-eyebrow text-foreground-muted mb-2">Active version</p>
+                        <p className="text-display-sm" style={{ color: "var(--brand-green)" }}>
+                            v{activeVersion?.version}
+                        </p>
                     </div>
-                    <div className="bg-white border border-gray-100 p-6" style={{ borderRadius: 2 }}>
-                        <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2" style={{ fontFamily: "var(--font-dm-mono)" }}>Signed</p>
-                        <p className="text-3xl font-bold" style={{ fontFamily: "var(--font-dm-mono)" }}>{activeVersion?.signedCount.toLocaleString()}</p>
-                        <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: "var(--font-lato)" }}>of {activeVersion?.totalUsers.toLocaleString()} users</p>
+                    <div className="rounded-lg border border-border bg-background p-6" style={{ boxShadow: "var(--shadow-sm)" }}>
+                        <p className="text-eyebrow text-foreground-muted mb-2">Signed</p>
+                        <p className="text-display-sm text-foreground">{activeVersion?.signedCount.toLocaleString()}</p>
+                        <p className="text-body-sm text-foreground-muted mt-1">
+                            of {activeVersion?.totalUsers.toLocaleString()} users
+                        </p>
                     </div>
-                    <div className="bg-white border border-gray-100 p-6 border-l-4 border-l-[#BB0000]" style={{ borderRadius: 2 }}>
-                        <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2" style={{ fontFamily: "var(--font-dm-mono)" }}>Unsigned</p>
-                        <p className="text-3xl font-bold text-[#BB0000]" style={{ fontFamily: "var(--font-dm-mono)" }}>{unsignedCount}</p>
-                        <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: "var(--font-lato)" }}>Require reminder</p>
+                    <div
+                        className="rounded-lg border bg-background p-6 border-l-4"
+                        style={{ boxShadow: "var(--shadow-sm)", borderLeftColor: "var(--brand-red)" }}
+                    >
+                        <p className="text-eyebrow text-foreground-muted mb-2">Unsigned</p>
+                        <p className="text-display-sm" style={{ color: "var(--brand-red)" }}>{unsignedCount}</p>
+                        <p className="text-body-sm text-foreground-muted mt-1">Require reminder</p>
                     </div>
                 </div>
 
                 {/* Upload New Version */}
                 <section className="mb-12">
-                    <h2 className="text-xl mb-4 flex items-center gap-2" style={{ fontFamily: "var(--font-playfair)", fontWeight: 700 }}>
-                        <span className="w-6 h-[2px] bg-[#BB0000]" />
-                        Upload New Version
+                    <h2 className="text-headline text-foreground mb-4 flex items-center gap-2">
+                        <span className="w-6 h-[2px]" style={{ background: "var(--brand-red)" }} />
+                        Upload new version
                     </h2>
-                    <div className="bg-white border-2 border-dashed border-gray-200 p-8 text-center hover:border-[#BB0000]/40 transition-colors cursor-pointer" style={{ borderRadius: 2 }}>
-                        <Upload size={32} className="mx-auto text-gray-300 mb-3" />
-                        <p className="text-sm font-bold mb-1" style={{ fontFamily: "var(--font-lato)" }}>Drop a PDF here or click to upload</p>
-                        <p className="text-xs text-gray-400" style={{ fontFamily: "var(--font-dm-mono)" }}>
+                    <div
+                        className="rounded-lg border-2 border-dashed border-border bg-background p-8 text-center hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors cursor-pointer"
+                        style={{ background: "var(--surface-1)" }}
+                    >
+                        <Upload size={32} className="mx-auto text-foreground-subtle mb-3" />
+                        <p className="text-label text-foreground mb-1">Drop a PDF here or click to upload</p>
+                        <p className="text-eyebrow text-foreground-muted">
                             Uploading a new version will require ALL users to re-sign
                         </p>
                     </div>
@@ -72,61 +79,81 @@ export default function NDAManager({ versions: initialVersions }: NDAManagerProp
 
                 {/* Version History */}
                 <section>
-                    <h2 className="text-xl mb-6 flex items-center gap-2" style={{ fontFamily: "var(--font-playfair)", fontWeight: 700 }}>
-                        <span className="w-6 h-[2px] bg-[#006600]" />
-                        Version History
+                    <h2 className="text-headline text-foreground mb-6 flex items-center gap-2">
+                        <span className="w-6 h-[2px]" style={{ background: "var(--brand-green)" }} />
+                        Version history
                     </h2>
                     <div className="space-y-3">
-                        {versions.map((v) => (
-                            <div
-                                key={v.id}
-                                className={`flex items-center justify-between p-5 bg-white border transition-all ${v.status === "active" ? "border-[#006600]/40" : "border-gray-100"
-                                    }`}
-                                style={{ borderRadius: 2 }}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className={`w-10 h-10 flex items-center justify-center ${v.status === "active" ? "bg-[#006600]/10" : "bg-gray-50"}`} style={{ borderRadius: 2 }}>
-                                        <FileText size={18} className={v.status === "active" ? "text-[#006600]" : "text-gray-400"} />
+                        {versions.map((v) => {
+                            const isActive = v.status === "active";
+                            return (
+                                <div
+                                    key={v.id}
+                                    className="flex items-center justify-between p-5 rounded-lg border bg-background transition-colors"
+                                    style={{
+                                        borderColor: isActive ? "var(--brand-green)" : "var(--border)",
+                                        boxShadow: "var(--shadow-sm)",
+                                    }}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div
+                                            className="w-10 h-10 flex items-center justify-center rounded-md"
+                                            style={{
+                                                background: isActive ? "var(--brand-green-soft)" : "var(--surface-1)",
+                                                color: isActive ? "var(--brand-green)" : "var(--foreground-subtle)",
+                                            }}
+                                        >
+                                            <FileText size={18} />
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-label text-foreground">Version {v.version}</p>
+                                                {isActive && (
+                                                    <span
+                                                        className="text-eyebrow px-2 py-0.5 rounded-full"
+                                                        style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                                                    >
+                                                        Active
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-2 mt-0.5">
+                                                <Clock size={10} className="text-foreground-subtle" />
+                                                <p className="text-eyebrow text-foreground-muted">{v.uploadedAt}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div className="flex items-center gap-2">
-                                            <p className="font-bold text-sm" style={{ fontFamily: "var(--font-dm-mono)" }}>Version {v.version}</p>
-                                            {v.status === "active" && (
-                                                <span className="text-[8px] px-2 py-0.5 bg-[#006600] text-white uppercase tracking-wider font-bold" style={{ fontFamily: "var(--font-dm-mono)", borderRadius: 2 }}>
-                                                    Active
-                                                </span>
-                                            )}
+                                    <div className="flex items-center gap-4">
+                                        <div className="text-right">
+                                            <p className="text-label text-foreground">
+                                                {v.signedCount}/{v.totalUsers}
+                                            </p>
+                                            <p className="text-eyebrow text-foreground-muted">Signed</p>
                                         </div>
-                                        <div className="flex items-center gap-2 mt-0.5">
-                                            <Clock size={10} className="text-gray-400" />
-                                            <p className="text-xs text-gray-400" style={{ fontFamily: "var(--font-dm-mono)" }}>{v.uploadedAt}</p>
-                                        </div>
+                                        {!isActive && (
+                                            <button className="text-foreground-subtle hover:text-[color:var(--brand-red)] transition-colors">
+                                                <Trash2 size={14} />
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-4">
-                                    <div className="text-right">
-                                        <p className="text-sm font-bold" style={{ fontFamily: "var(--font-dm-mono)" }}>
-                                            {v.signedCount}/{v.totalUsers}
-                                        </p>
-                                        <p className="text-[9px] text-gray-400 uppercase" style={{ fontFamily: "var(--font-dm-mono)" }}>Signed</p>
-                                    </div>
-                                    {v.status === "archived" && (
-                                        <button className="text-gray-300 hover:text-[#BB0000] transition-colors">
-                                            <Trash2 size={14} />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </section>
 
                 {/* Warning */}
-                <div className="mt-8 flex items-start gap-3 p-4 bg-[#BB0000]/5 border border-[#BB0000]/20" style={{ borderRadius: 2 }}>
-                    <AlertTriangle size={16} className="text-[#BB0000] flex-shrink-0 mt-0.5" />
+                <div
+                    className="mt-8 flex items-start gap-3 p-4 rounded-md border"
+                    style={{
+                        background: "var(--brand-red-soft)",
+                        borderColor: "var(--brand-red)",
+                    }}
+                >
+                    <AlertTriangle size={16} className="flex-shrink-0 mt-0.5" style={{ color: "var(--brand-red)" }} />
                     <div>
-                        <p className="text-xs font-bold text-[#BB0000] mb-1" style={{ fontFamily: "var(--font-dm-mono)" }}>IMPORTANT</p>
-                        <p className="text-xs text-gray-600" style={{ fontFamily: "var(--font-lato)" }}>
+                        <p className="text-label mb-1" style={{ color: "var(--brand-red)" }}>Important</p>
+                        <p className="text-body-sm text-foreground-muted">
                             Uploading a new NDA version will invalidate all existing signatures and require every user to re-sign before accessing their dashboard. Use with caution.
                         </p>
                     </div>
