@@ -53,10 +53,13 @@ function UserProfileCard({ user, onAction, actioning, actioned }: {
     ].filter(Boolean) as { label: string; value: string }[];
 
     return (
-        <div className="border border-border/50 rounded-lg bg-card shadow-sm overflow-hidden">
+        <div className="rounded-lg border border-border bg-background overflow-hidden" style={{ boxShadow: "var(--shadow-sm)" }}>
             <div className="p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="flex items-center gap-4 flex-1">
-                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center font-bold text-muted-foreground text-lg shrink-0 overflow-hidden">
+                    <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0 overflow-hidden text-foreground-muted"
+                        style={{ background: "var(--surface-2)" }}
+                    >
                         {user.image
                             ? <img src={user.image} alt={user.name ?? ""} className="w-full h-full object-cover" />
                             : (user.name ?? user.email).charAt(0).toUpperCase()
@@ -64,18 +67,25 @@ function UserProfileCard({ user, onAction, actioning, actioned }: {
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-1 flex-wrap">
-                            <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded text-foreground">{user.role}</span>
-                            <span className="font-mono text-xs text-muted-foreground">{new Date(user.createdAt).toLocaleDateString()}</span>
+                            <span
+                                className="text-eyebrow px-2 py-0.5 rounded text-foreground"
+                                style={{ background: "var(--surface-2)" }}
+                            >
+                                {user.role}
+                            </span>
+                            <span className="text-eyebrow text-foreground-muted">
+                                {new Date(user.createdAt).toLocaleDateString()}
+                            </span>
                             {user.locationRegion && (
-                                <span className="font-mono text-xs text-muted-foreground flex items-center gap-1">
+                                <span className="text-eyebrow text-foreground-muted flex items-center gap-1">
                                     <MapPin className="w-3 h-3" />{user.locationRegion}
                                 </span>
                             )}
                         </div>
-                        <h4 className="font-bold text-base text-foreground">{user.name ?? "Unnamed User"}</h4>
-                        <p className="text-sm text-muted-foreground font-mono truncate">{user.email}</p>
+                        <h4 className="text-headline text-foreground">{user.name ?? "Unnamed user"}</h4>
+                        <p className="text-body-sm text-foreground-muted truncate">{user.email}</p>
                         {meta.professionalTitle ? (
-                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <p className="text-body-sm text-foreground-muted flex items-center gap-1 mt-0.5">
                                 <Briefcase className="w-3 h-3" />{String(meta.professionalTitle)}
                                 {meta.orgName ? ` · ${String(meta.orgName)}` : ""}
                             </p>
@@ -83,15 +93,15 @@ function UserProfileCard({ user, onAction, actioning, actioned }: {
                     </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 font-mono text-xs font-bold shrink-0">
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
                     {actioned.has(user.id) ? (
-                        <span className="text-kenya-green font-mono text-xs">Actioned ✓</span>
+                        <span className="text-label" style={{ color: "var(--brand-green)" }}>Actioned ✓</span>
                     ) : (
                         <>
                             {profileFields.length > 0 && (
                                 <button
                                     onClick={() => setExpanded(v => !v)}
-                                    className="px-4 py-2 border border-border/50 text-foreground rounded hover:bg-muted transition-colors uppercase flex items-center gap-1"
+                                    className="inline-flex items-center gap-1 h-9 rounded-md border border-border bg-background px-3 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
                                 >
                                     {expanded ? <ChevronUp className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                                     {expanded ? "Hide" : "Profile"}
@@ -100,14 +110,16 @@ function UserProfileCard({ user, onAction, actioning, actioned }: {
                             <button
                                 onClick={() => onAction(user.id, "approve")}
                                 disabled={actioning === user.id}
-                                className="px-4 py-2 bg-kenya-green text-white rounded hover:bg-kenya-green/90 transition-colors uppercase flex items-center gap-1 disabled:opacity-50"
+                                className="inline-flex items-center gap-1 h-9 rounded-md px-3 text-label font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+                                style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
                             >
                                 {actioning === user.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <UserCheck className="w-3 h-3" />} Approve
                             </button>
                             <button
                                 onClick={() => onAction(user.id, "reject")}
                                 disabled={actioning === user.id}
-                                className="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded transition-colors uppercase flex items-center gap-1 disabled:opacity-50"
+                                className="inline-flex items-center gap-1 h-9 rounded-md border bg-background px-3 text-label transition-colors hover:bg-[color:var(--brand-red-soft)] disabled:opacity-50"
+                                style={{ borderColor: "var(--brand-red)", color: "var(--brand-red)" }}
                             >
                                 <X className="w-3 h-3" /> Reject
                             </button>
@@ -117,13 +129,13 @@ function UserProfileCard({ user, onAction, actioning, actioned }: {
             </div>
 
             {expanded && profileFields.length > 0 && (
-                <div className="border-t border-border/50 bg-muted/20 px-5 py-4">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-3">Profile Details</p>
+                <div className="border-t border-border px-5 py-4" style={{ background: "var(--surface-1)" }}>
+                    <p className="text-eyebrow text-foreground-muted mb-3">Profile details</p>
                     <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2">
                         {profileFields.map(f => (
                             <div key={f.label}>
-                                <dt className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{f.label}</dt>
-                                <dd className="text-sm text-foreground font-medium truncate">{f.value}</dd>
+                                <dt className="text-eyebrow text-foreground-muted">{f.label}</dt>
+                                <dd className="text-body-sm text-foreground font-medium truncate">{f.value}</dd>
                             </div>
                         ))}
                     </dl>
@@ -170,9 +182,11 @@ export default function ModeratorDashboard({
         return (
             <div className="flex-1 p-8 flex flex-col items-center justify-center bg-background h-full">
                 <div className="text-center space-y-3 max-w-sm">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{tierLabel}</p>
-                    <h2 className="font-playfair text-2xl font-black text-foreground">No Active Queues</h2>
-                    <p className="text-sm text-muted-foreground">Your moderation scope does not include any active content queues. Contact a SuperAdmin if you believe this is an error.</p>
+                    <p className="text-eyebrow text-foreground-muted">{tierLabel}</p>
+                    <h2 className="text-display-sm text-foreground">No active queues</h2>
+                    <p className="text-body-sm text-foreground-muted">
+                        Your moderation scope does not include any active content queues. Contact a SuperAdmin if you believe this is an error.
+                    </p>
                 </div>
             </div>
         );
@@ -181,40 +195,47 @@ export default function ModeratorDashboard({
     return (
         <div className="flex-1 p-6 sm:p-8 flex flex-col bg-background h-full overflow-y-auto">
             <div className="max-w-5xl w-full">
-                <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-                    <div>
-                        <h3 className="font-playfair text-3xl font-black text-foreground mb-1">Content Queue</h3>
-                        <p className="text-muted-foreground font-lato text-sm">Review content, manage applications, and resolve reports.</p>
+                <header className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-border pb-6">
+                    <div className="space-y-1">
+                        <h3 className="text-display-md text-foreground">Content queue</h3>
+                        <p className="text-body-sm text-foreground-muted">
+                            Review content, manage applications, and resolve reports.
+                        </p>
                     </div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-primary border border-primary/30 px-3 py-1 self-start sm:self-auto">
+                    <span
+                        className="text-eyebrow border px-3 py-1 rounded-full self-start sm:self-auto"
+                        style={{ borderColor: "var(--brand-green)", color: "var(--brand-green)" }}
+                    >
                         {tierLabel}
                     </span>
-                </div>
+                </header>
 
                 {/* Tabs — only show tabs the scope allows */}
-                <div className="flex border-b border-border/50 mb-6 font-mono text-xs uppercase tracking-wider overflow-x-auto">
+                <div className="flex border-b border-border mb-6 overflow-x-auto">
                     {perms.contentModeration && (
                         <button
                             onClick={() => setActiveTab("articles")}
-                            className={`px-6 py-3 border-b-2 font-bold whitespace-nowrap transition-colors ${
+                            className={`px-6 py-3 text-label font-medium whitespace-nowrap transition-colors border-b-2 ${
                                 activeTab === "articles"
-                                    ? "text-foreground border-primary"
-                                    : "text-muted-foreground border-transparent hover:text-foreground"
+                                    ? "text-foreground"
+                                    : "text-foreground-muted hover:text-foreground border-transparent"
                             }`}
+                            style={activeTab === "articles" ? { borderColor: "var(--brand-green)" } : { borderColor: "transparent" }}
                         >
-                            Articles for Review ({articlesInReview.length})
+                            Articles for review ({articlesInReview.length})
                         </button>
                     )}
                     {perms.userApprovals && (
                         <button
                             onClick={() => setActiveTab("applications")}
-                            className={`px-6 py-3 border-b-2 font-bold whitespace-nowrap transition-colors ${
+                            className={`px-6 py-3 text-label font-medium whitespace-nowrap transition-colors border-b-2 ${
                                 activeTab === "applications"
-                                    ? "text-foreground border-primary"
-                                    : "text-muted-foreground border-transparent hover:text-foreground"
+                                    ? "text-foreground"
+                                    : "text-foreground-muted hover:text-foreground border-transparent"
                             }`}
+                            style={activeTab === "applications" ? { borderColor: "var(--brand-green)" } : { borderColor: "transparent" }}
                         >
-                            Pending Approvals ({pendingUsers.length})
+                            Pending approvals ({pendingUsers.length})
                         </button>
                     )}
                 </div>
@@ -223,50 +244,65 @@ export default function ModeratorDashboard({
                 {activeTab === "articles" && perms.contentModeration && (
                     <div className="space-y-4">
                         {articlesInReview.length === 0 ? (
-                            <div className="border border-dashed border-border/50 rounded-lg p-8 text-center text-sm text-muted-foreground font-mono">
+                            <div
+                                className="rounded-md border border-dashed border-border p-8 text-center text-body-sm text-foreground-muted"
+                                style={{ background: "var(--surface-1)" }}
+                            >
                                 No articles pending review.
                             </div>
                         ) : (
                             articlesInReview.map((item) => (
-                                <div key={item.id} className="border border-border/50 rounded-lg p-5 bg-card shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                                <div
+                                    key={item.id}
+                                    className="rounded-lg border border-border bg-background p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                                    style={{ boxShadow: "var(--shadow-sm)" }}
+                                >
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <span className="font-mono text-xs bg-muted px-2 py-1 rounded text-foreground">
+                                            <span
+                                                className="text-eyebrow px-2 py-1 rounded text-foreground"
+                                                style={{ background: "var(--surface-2)" }}
+                                            >
                                                 {item.category ?? "Article"}
                                             </span>
-                                            <span className="font-mono text-xs text-muted-foreground">
+                                            <span className="text-eyebrow text-foreground-muted">
                                                 {item.submittedForReviewAt
                                                     ? new Date(item.submittedForReviewAt).toLocaleDateString()
                                                     : "Unknown date"}
                                             </span>
                                         </div>
-                                        <h4 className="font-bold text-lg text-foreground mb-1">{item.title}</h4>
-                                        <p className="text-sm text-muted-foreground font-mono">
+                                        <h4 className="text-headline text-foreground mb-1">{item.title}</h4>
+                                        <p className="text-body-sm text-foreground-muted">
                                             Author ID: {item.authorId.slice(0, 8)}…
                                         </p>
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-2 lg:ml-4 font-mono text-xs font-bold">
+                                    <div className="flex flex-wrap items-center gap-2 lg:ml-4">
                                         {actioned.has(item.id) ? (
-                                            <span className="text-kenya-green font-mono text-xs">Actioned ✓</span>
+                                            <span className="text-label" style={{ color: "var(--brand-green)" }}>Actioned ✓</span>
                                         ) : (
                                             <>
-                                                <button className="px-4 py-2 border border-border/50 text-foreground rounded hover:bg-muted transition-colors uppercase flex items-center gap-1">
+                                                <button className="inline-flex items-center gap-1 h-9 rounded-md border border-border bg-background px-3 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]">
                                                     <Eye className="w-3 h-3" /> Preview
                                                 </button>
-                                                <button className="px-4 py-2 border border-border/50 text-amber-600 rounded hover:bg-amber-600/10 transition-colors uppercase flex items-center gap-1">
-                                                    <AlertTriangle className="w-3 h-3" /> Request Changes
+                                                <button
+                                                    className="inline-flex items-center gap-1 h-9 rounded-md border bg-background px-3 text-label transition-colors"
+                                                    style={{ borderColor: "var(--border)", color: "#b45309" }}
+                                                >
+                                                    <AlertTriangle className="w-3 h-3" /> Request changes
                                                 </button>
                                                 <button
                                                     onClick={() => handleArticleAction(item.id, "approve")}
                                                     disabled={actioning === item.id}
-                                                    className="px-4 py-2 bg-kenya-green text-white rounded hover:bg-kenya-green/90 transition-colors uppercase flex items-center gap-1 disabled:opacity-50"
+                                                    className="inline-flex items-center gap-1 h-9 rounded-md px-3 text-label font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+                                                    style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
                                                 >
                                                     {actioning === item.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />} Approve
                                                 </button>
                                                 <button
                                                     onClick={() => handleArticleAction(item.id, "reject")}
                                                     disabled={actioning === item.id}
-                                                    className="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-white rounded transition-colors uppercase flex items-center gap-1 disabled:opacity-50"
+                                                    className="inline-flex items-center gap-1 h-9 rounded-md border bg-background px-3 text-label transition-colors hover:bg-[color:var(--brand-red-soft)] disabled:opacity-50"
+                                                    style={{ borderColor: "var(--brand-red)", color: "var(--brand-red)" }}
                                                 >
                                                     <X className="w-3 h-3" /> Reject
                                                 </button>
@@ -283,7 +319,10 @@ export default function ModeratorDashboard({
                 {activeTab === "applications" && perms.userApprovals && (
                     <div className="space-y-4">
                         {pendingUsers.length === 0 ? (
-                            <div className="border border-dashed border-border/50 rounded-lg p-8 text-center text-sm text-muted-foreground font-mono">
+                            <div
+                                className="rounded-md border border-dashed border-border p-8 text-center text-body-sm text-foreground-muted"
+                                style={{ background: "var(--surface-1)" }}
+                            >
                                 No pending user applications.
                             </div>
                         ) : (
