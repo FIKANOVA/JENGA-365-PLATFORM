@@ -5,7 +5,16 @@ import Link from "next/link";
 import Logo from "@/components/shared/Logo";
 import { authClient } from "@/lib/auth/client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Eye, EyeOff, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
+import {
+    Eye,
+    EyeOff,
+    ArrowRight,
+    CheckCircle2,
+    AlertTriangle,
+} from "lucide-react";
+
+const INPUT_CLASS =
+    "h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none";
 
 function ResetPasswordForm() {
     const searchParams = useSearchParams();
@@ -22,16 +31,21 @@ function ResetPasswordForm() {
     if (!token) {
         return (
             <div className="space-y-6 text-center">
-                <AlertCircle className="w-12 h-12 text-destructive mx-auto" />
+                <AlertTriangle
+                    className="h-10 w-10 mx-auto"
+                    style={{ color: "var(--brand-red)" }}
+                />
                 <div className="space-y-2">
-                    <h1 className="font-serif font-black text-2xl text-foreground uppercase tracking-tight">
-                        Invalid link
-                    </h1>
-                    <p className="font-sans font-light text-sm text-muted-foreground">
+                    <h1 className="text-display-sm text-foreground">Invalid link</h1>
+                    <p className="text-body-sm text-foreground-muted">
                         This password reset link is missing or malformed.
                     </p>
                 </div>
-                <Link href="/forgot-password" className="btn-primary inline-flex items-center gap-2 text-sm">
+                <Link
+                    href="/forgot-password"
+                    className="inline-flex items-center justify-center h-10 px-4 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                    style={{ background: "var(--brand-green)" }}
+                >
                     Request a new link
                 </Link>
             </div>
@@ -72,13 +86,14 @@ function ResetPasswordForm() {
     if (success) {
         return (
             <div className="space-y-6 text-center">
-                <CheckCircle className="w-12 h-12 text-[#006600] mx-auto" />
+                <CheckCircle2
+                    className="h-10 w-10 mx-auto"
+                    style={{ color: "var(--brand-green)" }}
+                />
                 <div className="space-y-2">
-                    <h1 className="font-serif font-black text-2xl text-foreground uppercase tracking-tight">
-                        Password updated
-                    </h1>
-                    <p className="font-sans font-light text-sm text-muted-foreground">
-                        Your password has been reset. Redirecting you to sign in…
+                    <h1 className="text-display-sm text-foreground">Password updated</h1>
+                    <p className="text-body-sm text-foreground-muted">
+                        Redirecting you to sign in…
                     </p>
                 </div>
             </div>
@@ -88,30 +103,36 @@ function ResetPasswordForm() {
     return (
         <>
             <div className="space-y-2">
-                <h1 className="font-serif font-black text-3xl text-foreground uppercase tracking-tight">
-                    New password
-                </h1>
-                <p className="font-sans font-light text-sm text-muted-foreground">
+                <h1 className="text-display-sm text-foreground">New password</h1>
+                <p className="text-body-sm text-foreground-muted">
                     Choose a strong password for your account.
                 </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                    <div className="bg-destructive/10 border border-destructive/20 text-destructive text-xs px-4 py-3">
+                    <div
+                        role="alert"
+                        className="rounded-md border px-3 py-2 text-body-sm"
+                        style={{
+                            background: "var(--brand-red-soft)",
+                            borderColor: "var(--brand-red-soft)",
+                            color: "var(--brand-red)",
+                        }}
+                    >
                         {error}
                     </div>
                 )}
 
                 <div className="space-y-1.5">
-                    <label htmlFor="password" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
-                        New Password
+                    <label htmlFor="password" className="text-label text-foreground">
+                        New password
                     </label>
                     <div className="relative">
                         <input
                             id="password"
                             type={showPassword ? "text" : "password"}
-                            className="jenga-input w-full pr-12"
+                            className={`${INPUT_CLASS} pr-10`}
                             placeholder="Minimum 8 characters"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -121,22 +142,23 @@ function ResetPasswordForm() {
                         <button
                             type="button"
                             onClick={() => setShowPassword((v) => !v)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-foreground transition-colors"
                             tabIndex={-1}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
                         >
-                            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
                     </div>
                 </div>
 
                 <div className="space-y-1.5">
-                    <label htmlFor="confirmPassword" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
-                        Confirm Password
+                    <label htmlFor="confirmPassword" className="text-label text-foreground">
+                        Confirm password
                     </label>
                     <input
                         id="confirmPassword"
                         type={showPassword ? "text" : "password"}
-                        className="jenga-input w-full"
+                        className={INPUT_CLASS}
                         placeholder="Repeat your password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -147,10 +169,18 @@ function ResetPasswordForm() {
 
                 <button
                     type="submit"
-                    className="btn-primary w-full shadow-xl flex items-center justify-center gap-2"
                     disabled={loading}
+                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                    style={{ background: "var(--brand-green)" }}
                 >
-                    {loading ? "Updating…" : <><span>Set new password</span> <ArrowRight size={14} /></>}
+                    {loading ? (
+                        "Updating…"
+                    ) : (
+                        <>
+                            <span>Set new password</span>
+                            <ArrowRight className="h-4 w-4" />
+                        </>
+                    )}
                 </button>
             </form>
         </>
@@ -159,14 +189,14 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center px-6 py-16 bg-background">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 py-16">
             <div className="mb-10">
-                <Logo variant="branding" theme="premium" height={32} priority />
+                <Logo size="md" />
             </div>
             <div className="w-full max-w-sm space-y-8">
                 <Suspense
                     fallback={
-                        <div className="animate-pulse font-mono text-[10px] uppercase tracking-widest text-muted-foreground text-center">
+                        <div className="text-body-sm text-foreground-muted animate-pulse text-center">
                             Loading…
                         </div>
                     }

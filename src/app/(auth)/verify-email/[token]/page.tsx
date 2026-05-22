@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Check, X, Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+
 import { authClient } from "@/lib/auth/client";
 import { toast } from "sonner";
+import Logo from "@/components/shared/Logo";
 
 export default function VerifyEmailPage() {
     const params = useParams();
-    const router = useRouter();
     const token = params.token as string;
 
     const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
@@ -27,18 +27,16 @@ export default function VerifyEmailPage() {
 
         async function verify() {
             try {
-                const res = await authClient.verifyEmail({
-                    query: { token },
-                });
+                const res = await authClient.verifyEmail({ query: { token } });
 
                 if (res.error) {
                     setStatus("error");
                     setError(res.error.message || "Invalid or expired token.");
                 } else {
                     setStatus("success");
-                    toast.success("Email verified!");
+                    toast.success("Email verified");
                 }
-            } catch (err: any) {
+            } catch {
                 setStatus("error");
                 setError("An unexpected error occurred.");
             }
@@ -48,98 +46,134 @@ export default function VerifyEmailPage() {
     }, [token]);
 
     return (
-        <div className="min-h-screen bg-white flex flex-col items-center justify-center">
-            <header className="fixed top-0 left-0 right-0 p-8 flex justify-center border-b border-border bg-white z-50">
-                <Image
-                    src="/assets/logos/jenga365-premium.png"
-                    alt="Jenga365"
-                    width={150}
-                    height={40}
-                    className="h-10 w-auto object-contain"
-                    priority
-                />
+        <div className="min-h-screen bg-background flex flex-col">
+            <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 h-16 flex items-center">
+                    <Logo size="md" />
+                </div>
             </header>
-            <div className="max-w-[480px] w-full text-center space-y-8">
-                {status === "loading" && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center gap-6">
-                        <Loader2 className="w-12 h-12 text-[#BB0000] animate-spin" />
-                        <h1 className="text-3xl font-black font-playfair">Verifying your email...</h1>
-                        <p className="text-muted-foreground font-lato">Please wait while we confirm your identity.</p>
-                    </motion.div>
-                )}
 
-                {status === "success" && (
-                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex flex-col items-center gap-6">
-                        <div className="w-20 h-20 bg-[#006600]/10 rounded-full flex items-center justify-center relative">
-                            <motion.svg
-                                viewBox="0 0 52 52"
-                                className="w-12 h-12 text-[#006600]"
-                                initial="hidden"
-                                animate="visible"
+            <main className="flex-1 flex items-center justify-center px-6 py-16">
+                <div className="max-w-md w-full text-center space-y-8">
+                    {status === "loading" && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="flex flex-col items-center gap-5"
+                        >
+                            <Loader2
+                                className="h-10 w-10 animate-spin"
+                                style={{ color: "var(--brand-green)" }}
+                            />
+                            <div className="space-y-2">
+                                <h1 className="text-display-sm text-foreground">
+                                    Verifying your email…
+                                </h1>
+                                <p className="text-body-sm text-foreground-muted">
+                                    Please wait while we confirm your identity.
+                                </p>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {status === "success" && (
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.18 }}
+                            className="flex flex-col items-center gap-5"
+                        >
+                            <div
+                                className="inline-flex h-14 w-14 items-center justify-center rounded-full"
+                                style={{ background: "var(--brand-green-soft)" }}
                             >
-                                <motion.path
-                                    d="M14 27l7 7 16-16"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    variants={{
-                                        hidden: { pathLength: 0 },
-                                        visible: { pathLength: 1, transition: { duration: 0.5, ease: "easeInOut" } }
-                                    }}
+                                <Check
+                                    className="h-7 w-7"
+                                    strokeWidth={3}
+                                    style={{ color: "var(--brand-green)" }}
                                 />
-                            </motion.svg>
-                        </div>
-                        <h1 className="text-3xl font-black font-playfair">Email Verified!</h1>
-                        <p className="text-muted-foreground font-lato">
-                            Your email has been confirmed. Let's set up your platform agreement.
-                        </p>
-                        <Link href="/legal/nda" className="w-full">
-                            <button className="w-full py-4 bg-[#BB0000] text-white font-mono text-xs uppercase tracking-[0.2em] font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                                Continue to Agreement <ArrowRight className="w-4 h-4" />
-                            </button>
-                        </Link>
-                    </motion.div>
-                )}
-
-                {status === "error" && (
-                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex flex-col items-center gap-6">
-                        <div className="w-20 h-20 bg-[#BB0000]/10 rounded-full flex items-center justify-center">
-                            <X className="w-10 h-10 text-[#BB0000]" />
-                        </div>
-                        <h1 className="text-3xl font-black font-playfair">Link Expired</h1>
-                        <p className="text-muted-foreground font-lato">
-                            {error || "This verification link has expired or already been used."}
-                        </p>
-                        <div className="flex flex-col w-full gap-4">
-                            <button
-                                disabled={resending}
-                                onClick={async () => {
-                                    setResending(true);
-                                    try {
-                                        await authClient.sendVerificationEmail({
-                                            email: "",
-                                            callbackURL: "/legal/nda",
-                                        });
-                                        toast.success("New verification link sent — check your inbox.");
-                                    } catch {
-                                        toast.error("Could not resend — please contact support.");
-                                    } finally {
-                                        setResending(false);
-                                    }
-                                }}
-                                className="w-full py-4 bg-[#BB0000] text-white font-mono text-xs uppercase tracking-[0.2em] font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
-                            >
-                                {resending ? "Sending..." : "Send a new link"}
-                            </button>
-                            <Link href="/contact" className="text-xs font-mono text-[#8A8A8A] hover:text-[#1A1A1A] transition-colors">
-                                Contact Support
+                            </div>
+                            <div className="space-y-2">
+                                <h1 className="text-display-sm text-foreground">
+                                    Email verified
+                                </h1>
+                                <p className="text-body-sm text-foreground-muted">
+                                    Your email has been confirmed. Let&apos;s set up your platform
+                                    agreement.
+                                </p>
+                            </div>
+                            <Link href="/legal/nda" className="w-full">
+                                <button
+                                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                                    style={{ background: "var(--brand-green)" }}
+                                >
+                                    Continue to agreement <ArrowRight className="h-4 w-4" />
+                                </button>
                             </Link>
-                        </div>
-                    </motion.div>
-                )}
-            </div>
+                        </motion.div>
+                    )}
+
+                    {status === "error" && (
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.18 }}
+                            className="flex flex-col items-center gap-5"
+                        >
+                            <div
+                                className="inline-flex h-14 w-14 items-center justify-center rounded-full"
+                                style={{ background: "var(--brand-red-soft)" }}
+                            >
+                                <X
+                                    className="h-7 w-7"
+                                    style={{ color: "var(--brand-red)" }}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <h1 className="text-display-sm text-foreground">
+                                    Link expired
+                                </h1>
+                                <p className="text-body-sm text-foreground-muted">
+                                    {error || "This verification link has expired or already been used."}
+                                </p>
+                            </div>
+                            <div className="flex w-full flex-col gap-3">
+                                <button
+                                    disabled={resending}
+                                    onClick={async () => {
+                                        setResending(true);
+                                        try {
+                                            await authClient.sendVerificationEmail({
+                                                email: "",
+                                                callbackURL: "/legal/nda",
+                                            });
+                                            toast.success(
+                                                "New verification link sent — check your inbox.",
+                                            );
+                                        } catch {
+                                            toast.error(
+                                                "Could not resend — please contact support.",
+                                            );
+                                        } finally {
+                                            setResending(false);
+                                        }
+                                    }}
+                                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                    style={{ background: "var(--brand-green)" }}
+                                >
+                                    {resending ? "Sending…" : "Send a new link"}
+                                </button>
+                                <Link
+                                    href="/contact"
+                                    className="text-body-sm text-foreground-muted hover:text-foreground transition-colors"
+                                >
+                                    Contact support
+                                </Link>
+                            </div>
+                        </motion.div>
+                    )}
+                </div>
+            </main>
         </div>
     );
 }

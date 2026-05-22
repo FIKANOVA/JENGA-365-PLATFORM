@@ -3,47 +3,54 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Lock, Key, Check, Loader2, AlertCircle } from "lucide-react";
+import {
+    Shield,
+    Lock,
+    Key,
+    Check,
+    Loader2,
+    AlertTriangle,
+} from "lucide-react";
+
 import { authClient } from "@/lib/auth/client";
 import { signNDA } from "@/lib/actions/nda";
 import { validateAdminInvite, finishAdminInvite } from "@/lib/actions/auth";
 import { bootstrapAdminSetPassword } from "@/lib/actions/adminBootstrap";
 import { toast } from "sonner";
+import Logo from "@/components/shared/Logo";
+
+const INPUT_CLASS =
+    "h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none";
 
 export default function AdminSetupPage() {
     const params = useParams();
     const router = useRouter();
     const token = params.token as string;
 
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState<1 | 2 | 3>(1);
     const [isLoading, setIsLoading] = useState(false);
     const [isValidating, setIsValidating] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
-    // User info from token
+
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
 
-    // Form state (The new password chosen by the admin)
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    // 2FA state
     const [twoFactorToken, setTwoFactorToken] = useState("");
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [twoFactorSecret, setTwoFactorSecret] = useState<string | null>(null);
 
-    // NDA state
     const [ndaAgreed, setNdaAgreed] = useState(false);
     const [digitalSignature, setDigitalSignature] = useState("");
 
     const steps = [
-        { id: 1, label: "Account Setup", icon: <Lock className="w-4 h-4" /> },
-        { id: 2, label: "2FA Security", icon: <Key className="w-4 h-4" /> },
-        { id: 3, label: "Admin NDA", icon: <Shield className="w-4 h-4" /> }
-    ];
+        { id: 1, label: "Account", icon: Lock },
+        { id: 2, label: "2FA", icon: Key },
+        { id: 3, label: "Admin NDA", icon: Shield },
+    ] as const;
 
-    // Validate token on mount
     useEffect(() => {
         const checkToken = async () => {
             if (!token) return;
@@ -69,35 +76,25 @@ export default function AdminSetupPage() {
         e.preventDefault();
         if (password.length < 8) return toast.error("Password must be at least 8 characters");
         if (password !== confirmPassword) return toast.error("Passwords do not match");
-        
+
         setIsLoading(true);
         try {
-            // 1+2. Server action: signs in with SUPERADMIN_BOOTSTRAP_PASSWORD (env-only),
-            //      changes to the admin's chosen password, sets session cookies.
-            //      The bootstrap password never touches the client bundle.
             await bootstrapAdminSetPassword(email, password);
-
-            // 3. Mark the invite as completed/used on the server
             await finishAdminInvite(token);
 
-            // 4. Trigger 2FA setup (now that we have a secure session)
-            const twoFactorRes = await authClient.twoFactor.enable({
-                password: password
-            });
+            const twoFactorRes = await authClient.twoFactor.enable({ password });
 
             if (twoFactorRes.data) {
                 setQrCode(twoFactorRes.data.totpURI);
-                // Extract secret from totpURI if possible as a fallback
                 const secretMatch = twoFactorRes.data.totpURI.match(/secret=([^&]+)/);
                 if (secretMatch) setTwoFactorSecret(secretMatch[1]);
-                
                 setStep(2);
                 toast.success("Account initialized. Please set up 2FA.");
             } else {
                 throw new Error("Failed to initialize 2FA security.");
             }
         } catch (err: any) {
-            toast.error(err.message || "Failed to setup account");
+            toast.error(err.message || "Failed to set up account");
         } finally {
             setIsLoading(false);
         }
@@ -106,12 +103,10 @@ export default function AdminSetupPage() {
     const handleTwoFactorVerify = async () => {
         setIsLoading(true);
         try {
-            const res = await authClient.twoFactor.verifyTotp({
-                code: twoFactorToken
-            });
+            const res = await authClient.twoFactor.verifyTotp({ code: twoFactorToken });
             if (res.error) throw new Error(res.error.message || "Invalid code");
             setStep(3);
-            toast.success("2FA Verified");
+            toast.success("2FA verified");
         } catch (err: any) {
             toast.error(err.message || "Invalid verification code");
         } finally {
@@ -130,7 +125,7 @@ export default function AdminSetupPage() {
                 documentHash: "admin-hash-placeholder",
             });
             if (res.success) {
-                toast.success("SuperAdmin Setup Complete");
+                toast.success("SuperAdmin setup complete");
                 router.push("/dashboard/admin");
             } else {
                 throw new Error("NDA signing failed");
@@ -144,10 +139,13 @@ export default function AdminSetupPage() {
 
     if (isValidating) {
         return (
-            <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-                <div className="text-center space-y-4">
-                    <Loader2 className="w-12 h-12 animate-spin text-[#006600] mx-auto" />
-                    <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Verifying Invitation...</p>
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3 text-foreground-muted">
+                    <Loader2
+                        className="h-8 w-8 animate-spin"
+                        style={{ color: "var(--brand-green)" }}
+                    />
+                    <p className="text-body-sm">Verifying invitation…</p>
                 </div>
             </div>
         );
@@ -155,13 +153,24 @@ export default function AdminSetupPage() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center p-6">
-                <div className="max-w-md w-full bg-white border border-border p-12 text-center space-y-6">
-                    <AlertCircle className="w-16 h-16 text-[#BB0000] mx-auto" />
-                    <h1 className="text-3xl font-black font-playfair">Invitation Error</h1>
-                    <p className="text-muted-foreground">{error}</p>
-                    <button onClick={() => router.push("/")} className="w-full py-4 bg-[#1A1A1A] text-white font-mono text-xs uppercase tracking-widest">
-                        Return Home
+            <div className="min-h-screen bg-background flex items-center justify-center px-6">
+                <div
+                    className="max-w-md w-full rounded-lg border border-border bg-background p-10 text-center space-y-5"
+                    style={{ boxShadow: "var(--shadow-sm)" }}
+                >
+                    <AlertTriangle
+                        className="h-10 w-10 mx-auto"
+                        style={{ color: "var(--brand-red)" }}
+                    />
+                    <div className="space-y-2">
+                        <h1 className="text-display-sm text-foreground">Invitation error</h1>
+                        <p className="text-body-sm text-foreground-muted">{error}</p>
+                    </div>
+                    <button
+                        onClick={() => router.push("/")}
+                        className="inline-flex h-10 w-full items-center justify-center rounded-md bg-foreground text-background text-label font-medium transition-opacity hover:opacity-90"
+                    >
+                        Return home
                     </button>
                 </div>
             </div>
@@ -169,110 +178,328 @@ export default function AdminSetupPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#FAFAF8] flex flex-col font-lato">
-            <header className="fixed top-0 left-0 right-0 p-8 flex justify-between items-center border-b border-border bg-white z-50">
-                <div className="text-2xl font-black font-playfair tracking-tighter">
-                    JENGA<span className="text-[#006600]">365</span> <span className="text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground ml-4">ADMIN PROMPT</span>
-                </div>
-                <div className="flex gap-4">
-                    {steps.map(s => (
-                        <div key={s.id} className={`flex items-center gap-2 ${s.id === step ? "text-[#006600]" : "text-[#D0CBC0]"}`}>
-                            <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center
-                                ${s.id < step ? "bg-[#006600] border-[#006600] text-white" : s.id === step ? "border-[#006600]" : "border-[#D0CBC0]"}`}>
-                                {s.id < step ? <Check className="w-4 h-4" /> : s.icon}
-                            </div>
-                            <span className="text-[10px] uppercase font-mono tracking-widest hidden md:block">{s.label}</span>
-                        </div>
-                    ))}
+        <div className="min-h-screen bg-background flex flex-col">
+            <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+                    <Logo size="md" />
+                    <nav
+                        aria-label="Setup progress"
+                        className="hidden sm:flex items-center gap-4"
+                    >
+                        {steps.map((s) => {
+                            const Icon = s.icon;
+                            const done = s.id < step;
+                            const active = s.id === step;
+                            const palette = done
+                                ? {
+                                      background: "var(--brand-green)",
+                                      color: "var(--brand-green-fg)",
+                                  }
+                                : active
+                                  ? {
+                                        background: "var(--brand-green-soft)",
+                                        color: "var(--brand-green)",
+                                    }
+                                  : {
+                                        background: "var(--surface-2)",
+                                        color: "var(--foreground-subtle)",
+                                    };
+                            return (
+                                <span key={s.id} className="flex items-center gap-2">
+                                    <span
+                                        className="inline-flex h-7 w-7 items-center justify-center rounded-full"
+                                        style={palette}
+                                    >
+                                        {done ? (
+                                            <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                                        ) : (
+                                            <Icon className="h-3.5 w-3.5" />
+                                        )}
+                                    </span>
+                                    <span
+                                        className={`text-eyebrow ${
+                                            active
+                                                ? "text-foreground"
+                                                : "text-foreground-muted"
+                                        }`}
+                                    >
+                                        {s.label}
+                                    </span>
+                                </span>
+                            );
+                        })}
+                    </nav>
                 </div>
             </header>
 
-            <main className="flex-1 flex items-center justify-center p-6 pt-32">
-                <div className="max-w-xl w-full bg-white border border-border shadow-xl p-12 space-y-8">
+            <main className="flex-1 flex items-center justify-center px-6 py-12 lg:py-16">
+                <div
+                    className="max-w-xl w-full rounded-lg border border-border bg-background p-8 lg:p-12 space-y-8"
+                    style={{ boxShadow: "var(--shadow-lg)" }}
+                >
                     <AnimatePresence mode="wait">
                         {step === 1 && (
-                            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-                                <h1 className="text-4xl font-black font-playfair">Initialise SuperAdmin</h1>
-                                <p className="text-muted-foreground">Welcome, <span className="text-[#006600] font-bold">{name}</span>. Please set your administrative credentials to begin setup for <span className="font-bold underline">{email}</span>.</p>
+                            <motion.div
+                                key="step1"
+                                initial={{ opacity: 0, x: 12 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -12 }}
+                                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                                className="space-y-6"
+                            >
+                                <header className="space-y-2">
+                                    <p
+                                        className="text-eyebrow"
+                                        style={{ color: "var(--brand-green)" }}
+                                    >
+                                        Step 1 · Account setup
+                                    </p>
+                                    <h1 className="text-display-sm text-foreground">
+                                        Initialise SuperAdmin
+                                    </h1>
+                                    <p className="text-body-sm text-foreground-muted">
+                                        Welcome,{" "}
+                                        <span className="font-medium text-foreground">
+                                            {name}
+                                        </span>
+                                        . Set your administrative credentials for{" "}
+                                        <span className="font-medium text-foreground">
+                                            {email}
+                                        </span>
+                                        .
+                                    </p>
+                                </header>
+
                                 <form onSubmit={handleAccountSetup} className="space-y-4">
-                                    <div className="space-y-2">
-                                        <label className="font-mono text-[10px] uppercase">Master Password</label>
-                                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required className="w-full bg-[#FAFAF8] border border-border p-4 outline-none focus:border-[#006600]" placeholder="Minimum 8 characters" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="font-mono text-[10px] uppercase">Confirm Master Password</label>
-                                        <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="w-full bg-[#FAFAF8] border border-border p-4 outline-none focus:border-[#006600]" />
-                                    </div>
-                                    <button type="submit" disabled={isLoading} className="w-full py-4 bg-[#006600] text-white font-mono text-xs uppercase tracking-[0.2em] font-bold mt-4 disabled:opacity-50">
-                                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Next Phase"}
+                                    <label className="block space-y-1.5">
+                                        <span className="text-label text-foreground">
+                                            Master password
+                                        </span>
+                                        <input
+                                            type="password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                            className={INPUT_CLASS}
+                                            placeholder="Minimum 8 characters"
+                                            autoComplete="new-password"
+                                        />
+                                    </label>
+                                    <label className="block space-y-1.5">
+                                        <span className="text-label text-foreground">
+                                            Confirm master password
+                                        </span>
+                                        <input
+                                            type="password"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            required
+                                            className={INPUT_CLASS}
+                                            autoComplete="new-password"
+                                        />
+                                    </label>
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                        style={{ background: "var(--brand-green)" }}
+                                    >
+                                        {isLoading ? (
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                        ) : (
+                                            "Next phase"
+                                        )}
                                     </button>
                                 </form>
                             </motion.div>
                         )}
 
                         {step === 2 && (
-                            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 text-center">
-                                <h1 className="text-4xl font-black font-playfair">Secure Your Access</h1>
-                                <p className="text-muted-foreground">SuperAdmin accounts require mandatory Two-Factor Authentication.</p>
-                                <div className="bg-[#FAFAF8] p-6 border border-dashed border-border flex flex-col items-center gap-4">
+                            <motion.div
+                                key="step2"
+                                initial={{ opacity: 0, x: 12 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -12 }}
+                                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                                className="space-y-6"
+                            >
+                                <header className="space-y-2 text-center">
+                                    <p
+                                        className="text-eyebrow"
+                                        style={{ color: "var(--brand-green)" }}
+                                    >
+                                        Step 2 · Two-factor authentication
+                                    </p>
+                                    <h1 className="text-display-sm text-foreground">
+                                        Secure your access
+                                    </h1>
+                                    <p className="text-body-sm text-foreground-muted">
+                                        SuperAdmin accounts require mandatory 2FA.
+                                    </p>
+                                </header>
+
+                                <div
+                                    className="rounded-md border border-border p-5 flex flex-col items-center gap-4"
+                                    style={{ background: "var(--surface-1)" }}
+                                >
                                     {qrCode ? (
-                                        <div className="bg-white p-2">
-                                            {/* Using Google Charts as it's more stable for TOTP URIs */}
-                                            <img 
-                                                src={`https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=${encodeURIComponent(qrCode)}&choe=UTF-8`} 
-                                                alt="2FA QR" 
-                                                className="w-48 h-48" 
+                                        <div className="rounded-md bg-white p-2">
+                                            <img
+                                                src={`https://chart.googleapis.com/chart?chs=240x240&cht=qr&chl=${encodeURIComponent(qrCode)}&choe=UTF-8`}
+                                                alt="2FA QR"
+                                                className="h-44 w-44"
                                                 onError={(e) => {
-                                                    // Fallback to qrserver if google fails
-                                                    e.currentTarget.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrCode)}`;
+                                                    e.currentTarget.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(qrCode)}`;
                                                 }}
                                             />
                                         </div>
                                     ) : (
-                                        <div className="w-48 h-48 bg-gray-200 animate-pulse flex items-center justify-center text-[10px] font-mono text-gray-400">LOADING QR...</div>
+                                        <div
+                                            className="h-44 w-44 animate-pulse rounded-md flex items-center justify-center text-body-sm text-foreground-subtle"
+                                            style={{ background: "var(--surface-2)" }}
+                                        >
+                                            Loading QR…
+                                        </div>
                                     )}
                                     <div className="text-center space-y-2">
-                                        <p className="text-[10px] font-mono text-[#8A8A8A]">Scan this with Google Authenticator or Authy</p>
-                                        
+                                        <p className="text-body-sm text-foreground-muted">
+                                            Scan with Google Authenticator or Authy
+                                        </p>
+
                                         {twoFactorSecret && (
                                             <details className="cursor-pointer">
-                                                <summary className="text-[9px] font-mono text-[#BB0000] uppercase hover:underline">Can&apos;t scan? View Manual Key</summary>
-                                                <div className="mt-2 p-2 bg-white border border-border font-mono text-xs break-all select-all">
+                                                <summary
+                                                    className="text-eyebrow hover:underline"
+                                                    style={{ color: "var(--brand-green)" }}
+                                                >
+                                                    Can&apos;t scan? View manual key
+                                                </summary>
+                                                <div
+                                                    className="mt-2 rounded-md border border-border bg-background px-2 py-1.5 font-mono text-xs break-all select-all text-foreground"
+                                                >
                                                     {twoFactorSecret}
                                                 </div>
                                             </details>
                                         )}
                                     </div>
                                 </div>
-                                <div className="space-y-2 text-left">
-                                    <label className="font-mono text-[10px] uppercase">Verification Code</label>
-                                    <input type="text" value={twoFactorToken} onChange={e => setTwoFactorToken(e.target.value)} placeholder="000000" className="w-full bg-[#FAFAF8] border border-border p-4 text-center text-2xl tracking-[0.5em] outline-none focus:border-[#006600]" maxLength={6} />
-                                </div>
-                                <button onClick={handleTwoFactorVerify} disabled={isLoading || twoFactorToken.length < 6} className="w-full py-4 bg-[#006600] text-white font-mono text-xs uppercase tracking-[0.2em] font-bold disabled:opacity-50">
-                                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Verify Security"}
+
+                                <label className="block space-y-1.5">
+                                    <span className="text-label text-foreground">
+                                        Verification code
+                                    </span>
+                                    <input
+                                        type="text"
+                                        value={twoFactorToken}
+                                        onChange={(e) => setTwoFactorToken(e.target.value)}
+                                        placeholder="000000"
+                                        className="h-12 w-full rounded-md border border-border bg-background px-3 text-center text-xl tracking-[0.5em] text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+                                        maxLength={6}
+                                    />
+                                </label>
+
+                                <button
+                                    onClick={handleTwoFactorVerify}
+                                    disabled={isLoading || twoFactorToken.length < 6}
+                                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                    style={{ background: "var(--brand-green)" }}
+                                >
+                                    {isLoading ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                        "Verify security"
+                                    )}
                                 </button>
                             </motion.div>
                         )}
 
                         {step === 3 && (
-                            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                                <div className="bg-[#F0FFF4] text-[#006600] font-mono text-[10px] p-4 flex items-center gap-3">
-                                    <Shield className="w-4 h-4" /> MANDATORY ADMINISTRATIVE NDA — VERSION ADMIN.2025.A
+                            <motion.div
+                                key="step3"
+                                initial={{ opacity: 0, x: 12 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -12 }}
+                                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                                className="space-y-6"
+                            >
+                                <div
+                                    className="inline-flex items-center gap-2 rounded-full px-2.5 py-0.5 text-eyebrow"
+                                    style={{
+                                        background: "var(--brand-green-soft)",
+                                        color: "var(--brand-green)",
+                                    }}
+                                >
+                                    <Shield className="h-3 w-3" /> Admin NDA · ADMIN.2025.A
                                 </div>
-                                <h1 className="text-4xl font-black font-playfair">Final Safeguard</h1>
-                                <div className="h-48 overflow-y-scroll bg-[#FAFAF8] border border-border p-4 text-xs italic text-muted-foreground leading-relaxed">
-                                    As a SuperAdmin, you will have unrestricted access to all platform data, user sessions, and financial records. You solemnly swear to uphold the Jenga365 Charter of Ethics, maintain total confidentiality, and never export platform data for unauthorized use. Your actions are logged and audit-trailed in real-time.
+                                <h1 className="text-display-sm text-foreground">
+                                    Final safeguard
+                                </h1>
+                                <div
+                                    className="max-h-48 overflow-y-auto rounded-md border border-border px-4 py-3 text-body-sm text-foreground-muted leading-relaxed"
+                                    style={{ background: "var(--surface-1)" }}
+                                >
+                                    As a SuperAdmin, you will have unrestricted access to all
+                                    platform data, user sessions, and financial records. You
+                                    solemnly swear to uphold the Jenga365 Charter of Ethics,
+                                    maintain total confidentiality, and never export platform
+                                    data for unauthorized use. Your actions are logged and
+                                    audit-trailed in real-time.
                                 </div>
-                                <label className="flex gap-4 cursor-pointer">
-                                    <input type="checkbox" checked={ndaAgreed} onChange={e => setNdaAgreed(e.target.checked)} className="mt-1" />
-                                    <span className="text-[11px]">I accept full legal responsibility for my actions as a SuperAdmin.</span>
+                                <label className="flex gap-3 cursor-pointer items-start">
+                                    <span
+                                        className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                                            ndaAgreed
+                                                ? "border-transparent"
+                                                : "border-border bg-background"
+                                        }`}
+                                        style={
+                                            ndaAgreed
+                                                ? { background: "var(--brand-green)" }
+                                                : undefined
+                                        }
+                                    >
+                                        {ndaAgreed && (
+                                            <Check
+                                                className="h-3.5 w-3.5"
+                                                strokeWidth={3}
+                                                style={{ color: "var(--brand-green-fg)" }}
+                                            />
+                                        )}
+                                        <input
+                                            type="checkbox"
+                                            checked={ndaAgreed}
+                                            onChange={(e) => setNdaAgreed(e.target.checked)}
+                                            className="sr-only"
+                                        />
+                                    </span>
+                                    <span className="text-body-sm text-foreground-muted leading-relaxed">
+                                        I accept full legal responsibility for my actions as a
+                                        SuperAdmin.
+                                    </span>
                                 </label>
-                                <div className="space-y-2">
-                                    <label className="font-mono text-[10px] uppercase">Administrative Signature</label>
-                                    <input type="text" value={digitalSignature} onChange={e => setDigitalSignature(e.target.value)} placeholder="Type Master Signature" className="w-full bg-[#FAFAF8] border border-border p-4 outline-none focus:border-[#006600] font-mono uppercase" />
-                                </div>
-                                <button onClick={handleNDASign} disabled={isLoading || !ndaAgreed || !digitalSignature} className="w-full py-4 bg-[#006600] text-white font-mono text-xs uppercase tracking-[0.2em] font-bold disabled:opacity-50">
-                                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Authorise & Enter"}
+                                <label className="block space-y-1.5">
+                                    <span className="text-label text-foreground">
+                                        Administrative signature
+                                    </span>
+                                    <input
+                                        type="text"
+                                        value={digitalSignature}
+                                        onChange={(e) => setDigitalSignature(e.target.value)}
+                                        placeholder="Type your full legal name"
+                                        className={INPUT_CLASS}
+                                    />
+                                </label>
+                                <button
+                                    onClick={handleNDASign}
+                                    disabled={isLoading || !ndaAgreed || !digitalSignature}
+                                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                    style={{ background: "var(--brand-green)" }}
+                                >
+                                    {isLoading ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                        "Authorise & enter"
+                                    )}
                                 </button>
                             </motion.div>
                         )}

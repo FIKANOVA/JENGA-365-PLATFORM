@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/shared/Logo";
 import { authClient } from "@/lib/auth/client";
-import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("");
@@ -31,56 +31,66 @@ export default function ForgotPasswordPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center px-6 py-16 bg-background">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 py-16">
             <div className="mb-10">
-                <Logo variant="branding" theme="premium" height={32} priority />
+                <Logo size="md" />
             </div>
 
             <div className="w-full max-w-sm space-y-8">
                 {submitted ? (
                     <div className="space-y-6 text-center">
-                        <CheckCircle className="w-12 h-12 text-[#006600] mx-auto" />
+                        <CheckCircle2
+                            className="h-10 w-10 mx-auto"
+                            style={{ color: "var(--brand-green)" }}
+                        />
                         <div className="space-y-2">
-                            <h1 className="font-serif font-black text-2xl text-foreground uppercase tracking-tight">
-                                Check your inbox
-                            </h1>
-                            <p className="font-sans font-light text-sm text-muted-foreground">
-                                If an account exists for <span className="font-semibold text-foreground">{email}</span>, you&apos;ll receive a password reset link shortly.
+                            <h1 className="text-display-sm text-foreground">Check your inbox</h1>
+                            <p className="text-body-sm text-foreground-muted">
+                                If an account exists for{" "}
+                                <span className="font-medium text-foreground">{email}</span>, you&apos;ll
+                                receive a password reset link shortly.
                             </p>
                         </div>
                         <Link
                             href="/login"
-                            className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-primary hover:underline"
+                            className="inline-flex items-center gap-1.5 text-label hover:underline"
+                            style={{ color: "var(--brand-green)" }}
                         >
-                            <ArrowLeft size={12} /> Back to sign in
+                            <ArrowLeft className="h-3.5 w-3.5" /> Back to sign in
                         </Link>
                     </div>
                 ) : (
                     <>
                         <div className="space-y-2">
-                            <h1 className="font-serif font-black text-3xl text-foreground uppercase tracking-tight">
-                                Reset password
-                            </h1>
-                            <p className="font-sans font-light text-sm text-muted-foreground">
+                            <h1 className="text-display-sm text-foreground">Reset password</h1>
+                            <p className="text-body-sm text-foreground-muted">
                                 Enter your email and we&apos;ll send you a reset link.
                             </p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
                             {error && (
-                                <div className="bg-destructive/10 border border-destructive/20 text-destructive text-xs px-4 py-3">
+                                <div
+                                    role="alert"
+                                    className="rounded-md border px-3 py-2 text-body-sm"
+                                    style={{
+                                        background: "var(--brand-red-soft)",
+                                        borderColor: "var(--brand-red-soft)",
+                                        color: "var(--brand-red)",
+                                    }}
+                                >
                                     {error}
                                 </div>
                             )}
 
                             <div className="space-y-1.5">
-                                <label htmlFor="email" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
-                                    Email Address
+                                <label htmlFor="email" className="text-label text-foreground">
+                                    Email
                                 </label>
                                 <input
                                     id="email"
                                     type="email"
-                                    className="jenga-input w-full"
+                                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
                                     placeholder="you@example.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -91,19 +101,27 @@ export default function ForgotPasswordPage() {
 
                             <button
                                 type="submit"
-                                className="btn-primary w-full shadow-xl flex items-center justify-center gap-2"
                                 disabled={loading}
+                                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                                style={{ background: "var(--brand-green)" }}
                             >
-                                {loading ? "Sending…" : <><span>Send reset link</span> <ArrowRight size={14} /></>}
+                                {loading ? (
+                                    "Sending…"
+                                ) : (
+                                    <>
+                                        <span>Send reset link</span>
+                                        <ArrowRight className="h-4 w-4" />
+                                    </>
+                                )}
                             </button>
                         </form>
 
                         <div className="pt-6 border-t border-border text-center">
                             <Link
                                 href="/login"
-                                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                                className="inline-flex items-center gap-1.5 text-body-sm text-foreground-muted hover:text-foreground transition-colors"
                             >
-                                <ArrowLeft size={14} /> Back to sign in
+                                <ArrowLeft className="h-3.5 w-3.5" /> Back to sign in
                             </Link>
                         </div>
                     </>

@@ -4,6 +4,15 @@ import AIInterviewerChat from "@/components/onboarding/AIInterviewerChat";
 import { completeOnboarding } from "@/lib/actions/onboarding";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Check, Loader2 } from "lucide-react";
+
+type Step = { id: number; label: string; done: boolean; active?: boolean };
+
+const STEPS: readonly Step[] = [
+    { id: 1, label: "Identity & commitment", done: true },
+    { id: 2, label: "NDA signed", done: true },
+    { id: 3, label: "AI growth interview", done: false, active: true },
+];
 
 export default function OnboardingClient() {
     const router = useRouter();
@@ -23,47 +32,90 @@ export default function OnboardingClient() {
     };
 
     return (
-        <div className="min-h-screen bg-[#FBFBF9] flex items-center justify-center p-4">
-            <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div className="md:col-span-1 py-12">
-                    <span className="font-mono text-[10px] text-[#006600] font-bold uppercase tracking-[0.3em] flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--red)]" />
-                        Phase 2 — Onboarding
-                    </span>
-                    <h1 className="text-3xl font-serif font-bold text-[#1A1A1A] mt-4 leading-tight uppercase tracking-tight">
-                        Let&apos;s Build Your <span className="text-[#006600]">Impact</span> Profile.
-                    </h1>
-                    <p className="text-[#8A8A8A] font-body mt-6 leading-relaxed">
-                        Jenga365 uses Agentic Onboarding to understand your goals more deeply than a standard form.
-                    </p>
-
-                    <div className="mt-12 space-y-6">
-                        <div className="flex items-center gap-4">
-                            <div className="w-8 h-8 rounded-full bg-[#006600] flex items-center justify-center text-white text-[10px] font-bold">✓</div>
-                            <span className="text-sm font-body text-[#1A1A1A]">Identity & Commitment</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="w-8 h-8 rounded-full bg-[#006600] flex items-center justify-center text-white text-[10px] font-bold">✓</div>
-                            <span className="text-sm font-body text-[#1A1A1A]">NDA Signed</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="w-8 h-8 rounded-full bg-[#006600] border-2 border-[#006600] flex items-center justify-center text-white text-[10px] font-bold">3</div>
-                            <span className="text-sm font-body font-bold text-[#1A1A1A]">AI Growth Interview</span>
-                        </div>
+        <div className="min-h-screen bg-background flex items-center justify-center px-6 py-12">
+            <div className="mx-auto w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
+                {/* Sidebar */}
+                <aside className="md:col-span-1 py-6 md:py-12 space-y-8">
+                    <div className="space-y-3">
+                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                            Phase 2 · Onboarding
+                        </p>
+                        <h1 className="text-display-sm text-foreground">
+                            Build your impact profile
+                        </h1>
+                        <p className="text-body text-foreground-muted">
+                            Jenga365 uses an agentic onboarding interview to understand your
+                            goals more deeply than a standard form.
+                        </p>
                     </div>
-                </div>
-                <div className="md:col-span-2">
+
+                    <ul className="space-y-3">
+                        {STEPS.map((step) => {
+                            const palette = step.done
+                                ? {
+                                      background: "var(--brand-green)",
+                                      color: "var(--brand-green-fg)",
+                                  }
+                                : step.active
+                                  ? {
+                                        background: "var(--brand-green-soft)",
+                                        color: "var(--brand-green)",
+                                    }
+                                  : {
+                                        background: "var(--surface-2)",
+                                        color: "var(--foreground-subtle)",
+                                    };
+                            return (
+                                <li key={step.id} className="flex items-center gap-3">
+                                    <span
+                                        className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-medium"
+                                        style={palette}
+                                    >
+                                        {step.done ? (
+                                            <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                                        ) : (
+                                            step.id
+                                        )}
+                                    </span>
+                                    <span
+                                        className={`text-body-sm ${
+                                            step.active
+                                                ? "font-medium text-foreground"
+                                                : step.done
+                                                  ? "text-foreground"
+                                                  : "text-foreground-muted"
+                                        }`}
+                                    >
+                                        {step.label}
+                                    </span>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </aside>
+
+                {/* Main */}
+                <main className="md:col-span-2">
                     {isFinishing ? (
-                        <div className="h-[500px] flex flex-col items-center justify-center bg-white border border-[#E8E4DC] p-12 text-center relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-[var(--red)]/10" />
-                            <div className="w-16 h-16 border-4 border-[#006600] border-t-[var(--red)] rounded-full animate-spin mb-6" />
-                            <h2 className="text-2xl font-serif font-bold text-[#1A1A1A] uppercase tracking-tight">Finalizing Your Profile...</h2>
-                            <p className="text-[#8A8A8A] mt-2">Amani AI is synthesizing your impact roadmap.</p>
+                        <div
+                            className="h-[500px] flex flex-col items-center justify-center rounded-lg border border-border bg-background p-10 text-center"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
+                        >
+                            <Loader2
+                                className="h-10 w-10 animate-spin mb-5"
+                                style={{ color: "var(--brand-green)" }}
+                            />
+                            <h2 className="text-headline text-foreground">
+                                Finalizing your profile…
+                            </h2>
+                            <p className="mt-2 text-body-sm text-foreground-muted">
+                                Amani AI is synthesizing your impact roadmap.
+                            </p>
                         </div>
                     ) : (
                         <AIInterviewerChat onComplete={handleComplete} />
                     )}
-                </div>
+                </main>
             </div>
         </div>
     );
