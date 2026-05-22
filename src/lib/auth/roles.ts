@@ -5,7 +5,7 @@ export type Role =
     | "Moderator"
     | "SuperAdmin";
 
-export type ModeratorScope = "welfare" | "meal" | "commerce" | "all";
+export type ModeratorScope = "mentor_applications" | "corporate" | "content" | "all";
 
 export type Capability =
     | "APPROVE_MENTOR_APPLICATION"
@@ -26,16 +26,16 @@ export type Capability =
 
 // Scopes that grant each capability. Empty array = SuperAdmin only.
 export const CAPABILITIES: Record<Capability, ModeratorScope[]> = {
-    APPROVE_MENTOR_APPLICATION:         ["welfare", "all"],
-    APPROVE_MENTEE_APPLICATION:         ["welfare", "all"],
-    INITIATE_THREE_STRIKES_SUSPENSION:  ["welfare", "all"],
-    APPROVE_RUGBY_CLINIC:               ["welfare", "all"],
-    MANAGE_WEBINAR_LOGISTICS:           ["welfare", "all"],
-    VET_CORPORATE_PARTNER:              ["meal", "all"],
-    INTAKE_SPATIAL_DATA:                ["meal", "all"],
-    VERIFY_TREE_SURVIVAL_AUDIT:         ["meal", "all"],
-    APPROVE_ARTICLE:                    ["commerce", "all"],
-    UPSERT_MERCHANDISE_STOCK:           ["commerce", "all"],
+    APPROVE_MENTOR_APPLICATION:         ["mentor_applications", "all"],
+    APPROVE_MENTEE_APPLICATION:         ["mentor_applications", "all"],
+    INITIATE_THREE_STRIKES_SUSPENSION:  ["mentor_applications", "all"],
+    APPROVE_RUGBY_CLINIC:               ["mentor_applications", "all"],
+    MANAGE_WEBINAR_LOGISTICS:           ["mentor_applications", "all"],
+    VET_CORPORATE_PARTNER:              ["corporate", "all"],
+    INTAKE_SPATIAL_DATA:                ["corporate", "all"],
+    VERIFY_TREE_SURVIVAL_AUDIT:         ["corporate", "all"],
+    APPROVE_ARTICLE:                    ["content", "all"],
+    UPSERT_MERCHANDISE_STOCK:           ["content", "all"],
     GENERATE_CORPORATE_INVITE_JWT:      [],
     COSIGN_PERMANENT_SUSPENSION:        [],
     UNLOCK_CORPORATE_ESG_FUNDS:         [],
@@ -48,7 +48,7 @@ export function parseScopes(scopeString?: string | null): ModeratorScope[] {
     try {
         const parsed = JSON.parse(scopeString);
         if (!Array.isArray(parsed)) return [];
-        const valid: ModeratorScope[] = ["welfare", "meal", "commerce", "all"];
+        const valid: ModeratorScope[] = ["mentor_applications", "corporate", "content", "all"];
         return parsed.filter((v): v is ModeratorScope => valid.includes(v));
     } catch {
         return [];
@@ -63,7 +63,7 @@ export function effectiveScopes(
     role: Role,
     scopeString?: string | null
 ): ModeratorScope[] {
-    if (role === "SuperAdmin") return ["welfare", "meal", "commerce", "all"];
+    if (role === "SuperAdmin") return ["mentor_applications", "corporate", "content", "all"];
     if (role !== "Moderator") return [];
     return parseScopes(scopeString);
 }
