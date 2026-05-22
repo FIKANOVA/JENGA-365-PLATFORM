@@ -1,5 +1,6 @@
 import AboutHero from "@/components/marketing/about/AboutHero";
 import OurPhilosophy from "@/components/marketing/about/OurPhilosophy";
+import StakeholdersDeepDive from "@/components/marketing/about/StakeholdersDeepDive";
 import HistoryTimeline from "@/components/marketing/about/HistoryTimeline";
 import LeadershipGrid from "@/components/marketing/about/LeadershipGrid";
 import WhyJenga from "@/components/marketing/about/WhyJenga";
@@ -28,28 +29,14 @@ export default async function AboutPage() {
 
     return (
         <div className="flex flex-col">
-            {/* 1. Who we are */}
             <AboutHero />
-
-            {/* 2. Philosophy & Mission */}
             <OurPhilosophy />
-
-            {/* 3. Our story */}
+            <StakeholdersDeepDive />
             <HistoryTimeline />
-
-            {/* 4. Why us — accordion */}
             <WhyJenga />
-
-            {/* 5. The people */}
             <LeadershipGrid />
-
-            {/* 6. Social proof */}
             <Testimonials />
-
-            {/* 7. Ecosystem */}
             <PartnerCarousel partners={partners} />
-
-            {/* 8. Convert */}
             <AboutCTAStrip />
         </div>
     );
