@@ -29,13 +29,13 @@ SET moderation_scope = (
 )
 WHERE moderation_scope IS NOT NULL AND moderation_scope != '';
 
+-- Postgres CHECK constraints cannot contain subqueries, so use jsonb
+-- containment (<@) instead of a NOT EXISTS subquery: the array is "contained
+-- by" the allowed-values array iff every element is in the allowed set.
 ALTER TABLE users ADD CONSTRAINT moderation_scope_valid_values CHECK (
     moderation_scope IS NULL OR (
         jsonb_typeof(moderation_scope::jsonb) = 'array'
-        AND NOT EXISTS (
-            SELECT 1 FROM jsonb_array_elements_text(moderation_scope::jsonb) AS v
-            WHERE v NOT IN ('mentor_applications', 'corporate', 'content', 'all')
-        )
+        AND moderation_scope::jsonb <@ '["mentor_applications","corporate","content","all"]'::jsonb
     )
 );
 
