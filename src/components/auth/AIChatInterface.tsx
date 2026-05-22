@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Bot, Send } from "lucide-react";
 
 interface Message {
     id: string;
@@ -71,7 +72,7 @@ export default function AIChatInterface({
             <div className="bg-[#FBFBF9] border-b border-[#E8E4DC] p-6 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <div className="relative size-12 bg-[#BB0000] rounded-full flex items-center justify-center text-white shadow-lg shadow-[#BB0000]/20">
-                        <span className="material-symbols-outlined text-[28px]">smart_toy</span>
+                        <Bot className="h-6 w-6" />
                         <div className="absolute -bottom-1 -right-1 size-4 bg-[#006600] rounded-full border-2 border-white" />
                     </div>
                     <div className="flex flex-col">
@@ -145,7 +146,7 @@ export default function AIChatInterface({
                     disabled={!input.trim() || isTyping}
                     className="bg-[#BB0000] text-white px-8 h-14 rounded-sm flex items-center justify-center hover:bg-[#8B0000] active:scale-95 transition-all disabled:opacity-30 disabled:grayscale shadow-lg shadow-[#BB0000]/20"
                 >
-                    <span className="material-symbols-outlined text-[24px]">send</span>
+                    <Send className="h-5 w-5" />
                 </button>
             </form>
         </div>

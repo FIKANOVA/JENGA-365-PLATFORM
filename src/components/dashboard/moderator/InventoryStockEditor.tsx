@@ -47,7 +47,7 @@ export default function InventoryStockEditor({ sanityProductId, name, price, ini
                     <label className="font-mono text-[9px] uppercase tracking-widest text-gray-400 font-bold">Active</label>
                     <button
                         onClick={() => setIsActive(prev => !prev)}
-                        className={`w-10 h-6 rounded-full transition-all duration-300 relative ${isActive ? "bg-[var(--primary-green)]" : "bg-gray-200"}`}
+                        className={`w-10 h-6 rounded-full transition-all duration-300 relative ${isActive ? "bg-[var(--brand-green)]" : "bg-gray-200"}`}
                         role="switch"
                         aria-checked={isActive}
                     >
@@ -59,7 +59,7 @@ export default function InventoryStockEditor({ sanityProductId, name, price, ini
             <button
                 onClick={handleSave}
                 disabled={isPending}
-                className="w-full h-9 bg-black text-white font-mono text-[9px] uppercase tracking-widest hover:bg-[var(--primary-green)] transition-all rounded flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full h-9 bg-black text-white font-mono text-[9px] uppercase tracking-widest hover:bg-[var(--brand-green)] transition-all rounded flex items-center justify-center gap-2 disabled:opacity-50"
             >
                 {isPending ? (
                     <><Loader2 size={12} className="animate-spin" /> Saving...</>

@@ -90,11 +90,11 @@ export default function RoleSidebar({ role }: { role: string }) {
                             href={link.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded transition-colors border-l-2 ${
                                 active
-                                    ? "bg-white/10 text-white border-l-[var(--primary-green)]"
+                                    ? "bg-white/10 text-white border-l-[var(--brand-green)]"
                                     : "text-gray-300 border-l-transparent hover:bg-white/5 hover:text-white"
                             }`}
                         >
-                            <link.icon className={`w-5 h-5 ${active ? "text-[var(--primary-green)]" : "text-gray-400"}`} />
+                            <link.icon className={`w-5 h-5 ${active ? "text-[var(--brand-green)]" : "text-gray-400"}`} />
                             <span>{link.label}</span>
                         </Link>
                     );

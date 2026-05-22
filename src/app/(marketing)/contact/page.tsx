@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MapPin, Mail, Clock, Globe, AtSign, Camera, Plus, Send, MailCheck, ArrowRight } from "lucide-react";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 import { toast } from "sonner";
@@ -68,290 +69,278 @@ export default function ContactPage() {
             if (!res.ok) throw new Error(data.error ?? "Unknown error");
             setSubmitted(true);
             toast.success("Message sent! We'll get back to you shortly.");
-        } catch (err: any) {
-            toast.error(err.message ?? "Failed to send message. Please try again.");
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : "Failed to send message. Please try again.";
+            toast.error(msg);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-background">
             <main>
                 <PageHero
-                    eyebrow="Get In Touch"
-                    eyebrowColor="var(--red)"
-                    heading={<>Connect <span className="italic text-primary">With Us.</span></>}
+                    eyebrow="Get in touch"
+                    heading={<>Connect with us.</>}
                     description="Have questions about our mentorship programs, corporate partnerships, or rugby development initiatives? We're here to help you build the future."
-                    bgImage="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop"
-                    bgFallback="https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=1920&auto=format&fit=crop"
                 />
 
-                {/* ── Contact Info + Form ── */}
-                <section className="py-24">
-                    <div className="max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-                            {/* Left Column: Contact Info */}
-                            <div className="space-y-16">
-                                <div className="space-y-4">
-                                    <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--primary-green)] block font-bold">
-                                        Reach Out
-                                    </span>
-                                    <h2 className="font-serif font-bold text-4xl md:text-5xl text-black uppercase tracking-tighter">
-                                        Let&apos;s Start A <span className="italic text-[var(--primary-green)]">Conversation.</span>
-                                    </h2>
-                                    <p className="text-[var(--text-secondary)] text-lg font-light leading-relaxed max-w-md pt-2">
+                <section className="py-20 lg:py-24">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                            {/* Left: contact info */}
+                            <div className="space-y-12">
+                                <div className="space-y-3">
+                                    <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Reach out</p>
+                                    <h2 className="text-display-md text-foreground">Let&apos;s start a conversation.</h2>
+                                    <p className="text-body-lg text-foreground-muted max-w-md">
                                         Whether you&apos;re a corporate partner looking to fund impact, a prospective mentor, or a youth seeking growth — our doors are open.
                                     </p>
                                 </div>
 
-                                {/* Info Cards */}
-                                <div className="space-y-10">
-                                    <div className="space-y-3 group">
-                                        <div className="flex items-center gap-3">
-                                            <span className="material-symbols-outlined text-[var(--primary-green)] text-xl">location_on</span>
-                                            <h3 className="font-mono text-[10px] uppercase tracking-[0.4em] text-black/60 font-bold">Headquarters</h3>
-                                        </div>
-                                        <p className="font-light text-lg text-black pl-9">
-                                            Nairobi Mentorship Hub<br />
-                                            Westlands, Nairobi, Kenya
-                                        </p>
-                                    </div>
-
-                                    <div className="h-px bg-[var(--border)]" />
-
-                                    <div className="space-y-3">
-                                        <div className="flex items-center gap-3">
-                                            <span className="material-symbols-outlined text-[var(--primary-green)] text-xl">mail</span>
-                                            <h3 className="font-mono text-[10px] uppercase tracking-[0.4em] text-black/60 font-bold">General Inquiries</h3>
-                                        </div>
-                                        <div className="pl-9 space-y-1">
-                                            <a href="mailto:hello@jenga365.org" className="block font-light text-lg text-black hover:text-[var(--primary-green)] transition-colors">
-                                                hello@jenga365.org
-                                            </a>
-                                            <a href="tel:+254700365365" className="block font-light text-lg text-black hover:text-[var(--primary-green)] transition-colors">
-                                                +254 (0) 700 365 365
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="h-px bg-[var(--border)]" />
-
-                                    <div className="space-y-3">
-                                        <div className="flex items-center gap-3">
-                                            <span className="material-symbols-outlined text-[var(--primary-green)] text-xl">schedule</span>
-                                            <h3 className="font-mono text-[10px] uppercase tracking-[0.4em] text-black/60 font-bold">Office Hours</h3>
-                                        </div>
-                                        <p className="font-light text-lg text-black pl-9">
-                                            Monday — Friday<br />
-                                            8:00 AM — 6:00 PM EAT
-                                        </p>
-                                    </div>
+                                <div className="space-y-6">
+                                    <ContactItem
+                                        Icon={MapPin}
+                                        label="Headquarters"
+                                        lines={["Nairobi Mentorship Hub", "Westlands, Nairobi, Kenya"]}
+                                    />
+                                    <div className="h-px bg-border" />
+                                    <ContactItem
+                                        Icon={Mail}
+                                        label="General inquiries"
+                                        links={[
+                                            { label: "hello@jenga365.org", href: "mailto:hello@jenga365.org" },
+                                            { label: "+254 (0) 700 365 365", href: "tel:+254700365365" },
+                                        ]}
+                                    />
+                                    <div className="h-px bg-border" />
+                                    <ContactItem
+                                        Icon={Clock}
+                                        label="Office hours"
+                                        lines={["Monday — Friday", "8:00 AM — 6:00 PM EAT"]}
+                                    />
                                 </div>
 
-                                {/* Social Links */}
-                                <div className="space-y-6">
-                                    <h3 className="font-mono text-[10px] uppercase tracking-[0.4em] text-black/60 font-bold">Follow Us</h3>
-                                    <div className="flex items-center gap-4">
+                                <div className="space-y-4">
+                                    <p className="text-eyebrow text-foreground-muted">Follow us</p>
+                                    <div className="flex items-center gap-2">
                                         {[
-                                            { icon: "public", label: "Website" },
-                                            { icon: "alternate_email", label: "Twitter/X" },
-                                            { icon: "photo_camera", label: "Instagram" },
-                                        ].map((social) => (
+                                            { Icon: Globe,  label: "Website",   href: "/" },
+                                            { Icon: AtSign, label: "Twitter/X", href: "/" },
+                                            { Icon: Camera, label: "Instagram", href: "/" },
+                                        ].map(({ Icon, label, href }) => (
                                             <a
-                                                key={social.icon}
-                                                href="/"
-                                                aria-label={social.label}
-                                                className="w-14 h-14 bg-[var(--off-white)] border border-[var(--border)] flex items-center justify-center text-black/40 hover:bg-[var(--primary-green)] hover:text-white hover:border-[var(--primary-green)] transition-all duration-500"
+                                                key={label}
+                                                href={href}
+                                                aria-label={label}
+                                                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-background text-foreground-muted transition-colors hover:text-foreground hover:bg-[color:var(--surface-2)]"
                                             >
-                                                <span className="material-symbols-outlined text-xl">{social.icon}</span>
+                                                <Icon className="h-4 w-4" />
                                             </a>
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Right Column: Contact Form */}
-                            <div className="bg-[var(--off-white)] p-10 md:p-12 border border-[var(--border)] self-start">
-                                <div className="space-y-2 mb-10">
-                                    <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--primary-green)] block font-bold">
-                                        Send a Message
-                                    </span>
-                                    <h3 className="font-serif font-bold text-2xl text-black uppercase tracking-tight">
-                                        We&apos;ll Get Back to You.
-                                    </h3>
+                            {/* Right: form */}
+                            <div
+                                className="rounded-lg border border-border bg-background p-6 lg:p-8 self-start"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <div className="space-y-2 mb-6">
+                                    <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Send a message</p>
+                                    <h3 className="text-headline text-foreground">We&apos;ll get back to you.</h3>
                                 </div>
 
                                 {submitted ? (
-                                    <div className="flex flex-col items-center justify-center py-16 space-y-6 text-center">
-                                        <span className="material-symbols-outlined text-6xl text-[var(--primary-green)]">mark_email_read</span>
-                                        <div className="space-y-2">
-                                            <h3 className="font-serif font-bold text-2xl uppercase tracking-tighter">Message Sent!</h3>
-                                            <p className="text-[var(--text-secondary)] font-light">We&apos;ve received your message and will respond within 1–2 business days.</p>
+                                    <div className="flex flex-col items-center justify-center py-10 space-y-4 text-center">
+                                        <MailCheck className="h-10 w-10" style={{ color: "var(--brand-green)" }} />
+                                        <div className="space-y-1">
+                                            <h3 className="text-headline text-foreground">Message sent</h3>
+                                            <p className="text-body-sm text-foreground-muted">
+                                                We&apos;ve received your message and will respond within 1–2 business days.
+                                            </p>
                                         </div>
                                         <button
                                             onClick={() => { setSubmitted(false); setFormData({ name: "", email: "", subject: "General Inquiry", message: "" }); }}
-                                            className="font-mono text-[10px] uppercase tracking-widest text-[var(--primary-green)] hover:underline font-bold"
+                                            className="text-label font-medium transition-colors"
+                                            style={{ color: "var(--brand-green)" }}
                                         >
-                                            Send Another Message
+                                            Send another message
                                         </button>
                                     </div>
                                 ) : (
-                                <form className="space-y-8" onSubmit={handleSubmit}>
-                                    <div className="space-y-2">
-                                        <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-black/60 font-bold block">
-                                            Full Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            className="w-full bg-white border border-[var(--border)] p-4 outline-none focus:border-[var(--primary-green)] transition-colors text-black"
-                                            placeholder="Enter your full name"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-black/60 font-bold block">
-                                            Email Address
-                                        </label>
-                                        <input
-                                            type="email"
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            className="w-full bg-white border border-[var(--border)] p-4 outline-none focus:border-[var(--primary-green)] transition-colors text-black"
-                                            placeholder="your@email.com"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-black/60 font-bold block">
-                                            Subject
-                                        </label>
-                                        <select
-                                            value={formData.subject}
-                                            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                            className="w-full bg-white border border-[var(--border)] p-4 outline-none focus:border-[var(--primary-green)] transition-colors text-black appearance-none cursor-pointer"
+                                    <form className="space-y-4" onSubmit={handleSubmit}>
+                                        <Field label="Full name">
+                                            <Input
+                                                value={formData.name}
+                                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                placeholder="Enter your full name"
+                                            />
+                                        </Field>
+                                        <Field label="Email address">
+                                            <Input
+                                                type="email"
+                                                value={formData.email}
+                                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                                placeholder="your@email.com"
+                                            />
+                                        </Field>
+                                        <Field label="Subject">
+                                            <select
+                                                value={formData.subject}
+                                                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                                className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+                                            >
+                                                {SUBJECT_OPTIONS.map((option) => (
+                                                    <option key={option} value={option}>{option}</option>
+                                                ))}
+                                            </select>
+                                        </Field>
+                                        <Field label="Message">
+                                            <textarea
+                                                rows={5}
+                                                value={formData.message}
+                                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                                placeholder="How can we help?"
+                                                className="w-full rounded-md border border-border bg-background px-3 py-2 text-body-sm text-foreground transition-colors focus:border-[color:var(--brand-green)] focus:outline-none resize-none"
+                                            />
+                                        </Field>
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="inline-flex w-full h-11 items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                            style={{ background: "var(--brand-green)" }}
                                         >
-                                            {SUBJECT_OPTIONS.map((option) => (
-                                                <option key={option} value={option}>
-                                                    {option}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-black/60 font-bold block">
-                                            Message
-                                        </label>
-                                        <textarea
-                                            rows={5}
-                                            value={formData.message}
-                                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                            className="w-full bg-white border border-[var(--border)] p-4 outline-none focus:border-[var(--primary-green)] transition-colors text-black resize-none"
-                                            placeholder="How can we help?"
-                                        />
-                                    </div>
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full py-5 bg-[var(--primary-green)] text-white font-mono text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black transition-all duration-500 border border-transparent hover:border-[var(--red)] disabled:opacity-60 disabled:cursor-not-allowed"
-                                    >
-                                        {isSubmitting ? "SENDING..." : "Send Message"}
-                                        {!isSubmitting && <span className="material-symbols-outlined ml-2 align-middle text-sm">send</span>}
-                                    </button>
-                                </form>
+                                            {isSubmitting ? "Sending…" : <>Send message <Send className="h-4 w-4" /></>}
+                                        </button>
+                                    </form>
                                 )}
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* ── Map Section ── */}
-                <section className="bg-[var(--off-white)] py-24 border-y border-[var(--border)]">
-                    <div className="max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="space-y-8">
-                            <div className="space-y-3">
-                                <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--primary-green)] block font-bold">
-                                    Our Location
-                                </span>
-                                <h2 className="font-serif font-bold text-3xl text-black uppercase tracking-tighter">
-                                    Nairobi Mentorship Hub
-                                </h2>
-                            </div>
-                            <div className="aspect-[21/9] bg-[var(--surface-container)] border border-[var(--border)] overflow-hidden relative group">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.17022526987!2d36.80277!3d-1.26389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f173c0a1f9de7%3A0xad2c84df45a4e52c!2sWestlands%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
-                                    width="100%"
-                                    height="100%"
-                                    style={{ border: 0 }}
-                                    allowFullScreen
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    className="grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-                                    title="Jenga365 Nairobi Mentorship Hub Location"
-                                />
-                            </div>
+                <section className="py-20 lg:py-24 border-y border-border" style={{ background: "var(--surface-1)" }}>
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-8">
+                        <div className="space-y-2">
+                            <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Our location</p>
+                            <h2 className="text-display-sm text-foreground">Nairobi Mentorship Hub</h2>
+                        </div>
+                        <div className="aspect-[21/9] rounded-lg border border-border overflow-hidden">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.17022526987!2d36.80277!3d-1.26389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f173c0a1f9de7%3A0xad2c84df45a4e52c!2sWestlands%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                title="Jenga365 Nairobi Mentorship Hub Location"
+                            />
                         </div>
                     </div>
                 </section>
 
-                {/* ── FAQ Section ── */}
-                <section className="py-24">
-                    <div className="max-w-4xl mx-auto px-6 md:px-12">
-                        <div className="text-center space-y-4 mb-16">
-                            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--primary-green)] block font-bold">
-                                Common Questions
-                            </span>
-                            <h2 className="font-serif font-bold text-4xl md:text-5xl text-black uppercase tracking-tighter">
-                                Frequently Asked <span className="italic text-[var(--primary-green)]">Questions.</span>
-                            </h2>
+                <section className="py-20 lg:py-24">
+                    <div className="mx-auto max-w-3xl px-6 lg:px-8">
+                        <div className="text-center space-y-3 mb-10">
+                            <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Common questions</p>
+                            <h2 className="text-display-md text-foreground">Frequently asked.</h2>
                         </div>
 
-                        <div className="space-y-4">
-                            {FAQ_ITEMS.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className={`border transition-all duration-300 ${
-                                        openFaq === index
-                                            ? "border-[var(--primary-green)] bg-[var(--off-white)]"
-                                            : "border-[var(--border)] bg-white hover:border-black/20"
-                                    }`}
-                                >
-                                    <button
-                                        onClick={() => toggleFaq(index)}
-                                        className="w-full flex items-center justify-between p-6 md:p-8 text-left group"
-                                    >
-                                        <span className="font-serif font-bold text-lg md:text-xl text-black pr-8 group-hover:text-[var(--primary-green)] transition-colors">
-                                            {item.question}
-                                        </span>
-                                        <span
-                                            className={`material-symbols-outlined text-2xl flex-shrink-0 transition-transform duration-300 ${
-                                                openFaq === index ? "rotate-45 text-[var(--red)]" : "text-black/30"
-                                            }`}
-                                        >
-                                            add
-                                        </span>
-                                    </button>
+                        <div className="space-y-3">
+                            {FAQ_ITEMS.map((item, index) => {
+                                const open = openFaq === index;
+                                return (
                                     <div
-                                        className={`overflow-hidden transition-all duration-300 ${
-                                            openFaq === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                                        }`}
+                                        key={index}
+                                        className="rounded-lg border border-border bg-background overflow-hidden"
                                     >
-                                        <div className="px-6 md:px-8 pb-8">
-                                            <div className="h-px bg-[var(--border)] mb-6" />
-                                            <p className="font-light text-[var(--text-secondary)] leading-relaxed text-lg">
-                                                {item.answer}
-                                            </p>
-                                        </div>
+                                        <button
+                                            onClick={() => toggleFaq(index)}
+                                            className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-[color:var(--surface-1)]"
+                                        >
+                                            <span className="text-body font-medium text-foreground pr-6">{item.question}</span>
+                                            <Plus
+                                                className="h-4 w-4 shrink-0 transition-transform"
+                                                style={{
+                                                    transform: open ? "rotate(45deg)" : "rotate(0deg)",
+                                                    color: open ? "var(--brand-red)" : "var(--foreground-muted)",
+                                                }}
+                                            />
+                                        </button>
+                                        {open && (
+                                            <div className="px-5 pb-5">
+                                                <div className="h-px bg-border mb-4" />
+                                                <p className="text-body-sm text-foreground-muted">{item.answer}</p>
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
 
-                {/* ── Final CTA ── */}
                 <FinalCTAStrip />
             </main>
         </div>
+    );
+}
+
+/* ─── Local primitives ─── */
+
+function ContactItem({
+    Icon,
+    label,
+    lines,
+    links,
+}: {
+    Icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+    label: string;
+    lines?: string[];
+    links?: { label: string; href: string }[];
+}) {
+    return (
+        <div className="space-y-2">
+            <div className="flex items-center gap-2.5">
+                <Icon className="h-4 w-4" style={{ color: "var(--brand-green)" }} />
+                <p className="text-eyebrow text-foreground-muted">{label}</p>
+            </div>
+            <div className="pl-6 space-y-1">
+                {lines?.map((line) => (
+                    <p key={line} className="text-body text-foreground">{line}</p>
+                ))}
+                {links?.map((link) => (
+                    <a
+                        key={link.href}
+                        href={link.href}
+                        className="block text-body text-foreground transition-colors hover:text-[color:var(--brand-green)]"
+                    >
+                        {link.label}
+                    </a>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+    return (
+        <label className="block space-y-1.5">
+            <span className="text-label text-foreground">{label}</span>
+            {children}
+        </label>
+    );
+}
+
+function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
+    return (
+        <input
+            {...props}
+            className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+        />
     );
 }

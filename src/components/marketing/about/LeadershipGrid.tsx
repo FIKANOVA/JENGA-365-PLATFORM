@@ -52,16 +52,16 @@ const fallbackTeam = [
 
 export default function LeadershipGrid({ team = fallbackTeam }: LeadershipGridProps) {
     return (
-        <section className="py-40 bg-[var(--off-white)]">
+        <section className="py-40 bg-[var(--surface-1)]">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-24 space-y-4">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.6em] text-[var(--primary-green)] block font-bold">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.6em] text-[var(--brand-green)] block font-bold">
                         The People
                     </span>
                     <h2 className="font-serif font-bold text-5xl md:text-6xl text-black uppercase tracking-tighter">
                         Architects of Change
                     </h2>
-                    <p className="font-light text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl">
+                    <p className="font-light text-lg text-[var(--foreground-muted)] leading-relaxed max-w-2xl">
                         Built with editorial heritage & technical precision by Kenya&apos;s finest sporting minds.
                     </p>
                 </div>
@@ -79,11 +79,11 @@ export default function LeadershipGrid({ team = fallbackTeam }: LeadershipGridPr
                             </div>
                             
                             <div className="space-y-3">
-                                <h3 className="font-serif font-bold text-3xl text-black uppercase tracking-tight group-hover:text-[var(--primary-green)] transition-colors duration-500">
+                                <h3 className="font-serif font-bold text-3xl text-black uppercase tracking-tight group-hover:text-[var(--brand-green)] transition-colors duration-500">
                                     {member.name}
                                 </h3>
-                                <div className="h-px w-12 bg-[var(--primary-green)] group-hover:bg-[var(--red)] transition-colors duration-500 mb-4" />
-                                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--primary-green)] font-bold block">
+                                <div className="h-px w-12 bg-[var(--brand-green)] group-hover:bg-[var(--brand-red)] transition-colors duration-500 mb-4" />
+                                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold block">
                                     {member.role}
                                 </span>
                             </div>

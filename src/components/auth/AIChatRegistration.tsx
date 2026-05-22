@@ -96,17 +96,17 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
     return (
         <div className="flex flex-col h-[500px] border border-black/5 bg-white relative overflow-hidden group">
             {/* Header */}
-            <div className="p-4 border-b border-black/5 bg-[var(--off-white)] flex items-center justify-between">
+            <div className="p-4 border-b border-black/5 bg-[var(--surface-1)] flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="relative">
                         <div className="w-8 h-8 bg-black flex items-center justify-center">
                             <Bot size={16} className="text-white" />
                         </div>
-                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[var(--green)] border-2 border-white rounded-full" />
+                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[var(--brand-green)] border-2 border-white rounded-full" />
                     </div>
                     <div>
                         <p className="font-mono text-[9px] font-bold uppercase tracking-widest text-black">Jenga Intelligence</p>
-                        <p className="font-mono text-[7px] uppercase tracking-widest text-[var(--green)]">Processing Node: Active</p>
+                        <p className="font-mono text-[7px] uppercase tracking-widest text-[var(--brand-green)]">Processing Node: Active</p>
                     </div>
                 </div>
                 <Sparkles size={14} className="text-black/10" />
@@ -129,7 +129,7 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                                 <div className={`p-4 ${
                                     msg.role === 'user' 
                                     ? 'bg-black text-white' 
-                                    : 'bg-[var(--off-white)] text-black'
+                                    : 'bg-[var(--surface-1)] text-black'
                                 } border border-black/5`}>
                                     <p className="font-mono text-[11px] leading-relaxed tracking-tight">{msg.content}</p>
                                 </div>
@@ -145,7 +145,7 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                             animate={{ opacity: 1 }}
                             className="flex justify-start"
                         >
-                             <div className="bg-[var(--off-white)] p-4 border border-black/5">
+                             <div className="bg-[var(--surface-1)] p-4 border border-black/5">
                                 <div className="flex gap-1">
                                     <div className="w-1 h-1 bg-black/20 animate-bounce" />
                                     <div className="w-1 h-1 bg-black/20 animate-bounce [animation-delay:0.2s]" />
@@ -166,13 +166,13 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         placeholder={currentStep < steps.length ? "TYPE YOUR RESPONSE..." : "PROTOCOL COMPLETE"}
-                        className="flex-1 bg-[var(--off-white)] border-b border-black/10 px-4 py-3 font-mono text-[10px] uppercase tracking-widest focus:outline-none focus:border-black transition-all"
+                        className="flex-1 bg-[var(--surface-1)] border-b border-black/10 px-4 py-3 font-mono text-[10px] uppercase tracking-widest focus:outline-none focus:border-black transition-all"
                         disabled={isTyping || currentStep >= steps.length + 1}
                     />
                     <button
                         onClick={handleSend}
                         disabled={isTyping || !input.trim() || currentStep >= steps.length + 1}
-                        className="w-12 h-12 bg-black text-white flex items-center justify-center hover:bg-[var(--red)] transition-all disabled:opacity-20"
+                        className="w-12 h-12 bg-black text-white flex items-center justify-center hover:bg-[var(--brand-red)] transition-all disabled:opacity-20"
                     >
                         <Send size={16} />
                     </button>
@@ -186,7 +186,7 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                     animate={{ opacity: 1, y: 0 }}
                     className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-10 text-center space-y-8 z-20"
                 >
-                    <div className="w-16 h-16 bg-[var(--green)] flex items-center justify-center">
+                    <div className="w-16 h-16 bg-[var(--brand-green)] flex items-center justify-center">
                         <Sparkles size={32} className="text-white" />
                     </div>
                     <div className="space-y-2">
@@ -195,7 +195,7 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                     </div>
                     <button
                         onClick={() => onComplete({})}
-                        className="px-12 py-5 bg-white text-black font-mono font-bold text-[10px] uppercase tracking-[0.4em] hover:bg-black hover:text-white border border-transparent hover:border-[var(--red)] transition-all shadow-2xl"
+                        className="px-12 py-5 bg-white text-black font-mono font-bold text-[10px] uppercase tracking-[0.4em] hover:bg-black hover:text-white border border-transparent hover:border-[var(--brand-red)] transition-all shadow-2xl"
                     >
                         Initialize Commitment →
                     </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AlertCircle, CheckCircle2, Circle, CircleDot, XCircle } from "lucide-react";
 
 export type ArticleStatus = "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "REJECTED";
 
@@ -26,7 +27,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
             {isRejected && (
                 <div className="mb-4">
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#BB0000] bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded border border-[#BB0000]/20 shadow-sm">
-                        <span className="material-symbols-outlined text-[14px]">error</span>
+                        <AlertCircle className="h-3.5 w-3.5" />
                         REQUIRES CHANGES
                     </span>
                 </div>
@@ -86,20 +87,18 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
             {/* Stepper */}
             <div className="flex items-center gap-3 mt-8 px-1">
                 <div className="flex items-center gap-2">
-                    <span className={`material-symbols-outlined text-[18px] ${status === "DRAFT" ? "text-[#BB0000]" : "text-green-600"}`}>
-                        {status === "DRAFT" ? "radio_button_checked" : "check_circle"}
-                    </span>
+                    {status === "DRAFT"
+                        ? <CircleDot className="h-4 w-4 text-[#BB0000]" />
+                        : <CheckCircle2 className="h-4 w-4 text-green-600" />}
                     <span className={`text-[10px] font-mono tracking-widest uppercase ${status === "DRAFT" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"}`}>Draft</span>
                 </div>
                 <div className={`w-10 h-[1px] ${status === "DRAFT" ? "bg-[#E8E4DC] border-dashed border-t" : "bg-green-600"}`} />
 
                 <div className="flex items-center gap-2">
-                    <span className={`material-symbols-outlined text-[18px] ${isRejected ? "text-[#BB0000]" :
-                            status === "IN_REVIEW" ? "text-primary" :
-                                status === "PUBLISHED" ? "text-green-600" : "text-[#D0CBC0]"
-                        }`}>
-                        {isRejected ? "cancel" : status === "IN_REVIEW" ? "radio_button_checked" : status === "PUBLISHED" ? "check_circle" : "radio_button_unchecked"}
-                    </span>
+                    {isRejected ? <XCircle className="h-4 w-4 text-[#BB0000]" /> :
+                        status === "IN_REVIEW" ? <CircleDot className="h-4 w-4 text-[var(--brand-green)]" /> :
+                        status === "PUBLISHED" ? <CheckCircle2 className="h-4 w-4 text-green-600" /> :
+                        <Circle className="h-4 w-4 text-[#D0CBC0]" />}
                     <span className={`text-[10px] font-mono tracking-widest uppercase ${isRejected ? "text-[#BB0000] font-bold" :
                             status === "IN_REVIEW" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"
                         }`}>
@@ -109,9 +108,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                 <div className={`w-10 h-[1px] ${status === "PUBLISHED" ? "bg-green-600" : "bg-[#E8E4DC] border-dashed border-t"}`} />
 
                 <div className="flex items-center gap-2">
-                    <span className={`material-symbols-outlined text-[18px] ${status === "PUBLISHED" ? "text-green-600" : "text-[#D0CBC0]"}`}>
-                        {status === "PUBLISHED" ? "check_circle" : "radio_button_unchecked"}
-                    </span>
+                    {status === "PUBLISHED" ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <Circle className="h-4 w-4 text-[#D0CBC0]" />}
                     <span className={`text-[10px] font-mono tracking-widest uppercase ${status === "PUBLISHED" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"}`}>Published</span>
                 </div>
             </div>

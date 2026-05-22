@@ -22,14 +22,14 @@ export default function ContentPage() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className="group bg-card border border-border/50 rounded-lg p-6 hover:border-[var(--primary-green)] transition-all hover:shadow-md space-y-3"
+                            className="group bg-card border border-border/50 rounded-lg p-6 hover:border-[var(--brand-green)] transition-all hover:shadow-md space-y-3"
                         >
                             <div className="flex items-center justify-between">
-                                <BookOpen className="w-5 h-5 text-[var(--primary-green)]" />
-                                <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-[var(--primary-green)] transition-colors" />
+                                <BookOpen className="w-5 h-5 text-[var(--brand-green)]" />
+                                <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-[var(--brand-green)] transition-colors" />
                             </div>
                             <div>
-                                <h3 className="font-playfair font-bold text-lg text-foreground group-hover:text-[var(--primary-green)] transition-colors">
+                                <h3 className="font-playfair font-bold text-lg text-foreground group-hover:text-[var(--brand-green)] transition-colors">
                                     {item.label}
                                 </h3>
                                 <p className="font-lato text-sm text-muted-foreground mt-1">{item.description}</p>

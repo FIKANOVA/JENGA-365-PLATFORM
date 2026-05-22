@@ -25,7 +25,7 @@ export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgre
                     ? "bg-[var(--md-primary-container)] border-[var(--md-primary-container)] text-white"
                     : isActive
                     ? "bg-[var(--md-primary)] border-[var(--md-primary)] text-white"
-                    : "bg-transparent border-[var(--md-outline-variant)] text-[var(--text-muted)]"
+                    : "bg-transparent border-[var(--md-outline-variant)] text-[var(--foreground-subtle)]"
                   }
                 `}
               >
@@ -39,7 +39,7 @@ export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgre
                     ? "font-bold text-[var(--md-on-surface)]"
                     : isCompleted
                     ? "font-semibold text-[var(--md-on-surface-variant)]"
-                    : "font-normal text-[var(--text-muted)]"
+                    : "font-normal text-[var(--foreground-subtle)]"
                 }`}
               >
                 {label}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSession } from "@/lib/auth/client";
 import { ArrowRight, Heart } from "lucide-react";
+import DonateButton from "@/components/shared/DonateButton";
 
 /**
  * Final landing CTA strip — re-exported by FinalCTAStrip.tsx.
@@ -35,14 +36,13 @@ export default function AboutCTAStrip() {
                 </div>
 
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-                    <Link
-                        href="/donate"
+                    <DonateButton
                         className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
                         style={{ background: "var(--brand-red)" }}
                     >
                         <Heart className="h-4 w-4" aria-hidden />
                         {isAuthenticated ? "Donate & Support" : "Donate Now"}
-                    </Link>
+                    </DonateButton>
                     <Link
                         href={isAuthenticated ? "/dashboard" : "/register"}
                         className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"

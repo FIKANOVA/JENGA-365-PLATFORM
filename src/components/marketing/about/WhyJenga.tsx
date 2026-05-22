@@ -8,7 +8,7 @@ const reasons = [
     {
         id: "holistic",
         title: "Holistic Excellence",
-        color: "var(--primary-green)",
+        color: "var(--brand-green)",
         copy: "We don't just build players — we build people. Every programme balances mental health, education, and professional rugby skills to ensure well-rounded, sustainable growth.",
     },
     {
@@ -20,7 +20,7 @@ const reasons = [
     {
         id: "safe",
         title: "Safe Haven",
-        color: "var(--primary-green)",
+        color: "var(--brand-green)",
         copy: "We provide a secure environment where mentorship and growth are monitored through precision protocols and AI-assisted matchmaking — so every connection is intentional and accountable.",
     },
     {
@@ -45,7 +45,7 @@ export default function WhyJenga() {
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-14 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
                     <div>
-                        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--primary-green)] font-bold block mb-3">
+                        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--brand-green)] font-bold block mb-3">
                             Our Differentiators
                         </span>
                         <h2 className="font-serif font-black text-4xl md:text-5xl text-black uppercase tracking-tighter leading-none">
@@ -70,7 +70,7 @@ export default function WhyJenga() {
                                         <span className="font-mono text-[9px] uppercase tracking-widest text-[#999]">
                                             {String(i + 1).padStart(2, "0")}
                                         </span>
-                                        <span className="font-serif font-bold text-xl md:text-2xl text-black uppercase tracking-tight group-hover:text-[var(--primary-green)] transition-colors">
+                                        <span className="font-serif font-bold text-xl md:text-2xl text-black uppercase tracking-tight group-hover:text-[var(--brand-green)] transition-colors">
                                             {reason.title}
                                         </span>
                                     </div>

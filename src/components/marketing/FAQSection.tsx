@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 const FAQ_ITEMS = [
     {
@@ -36,11 +37,11 @@ export default function FAQSection() {
         <section className="py-24 bg-white">
             <div className="max-w-4xl mx-auto px-6 md:px-12">
                 <div className="text-center space-y-4 mb-16">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--primary-green)] block font-bold">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--brand-green)] block font-bold">
                         Common Questions
                     </span>
                     <h2 className="font-serif font-bold text-4xl md:text-5xl text-black uppercase tracking-tighter">
-                        Frequently Asked <span className="italic text-[var(--primary-green)]">Questions.</span>
+                        Frequently Asked <span className="italic text-[var(--brand-green)]">Questions.</span>
                     </h2>
                 </div>
 
@@ -50,7 +51,7 @@ export default function FAQSection() {
                             key={index}
                             className={`border transition-all duration-300 rounded-sm ${
                                 openFaq === index
-                                    ? "border-[var(--primary-green)] bg-[var(--off-white)]"
+                                    ? "border-[var(--brand-green)] bg-[var(--surface-1)]"
                                     : "border-[var(--border)] bg-white hover:border-black/20"
                             }`}
                         >
@@ -58,16 +59,16 @@ export default function FAQSection() {
                                 onClick={() => toggleFaq(index)}
                                 className="w-full flex items-center justify-between p-6 md:p-8 text-left group"
                             >
-                                <span className="font-serif font-bold text-lg md:text-xl text-black pr-8 group-hover:text-[var(--primary-green)] transition-colors">
+                                <span className="font-serif font-bold text-lg md:text-xl text-black pr-8 group-hover:text-[var(--brand-green)] transition-colors">
                                     {item.question}
                                 </span>
-                                <span
-                                    className={`material-symbols-outlined text-2xl flex-shrink-0 transition-transform duration-300 ${
-                                        openFaq === index ? "rotate-45 text-[var(--red)]" : "text-black/30"
-                                    }`}
-                                >
-                                    add
-                                </span>
+                                <Plus
+                                    className="h-4 w-4 shrink-0 transition-transform"
+                                    style={{
+                                        transform: openFaq === index ? "rotate(45deg)" : "rotate(0deg)",
+                                        color: openFaq === index ? "var(--brand-red)" : "var(--foreground-muted)",
+                                    }}
+                                />
                             </button>
                             <div
                                 className={`overflow-hidden transition-all duration-300 ${
@@ -76,7 +77,7 @@ export default function FAQSection() {
                             >
                                 <div className="px-6 md:px-8 pb-8">
                                     <div className="h-px bg-[var(--border)] mb-6" />
-                                    <p className="font-light text-[var(--text-secondary)] leading-relaxed text-lg">
+                                    <p className="font-light text-[var(--foreground-muted)] leading-relaxed text-lg">
                                         {item.answer}
                                     </p>
                                 </div>

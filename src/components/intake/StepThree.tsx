@@ -145,7 +145,7 @@ export default function StepThree({
             flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors
             ${canSubmit
               ? 'bg-[var(--md-primary)] text-white hover:opacity-90 cursor-pointer'
-              : 'bg-[var(--md-outline-variant)] text-[var(--text-muted)] cursor-not-allowed opacity-50'
+              : 'bg-[var(--md-outline-variant)] text-[var(--foreground-subtle)] cursor-not-allowed opacity-50'
             }
           `}
         >

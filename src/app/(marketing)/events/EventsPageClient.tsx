@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Search, CalendarX } from "lucide-react";
 import EventsGrid from "@/components/marketing/EventsGrid";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
@@ -43,7 +44,7 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                 >
                     <div className="relative max-w-2xl group">
                         <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-white/40 group-focus-within:text-primary">
-                            <span className="material-symbols-outlined text-[22px]">search</span>
+                            <Search className="h-5 w-5" />
                         </div>
                         <input
                             type="text"
@@ -60,20 +61,20 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                     <div className="space-y-16">
                         {/* Type Selection */}
                         <div className="flex flex-col gap-6">
-                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--text-muted)] font-bold">Event Type</span>
+                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)] font-bold">Event Type</span>
                             <div className="flex border-b border-[var(--border)] overflow-x-auto hide-scrollbar">
                                 {EVENT_TYPES.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
                                         className={`px-8 py-5 text-[10px] font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${activeCategory === cat
-                                            ? "text-[var(--primary-green)]"
-                                            : "text-[var(--text-muted)] hover:text-black"
+                                            ? "text-[var(--brand-green)]"
+                                            : "text-[var(--foreground-subtle)] hover:text-black"
                                             }`}
                                         style={{ fontFamily: "var(--font-dm-mono)" }}
                                     >
                                         {cat}
-                                        <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--primary-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
+                                        <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
                                     </button>
                                 ))}
                             </div>
@@ -85,10 +86,10 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                                 <EventsGrid events={filteredEvents} />
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-32 text-center space-y-8">
-                                    <span className="material-symbols-outlined text-8xl text-[var(--border)]">event_busy</span>
+                                    <CalendarX className="h-20 w-20 text-[var(--border)]" />
                                     <div className="space-y-3">
                                         <h3 className="font-serif font-bold text-4xl text-black uppercase tracking-tight">No Events Scheduled</h3>
-                                        <p className="text-[var(--text-muted)] font-light text-lg">We couldn&apos;t find any events matching your selection.</p>
+                                        <p className="text-[var(--foreground-subtle)] font-light text-lg">We couldn&apos;t find any events matching your selection.</p>
                                     </div>
                                     <button
                                         onClick={() => { setActiveCategory("ALL"); setSearchQuery(""); }}

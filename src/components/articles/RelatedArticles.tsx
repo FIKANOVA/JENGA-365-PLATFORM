@@ -20,7 +20,7 @@ export default function RelatedArticles({ articles }: RelatedArticlesProps) {
     return (
         <div className="space-y-8">
             <div className="flex items-center gap-4">
-                <span className="w-10 h-0.5 bg-[var(--red)]"></span>
+                <span className="w-10 h-0.5 bg-[var(--brand-red)]"></span>
                 <h3 className="font-serif font-black text-2xl text-black uppercase tracking-tight">Other Stories</h3>
             </div>
 
@@ -40,10 +40,10 @@ export default function RelatedArticles({ articles }: RelatedArticlesProps) {
                             />
                         </div>
                         <div className="flex flex-col gap-2 justify-center py-1">
-                            <h4 className="font-serif font-bold text-[15px] text-black line-clamp-2 leading-tight group-hover:text-[var(--red)] transition-colors uppercase">
+                            <h4 className="font-serif font-bold text-[15px] text-black line-clamp-2 leading-tight group-hover:text-[var(--brand-red)] transition-colors uppercase">
                                 {article.title}
                             </h4>
-                            <div className="flex items-center gap-3 text-[var(--text-muted)] font-mono text-[9px] uppercase tracking-widest font-bold">
+                            <div className="flex items-center gap-3 text-[var(--foreground-subtle)] font-mono text-[9px] uppercase tracking-widest font-bold">
                                 <span>{article.readTime}</span>
                                 <span className="w-4 h-px bg-[var(--border)]"></span>
                                 <span>{article.date}</span>

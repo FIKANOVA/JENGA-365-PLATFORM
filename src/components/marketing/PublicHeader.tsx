@@ -7,6 +7,7 @@ import { Menu, X, ArrowRight, ShoppingCart, Heart, ChevronDown } from "lucide-re
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "@/components/shared/Logo";
 import { useSession } from "@/lib/auth/client";
+import DonateButton from "@/components/shared/DonateButton";
 
 const navGroups = [
     {
@@ -138,13 +139,12 @@ export default function PublicHeader() {
                         </Link>
 
                         {/* Donate — red outline */}
-                        <Link
-                            href="/donate"
+                        <DonateButton
                             className="flex items-center gap-1.5 px-4 py-[7px] border border-[#bc0100]/60 text-[#ff4444] font-mono text-[9px] uppercase tracking-widest font-bold hover:bg-[#bc0100] hover:text-white hover:border-[#bc0100] transition-all duration-200"
                         >
                             <Heart size={11} strokeWidth={2} />
                             Donate
-                        </Link>
+                        </DonateButton>
 
                         {!isAuthenticated ? (
                             <>
@@ -228,13 +228,11 @@ export default function PublicHeader() {
                         </div>
 
                         <div className="grid grid-cols-4 border-t border-white/10 shrink-0">
-                            <Link
-                                href="/donate"
-                                onClick={() => setMobileOpen(false)}
+                            <DonateButton
                                 className="py-5 text-center text-[#ff4444] font-mono font-bold uppercase tracking-widest text-[9px] border-r border-white/10 hover:bg-[#bc0100]/15 transition-colors flex items-center justify-center gap-1.5"
                             >
                                 <Heart size={11} /> Donate
-                            </Link>
+                            </DonateButton>
                             <Link
                                 href="/shop"
                                 onClick={() => setMobileOpen(false)}

@@ -1,84 +1,51 @@
-"use client";
-
 /**
- * PageHero — reusable full-width hero banner with bg image/video support.
- * Used on all sub-page heroes across the marketing site.
+ * PageHero — reusable hero banner shared across marketing sub-pages.
+ * Canonical tokens (DESIGN.md §11): neutral surface + faint topo pattern,
+ * Inter typography. Stock background images are ignored — kept on the prop
+ * surface only for backwards compatibility with legacy callers.
  */
-
 interface PageHeroProps {
-    /** Eyebrow label above the heading */
     eyebrow?: string;
+    /** @deprecated use canonical brand-green eyebrow */
     eyebrowColor?: string;
-    /** Main heading — supports JSX for coloured spans */
     heading: React.ReactNode;
-    /** Sub-copy */
     description?: string;
-    /** Background image URL */
-    bgImage: string;
-    /** Fallback image if bgImage fails to load */
+    /** @deprecated stock photos are forbidden per DESIGN.md §11 */
+    bgImage?: string;
+    /** @deprecated */
     bgFallback?: string;
-    /** Overlay darkness (0–100). Default 65 */
+    /** @deprecated */
     overlayOpacity?: number;
-    /** Extra content below description (e.g. search bar, CTAs) */
     children?: React.ReactNode;
-    /** Min height class. Default "min-h-[50vh]" */
+    /** Optional min-height; defaults to a comfortable hero block */
     minHeight?: string;
 }
 
 export default function PageHero({
     eyebrow,
-    eyebrowColor = "var(--primary-green)",
     heading,
     description,
-    bgImage,
-    bgFallback,
-    overlayOpacity = 65,
     children,
-    minHeight = "min-h-[50vh]",
+    minHeight,
 }: PageHeroProps) {
-    const overlayStyle = { backgroundColor: `rgba(0,0,0,${overlayOpacity / 100})` };
-
     return (
-        <div className={`relative flex items-end ${minHeight} overflow-hidden border-b border-white/10`}>
-            {/* Background */}
-            <div className="absolute inset-0 z-0">
-                <img
-                    src={bgImage}
-                    alt=""
-                    className="w-full h-full object-cover object-center"
-                    onError={
-                        bgFallback
-                            ? (e) => { (e.target as HTMLImageElement).src = bgFallback; }
-                            : undefined
-                    }
-                />
-                <div className="absolute inset-0" style={overlayStyle} />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-[var(--primary-green)]/40 via-transparent to-transparent" />
-            </div>
-
-            {/* Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pb-16 pt-40">
-                <div className="max-w-4xl space-y-6">
+        <section
+            className={`relative overflow-hidden border-b border-border bg-hero-radial bg-topo ${minHeight ?? ""}`}
+        >
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-24 pb-20 lg:pt-32 lg:pb-24">
+                <div className="max-w-3xl space-y-6">
                     {eyebrow && (
-                        <span
-                            className="font-mono text-[10px] uppercase tracking-[0.4em] font-bold block"
-                            style={{ color: eyebrowColor }}
-                        >
+                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                             {eyebrow}
-                        </span>
-                    )}
-                    <h1 className="font-serif font-black text-5xl md:text-7xl text-white uppercase leading-[0.9] tracking-tighter">
-                        {heading}
-                    </h1>
-                    {description && (
-                        <p className="text-xl text-white/75 max-w-2xl font-light leading-relaxed font-sans">
-                            {description}
                         </p>
+                    )}
+                    <h1 className="text-display-xl text-foreground">{heading}</h1>
+                    {description && (
+                        <p className="text-body-lg text-foreground-muted max-w-2xl">{description}</p>
                     )}
                     {children && <div className="pt-2">{children}</div>}
                 </div>
             </div>
-        </div>
+        </section>
     );
 }

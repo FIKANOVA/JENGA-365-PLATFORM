@@ -6,9 +6,10 @@ interface Props {
     sessionsCount: number;
     progress: number;
     lastSessionDate?: Date;
+    matchScorePct?: number;
 }
 
-export default function MenteeStatRow({ sessionsCount, progress, lastSessionDate }: Props) {
+export default function MenteeStatRow({ sessionsCount, progress, lastSessionDate, matchScorePct }: Props) {
     const daysSinceLastSession = lastSessionDate
         ? Math.floor((new Date().getTime() - new Date(lastSessionDate).getTime()) / (1000 * 3600 * 24))
         : null;
@@ -18,13 +19,13 @@ export default function MenteeStatRow({ sessionsCount, progress, lastSessionDate
             <StatCard
                 label="Sessions Completed"
                 value={sessionsCount.toString()}
-                delta="+3 this month"
+                delta="Live"
                 deltaColor="text-[#006600]"
             />
             <StatCard
                 label="Pathway Progress"
                 value={`${progress}%`}
-                delta="+12% since last month"
+                delta="Live"
                 deltaColor="text-[#006600]"
                 suffix={<div className="w-8 h-8 rounded-full border-2 border-[#006600] border-t-transparent animate-spin ml-2" />}
             />
@@ -36,7 +37,7 @@ export default function MenteeStatRow({ sessionsCount, progress, lastSessionDate
             />
             <StatCard
                 label="Mentor Match Score"
-                value="91%"
+                value={typeof matchScorePct === "number" ? `${matchScorePct}%` : "—"}
                 delta="Goals · Location · Availability"
                 deltaColor="text-muted-foreground"
                 valueColor="text-[#BB0000]"

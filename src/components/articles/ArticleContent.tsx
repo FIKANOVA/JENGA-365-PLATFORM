@@ -23,7 +23,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                     {/* Author Profile */}
                     <div className="space-y-6">
                         <div className="relative size-24 rounded-sm border border-[var(--border)] p-1 bg-white shadow-xl">
-                            <div className="relative w-full h-full rounded-sm overflow-hidden bg-[var(--off-white)]">
+                            <div className="relative w-full h-full rounded-sm overflow-hidden bg-[var(--surface-1)]">
                                 <Image
                                     src={author.avatar}
                                     alt={author.name}
@@ -35,15 +35,15 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                         <div className="space-y-3">
                             <div className="space-y-1">
                                 <h3 className="font-serif font-bold text-2xl text-black">{author.name}</h3>
-                                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--primary-green)] font-bold block">
+                                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold block">
                                     {author.role}
                                 </span>
                             </div>
-                            <p className="text-[var(--text-secondary)] text-[14px] leading-relaxed font-light">
+                            <p className="text-[var(--foreground-muted)] text-[14px] leading-relaxed font-light">
                                 {author.bio}
                             </p>
-                            <button className="pt-2 flex items-center gap-2 group text-[10px] font-mono uppercase tracking-widest text-black hover:text-[var(--primary-green)] transition-colors">
-                                <span className="w-6 h-px bg-black group-hover:bg-[var(--primary-green)] transition-colors"></span>
+                            <button className="pt-2 flex items-center gap-2 group text-[10px] font-mono uppercase tracking-widest text-black hover:text-[var(--brand-green)] transition-colors">
+                                <span className="w-6 h-px bg-black group-hover:bg-[var(--brand-green)] transition-colors"></span>
                                 Follow Profile
                             </button>
                         </div>
@@ -52,10 +52,10 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                     {/* Meta Info */}
                     <div className="space-y-6 pt-10 border-t border-[var(--border)]">
                         <div className="space-y-4">
-                            <h4 className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--text-muted)]">Topic Area</h4>
+                            <h4 className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">Topic Area</h4>
                             <div className="flex flex-wrap gap-2">
                                 {["MENTORSHIP", "RUGBY", "IMPACT"].map(tag => (
-                                    <span key={tag} className="px-3 py-1 bg-[var(--off-white)] border border-[var(--border)] text-[9px] font-mono tracking-widest uppercase">
+                                    <span key={tag} className="px-3 py-1 bg-[var(--surface-1)] border border-[var(--border)] text-[9px] font-mono tracking-widest uppercase">
                                         {tag}
                                     </span>
                                 ))}
@@ -66,7 +66,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
             </aside>
 
             {/* Main Content Area */}
-            <article className="flex-1 w-full prose prose-pre:bg-black prose-pre:text-white prose-headings:font-serif prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-p:font-light prose-p:text-[16px] prose-p:leading-[1.8] prose-p:text-[var(--text-secondary)] prose-strong:font-bold prose-strong:text-black max-w-none">
+            <article className="flex-1 w-full prose prose-pre:bg-black prose-pre:text-white prose-headings:font-serif prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-p:font-light prose-p:text-[16px] prose-p:leading-[1.8] prose-p:text-[var(--foreground-muted)] prose-strong:font-bold prose-strong:text-black max-w-none">
                 {content ? (
                     <PortableText
                         value={content}
@@ -99,7 +99,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                     />
                 ) : (
                     <>
-                        <div className="font-serif italic text-2xl text-black leading-relaxed border-l-[3px] border-[var(--primary-green)] pl-8 mb-16 py-2">
+                        <div className="font-serif italic text-2xl text-black leading-relaxed border-l-[3px] border-[var(--brand-green)] pl-8 mb-16 py-2">
                             "Strategic foresight in mentorship creates ripples that transform not just one athlete, but an entire ecosystem of professional excellence."
                         </div>
 
@@ -117,7 +117,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                                     className="object-cover grayscale opacity-80"
                                 />
                             </div>
-                            <figcaption className="text-[11px] font-mono uppercase tracking-[0.3em] text-[var(--text-muted)] text-center">
+                            <figcaption className="text-[11px] font-mono uppercase tracking-[0.3em] text-[var(--foreground-subtle)] text-center">
                                 Snapshot: Jenga365 Field Impact Clinic, 2024
                             </figcaption>
                         </figure>
@@ -127,7 +127,7 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                             The platform&apos;s AI-native matching engine ensures that every connection is built on a foundation of shared values and professional synergy. We are no longer just connecting people; we are curating pathways to success.
                         </p>
 
-                        <blockquote className="my-14 p-12 bg-[var(--off-white)] border-l-[6px] border-[var(--primary-green)] rounded-sm text-2xl font-serif italic text-black leading-tight">
+                        <blockquote className="my-14 p-12 bg-[var(--surface-1)] border-l-[6px] border-[var(--brand-green)] rounded-sm text-2xl font-serif italic text-black leading-tight">
                             &quot;Greatness is never achieved in isolation. The Jenga365 platform is the connective tissue for the next generation of global stars.&quot;
                         </blockquote>
                     </>
