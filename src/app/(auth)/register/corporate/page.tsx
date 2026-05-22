@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -58,6 +58,14 @@ const CONTRIBUTION_MODELS = [
 ] as const;
 
 export default function CorporateRegisterPage() {
+    return (
+        <Suspense fallback={null}>
+            <CorporateRegisterInner />
+        </Suspense>
+    );
+}
+
+function CorporateRegisterInner() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [step, setStep] = useState<1 | 2 | 3>(1);
