@@ -118,31 +118,30 @@ RETURNING *;
 
 If `RETURNING` is empty, the item is out of stock — fail the purchase. **Never** read-then-write; that allows overselling under concurrent load.
 
-## 9. Current Sprint Priorities (BACKEND ONLY — locked 2026-05-21)
+## 9. Current Sprint Priorities — Backend + UI overhaul (UI freeze LIFTED 2026-05-22)
 
-Founder Bruce: "freeze the UI cleaning and background noise for now and focus strictly on these core backend functions."
+Moseti reopened UI/UX work on 2026-05-22 (the prior freeze was his own pause to focus on backend). Both tracks now active in parallel:
 
-1. **Auth & Roles routing**
-   - Diagnostic Intake routing for athletes (Mentee → `/onboarding/intake`).
-   - NDA gate routing for corporate professionals (CorporatePartner → `/legal/nda`).
-   - *Middleware already enforces; auth registration pages need restoration.*
+### Backend (continue from completed Phases 1 + 2)
+- Wire intake + mentor-profile flows to write `user_goal_tags` (backfill is in place).
+- Drop legacy `text[]` columns (`users.mentor_specialisations`, `mentee_intake.goal_categories`, `project_locations.trees_planted`) after readers migrate.
+- Mentor write-time capacity guard (`mentorshipPairs` insert).
 
-2. **Engine B backend**
-   - DB tables capable of receiving Audit data and updating Corporate Unlock status.
-   - New: `tree_planting_events` table.
-   - Existing (keep): `tree_survival_checks`, `tree_survival_audits`, `corporate_unlock_milestones`, `corporate_unlock_triggers`.
+### UI/UX (NEW — full overhaul)
+- See `DESIGN.md` for tokens. Aesthetic: Linear / Vercel / Anthropic.
+- Typography: **Inter** + system-ui fallback. No display fonts. Headings are NOT mono.
+- Logo: **text wordmark only** via `src/components/shared/Logo.tsx`. Do not reference images at `/public/assets/logos/*` until custom SVG ships.
+- Backgrounds: solid neutrals + optional faint topographic pattern. **Forbidden:** stop-sign/caution imagery, busy stock photos, AI-generated illustration.
+- Header: wordmark left, center nav, right CTAs (Donate + Sign In/Sign Up OR Dashboard if authed). Mobile drawer.
+- Authentic impact-ticker only — replace "750K+ Lives" / "12,000 Mentors" vanity numbers with verified DB stats; render "—" if unverified.
+- Sweat-Equity / Three-Strikes messaging communicated BEFORE any "Join Free" CTA.
+- Engine B amplification — corporate-ESG framing ("Green Technology", "Trees for Tries", quarterly M&E + spatial data).
+- AI-driven matching language elevates the platform; surface on landing.
+- Jenga Journal framed as content hub (lead magnet, quarterly impact zine).
 
-3. **Commerce & Content backend**
-   - Merchandise upload endpoints with **atomic decrement** (§8).
-   - Article publishing permission gates — only `content` scope can publish.
+## 12. Design system pointer
 
-**Out of scope until Bruce reopens UI work:**
-- Logo PNG → SVG.
-- Caution/stop-sign background → brand white/light-green with faint topographic pattern.
-- Impact-ticker dummy data ("750K+ Lives", "12,000 Mentors") → authentic baseline.
-- Sweat-Equity / Three-Strikes messaging on landing page before NDA gate.
-- Expanded Engine B marketing copy ("Green Technology", "Trees for Tries").
-- Restoration of `(marketing)/*` pages and per-role `dashboard/*/studio/` embeds.
+`DESIGN.md` at project root is the canonical UI source-of-truth. Components must consume tokens declared there via `globals.css` (e.g. `bg-background`, `text-foreground`, `text-display-md`). Avoid the legacy Modern Premium hooks (`.jenga-card`, `.btn-primary`, `font-serif`, `font-mono` for headings) — they were removed when the new system landed.
 
 ## 10. Phase 2 Implementation Directives (locked 2026-05-22)
 
