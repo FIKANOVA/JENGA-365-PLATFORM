@@ -73,18 +73,21 @@
   --foreground-muted: #52525b;
   --foreground-subtle: #71717a;
 
-  /* Brand accents (desaturated from prior #006600 / #BB0000) */
-  --brand-green: #0f7b3a;
+  /* Brand accents — Kenya flag green & red, full saturation */
+  --brand-green: #006600;
+  --brand-green-hover: #004d00;
   --brand-green-fg: #ffffff;
-  --brand-green-soft: #e8f3ec;
-  --brand-red: #b91c1c;
+  --brand-green-soft: #e6f2e6;
+  --brand-red: #bb0000;
+  --brand-red-hover: #960000;
   --brand-red-fg: #ffffff;
-  --brand-red-soft: #fee7e7;
+  --brand-red-soft: #fce7e7;
+  --brand-black: #1a1a1a;
 
   /* Semantic */
-  --success: #0f7b3a;
+  --success: #006600;
   --warning: #b45309;
-  --error: #b91c1c;
+  --error: #bb0000;
   --info: #1d4ed8;
 
   /* Shadcn semantic mapping (light) */
@@ -124,7 +127,7 @@
   --shadow-sm: 0 1px 2px rgba(9, 9, 11, 0.04);
   --shadow: 0 6px 16px rgba(9, 9, 11, 0.06), 0 1px 2px rgba(9, 9, 11, 0.04);
   --shadow-lg: 0 24px 48px -12px rgba(9, 9, 11, 0.10), 0 4px 6px rgba(9, 9, 11, 0.04);
-  --shadow-ring: 0 0 0 4px rgba(15, 123, 58, 0.12);
+  --shadow-ring: 0 0 0 4px rgba(0, 102, 0, 0.18);
 
   /* Motion */
   --motion-fast: 100ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -142,9 +145,11 @@
   --foreground-muted: #a1a1aa;
   --foreground-subtle: #71717a;
 
-  --brand-green: #34a05b;
+  --brand-green: #2ea043;
+  --brand-green-hover: #3fb957;
   --brand-green-soft: #0e2c1b;
-  --brand-red: #ef4444;
+  --brand-red: #f04747;
+  --brand-red-hover: #ff6b6b;
   --brand-red-soft: #2c1313;
 
   --primary: var(--brand-green);
@@ -167,7 +172,7 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.6), 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-ring: 0 0 0 4px rgba(52, 160, 91, 0.25);
+  --shadow-ring: 0 0 0 4px rgba(46, 160, 67, 0.28);
 
   --sidebar: var(--surface-1);
   --sidebar-foreground: var(--foreground);
@@ -288,7 +293,7 @@
 
   /* Hero radial accent (very subtle brand-green halo) */
   .bg-hero-radial {
-    background-image: radial-gradient(at top, rgba(15, 123, 58, 0.06), transparent 60%);
+    background-image: radial-gradient(at top, rgba(0, 102, 0, 0.06), transparent 60%);
   }
 }
 
