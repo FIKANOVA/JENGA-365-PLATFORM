@@ -6,6 +6,7 @@ import { users, articles, moderationLog } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { createNotification } from "@/lib/notifications/service";
+import { hasCapability, parseScopes, type Capability, type Role } from "@/lib/auth/roles";
 
 async function requireModerator() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -13,6 +14,17 @@ async function requireModerator() {
     const role = (session.user as any).role as string;
     if (!["Moderator", "SuperAdmin"].includes(role)) throw new Error("FORBIDDEN");
     return session.user;
+}
+
+async function requireModeratorWithCapability(cap: Capability) {
+    const user = await requireModerator();
+    const role = (user as { role?: string }).role as Role | undefined;
+    const scopeString = (user as { moderationScope?: string }).moderationScope;
+    const scopes = parseScopes(scopeString);
+    if (!role || !hasCapability(role, scopes, cap)) {
+        throw new Error(`FORBIDDEN:${cap}`);
+    }
+    return user;
 }
 
 // ── User Approval ─────────────────────────────────────────────────────────────
@@ -90,7 +102,7 @@ export async function suspendUser(userId: string) {
 // ── Article Moderation ────────────────────────────────────────────────────────
 
 export async function approveArticle(articleId: string) {
-    const mod = await requireModerator();
+    const mod = await requireModeratorWithCapability("APPROVE_ARTICLE");
 
     const article = await db.query.articles.findFirst({
         where: eq(articles.id, articleId),
@@ -118,7 +130,7 @@ export async function approveArticle(articleId: string) {
 }
 
 export async function rejectArticle(articleId: string, feedback?: string) {
-    const mod = await requireModerator();
+    const mod = await requireModeratorWithCapability("APPROVE_ARTICLE");
 
     const article = await db.query.articles.findFirst({
         where: eq(articles.id, articleId),
