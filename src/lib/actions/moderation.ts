@@ -102,7 +102,10 @@ export async function suspendUser(userId: string) {
 // ── Article Moderation ────────────────────────────────────────────────────────
 
 export async function approveArticle(articleId: string) {
-    const mod = await requireModeratorWithCapability("APPROVE_ARTICLE");
+    // Phase 2.6 / CLAUDE.md: approval atomically publishes. Gate the publish-side
+    // capability separately so Sanity Studio publishes (when wired up to call this
+    // action) fail closed without the content scope.
+    const mod = await requireModeratorWithCapability("PUBLISH_ARTICLE");
 
     const article = await db.query.articles.findFirst({
         where: eq(articles.id, articleId),

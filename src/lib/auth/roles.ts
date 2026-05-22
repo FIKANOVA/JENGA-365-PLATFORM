@@ -17,6 +17,7 @@ export type Capability =
     | "INTAKE_SPATIAL_DATA"
     | "VERIFY_TREE_SURVIVAL_AUDIT"
     | "APPROVE_ARTICLE"
+    | "PUBLISH_ARTICLE"
     | "UPSERT_MERCHANDISE_STOCK"
     | "GENERATE_CORPORATE_INVITE_JWT"
     | "COSIGN_PERMANENT_SUSPENSION"
@@ -35,6 +36,7 @@ export const CAPABILITIES: Record<Capability, ModeratorScope[]> = {
     INTAKE_SPATIAL_DATA:                ["corporate", "all"],
     VERIFY_TREE_SURVIVAL_AUDIT:         ["corporate", "all"],
     APPROVE_ARTICLE:                    ["content", "all"],
+    PUBLISH_ARTICLE:                    ["content", "all"],
     UPSERT_MERCHANDISE_STOCK:           ["content", "all"],
     GENERATE_CORPORATE_INVITE_JWT:      [],
     COSIGN_PERMANENT_SUSPENSION:        [],

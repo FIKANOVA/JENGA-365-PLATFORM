@@ -155,6 +155,8 @@ Moseti reopened UI/UX work on 2026-05-22 (the prior freeze was his own pause to 
 
 5. **Partner Reporting:** Do **NOT** restore or build any in-app partner reporting pages. Looker Studio (see §11) remains the canonical, sole source for Corporate Partner ESG reporting.
 
+6. **Article publish gate:** Distinct `PUBLISH_ARTICLE` capability mapping to `["content", "all"]`, separate from `APPROVE_ARTICLE` (which gates the moderator review-queue route). The server action that flips `articles.status → 'published'` and stamps `publishedAt` must call `requireCapability("PUBLISH_ARTICLE")`. Sanity Studio publishes must route through this server action — Sanity Studio role basePath should be authors-only; the gate fires inside Next.js, not inside Sanity.
+
 ## 11. Looker Studio — connection, partner isolation, embedding
 
 - **Connector:** Looker Studio's native PostgreSQL connector → Neon. Point it at clean **Drizzle `pgView`s**, never raw tables. The `v_resilience_delta` view already exists; `v_tree_survival_time_series` exists; add views for new metrics as needed.
