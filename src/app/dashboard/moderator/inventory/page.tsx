@@ -18,29 +18,33 @@ export default async function ModeratorInventoryPage() {
     ]);
 
     return (
-        <div className="flex-1 p-8 lg:p-12 bg-[#FAFAF8] min-h-screen">
+        <div className="flex-1 p-8 lg:p-12 min-h-screen" style={{ background: "var(--surface-1)" }}>
             <div className="mb-10 flex items-center justify-between">
                 <div>
-                    <h1 className="text-4xl text-[#1A1A1A] font-playfair font-black mb-2">
-                        Inventory Management
-                    </h1>
-                    <p className="text-sm text-gray-500 font-lato">
+                    <h1 className="text-display-md text-foreground mb-2">Inventory management</h1>
+                    <p className="text-body-sm text-foreground-muted">
                         Set stock counts and visibility for store products. Edit product details in Sanity Studio.
                     </p>
                 </div>
                 <Link
                     href="/dashboard/moderator/studio/structure/product"
-                    className="bg-[#BB0000] text-white px-6 py-3 rounded text-sm font-bold uppercase tracking-wider hover:bg-[#8A0000] transition-colors font-dm-mono"
+                    className="inline-flex items-center h-11 rounded-md px-5 text-label font-medium transition-opacity hover:opacity-90"
+                    style={{ background: "var(--brand-red)", color: "var(--brand-red-fg)" }}
                 >
-                    Add / Edit Products
+                    Add / edit products
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {products.length === 0 ? (
-                    <div className="col-span-full py-12 text-center bg-white border border-gray-100 rounded">
-                        <p className="text-gray-500 font-lato">No products found in inventory.</p>
-                        <p className="text-sm text-gray-400 mt-2">Click &quot;Add / Edit Products&quot; to create some.</p>
+                    <div
+                        className="col-span-full py-12 text-center rounded-lg border border-border bg-background"
+                        style={{ boxShadow: "var(--shadow-sm)" }}
+                    >
+                        <p className="text-body-sm text-foreground-muted">No products found in inventory.</p>
+                        <p className="text-body-sm text-foreground-subtle mt-2">
+                            Click &quot;Add / edit products&quot; to create some.
+                        </p>
                     </div>
                 ) : (
                     products.map((product: any) => {
@@ -49,8 +53,12 @@ export default async function ModeratorInventoryPage() {
                         const initialActive = dbRecord?.isActive ?? true;
 
                         return (
-                            <Card key={product._id} className="overflow-hidden bg-white border border-gray-100 rounded shadow-sm flex flex-col">
-                                <CardHeader className="p-0 h-48 relative overflow-hidden bg-gray-50">
+                            <Card
+                                key={product._id}
+                                className="overflow-hidden bg-background border border-border rounded-lg flex flex-col"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <CardHeader className="p-0 h-48 relative overflow-hidden" style={{ background: "var(--surface-1)" }}>
                                     {product.mainImage?.asset?.url ? (
                                         <img
                                             src={product.mainImage.asset.url}
@@ -58,30 +66,37 @@ export default async function ModeratorInventoryPage() {
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-gray-300 text-sm font-mono">
-                                            No Image
+                                        <div className="w-full h-full flex items-center justify-center text-foreground-subtle text-body-sm">
+                                            No image
                                         </div>
                                     )}
-                                    <div className="absolute top-2 right-2 bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded shadow font-dm-mono">
-                                        {product.stockStatus === "inStock" ? "In Stock" : product.stockStatus === "lowStock" ? "Low Stock" : "Out of Stock"}
+                                    <div
+                                        className="absolute top-2 right-2 px-2 py-1 text-eyebrow rounded"
+                                        style={{ background: "var(--background)", color: "var(--foreground)", boxShadow: "var(--shadow-sm)" }}
+                                    >
+                                        {product.stockStatus === "inStock" ? "In stock" : product.stockStatus === "lowStock" ? "Low stock" : "Out of stock"}
                                     </div>
                                     {!initialActive && (
                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                            <span className="font-mono text-white text-[10px] uppercase tracking-widest font-bold bg-black/60 px-3 py-1 rounded">Inactive</span>
+                                            <span className="text-eyebrow text-white bg-black/60 px-3 py-1 rounded">Inactive</span>
                                         </div>
                                     )}
                                 </CardHeader>
                                 <CardContent className="p-4 flex-1">
-                                    <p className="text-[10px] text-[#BB0000] uppercase tracking-widest font-bold mb-1 font-dm-mono">
+                                    <p className="text-eyebrow mb-1" style={{ color: "var(--brand-red)" }}>
                                         {product.category || "Uncategorized"}
                                     </p>
-                                    <h3 className="font-bold text-lg leading-tight font-lato text-[#1A1A1A] mb-2 line-clamp-1">
+                                    <h3 className="text-headline text-foreground mb-2 line-clamp-1">
                                         {product.title}
                                     </h3>
                                     <div className="flex items-center gap-2">
-                                        <span className="font-black text-[#1A1A1A]">KES {product.price?.toLocaleString() ?? 0}</span>
+                                        <span className="text-headline text-foreground">
+                                            KES {product.price?.toLocaleString() ?? 0}
+                                        </span>
                                         {product.discountPrice && (
-                                            <span className="text-sm text-gray-400 line-through">KES {product.discountPrice.toLocaleString()}</span>
+                                            <span className="text-body-sm text-foreground-subtle line-through">
+                                                KES {product.discountPrice.toLocaleString()}
+                                            </span>
                                         )}
                                     </div>
                                 </CardContent>

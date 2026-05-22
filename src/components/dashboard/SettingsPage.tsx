@@ -162,15 +162,15 @@ export default function SettingsPage({
         <div className="flex-1 bg-background h-full overflow-y-auto">
             <div className="max-w-2xl mx-auto p-6 md:p-10 space-y-10">
                 <div>
-                    <h1 className="font-playfair text-3xl font-black text-foreground mb-1">Account Settings</h1>
-                    <p className="text-muted-foreground font-mono text-sm">Manage your profile and security preferences.</p>
+                    <h1 className="text-display-md text-foreground mb-1">Account settings</h1>
+                    <p className="text-body-sm text-foreground-muted">Manage your profile and security preferences.</p>
                 </div>
 
                 {/* ── Profile ──────────────────────────────────────────────── */}
                 <section className="border border-border/50 rounded-lg bg-card p-6 shadow-sm space-y-6">
                     <div className="flex items-center gap-3 mb-2">
-                        <User className="w-5 h-5 text-primary" />
-                        <h2 className="font-playfair text-xl font-bold text-foreground">Profile</h2>
+                        <User className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
+                        <h2 className="text-headline text-foreground">Profile</h2>
                     </div>
 
                     <form onSubmit={handleSaveProfile} className="space-y-4">
@@ -228,8 +228,8 @@ export default function SettingsPage({
                 <section className="border border-border/50 rounded-lg bg-card p-6 shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <Shield className="w-5 h-5 text-primary" />
-                            <h2 className="font-playfair text-xl font-bold text-foreground">Two-Factor Authentication</h2>
+                            <Shield className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
+                            <h2 className="text-headline text-foreground">Two-factor authentication</h2>
                         </div>
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-mono font-bold ${
                             is2FAEnabled
@@ -445,8 +445,8 @@ export default function SettingsPage({
                 {/* ── GDPR Data Export ─────────────────────────────────────── */}
                 <section className="border border-border/50 rounded-lg bg-card p-6 shadow-sm">
                     <div className="flex items-center gap-3 mb-4">
-                        <Download className="w-5 h-5 text-primary" />
-                        <h2 className="font-playfair text-xl font-bold text-foreground">Data Export (GDPR)</h2>
+                        <Download className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
+                        <h2 className="text-headline text-foreground">Data export (GDPR)</h2>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
                         Download a full copy of all data Jenga365 holds about your account.

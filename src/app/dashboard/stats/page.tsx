@@ -18,39 +18,48 @@ export default async function StatsPage() {
     const stats = await getGlobalImpactStats();
 
     const statCards = [
-        { label: "Mentorship Hours",   value: fmt(stats?.mentorshipHoursTotal),    icon: Clock,       color: "text-blue-500" },
-        { label: "Youth Engaged",      value: fmt(stats?.youthEngagedActive),      icon: Users,       color: "text-[var(--brand-green)]" },
-        { label: "Active Mentors",     value: fmt(stats?.activeMentors),           icon: TrendingUp,  color: "text-purple-500" },
-        { label: "Trees Planted",      value: fmt(stats?.treesPlantedTotal),       icon: Trees,       color: "text-[var(--brand-green)]" },
-        { label: "Trees Alive (Audit)", value: fmt(stats?.treesAliveLatestAudit), icon: Leaf,         color: "text-emerald-600" },
-        { label: "Corporate Partners", value: fmt(stats?.activeCorporatePartners), icon: BarChart3,   color: "text-amber-500" },
+        { label: "Mentorship hours",    value: fmt(stats?.mentorshipHoursTotal),    Icon: Clock,       color: "var(--brand-green)" },
+        { label: "Youth engaged",       value: fmt(stats?.youthEngagedActive),      Icon: Users,       color: "var(--brand-green)" },
+        { label: "Active mentors",      value: fmt(stats?.activeMentors),           Icon: TrendingUp,  color: "var(--brand-green)" },
+        { label: "Trees planted",       value: fmt(stats?.treesPlantedTotal),       Icon: Trees,       color: "var(--brand-green)" },
+        { label: "Trees alive (audit)", value: fmt(stats?.treesAliveLatestAudit),   Icon: Leaf,        color: "var(--brand-green)" },
+        { label: "Corporate partners",  value: fmt(stats?.activeCorporatePartners), Icon: BarChart3,   color: "var(--brand-green)" },
     ];
 
     return (
         <div className="flex-1 p-8 lg:p-12 bg-background min-h-screen">
             <div className="max-w-4xl mx-auto space-y-8">
                 <div>
-                    <h1 className="font-playfair text-4xl font-black text-foreground mb-2">Impact Stats</h1>
-                    <p className="text-muted-foreground font-mono text-sm">
+                    <h1 className="text-display-md text-foreground mb-2">Impact stats</h1>
+                    <p className="text-body-sm text-foreground-muted">
                         Live platform-wide impact metrics — sourced from v_public_impact_aggregate.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {statCards.map((card) => (
-                        <div key={card.label} className="bg-card border border-border/50 rounded-lg p-6 space-y-3">
-                            <card.icon className={`w-6 h-6 ${card.color}`} />
+                        <div
+                            key={card.label}
+                            className="rounded-lg border border-border bg-background p-6 space-y-3"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
+                        >
+                            <card.Icon className="w-5 h-5" style={{ color: card.color }} />
                             <div>
-                                <p className="font-playfair text-3xl font-black text-foreground">{card.value}</p>
-                                <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider mt-1">{card.label}</p>
+                                <p className="text-display-sm text-foreground">{card.value}</p>
+                                <p className="text-eyebrow text-foreground-muted mt-1">{card.label}</p>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 {!stats && (
-                    <div className="py-12 text-center border border-dashed border-border rounded-lg">
-                        <p className="font-mono text-sm text-muted-foreground">No impact report data yet. Reports are generated periodically.</p>
+                    <div
+                        className="py-12 text-center border border-dashed border-border rounded-lg"
+                        style={{ background: "var(--surface-1)" }}
+                    >
+                        <p className="text-body-sm text-foreground-muted">
+                            No impact report data yet. Reports are generated periodically.
+                        </p>
                     </div>
                 )}
             </div>

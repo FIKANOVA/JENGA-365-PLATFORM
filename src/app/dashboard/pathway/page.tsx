@@ -15,8 +15,8 @@ export default async function PathwayPage() {
         <div className="flex-1 p-8 lg:p-12 bg-background min-h-screen">
             <div className="max-w-3xl mx-auto space-y-8">
                 <div>
-                    <h1 className="font-playfair text-4xl font-black text-foreground mb-2">My Pathway</h1>
-                    <p className="text-muted-foreground font-mono text-sm">Your learning milestones and progress</p>
+                    <h1 className="text-display-md text-foreground mb-2">My pathway</h1>
+                    <p className="text-body-sm text-foreground-muted">Your learning milestones and progress</p>
                 </div>
                 <LearningPathwayTracker pathway={pathway} />
             </div>

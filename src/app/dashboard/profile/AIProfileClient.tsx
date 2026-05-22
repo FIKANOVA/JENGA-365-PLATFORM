@@ -25,19 +25,26 @@ export default function AIProfileClient() {
 
     if (state === "idle") {
         return (
-            <div className="bg-card border border-border/50 rounded-lg p-10 text-center space-y-6 shadow-sm">
-                <div className="w-14 h-14 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-                    <Sparkles className="w-7 h-7 text-primary" />
+            <div
+                className="rounded-lg border border-border bg-background p-10 text-center space-y-6"
+                style={{ boxShadow: "var(--shadow-sm)" }}
+            >
+                <div
+                    className="w-14 h-14 mx-auto rounded-full flex items-center justify-center"
+                    style={{ background: "var(--brand-green-soft)" }}
+                >
+                    <Sparkles className="w-7 h-7" style={{ color: "var(--brand-green)" }} />
                 </div>
                 <div>
-                    <h2 className="font-playfair text-2xl font-bold text-foreground mb-2">Ready when you are</h2>
-                    <p className="text-muted-foreground font-mono text-sm">The interview takes about 5–10 minutes.</p>
+                    <h2 className="text-display-sm text-foreground mb-2">Ready when you are</h2>
+                    <p className="text-body-sm text-foreground-muted">The interview takes about 5–10 minutes.</p>
                 </div>
                 <button
                     onClick={() => setState("interviewing")}
-                    className="px-8 py-3 bg-primary text-primary-foreground font-mono font-bold text-xs uppercase tracking-widest hover:bg-primary/90 transition-colors rounded-md"
+                    className="inline-flex items-center h-11 rounded-md px-6 text-label font-medium transition-opacity hover:opacity-90"
+                    style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
                 >
-                    Start Interview
+                    Start interview
                 </button>
             </div>
         );
@@ -49,30 +56,36 @@ export default function AIProfileClient() {
 
     if (state === "synthesizing") {
         return (
-            <div className="bg-card border border-border/50 rounded-lg p-10 text-center space-y-4 shadow-sm">
+            <div
+                className="rounded-lg border border-border bg-background p-10 text-center space-y-4"
+                style={{ boxShadow: "var(--shadow-sm)" }}
+            >
                 <div className="flex items-center justify-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary animate-bounce" />
-                    <div className="w-2 h-2 rounded-full bg-primary animate-bounce [animation-delay:0.2s]" />
-                    <div className="w-2 h-2 rounded-full bg-primary animate-bounce [animation-delay:0.4s]" />
+                    <div className="w-2 h-2 rounded-full animate-bounce" style={{ background: "var(--brand-green)" }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce [animation-delay:0.2s]" style={{ background: "var(--brand-green)" }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce [animation-delay:0.4s]" style={{ background: "var(--brand-green)" }} />
                 </div>
-                <p className="font-mono text-sm text-muted-foreground uppercase tracking-widest">Synthesizing your profile…</p>
+                <p className="text-label text-foreground-muted">Synthesizing your profile…</p>
             </div>
         );
     }
 
     if (state === "done") {
         return (
-            <div className="bg-card border border-border/50 rounded-lg p-10 text-center space-y-6 shadow-sm">
-                <CheckCircle className="w-14 h-14 mx-auto text-green-500" />
+            <div
+                className="rounded-lg border border-border bg-background p-10 text-center space-y-6"
+                style={{ boxShadow: "var(--shadow-sm)" }}
+            >
+                <CheckCircle className="w-14 h-14 mx-auto" style={{ color: "var(--brand-green)" }} />
                 <div>
-                    <h2 className="font-playfair text-2xl font-bold text-foreground mb-2">Profile Updated</h2>
-                    <p className="text-muted-foreground font-mono text-sm">
+                    <h2 className="text-display-sm text-foreground mb-2">Profile updated</h2>
+                    <p className="text-body-sm text-foreground-muted">
                         Your profile embedding has been regenerated. Match recommendations will reflect your updated profile.
                     </p>
                 </div>
                 <button
                     onClick={() => setState("idle")}
-                    className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+                    className="text-body-sm text-foreground-muted hover:text-foreground transition-colors underline underline-offset-4"
                 >
                     Retake interview
                 </button>
@@ -82,12 +95,15 @@ export default function AIProfileClient() {
 
     // error state
     return (
-        <div className="bg-card border border-destructive/30 rounded-lg p-10 text-center space-y-4 shadow-sm">
-            <p className="font-mono text-sm text-destructive uppercase tracking-widest">Synthesis incomplete</p>
-            <p className="text-muted-foreground text-sm">{errorMsg}</p>
+        <div
+            className="rounded-lg border bg-background p-10 text-center space-y-4"
+            style={{ borderColor: "var(--brand-red)", boxShadow: "var(--shadow-sm)" }}
+        >
+            <p className="text-label" style={{ color: "var(--brand-red)" }}>Synthesis incomplete</p>
+            <p className="text-body-sm text-foreground-muted">{errorMsg}</p>
             <button
                 onClick={() => setState("idle")}
-                className="px-6 py-2 border border-border text-sm font-mono rounded-md hover:bg-muted transition-colors"
+                className="inline-flex items-center h-9 rounded-md border border-border bg-background px-4 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
             >
                 Try again
             </button>
