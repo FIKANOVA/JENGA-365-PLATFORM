@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useSession } from "@/lib/auth/client";
+import { Search, SearchX, PenSquare } from "lucide-react";
 import FeaturedArticle from "@/components/articles/FeaturedArticle";
 import ArticlesGrid from "@/components/articles/ArticlesGrid";
 import TopicFilters from "@/components/marketing/resources/TopicFilters";
@@ -68,7 +69,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                 >
                     <div className="relative max-w-2xl group">
                         <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-white/40 group-focus-within:text-primary">
-                            <span className="material-symbols-outlined text-[22px]">search</span>
+                            <Search className="h-5 w-5" />
                         </div>
                         <input
                             type="text"
@@ -82,7 +83,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
 
                 {/* Breadcrumb */}
                 <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8">
-                    <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--text-muted)] hover:text-black transition-colors">
+                    <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
                         ← Resources
                     </Link>
                 </div>
@@ -90,7 +91,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                 <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                     {/* Filters */}
                     <div className="flex flex-wrap items-center gap-6 border-b border-[var(--border)] pb-10 mb-16">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--text-muted)]">Filter</span>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">Filter</span>
                         <TopicFilters activeTopic={activeTopic} onTopicChange={setActiveTopic} />
                     </div>
 
@@ -115,13 +116,13 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                     <motion.div
                         initial={{ opacity: 0, scale: 0.98 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="mb-16 w-full p-10 flex flex-col md:flex-row items-center justify-between gap-8 border border-[var(--primary-green)]/20 bg-[var(--green-tint)]"
+                        className="mb-16 w-full p-10 flex flex-col md:flex-row items-center justify-between gap-8 border border-[var(--brand-green)]/20 bg-[var(--green-tint)]"
                     >
                         <div className="space-y-3">
                             <h3 className="font-serif font-black text-2xl text-black uppercase tracking-tight">
                                 {isAuthenticated ? "Share Your Expertise" : "Join the Movement"}
                             </h3>
-                            <p className="font-light text-[15px] text-[var(--text-secondary)] leading-relaxed max-w-xl">
+                            <p className="font-light text-[15px] text-[var(--foreground-muted)] leading-relaxed max-w-xl">
                                 {isAuthenticated
                                     ? "Your professional journey could be the roadmap for a future star."
                                     : "Register to publish articles and join our global network of contributors."}
@@ -129,7 +130,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                         </div>
                         <Link
                             href={isAuthenticated ? "/dashboard/articles/new" : "/register"}
-                            className="shrink-0 h-14 px-10 bg-[var(--primary-green)] text-white text-[10px] font-mono uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl flex items-center"
+                            className="shrink-0 h-14 px-10 bg-[var(--brand-green)] text-white text-[10px] font-mono uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl flex items-center"
                         >
                             {isAuthenticated ? "Publish Article" : "Create Free Account"}
                         </Link>
@@ -141,7 +142,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                             <ArticlesGrid articles={filteredArticles} />
                         ) : (
                             <div className="flex flex-col items-center justify-center py-24 text-center space-y-6">
-                                <span className="material-symbols-outlined text-7xl text-[var(--border)]">search_off</span>
+                                <SearchX className="h-16 w-16 text-[var(--border)]" />
                                 <h3 className="font-serif font-black text-3xl text-black">No Results Found</h3>
                                 <button
                                     onClick={() => { setSearchQuery(""); setActiveTopic("All Topics"); }}
@@ -159,9 +160,9 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                 <div className="fixed bottom-12 right-12 z-[60] group">
                     <Link
                         href="/dashboard/articles/new"
-                        className="flex items-center justify-center w-16 h-16 bg-[var(--primary-green)] text-white rounded-full shadow-2xl hover:bg-black hover:scale-110 transition-all duration-500"
+                        className="flex items-center justify-center w-16 h-16 bg-[var(--brand-green)] text-white rounded-full shadow-2xl hover:bg-black hover:scale-110 transition-all duration-500"
                     >
-                        <span className="material-symbols-outlined text-[28px]">edit_document</span>
+                        <PenSquare className="h-6 w-6" />
                     </Link>
                 </div>
             )}

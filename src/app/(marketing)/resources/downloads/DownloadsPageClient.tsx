@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { FileText, FolderArchive, Lock, Download } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 
@@ -14,13 +15,10 @@ const FALLBACK_DOWNLOADS = [
     { id: "d6", title: "AI Profile & Matching Engine — Technical Brief", description: "An overview of how Jenga365's vector-based matching works, for corporate and institutional partners.", format: "PDF", size: "980 KB", category: "Technology", locked: true, fileUrl: null },
 ];
 
-const FORMAT_ICON: Record<string, string> = {
-    PDF: "picture_as_pdf",
-    DOCX: "description",
-    DOC: "description",
-    ZIP: "folder_zip",
-    XLSX: "table_chart",
-};
+function FormatIcon({ format, className }: { format: string; className?: string }) {
+    if (format === "ZIP") return <FolderArchive className={className} />;
+    return <FileText className={className} />;
+}
 
 interface DownloadsPageClientProps {
     readonly initialDownloads: any[];
@@ -62,7 +60,7 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                 {/* Breadcrumb */}
-                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--text-muted)] hover:text-black transition-colors">
+                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
                     ← Resources
                 </Link>
 
@@ -72,10 +70,10 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-6 py-4 font-mono text-[10px] uppercase tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--primary-green)]" : "text-[var(--text-muted)] hover:text-black"}`}
+                            className={`px-6 py-4 font-mono text-[10px] uppercase tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
                         >
                             {cat}
-                            <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--primary-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
+                            <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
                         </button>
                     ))}
                 </div>
@@ -85,29 +83,27 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                     {filtered.map((item) => (
                         <div
                             key={item.id}
-                            className="group border border-[var(--border)] bg-[var(--off-white)] p-8 flex flex-col gap-6 hover:border-[var(--primary-green)] transition-all duration-300 relative overflow-hidden"
+                            className="group border border-[var(--border)] bg-[var(--surface-1)] p-8 flex flex-col gap-6 hover:border-[var(--brand-green)] transition-all duration-300 relative overflow-hidden"
                         >
                             {/* Top accent */}
-                            <div className="absolute top-0 left-0 h-[3px] w-0 group-hover:w-full bg-[var(--primary-green)] transition-all duration-500" />
+                            <div className="absolute top-0 left-0 h-[3px] w-0 group-hover:w-full bg-[var(--brand-green)] transition-all duration-500" />
 
                             {/* Icon + format */}
                             <div className="flex items-center justify-between">
-                                <span className="material-symbols-outlined text-4xl text-[var(--primary-green)] opacity-70 group-hover:opacity-100 transition-opacity">
-                                    {FORMAT_ICON[item.format] ?? "download"}
-                                </span>
+                                <FormatIcon format={item.format} className="h-8 w-8 text-[var(--brand-green)] opacity-70 group-hover:opacity-100 transition-opacity" />
                                 <div className="flex items-center gap-2">
-                                    <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--text-muted)] font-bold">{item.format}</span>
-                                    {item.size && <span className="font-mono text-[9px] text-[var(--text-muted)]">· {item.size}</span>}
+                                    <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] font-bold">{item.format}</span>
+                                    {item.size && <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">· {item.size}</span>}
                                 </div>
                             </div>
 
                             {/* Text */}
                             <div className="flex-1 space-y-3">
-                                <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--primary-green)] font-bold">{item.category}</span>
-                                <h3 className="font-serif font-black text-lg text-black uppercase tracking-tight leading-tight group-hover:text-[var(--primary-green)] transition-colors">
+                                <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold">{item.category}</span>
+                                <h3 className="font-serif font-black text-lg text-black uppercase tracking-tight leading-tight group-hover:text-[var(--brand-green)] transition-colors">
                                     {item.title}
                                 </h3>
-                                <p className="font-sans font-light text-sm text-[var(--text-secondary)] leading-relaxed">
+                                <p className="font-sans font-light text-sm text-[var(--foreground-muted)] leading-relaxed">
                                     {item.description}
                                 </p>
                             </div>
@@ -116,9 +112,9 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                             {item.locked ? (
                                 <Link
                                     href="/register"
-                                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--text-muted)] hover:text-black transition-colors"
+                                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--foreground-subtle)] hover:text-black transition-colors"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">lock</span>
+                                    <Lock className="h-4 w-4" />
                                     Members Only
                                 </Link>
                             ) : item.fileUrl ? (
@@ -127,14 +123,14 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                                     download
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--primary-green)] hover:text-black transition-colors"
+                                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--brand-green)] hover:text-black transition-colors"
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">download</span>
+                                    <Download className="h-4 w-4" />
                                     Download Free
                                 </a>
                             ) : (
-                                <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--primary-green)] opacity-50 cursor-not-allowed">
-                                    <span className="material-symbols-outlined text-[18px]">download</span>
+                                <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--brand-green)] opacity-50 cursor-not-allowed">
+                                    <Download className="h-4 w-4" />
                                     Coming Soon
                                 </span>
                             )}

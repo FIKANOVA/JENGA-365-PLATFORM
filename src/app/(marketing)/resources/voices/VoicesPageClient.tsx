@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Mic, AudioLines, MessageSquare, ExternalLink, AtSign } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 
 type VoiceType = "SPACES" | "THREADS";
+
+function TabIcon({ id, className }: { id: VoiceType | "ALL"; className?: string }) {
+    if (id === "SPACES") return <AudioLines className={className} />;
+    if (id === "THREADS") return <MessageSquare className={className} />;
+    return <Mic className={className} />;
+}
 
 const FALLBACK_VOICES = [
     { id: "vc1", type: "SPACES" as VoiceType, title: "Building the Total Athlete — A Jenga365 X-Space", description: "Coaches, mentors, and athletes joined live to discuss what holistic athlete development really looks like in East Africa.", host: "@jenga365", date: "Mar 14, 2026", duration: "58 min", listeners: "1.2K", recorded: true, xUrl: "https://x.com/jenga365" },
@@ -16,10 +23,10 @@ const FALLBACK_VOICES = [
     { id: "vc6", type: "THREADS" as VoiceType, title: "What Makes a Great Mentor? 10 Traits", description: "The Jenga365 team distilled feedback from 500+ mentees into a definitive thread on what separates good mentors from great ones.", host: "@jenga365", date: "Jan 30, 2026", posts: 10, impressions: "62K", recorded: false, xUrl: "https://x.com/jenga365" },
 ];
 
-const TABS: { id: VoiceType | "ALL"; label: string; icon: string }[] = [
-    { id: "ALL", label: "All Voices", icon: "record_voice_over" },
-    { id: "SPACES", label: "X-Spaces", icon: "spatial_audio" },
-    { id: "THREADS", label: "X-Threads", icon: "thread_unread" },
+const TABS: { id: VoiceType | "ALL"; label: string }[] = [
+    { id: "ALL", label: "All Voices" },
+    { id: "SPACES", label: "X-Spaces" },
+    { id: "THREADS", label: "X-Threads" },
 ];
 
 interface VoicesPageClientProps {
@@ -62,7 +69,7 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                 {/* Breadcrumb */}
-                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--text-muted)] hover:text-black transition-colors">
+                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
                     ← Resources
                 </Link>
 
@@ -75,10 +82,10 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                             className={`flex items-center gap-2 px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] font-bold border transition-all duration-200 ${
                                 activeTab === tab.id
                                     ? "bg-black text-white border-black"
-                                    : "bg-white text-[var(--text-muted)] border-[var(--border)] hover:border-black hover:text-black"
+                                    : "bg-white text-[var(--foreground-subtle)] border-[var(--border)] hover:border-black hover:text-black"
                             }`}
                         >
-                            <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
+                            <TabIcon id={tab.id} className="h-4 w-4" />
                             {tab.label}
                         </button>
                     ))}
@@ -89,55 +96,55 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                     {filtered.map((voice) => (
                         <div
                             key={voice.id}
-                            className="group flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 hover:bg-[var(--off-white)] transition-colors"
+                            className="group flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 hover:bg-[var(--surface-1)] transition-colors"
                         >
                             {/* Left */}
                             <div className="flex items-start gap-6">
                                 <div className={`shrink-0 w-12 h-12 flex items-center justify-center border ${
                                     voice.type === "SPACES"
-                                        ? "border-[var(--primary-green)] bg-[var(--green-tint)]"
+                                        ? "border-[var(--brand-green)] bg-[var(--green-tint)]"
                                         : "border-black bg-black/5"
                                 }`}>
-                                    <span className={`material-symbols-outlined text-xl ${
-                                        voice.type === "SPACES" ? "text-[var(--primary-green)]" : "text-black"
-                                    }`}>
-                                        {voice.type === "SPACES" ? "spatial_audio" : "thread_unread"}
-                                    </span>
+                                    {voice.type === "SPACES" ? (
+                                        <AudioLines className="h-5 w-5 text-[var(--brand-green)]" />
+                                    ) : (
+                                        <MessageSquare className="h-5 w-5 text-black" />
+                                    )}
                                 </div>
 
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-3">
                                         <span className={`font-mono text-[8px] uppercase tracking-[0.3em] font-bold ${
-                                            voice.type === "SPACES" ? "text-[var(--primary-green)]" : "text-black"
+                                            voice.type === "SPACES" ? "text-[var(--brand-green)]" : "text-black"
                                         }`}>
                                             {voice.type === "SPACES" ? "X-Space" : "X-Thread"}
                                         </span>
                                         {voice.type === "SPACES" && voice.recorded && (
-                                            <span className="font-mono text-[8px] uppercase tracking-widest text-white bg-[var(--primary-green)] px-2 py-0.5">
+                                            <span className="font-mono text-[8px] uppercase tracking-widest text-white bg-[var(--brand-green)] px-2 py-0.5">
                                                 Recorded
                                             </span>
                                         )}
                                     </div>
-                                    <h3 className="font-serif font-black text-xl text-black uppercase tracking-tight leading-tight group-hover:text-[var(--primary-green)] transition-colors">
+                                    <h3 className="font-serif font-black text-xl text-black uppercase tracking-tight leading-tight group-hover:text-[var(--brand-green)] transition-colors">
                                         {voice.title}
                                     </h3>
-                                    <p className="font-sans font-light text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl">
+                                    <p className="font-sans font-light text-sm text-[var(--foreground-muted)] leading-relaxed max-w-2xl">
                                         {voice.description}
                                     </p>
 
                                     <div className="flex flex-wrap items-center gap-4 pt-1">
-                                        <span className="font-mono text-[9px] text-[var(--text-muted)]">{voice.host}</span>
-                                        <span className="font-mono text-[9px] text-[var(--text-muted)]">{voice.date}</span>
+                                        <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">{voice.host}</span>
+                                        <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">{voice.date}</span>
                                         {voice.type === "SPACES" && (
                                             <>
-                                                {voice.duration && <span className="font-mono text-[9px] text-[var(--text-muted)]">{voice.duration}</span>}
-                                                {voice.listeners && <span className="font-mono text-[9px] text-[var(--text-muted)]">{voice.listeners} listeners</span>}
+                                                {voice.duration && <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">{voice.duration}</span>}
+                                                {voice.listeners && <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">{voice.listeners} listeners</span>}
                                             </>
                                         )}
                                         {voice.type === "THREADS" && (
                                             <>
-                                                {voice.posts && <span className="font-mono text-[9px] text-[var(--text-muted)]">{voice.posts} posts</span>}
-                                                {voice.impressions && <span className="font-mono text-[9px] text-[var(--text-muted)]">{voice.impressions} impressions</span>}
+                                                {voice.posts && <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">{voice.posts} posts</span>}
+                                                {voice.impressions && <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">{voice.impressions} impressions</span>}
                                             </>
                                         )}
                                     </div>
@@ -151,7 +158,7 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                                <ExternalLink className="h-4 w-4" />
                                 {voice.type === "SPACES" ? (voice.recorded ? "Listen" : "Join Space") : "Read Thread"}
                             </Link>
                         </div>
@@ -159,10 +166,10 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                 </div>
 
                 {/* Follow CTA */}
-                <div className="mt-16 border border-[var(--border)] p-10 flex flex-col md:flex-row items-center justify-between gap-8 bg-[var(--off-white)]">
+                <div className="mt-16 border border-[var(--border)] p-10 flex flex-col md:flex-row items-center justify-between gap-8 bg-[var(--surface-1)]">
                     <div className="space-y-3">
                         <h3 className="font-serif font-black text-2xl text-black uppercase tracking-tight">Stay in the Conversation</h3>
-                        <p className="font-sans font-light text-[var(--text-secondary)] max-w-xl">
+                        <p className="font-sans font-light text-[var(--foreground-muted)] max-w-xl">
                             Follow <strong className="text-black">@jenga365</strong> on X to get notified of live Spaces and new Threads as they publish.
                         </p>
                     </div>
@@ -170,9 +177,9 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                         href="https://x.com/jenga365"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="shrink-0 flex items-center gap-3 px-8 py-4 bg-black text-white font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-[var(--primary-green)] transition-all"
+                        className="shrink-0 flex items-center gap-3 px-8 py-4 bg-black text-white font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-[var(--brand-green)] transition-all"
                     >
-                        <span className="material-symbols-outlined text-[18px]">alternate_email</span>
+                        <AtSign className="h-4 w-4" />
                         Follow @jenga365
                     </Link>
                 </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Play } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 
@@ -61,7 +62,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                 {/* Breadcrumb */}
-                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--text-muted)] hover:text-black transition-colors">
+                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
                     ← Resources
                 </Link>
 
@@ -71,10 +72,10 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-6 py-4 font-mono text-[10px] uppercase tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--primary-green)]" : "text-[var(--text-muted)] hover:text-black"}`}
+                            className={`px-6 py-4 font-mono text-[10px] uppercase tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
                         >
                             {cat}
-                            <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--primary-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
+                            <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
                         </button>
                     ))}
                 </div>
@@ -93,11 +94,11 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                 )}
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <div className="w-20 h-20 rounded-full bg-white/10 border-2 border-white/50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
-                                        <span className="material-symbols-outlined text-5xl text-white">play_arrow</span>
+                                        <Play className="h-10 w-10 text-white fill-white" />
                                     </div>
                                 </div>
                                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                                    <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--primary-green)] font-bold">{featuredVideo.category} · {featuredVideo.duration}</span>
+                                    <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--brand-green)] font-bold">{featuredVideo.category} · {featuredVideo.duration}</span>
                                     <h2 className="font-serif font-black text-3xl md:text-4xl text-white uppercase tracking-tighter mt-2 leading-none">
                                         {featuredVideo.title}
                                     </h2>
@@ -122,7 +123,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                     )}
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="w-14 h-14 rounded-full bg-white/10 border border-white/40 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                            <span className="material-symbols-outlined text-3xl text-white">play_arrow</span>
+                                            <Play className="h-7 w-7 text-white fill-white" />
                                         </div>
                                     </div>
                                     {video.duration && (
@@ -131,11 +132,11 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                         </div>
                                     )}
                                 </div>
-                                <span className="font-mono text-[8px] uppercase tracking-widest text-[var(--primary-green)] font-bold">{video.category}</span>
-                                <h3 className="font-serif font-black text-lg text-black uppercase tracking-tight leading-tight group-hover:text-[var(--primary-green)] transition-colors mt-1">
+                                <span className="font-mono text-[8px] uppercase tracking-widest text-[var(--brand-green)] font-bold">{video.category}</span>
+                                <h3 className="font-serif font-black text-lg text-black uppercase tracking-tight leading-tight group-hover:text-[var(--brand-green)] transition-colors mt-1">
                                     {video.title}
                                 </h3>
-                                <p className="font-sans font-light text-sm text-[var(--text-secondary)] leading-relaxed mt-2">
+                                <p className="font-sans font-light text-sm text-[var(--foreground-muted)] leading-relaxed mt-2">
                                     {video.description}
                                 </p>
                             </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FileText, Download, PlayCircle, Mic, ArrowRight } from "lucide-react";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 
@@ -11,124 +12,86 @@ const SECTIONS = [
     {
         label: "Articles",
         href: "/resources/articles",
-        icon: "article",
-        color: "var(--primary-green)",
-        heading: "Insights & Thought Leadership",
+        Icon: FileText,
+        color: "var(--brand-green)",
+        colorSoft: "var(--brand-green-soft)",
+        heading: "Insights & thought leadership",
         body: "In-depth articles on mentorship, rugby development, financial literacy, and community impact — written by practitioners and experts.",
-        cta: "Browse Articles",
-        bg: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800&auto=format&fit=crop",
+        cta: "Browse articles",
     },
     {
         label: "Downloads",
         href: "/resources/downloads",
-        icon: "download",
-        color: "#c00000",
-        heading: "Guides, Playbooks & Templates",
-        body: "Downloadable PDFs, checklists, mentor readiness guides, and strategic frameworks built by the Jenga365 team.",
-        cta: "Get Downloads",
-        bg: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=800&auto=format&fit=crop",
+        Icon: Download,
+        color: "var(--brand-red)",
+        colorSoft: "var(--brand-red-soft)",
+        heading: "Guides, playbooks & templates",
+        body: "Downloadable PDFs, checklists, mentor-readiness guides, and strategic frameworks built by the Jenga365 team.",
+        cta: "Get downloads",
     },
     {
         label: "Video",
         href: "/resources/video",
-        icon: "play_circle",
-        color: "var(--primary-green)",
-        heading: "Talks, Sessions & Tutorials",
+        Icon: PlayCircle,
+        color: "var(--brand-green)",
+        colorSoft: "var(--brand-green-soft)",
+        heading: "Talks, sessions & tutorials",
         body: "Recorded mentorship sessions, platform walkthroughs, athlete interviews, and keynote talks from Jenga365 events.",
-        cta: "Watch Videos",
-        bg: "https://images.unsplash.com/photo-1492724724894-7464c27d0ceb?q=80&w=800&auto=format&fit=crop",
+        cta: "Watch videos",
     },
     {
         label: "Voices",
         href: "/resources/voices",
-        icon: "record_voice_over",
-        color: "#111111",
+        Icon: Mic,
+        color: "var(--brand-black)",
+        colorSoft: "var(--surface-2)",
         heading: "X-Spaces & X-Threads",
         body: "Live and recorded X-Spaces conversations, curated X-Threads, and community discussions shaping the Jenga365 narrative.",
-        cta: "Explore Voices",
-        bg: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?q=80&w=800&auto=format&fit=crop",
+        cta: "Explore voices",
     },
 ];
 
 export default function ResourcesHubPage() {
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-background">
             <PageHero
-                eyebrow="Knowledge Hub"
-                heading={<>The Jenga365 <span className="italic text-primary">Library.</span></>}
+                eyebrow="Knowledge hub"
+                heading={<>The Jenga365 library.</>}
                 description="Articles, downloads, video sessions, and community voices — everything you need to grow, in one place."
-                bgImage="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1920&auto=format&fit=crop"
-                bgFallback="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1920&auto=format&fit=crop"
-                minHeight="min-h-[55vh]"
             />
 
-            {/* Section grid */}
-            <section className="max-w-7xl mx-auto px-6 md:px-12 py-24">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--border)]">
-                    {SECTIONS.map((section) => (
+            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-20 lg:py-24">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+                    {SECTIONS.map(({ label, href, Icon, color, colorSoft, heading, body, cta }) => (
                         <Link
-                            key={section.href}
-                            href={section.href}
-                            className="group relative bg-white overflow-hidden flex flex-col min-h-[400px]"
+                            key={href}
+                            href={href}
+                            className="group relative rounded-lg border border-border bg-background overflow-hidden flex flex-col p-6 lg:p-8 min-h-[260px] transition-shadow hover:shadow-md"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
                         >
-                            {/* Background image — subtle on hover */}
-                            <div className="absolute inset-0 z-0">
-                                <img
-                                    src={section.bg}
-                                    alt=""
-                                    className="w-full h-full object-cover opacity-[0.06] group-hover:opacity-[0.14] group-hover:scale-105 transition-all duration-700"
-                                />
+                            <div className="flex items-center gap-3">
+                                <span
+                                    className="inline-flex h-10 w-10 items-center justify-center rounded-md"
+                                    style={{ background: colorSoft }}
+                                >
+                                    <Icon className="h-5 w-5" style={{ color }} />
+                                </span>
+                                <span className="text-eyebrow" style={{ color }}>
+                                    {label}
+                                </span>
                             </div>
 
-                            <div className="relative z-10 flex flex-col h-full p-10 md:p-12">
-                                {/* Icon + label */}
-                                <div className="flex items-center gap-3">
-                                    <span
-                                        className="material-symbols-outlined text-3xl transition-transform group-hover:scale-110 duration-300"
-                                        style={{ color: section.color }}
-                                    >
-                                        {section.icon}
-                                    </span>
-                                    <span
-                                        className="font-mono text-[9px] uppercase tracking-[0.3em] font-bold"
-                                        style={{ color: section.color }}
-                                    >
-                                        {section.label}
-                                    </span>
-                                </div>
-
-                                {/* Text — pushed to bottom */}
-                                <div className="mt-auto space-y-4 pt-12">
-                                    <h2 className="font-serif font-black text-2xl md:text-3xl text-black uppercase tracking-tighter leading-none group-hover:text-[var(--primary-green)] transition-colors duration-300">
-                                        {section.heading}
-                                    </h2>
-                                    <p className="font-sans font-light text-[var(--text-secondary)] leading-relaxed text-[15px] max-w-sm">
-                                        {section.body}
-                                    </p>
-                                </div>
-
-                                {/* CTA row */}
-                                <div className="mt-8 flex items-center gap-3">
-                                    <span
-                                        className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold border-b-2 pb-0.5"
-                                        style={{ borderColor: section.color, color: section.color }}
-                                    >
-                                        {section.cta}
-                                    </span>
-                                    <span
-                                        className="material-symbols-outlined text-base transition-transform group-hover:translate-x-2 duration-300"
-                                        style={{ color: section.color }}
-                                    >
-                                        arrow_forward
-                                    </span>
-                                </div>
+                            <div className="mt-auto pt-10 space-y-3">
+                                <h2 className="text-headline text-foreground transition-colors group-hover:text-[color:var(--brand-green)]">
+                                    {heading}
+                                </h2>
+                                <p className="text-body-sm text-foreground-muted">{body}</p>
                             </div>
 
-                            {/* Bottom accent bar */}
-                            <div
-                                className="absolute bottom-0 left-0 h-[3px] w-0 group-hover:w-full transition-all duration-500 z-10"
-                                style={{ background: section.color }}
-                            />
+                            <div className="mt-6 inline-flex items-center gap-2 text-label font-medium" style={{ color }}>
+                                {cta}
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </div>
                         </Link>
                     ))}
                 </div>

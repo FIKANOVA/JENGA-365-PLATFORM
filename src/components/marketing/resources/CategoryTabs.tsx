@@ -21,13 +21,13 @@ export default function CategoryTabs({ activeCategory, onCategoryChange }: Categ
                     key={cat.id}
                     onClick={() => onCategoryChange(cat.id)}
                     className={`px-8 py-5 text-[10px] font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${activeCategory === cat.id
-                            ? "text-[var(--primary-green)]"
-                            : "text-[var(--text-muted)] hover:text-black"
+                            ? "text-[var(--brand-green)]"
+                            : "text-[var(--foreground-subtle)] hover:text-black"
                         }`}
                     style={{ fontFamily: "var(--font-dm-mono)" }}
                 >
                     {cat.label}
-                    <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--primary-green)] transition-all duration-300 ${activeCategory === cat.id ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
+                    <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat.id ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
                 </button>
             ))}
         </div>
