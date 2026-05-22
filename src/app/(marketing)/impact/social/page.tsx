@@ -1,45 +1,39 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-export default function ImpactPage() {
+export default function ImpactSocialPage() {
     return (
         <div className="flex flex-col min-h-screen">
-            <main className="flex-1 py-24 container mx-auto px-4">
-                <div className="max-w-4xl mx-auto text-center mb-16">
-                    <span className="section-label text-[#006600]">MEASURABLE CHANGE</span>
-                    <h1 className="text-6xl font-black mt-2 font-playfair mb-8">Direct Social Impact</h1>
-                    <p className="font-lato text-xl text-muted-foreground leading-relaxed">
+            <main className="flex-1 py-20 container mx-auto px-4">
+                <div className="max-w-4xl mx-auto text-center mb-16 space-y-4">
+                    <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                        Measurable change
+                    </span>
+                    <h1 className="text-display-lg text-foreground">Direct social impact</h1>
+                    <p className="text-body-lg text-foreground-muted leading-relaxed">
                         Visualizing the human connection behind the numbers. Our social impact engine tracks every hour of mentorship and every success story.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-                    <ImpactCard
-                        title="Mentorship Hubs"
-                        value="12"
-                        sub="Across 6 Counties"
-                    />
-                    <ImpactCard
-                        title="Active Mentees"
-                        value="1,200+"
-                        sub="Sustainable Growth"
-                    />
-                    <ImpactCard
-                        title="Success Rate"
-                        value="94%"
-                        sub="Post- Mentorship Employment"
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-20">
+                    <ImpactCard title="Mentorship hubs" value="12" sub="Across 6 counties" />
+                    <ImpactCard title="Active mentees" value="1,200+" sub="Sustainable growth" />
+                    <ImpactCard title="Success rate" value="94%" sub="Post-mentorship employment" />
                 </div>
 
-                <div className="flex justify-center gap-4">
-                    <Link href="/impact/map">
-                        <button className="px-8 py-4 bg-[#1A1A1A] text-white font-mono text-xs uppercase tracking-[0.2em] font-bold hover:opacity-90 transition-opacity">
-                            View Funding Map
-                        </button>
+                <div className="flex flex-wrap justify-center gap-3">
+                    <Link
+                        href="/impact/map"
+                        className="inline-flex items-center gap-2 h-11 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                        style={{ background: "var(--brand-green)" }}
+                    >
+                        View funding map <ArrowRight className="h-4 w-4" />
                     </Link>
-                    <Link href="/register">
-                        <button className="px-8 py-4 border border-input font-mono text-xs uppercase tracking-[0.2em] font-bold">
-                            Join the Movement
-                        </button>
+                    <Link
+                        href="/register"
+                        className="inline-flex items-center gap-2 h-11 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+                    >
+                        Join the movement
                     </Link>
                 </div>
             </main>
@@ -47,12 +41,15 @@ export default function ImpactPage() {
     );
 }
 
-function ImpactCard({ title, value, sub }: any) {
+function ImpactCard({ title, value, sub }: { title: string; value: string; sub: string }) {
     return (
-        <div className="p-10 bg-[#F9F9F8] border border-border text-center">
-            <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-4">{title}</h3>
-            <div className="text-5xl font-black font-playfair mb-2">{value}</div>
-            <p className="font-lato text-sm italic py-2 border-t border-border mt-4">{sub}</p>
+        <div
+            className="rounded-lg border border-border bg-background p-10 text-center"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+        >
+            <h3 className="text-eyebrow text-foreground-muted mb-4">{title}</h3>
+            <div className="text-display-md text-foreground mb-2">{value}</div>
+            <p className="text-body-sm text-foreground-muted italic py-2 border-t border-border mt-4">{sub}</p>
         </div>
-    )
+    );
 }

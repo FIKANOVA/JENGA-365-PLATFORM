@@ -61,15 +61,15 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
     }));
 
     const authorName = article.author?.name ?? "Jenga365 Team";
-    const authorRole = article.author?.role ?? "STAFF";
+    const authorRole = article.author?.role ?? "Staff";
     const heroImage = article.mainImage?.asset?.url ?? (article as any).image ?? "";
     const readTime = article.readTime ? `${article.readTime} min read` : "5 min read";
     const publishedDate = article.publishedAt ? formatDate(article.publishedAt) : "";
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-background">
             <main>
-                <section className="relative w-full h-[70vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
+                <section className="relative w-full h-[60vh] min-h-[480px] flex items-center justify-center overflow-hidden bg-black">
                     <div className="absolute inset-0 bg-black/60 z-10" />
                     {heroImage && (
                         <div className="absolute inset-0">
@@ -83,22 +83,23 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
                         </div>
                     )}
                     <div className="relative z-20 max-w-5xl mx-auto px-6 text-center">
-                        <div className="space-y-8">
-                            <div className="flex justify-center items-center gap-4">
+                        <div className="space-y-6">
+                            <div className="flex justify-center items-center gap-3 flex-wrap">
                                 <Link
                                     href="/resources/articles"
-                                    className="text-white/50 text-[10px] font-mono tracking-[0.3em] uppercase hover:text-white transition-colors"
+                                    className="text-eyebrow text-white/60 hover:text-white transition-colors"
                                 >
                                     ← Articles
                                 </Link>
-                                <span className="bg-primary text-white text-[10px] font-mono font-bold px-4 py-1.5 uppercase tracking-[0.3em]">
+                                <span
+                                    className="text-eyebrow px-3 py-1 rounded-full"
+                                    style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                                >
                                     {(article as any).category ?? "Insight"}
                                 </span>
-                                <span className="text-white/60 text-[10px] font-mono tracking-[0.3em] uppercase">
-                                    {readTime}
-                                </span>
+                                <span className="text-eyebrow text-white/60">{readTime}</span>
                             </div>
-                            <h1 className="text-white text-5xl md:text-8xl font-serif font-black uppercase leading-[0.9] tracking-tighter">
+                            <h1 className="text-white text-4xl md:text-6xl font-medium leading-tight">
                                 {article.title}
                             </h1>
                             {(article as any).excerpt && (
@@ -110,8 +111,8 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
                     </div>
                 </section>
 
-                <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                         <div className="lg:col-span-8">
                             <ArticleContent
                                 author={{ name: authorName, role: authorRole, avatar: article.author?.image?.asset?.url ?? "", bio: `${authorName} — ${authorRole}` }}
@@ -120,7 +121,7 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
                             />
                         </div>
                         <aside className="lg:col-span-4">
-                            <div className="sticky top-[120px] space-y-16">
+                            <div className="sticky top-[120px] space-y-12">
                                 <RelatedArticles articles={relatedArticles} />
                                 {!isAuthenticated && <ArticleAuthGate />}
                             </div>
@@ -129,14 +130,25 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
                 </div>
 
                 {!isAuthenticated && (
-                    <section className="bg-accent border-t border-border py-32 mt-20">
-                        <div className="max-w-4xl mx-auto px-6 flex flex-col items-center text-center space-y-10">
-                            <h2 className="text-5xl font-serif font-black text-foreground uppercase leading-tight">
-                                Ready to go <span className="italic text-primary">Deeper?</span>
+                    <section className="bg-accent border-t border-border py-24 mt-12">
+                        <div className="max-w-4xl mx-auto px-6 flex flex-col items-center text-center space-y-6">
+                            <h2 className="text-display-lg text-foreground">
+                                Ready to go <span style={{ color: "var(--brand-green)" }}>deeper?</span>
                             </h2>
-                            <div className="flex flex-wrap justify-center gap-6 pt-4">
-                                <Link href="/register" className="btn-primary px-12 py-4">Create Free Account</Link>
-                                <Link href="/login" className="px-12 py-4 border border-border text-foreground font-mono text-[10px] uppercase tracking-widest hover:bg-foreground hover:text-background transition-all">Log In</Link>
+                            <div className="flex flex-wrap justify-center gap-3 pt-2">
+                                <Link
+                                    href="/register"
+                                    className="inline-flex items-center h-11 rounded-md px-6 text-label font-medium transition-opacity hover:opacity-90"
+                                    style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                                >
+                                    Create free account
+                                </Link>
+                                <Link
+                                    href="/login"
+                                    className="inline-flex items-center h-11 rounded-md border border-border bg-background px-6 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+                                >
+                                    Log in
+                                </Link>
                             </div>
                         </div>
                     </section>

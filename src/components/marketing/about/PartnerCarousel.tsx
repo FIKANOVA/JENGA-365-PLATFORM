@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 const CDN = "https://jenga365.com/wp-content/uploads";
 
 const fallbackPartners = [
@@ -36,7 +34,7 @@ interface Partner {
     name: string;
     url: string;
     img?: string;
-    logoUrl?: string; // from sanity
+    logoUrl?: string;
 }
 
 interface PartnerCarouselProps {
@@ -45,17 +43,19 @@ interface PartnerCarouselProps {
 
 export default function PartnerCarousel({ partners = fallbackPartners }: PartnerCarouselProps) {
     return (
-        <section className="py-32 bg-background overflow-hidden border-b border-border">
-            <div className="max-w-7xl mx-auto px-6 md:px-12 mb-24">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-12 border-b border-border pb-12">
-                    <div className="space-y-4">
-                        <span className="section-label block text-center md:text-left">Joint Ventures</span>
-                        <h2 className="font-serif font-bold text-5xl md:text-5xl text-foreground uppercase leading-[0.9] tracking-tighter text-center md:text-left">
-                            Strategic <br /><span className="italic text-primary transition-colors duration-500 hover:text-secondary">Allies.</span>
+        <section className="py-24 bg-background overflow-hidden border-b border-border">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-border pb-10">
+                    <div className="space-y-3">
+                        <span className="text-eyebrow text-foreground-muted block text-center md:text-left">
+                            Joint ventures
+                        </span>
+                        <h2 className="text-display-lg text-foreground text-center md:text-left">
+                            Strategic allies.
                         </h2>
                     </div>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-muted-foreground font-bold text-center md:text-right max-w-[200px]">
-                        Architecting the Jenga365 Ecosystem
+                    <p className="text-eyebrow text-foreground-muted text-center md:text-right max-w-[220px]">
+                        Architecting the Jenga365 ecosystem
                     </p>
                 </div>
             </div>
