@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -59,6 +59,7 @@ const CONTRIBUTION_MODELS = [
 
 export default function CorporateRegisterPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [step, setStep] = useState<1 | 2 | 3>(1);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -73,6 +74,14 @@ export default function CorporateRegisterPage() {
         contributionType: "Fin",
         agreedToProtocol: false,
     });
+
+    // /register/ngo redirects here with ?type=ngo and we pre-fill orgType so
+    // the form's NGO bypass (skip step 2) takes effect from the first click.
+    useEffect(() => {
+        if (searchParams.get("type") === "ngo" && !formData.orgType) {
+            setFormData((p) => ({ ...p, orgType: "NGO" }));
+        }
+    }, [searchParams, formData.orgType]);
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -248,7 +257,9 @@ export default function CorporateRegisterPage() {
                                             formData.password
                                         ) {
                                             setError(null);
-                                            setStep(2);
+                                            // NGOs bypass the milestone-tied contribution step (CLAUDE.md §10.5).
+                                            // Resource Exchange MOU is signed inside the NGO dashboard after sign-up.
+                                            setStep(formData.orgType === "NGO" ? 3 : 2);
                                         } else {
                                             setError("Please fill in all required fields.");
                                         }
@@ -399,7 +410,7 @@ export default function CorporateRegisterPage() {
                                 onSignAndComplete={handleSignAndComplete}
                                 isLoading={loading}
                                 error={error}
-                                onBack={() => setStep(2)}
+                                onBack={() => setStep(formData.orgType === "NGO" ? 1 : 2)}
                             />
                         </motion.section>
                     )}
