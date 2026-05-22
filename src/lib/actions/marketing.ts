@@ -1,15 +1,41 @@
 "use server"
 
 import { db } from "@/lib/db";
-import { impactReports, corporatePartners, articles } from "@/lib/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { corporatePartners, articles, users, vPublicImpactAggregate } from "@/lib/db/schema";
+import { and, count, desc, eq } from "drizzle-orm";
 
-export async function getGlobalImpactStats() {
+export type GlobalImpactStats = {
+    treesPlantedTotal: number;
+    treesAliveLatestAudit: number;
+    survivalRatePct: number;
+    mentorshipHoursTotal: number;
+    youthEngagedActive: number;
+    activeCorporatePartners: number;
+    activeMentors: number;
+};
+
+// Reads v_public_impact_aggregate — unfiltered aggregates fed by tree_planting_events,
+// DISTINCT ON latest tree_survival_checks, sessions_log, and active counts.
+// See drizzle/0013_public_impact_view.sql and CLAUDE.md §11.
+export async function getGlobalImpactStats(): Promise<GlobalImpactStats | null> {
     try {
-        const stats = await db.query.impactReports.findFirst({
-            orderBy: [desc(impactReports.generatedAt)]
-        });
-        return stats;
+        const [row] = await db.select().from(vPublicImpactAggregate).limit(1);
+
+        const [mentorsRow] = await db
+            .select({ count: count() })
+            .from(users)
+            .where(and(eq(users.role, "Mentor"), eq(users.isApproved, true), eq(users.status, "active")));
+
+        if (!row) return null;
+        return {
+            treesPlantedTotal: Number(row.treesPlantedTotal ?? 0),
+            treesAliveLatestAudit: Number(row.treesAliveLatestAudit ?? 0),
+            survivalRatePct: Number(row.survivalRatePct ?? 0),
+            mentorshipHoursTotal: Number(row.mentorshipHoursTotal ?? 0),
+            youthEngagedActive: Number(row.youthEngagedActive ?? 0),
+            activeCorporatePartners: Number(row.activeCorporatePartners ?? 0),
+            activeMentors: Number(mentorsRow?.count ?? 0),
+        };
     } catch (error) {
         console.error("Failed to fetch impact stats:", error);
         return null;

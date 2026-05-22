@@ -5,7 +5,8 @@ import { db } from "@/lib/db";
 import {
     projectLocations,
     corporatePartners,
-    activityLog
+    activityLog,
+    treePlantingEvents
 } from "@/lib/db/schema";
 import { eq, and, gte, lte, sql, desc } from "drizzle-orm";
 import { z } from "zod";
@@ -143,25 +144,43 @@ export async function addProjectLocation(input: z.infer<typeof addLocationSchema
 
     const parsed = addLocationSchema.parse(input);
 
-    const [newLocation] = await db.insert(projectLocations).values({
-        name: parsed.name,
-        latitude: parsed.latitude.toString(),
-        longitude: parsed.longitude.toString(),
-        projectType: parsed.projectType as any,
-        funderId: parsed.funderId,
-        amountFunded: parsed.amountFunded.toString(),
-        startDate: parsed.startDate,
-        endDate: parsed.endDate,
-        description: parsed.description,
-        youthReached: parsed.youthReached,
-        treesPlanted: parsed.treesPlanted,
-        createdBy: session.user.id,
-    }).returning();
+    // Canonical writer for trees-planted is now tree_planting_events.
+    // project_locations no longer carries the trees_planted column —
+    // aggregates are read via v_project_location_plantings (CLAUDE.md §10.4).
+    const newLocation = await db.transaction(async (tx) => {
+        const [loc] = await tx.insert(projectLocations).values({
+            name: parsed.name,
+            latitude: parsed.latitude.toString(),
+            longitude: parsed.longitude.toString(),
+            projectType: parsed.projectType as any,
+            funderId: parsed.funderId,
+            amountFunded: parsed.amountFunded.toString(),
+            startDate: parsed.startDate,
+            endDate: parsed.endDate,
+            description: parsed.description,
+            youthReached: parsed.youthReached,
+            createdBy: session.user.id,
+        }).returning();
 
-    await db.insert(activityLog).values({
-        userId: session.user.id,
-        actionType: "project_location_added",
-        entityId: newLocation.id,
+        if (parsed.treesPlanted && parsed.treesPlanted > 0) {
+            await tx.insert(treePlantingEvents).values({
+                projectLocationId: loc.id,
+                plantedAt: parsed.startDate,
+                treesPlanted: parsed.treesPlanted,
+                plantedBy: session.user.id,
+                geoLat: parsed.latitude.toString(),
+                geoLng: parsed.longitude.toString(),
+                metadata: { source: "addProjectLocation" },
+            });
+        }
+
+        await tx.insert(activityLog).values({
+            userId: session.user.id,
+            actionType: "project_location_added",
+            entityId: loc.id,
+        });
+
+        return loc;
     });
 
     return { success: true, location: newLocation };

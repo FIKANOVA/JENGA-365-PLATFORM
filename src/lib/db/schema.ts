@@ -159,8 +159,6 @@ export const users = pgTable("users", {
     isMentorVerified: boolean("is_mentor_verified").default(false),
     // Role-specific registration data (meetingPreference, orgType, contributionType, etc.)
     metadata: jsonb("metadata").$type<Record<string, unknown>>(),
-    // Mentor specialisation tags used for goal-alignment matching (e.g. ['entrepreneur','finance'])
-    mentorSpecialisations: text("mentor_specialisations").array(),
     banned: boolean("banned").default(false).notNull(),
     banReason: text("ban_reason"),
     banExpires: timestamp("ban_expires"),
@@ -457,7 +455,6 @@ export const projectLocations = pgTable("project_locations", {
     funderId: uuid("funder_id").references(() => corporatePartners.id, { onDelete: 'set null' }),
     amountFunded: decimal("amount_funded", { precision: 12, scale: 2 }).default("0"),
     youthReached: integer("youth_engaged").default(0), // matched with impactReports column names if needed
-    treesPlanted: integer("trees_planted").default(0),
     startDate: timestamp("start_date").notNull(),
     endDate: timestamp("end_date"),
     isActive: boolean("is_active").default(true).notNull(),
@@ -639,8 +636,6 @@ export const menteeIntake = pgTable("mentee_intake", {
     careerFreeText: text("career_free_text"),
     supportTypes: text("support_types").array().notNull(),
     preferredMentorshipStyle: text("preferred_mentorship_style").notNull(),
-    // Goal categories used for goal-alignment matching (e.g. ['entrepreneurship','career_change'])
-    goalCategories: text("goal_categories").array(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (t) => [
     check("academic_standing_check",

@@ -1,22 +1,40 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-// Mock all external dependencies before importing the action
-vi.mock('@/lib/db', () => ({
-  db: {
-    insert: vi.fn().mockReturnValue({
-      values: vi.fn().mockResolvedValue([{ id: 'intake-1' }])
+// Mock all external dependencies before importing the action.
+// The intake action wraps writes in `db.transaction(async (tx) => ...)`.
+// The mock tx delegates back to the top-level db mocks so existing assertions
+// on db.insert / db.update keep working.
+const mockTx = {
+  insert: vi.fn(),
+  update: vi.fn(),
+}
+
+vi.mock('@/lib/db', () => {
+  const insertMock = vi.fn().mockReturnValue({
+    values: vi.fn().mockReturnValue({
+      onConflictDoNothing: vi.fn().mockResolvedValue([]),
     }),
-    update: vi.fn().mockReturnValue({
-      set: vi.fn().mockReturnValue({
-        where: vi.fn().mockResolvedValue([])
-      })
+  })
+  const updateMock = vi.fn().mockReturnValue({
+    set: vi.fn().mockReturnValue({
+      where: vi.fn().mockResolvedValue([]),
     }),
-  },
-}))
+  })
+  return {
+    db: {
+      insert: insertMock,
+      update: updateMock,
+      transaction: vi.fn(async (cb: (tx: any) => Promise<any>) => {
+        return cb({ insert: insertMock, update: updateMock })
+      }),
+    },
+  }
+})
 
 vi.mock('@/lib/db/schema', () => ({
   menteeIntake: { name: 'mentee_intake' },
   resilienceAssessments: { name: 'resilience_assessments' },
+  userGoalTags: { name: 'user_goal_tags' },
   users: { name: 'users' },
 }))
 
@@ -67,7 +85,9 @@ describe('submitDiagnosticIntake', () => {
     vi.clearAllMocks()
     // Reset mocks to default success state
     vi.mocked(db.insert).mockReturnValue({
-      values: vi.fn().mockResolvedValue([{ id: 'intake-1' }])
+      values: vi.fn().mockReturnValue({
+        onConflictDoNothing: vi.fn().mockResolvedValue([]),
+      }),
     } as any)
     vi.mocked(db.update).mockReturnValue({
       set: vi.fn().mockReturnValue({
@@ -82,9 +102,10 @@ describe('submitDiagnosticIntake', () => {
     expect(db.insert).toHaveBeenCalled()
   })
 
-  it('inserts a resilience_assessment (insert called twice)', async () => {
+  // Now 3 inserts: mentee_intake, resilience_assessments, user_goal_tags
+  it('inserts mentee_intake, resilience_assessments, and user_goal_tags', async () => {
     await submitDiagnosticIntake(validFormData)
-    expect(db.insert).toHaveBeenCalledTimes(2)
+    expect(db.insert).toHaveBeenCalledTimes(3)
   })
 
   it('calls generateProfileEmbedding with a non-empty string', async () => {
