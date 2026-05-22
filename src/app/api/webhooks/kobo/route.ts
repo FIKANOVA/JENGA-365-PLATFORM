@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { treeSurvivalChecks, treeSurvivalAudits, giveBackTracking } from "@/lib/db/schema";
+import { treeSurvivalChecks, treeSurvivalAudits, giveBackTracking, treePlantingEvents } from "@/lib/db/schema";
 import { checkAndUnlockMilestones } from "@/lib/actions/corporateUnlock";
 
 const KoboTreeSchema = z.object({
@@ -31,9 +31,21 @@ const KoboGiveBackSchema = z.object({
     _attachments: z.array(z.object({ download_url: z.string() })).optional(),
 });
 
+const KoboPlantingSchema = z.object({
+    form_type: z.literal("tree_planting"),
+    _id: z.string(),
+    project_location_id: z.string().uuid(),
+    planted_at: z.string(),
+    trees_planted: z.number().int().positive(),
+    species: z.string().optional(),
+    planted_by: z.string().uuid().optional(),
+    _geolocation: z.tuple([z.number(), z.number()]).optional(),
+});
+
 const KoboPayloadSchema = z.discriminatedUnion("form_type", [
     KoboTreeSchema,
     KoboGiveBackSchema,
+    KoboPlantingSchema,
 ]);
 
 export async function POST(request: NextRequest) {
@@ -93,6 +105,21 @@ export async function POST(request: NextRequest) {
             }
 
             await checkAndUnlockMilestones("tree_survival");
+        } else if (payload.form_type === "tree_planting") {
+            const [lat, lng] = payload._geolocation ?? [];
+            await db
+                .insert(treePlantingEvents)
+                .values({
+                    projectLocationId: payload.project_location_id,
+                    plantedAt: new Date(payload.planted_at),
+                    treesPlanted: payload.trees_planted,
+                    species: payload.species ?? null,
+                    plantedBy: payload.planted_by ?? null,
+                    koboSubmissionId: payload._id,
+                    geoLat: lat != null ? String(lat) : null,
+                    geoLng: lng != null ? String(lng) : null,
+                })
+                .onConflictDoNothing();
         } else {
             const [lat, lng] = payload._geolocation ?? [];
             const photoUrl = payload._attachments?.[0]?.download_url ?? null;

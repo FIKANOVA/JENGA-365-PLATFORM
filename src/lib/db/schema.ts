@@ -975,3 +975,33 @@ export const userGoalTags = pgTable("user_goal_tags", {
     categoryIdx: index("idx_user_goal_tags_category").on(table.category),
     userIdx: index("idx_user_goal_tags_user").on(table.userId),
 }));
+
+// Engine B: dedicated planting-events table. Aggregate via v_project_location_plantings.
+// See CLAUDE.md §9.2 and §10.4.
+export const treePlantingEvents = pgTable("tree_planting_events", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    projectLocationId: uuid("project_location_id").notNull().references(() => projectLocations.id, { onDelete: "cascade" }),
+    plantedAt: timestamp("planted_at", { withTimezone: true }).notNull(),
+    treesPlanted: integer("trees_planted").notNull(),
+    species: text("species"),
+    plantedBy: uuid("planted_by").references(() => users.id, { onDelete: "set null" }),
+    koboSubmissionId: text("kobo_submission_id").unique(),
+    geoLat: decimal("geo_lat", { precision: 10, scale: 7 }),
+    geoLng: decimal("geo_lng", { precision: 10, scale: 7 }),
+    metadata: jsonb("metadata").notNull().default({}),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => ({
+    locationIdx: index("idx_tree_planting_events_location").on(table.projectLocationId, table.plantedAt),
+}));
+
+export const vProjectLocationPlantings = pgView("v_project_location_plantings").as((qb) =>
+    qb
+        .select({
+            projectLocationId: treePlantingEvents.projectLocationId,
+            treesPlantedTotal: sql<number>`coalesce(sum(${treePlantingEvents.treesPlanted}), 0)::integer`.as("trees_planted_total"),
+            lastPlantedAt: sql<Date>`max(${treePlantingEvents.plantedAt})`.as("last_planted_at"),
+            plantingEventCount: sql<number>`count(*)::integer`.as("planting_event_count"),
+        })
+        .from(treePlantingEvents)
+        .groupBy(treePlantingEvents.projectLocationId)
+);
