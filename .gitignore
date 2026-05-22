@@ -68,3 +68,6 @@ plans/
 .env*
 !.env.example
 .gstack/
+
+# Claude Code session-local state (lock files, settings overrides)
+.claude/
