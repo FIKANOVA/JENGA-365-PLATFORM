@@ -30,16 +30,18 @@ export default function LearningPathwayTracker({ pathway }: LearningPathwayTrack
 
     if (milestones.length === 0) {
         return (
-            <section className="bg-muted/30 rounded-xl p-6 border border-border/50">
-                <h3 className="font-playfair text-xl font-bold mb-4">My Learning Pathway</h3>
-                <div className="py-6 text-center text-sm text-muted-foreground font-mono border border-dashed border-border/50 rounded-lg">
+            <section
+                className="rounded-lg border border-border p-6"
+                style={{ background: "var(--surface-1)" }}
+            >
+                <h3 className="text-headline text-foreground mb-4">My learning pathway</h3>
+                <div className="py-6 text-center text-body-sm text-foreground-muted border border-dashed border-border rounded-md">
                     Your learning pathway will appear once you&apos;re matched with a mentor.
                 </div>
             </section>
         );
     }
 
-    // Mark the current milestone based on progress
     const currentIndex = Math.min(
         Math.floor((progress / 100) * milestones.length),
         milestones.length - 1
@@ -53,60 +55,97 @@ export default function LearningPathwayTracker({ pathway }: LearningPathwayTrack
     const nextStep = enriched.find((m) => m.isCurrent || m.status === "Active");
 
     return (
-        <section className="bg-muted/30 rounded-xl p-6 border border-border/50">
+        <section
+            className="rounded-lg border border-border p-6"
+            style={{ background: "var(--surface-1)" }}
+        >
             <div className="flex items-center justify-between mb-6">
-                <h3 className="font-playfair text-xl font-bold">My Learning Pathway</h3>
-                <span className="font-mono text-xs text-muted-foreground">{progress}% complete</span>
+                <h3 className="text-headline text-foreground">My learning pathway</h3>
+                <span className="text-eyebrow text-foreground-muted">{progress}% complete</span>
             </div>
             <div className="grid grid-cols-[40px_1fr] gap-x-4 mb-8">
-                {enriched.map((node, index) => (
-                    <React.Fragment key={node.id ?? index}>
-                        {/* Node Icon */}
-                        <div className="flex flex-col items-center">
-                            {node.status === "Completed" ? (
-                                <div className="w-8 h-8 rounded-full bg-kenya-green text-white flex items-center justify-center z-10 shadow-sm">
-                                    <Check className="w-4 h-4" />
-                                </div>
-                            ) : node.isCurrent ? (
-                                <div className="w-8 h-8 rounded-full border-2 border-kenya-red bg-background text-kenya-red flex items-center justify-center z-10 relative">
-                                    <CircleDot className="w-4 h-4" />
-                                    <div className="absolute inset-0 rounded-full border border-kenya-red animate-ping opacity-75" />
-                                </div>
-                            ) : (
-                                <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center z-10">
-                                    <Lock className="w-4 h-4" />
-                                </div>
-                            )}
-                            {index < enriched.length - 1 && (
-                                <div className={`w-[2px] h-12 my-1 ${node.status === "Completed" ? "bg-kenya-red" : "bg-muted-foreground/30"}`} />
-                            )}
-                        </div>
+                {enriched.map((node, index) => {
+                    const completed = node.status === "Completed";
+                    return (
+                        <React.Fragment key={node.id ?? index}>
+                            <div className="flex flex-col items-center">
+                                {completed ? (
+                                    <div
+                                        className="w-8 h-8 rounded-full flex items-center justify-center z-10"
+                                        style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                                    >
+                                        <Check className="w-4 h-4" />
+                                    </div>
+                                ) : node.isCurrent ? (
+                                    <div
+                                        className="w-8 h-8 rounded-full border-2 bg-background flex items-center justify-center z-10 relative"
+                                        style={{ borderColor: "var(--brand-green)", color: "var(--brand-green)" }}
+                                    >
+                                        <CircleDot className="w-4 h-4" />
+                                        <div
+                                            className="absolute inset-0 rounded-full border animate-ping opacity-75"
+                                            style={{ borderColor: "var(--brand-green)" }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div
+                                        className="w-8 h-8 rounded-full flex items-center justify-center z-10 text-foreground-subtle"
+                                        style={{ background: "var(--surface-2)" }}
+                                    >
+                                        <Lock className="w-4 h-4" />
+                                    </div>
+                                )}
+                                {index < enriched.length - 1 && (
+                                    <div
+                                        className="w-[2px] h-12 my-1"
+                                        style={{ background: completed ? "var(--brand-green)" : "var(--border)" }}
+                                    />
+                                )}
+                            </div>
 
-                        {/* Node Text */}
-                        <div className="py-1">
-                            <p className={`font-lato font-bold ${node.status === "Completed" || node.isCurrent ? "text-foreground" : "text-muted-foreground"}`}>
-                                {node.title}
-                            </p>
-                            <p className={`font-lato text-sm ${node.isCurrent ? "text-kenya-red font-semibold" : "text-muted-foreground"}`}>
-                                {node.status}
-                            </p>
-                        </div>
-                    </React.Fragment>
-                ))}
+                            <div className="py-1">
+                                <p
+                                    className={`text-label ${completed || node.isCurrent ? "text-foreground" : "text-foreground-muted"}`}
+                                >
+                                    {node.title}
+                                </p>
+                                <p
+                                    className="text-body-sm"
+                                    style={
+                                        node.isCurrent
+                                            ? { color: "var(--brand-green)", fontWeight: 500 }
+                                            : { color: "var(--foreground-muted)" }
+                                    }
+                                >
+                                    {node.status}
+                                </p>
+                            </div>
+                        </React.Fragment>
+                    );
+                })}
             </div>
 
             {nextStep && (
-                <div className="bg-background rounded-lg p-4 flex items-center justify-between shadow-sm border border-border/50">
+                <div
+                    className="rounded-lg p-4 flex items-center justify-between border border-border bg-background"
+                    style={{ boxShadow: "var(--shadow-sm)" }}
+                >
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                        <div
+                            className="w-12 h-12 rounded-full flex items-center justify-center"
+                            style={{ background: "var(--brand-green-soft)", color: "var(--brand-green)" }}
+                        >
                             <CalendarCheck className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="font-lato font-bold text-foreground">Next: {nextStep.title}</p>
-                            <p className="font-lato text-sm text-muted-foreground">{nextStep.status}</p>
+                            <p className="text-label text-foreground">Next: {nextStep.title}</p>
+                            <p className="text-body-sm text-foreground-muted">{nextStep.status}</p>
                         </div>
                     </div>
-                    <button className="bg-primary text-primary-foreground font-lato font-bold px-6 py-2 rounded-lg text-sm hover:bg-primary/90 transition-colors shadow">
+                    <button
+                        className="inline-flex items-center h-10 rounded-md px-5 text-label font-medium transition-opacity hover:opacity-90"
+                        style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                    >
                         Continue
                     </button>
                 </div>

@@ -7,75 +7,89 @@ export default function MenteeDetail({ id }: { id: string }) {
     return (
         <div className="flex-1 bg-background p-6 md:p-12 h-full overflow-y-auto w-full">
             {/* Breadcrumbs */}
-            <nav className="flex items-center gap-2 mb-8 font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-                <Link href="/dashboard" className="hover:text-primary">Dashboard</Link>
+            <nav className="flex items-center gap-2 mb-8 text-eyebrow text-foreground-muted">
+                <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
                 <ChevronRight className="w-3 h-3" />
-                <Link href="/dashboard/people" className="hover:text-primary">Mentees</Link>
+                <Link href="/dashboard/people" className="hover:text-foreground transition-colors">Mentees</Link>
                 <ChevronRight className="w-3 h-3" />
-                <span className="text-foreground font-bold">Aisha Kamau</span>
+                <span className="text-foreground">Aisha Kamau</span>
             </nav>
 
             {/* Header Section */}
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 border-b border-border pb-6">
                 <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 bg-kenya-green/10 flex items-center justify-center border border-kenya-green/20 rounded-lg">
-                        <span className="text-kenya-green font-playfair text-2xl font-black">AK</span>
+                    <div
+                        className="w-16 h-16 flex items-center justify-center rounded-lg border"
+                        style={{
+                            background: "var(--brand-green-soft)",
+                            borderColor: "var(--brand-green)",
+                            color: "var(--brand-green)",
+                        }}
+                    >
+                        <span className="text-display-sm">AK</span>
                     </div>
                     <div>
                         <div className="flex items-center gap-3 mb-1">
-                            <h1 className="text-3xl md:text-4xl font-playfair font-black text-foreground">Aisha Kamau</h1>
-                            <span className="bg-kenya-green/10 text-kenya-green text-[10px] font-mono px-2 py-0.5 border border-kenya-green/20 rounded">Mentee Role</span>
+                            <h1 className="text-display-md text-foreground">Aisha Kamau</h1>
+                            <span
+                                className="text-eyebrow px-2 py-0.5 rounded border"
+                                style={{
+                                    background: "var(--brand-green-soft)",
+                                    borderColor: "var(--brand-green)",
+                                    color: "var(--brand-green)",
+                                }}
+                            >
+                                Mentee role
+                            </span>
                             <div className="flex items-center gap-1.5 ml-2">
-                                <div className="w-2 h-2 bg-kenya-green rounded-full animate-pulse"></div>
-                                <span className="text-[10px] font-mono text-kenya-green uppercase tracking-wider">Active</span>
+                                <div
+                                    className="w-2 h-2 rounded-full animate-pulse"
+                                    style={{ background: "var(--brand-green)" }}
+                                />
+                                <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Active</span>
                             </div>
                         </div>
-                        <p className="font-mono text-xs text-muted-foreground">Member Since: 14 Jan 2026 • ID: M-9920-KE</p>
+                        <p className="text-body-sm text-foreground-muted">Member since 14 Jan 2026 · ID M-9920-KE</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-4 flex-wrap">
-                    <button className="px-4 py-2 border border-border/50 font-mono text-xs hover:bg-muted transition-colors flex items-center gap-2 rounded">
-                        <Mail className="w-4 h-4" /> Message Mentee
+                <div className="flex items-center gap-3 flex-wrap">
+                    <button className="inline-flex items-center gap-2 h-9 rounded-md border border-border bg-background px-4 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]">
+                        <Mail className="w-4 h-4" /> Message mentee
                     </button>
-                    <button className="px-4 py-2 border border-border/50 font-mono text-xs hover:bg-muted transition-colors flex items-center gap-2 rounded">
-                        <Download className="w-4 h-4" /> Download Report
+                    <button className="inline-flex items-center gap-2 h-9 rounded-md border border-border bg-background px-4 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]">
+                        <Download className="w-4 h-4" /> Download report
                     </button>
-                    <button className="px-4 py-2 bg-kenya-red text-white font-mono text-xs hover:bg-kenya-red/90 transition-colors flex items-center gap-2 rounded">
+                    <button
+                        className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-label font-medium transition-opacity hover:opacity-90"
+                        style={{ background: "var(--brand-red)", color: "var(--brand-red-fg)" }}
+                    >
                         <Ban className="w-4 h-4" /> Suspend
                     </button>
                 </div>
             </header>
 
             {/* Stat Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                <div className="p-6 border border-border/50 hover:border-kenya-red transition-all rounded-lg bg-card">
-                    <p className="font-mono text-xs text-muted-foreground mb-4 uppercase">Sessions Completed</p>
-                    <div className="flex items-end justify-between">
-                        <span className="text-4xl font-playfair font-black text-foreground">12</span>
-                        <span className="text-kenya-green text-xs font-mono mb-1">+3 This Month</span>
-                    </div>
-                </div>
-                <div className="p-6 border border-border/50 hover:border-kenya-red transition-all rounded-lg bg-card">
-                    <p className="font-mono text-xs text-muted-foreground mb-4 uppercase">Pathway Progress</p>
-                    <div className="flex items-center justify-between">
-                        <span className="text-4xl font-playfair font-black text-foreground">67%</span>
-                        <div className="w-10 h-10 rounded-full border-4 border-kenya-green border-r-transparent rotate-45"></div>
-                    </div>
-                </div>
-                <div className="p-6 border border-border/50 hover:border-kenya-red transition-all rounded-lg bg-card">
-                    <p className="font-mono text-xs text-muted-foreground mb-4 uppercase">Last Session (Days)</p>
-                    <div className="flex items-end justify-between">
-                        <span className="text-4xl font-playfair font-black text-foreground">4</span>
-                        <span className="bg-kenya-green text-white text-[10px] px-2 py-0.5 font-mono mb-1 rounded">On Track</span>
-                    </div>
-                </div>
-                <div className="p-6 border border-border/50 hover:border-kenya-red transition-all rounded-lg bg-card">
-                    <p className="font-mono text-xs text-muted-foreground mb-4 uppercase">Mentor Match Score</p>
-                    <div className="flex items-end justify-between">
-                        <span className="text-4xl font-playfair font-black text-foreground">91%</span>
-                        <span className="text-muted-foreground text-[10px] font-mono mb-1 text-right leading-tight">Goals/Location<br />Avail</span>
-                    </div>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                <StatCard label="Sessions completed" value="12" delta="+3 this month" deltaColor="var(--brand-green)" />
+                <StatCard label="Pathway progress" value="67%" deltaNode={
+                    <div
+                        className="w-10 h-10 rounded-full border-4 border-r-transparent rotate-45"
+                        style={{ borderColor: "var(--brand-green)", borderRightColor: "transparent" }}
+                    />
+                } />
+                <StatCard label="Last session (days)" value="4" deltaNode={
+                    <span
+                        className="px-2 py-0.5 rounded text-eyebrow"
+                        style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                    >
+                        On track
+                    </span>
+                } />
+                <StatCard label="Mentor match score" value="91%" deltaNode={
+                    <span className="text-eyebrow text-foreground-muted text-right leading-tight">
+                        Goals · Location<br />Availability
+                    </span>
+                } />
             </div>
 
             {/* Main Layout Grid */}
@@ -83,63 +97,59 @@ export default function MenteeDetail({ id }: { id: string }) {
                 {/* Left Column (Main) */}
                 <div className="xl:col-span-2 flex flex-col gap-12">
                     <section>
-                        <h2 className="text-2xl font-playfair font-black mb-6 flex items-center gap-3 text-foreground">
-                            Learning Pathway <span className="text-xs font-mono text-muted-foreground font-normal">Level 2 of 4</span>
+                        <h2 className="text-display-sm text-foreground mb-6 flex items-center gap-3">
+                            Learning pathway
+                            <span className="text-body-sm text-foreground-muted font-normal">Level 2 of 4</span>
                         </h2>
                         <div className="space-y-0 relative ml-4">
-                            <div className="absolute left-3 top-2 bottom-2 w-px bg-border/50"></div>
-                            
-                            {/* Completed */}
-                            <div className="relative pl-12 pb-8">
-                                <div className="absolute left-0 top-1 w-6 h-6 bg-kenya-green rounded-full flex items-center justify-center z-10">
-                                    <Check className="text-white w-4 h-4" />
-                                </div>
-                                <p className="font-mono text-[10px] text-kenya-green uppercase tracking-wider mb-1">Completed • 02 Feb</p>
-                                <h3 className="font-bold text-lg mb-1 text-foreground">Financial Literacy Foundations</h3>
-                                <p className="text-sm text-muted-foreground">Successfully completed the assessment with 94% score.</p>
-                            </div>
+                            <div className="absolute left-3 top-2 bottom-2 w-px bg-border" />
 
-                            {/* In Progress */}
-                            <div className="relative pl-12 pb-8">
-                                <div className="absolute left-0 top-1 w-6 h-6 border-2 border-primary bg-background rounded-full flex items-center justify-center z-10">
-                                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                                </div>
-                                <p className="font-mono text-[10px] text-primary uppercase tracking-wider mb-1">In Progress</p>
-                                <h3 className="font-bold text-lg mb-2 text-foreground">Portfolio Management & Risk</h3>
-                                <div className="w-full h-1.5 bg-muted rounded-full max-w-sm overflow-hidden">
-                                    <div className="bg-primary h-full w-[40%]"></div>
-                                </div>
-                                <p className="text-[10px] font-mono mt-2 text-muted-foreground">Next Milestone: Risk Mitigation Strategy</p>
-                            </div>
+                            <PathwayStep
+                                status="completed"
+                                date="Completed · 02 Feb"
+                                title="Financial Literacy Foundations"
+                                body="Successfully completed the assessment with 94% score."
+                            />
+                            <PathwayStep
+                                status="in_progress"
+                                date="In progress"
+                                title="Portfolio management & risk"
+                                body={null}
+                                progress={40}
+                                nextMilestone="Next milestone: risk mitigation strategy"
+                            />
                         </div>
                     </section>
 
                     <section>
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-playfair font-black text-foreground">Session History</h2>
-                            <button className="bg-primary text-primary-foreground text-[10px] font-mono uppercase tracking-wider px-4 py-2 hover:bg-primary/90 transition-colors rounded">
-                                + Log New Session
+                            <h2 className="text-display-sm text-foreground">Session history</h2>
+                            <button
+                                className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-label font-medium transition-opacity hover:opacity-90"
+                                style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                            >
+                                + Log new session
                             </button>
                         </div>
-                        <div className="border border-border/50 rounded-lg overflow-hidden bg-card">
-                            <table className="w-full text-left text-sm">
-                                <thead className="bg-muted border-b border-border/50">
+                        <div className="rounded-lg border border-border bg-background overflow-hidden" style={{ boxShadow: "var(--shadow-sm)" }}>
+                            <table className="w-full text-left">
+                                <thead className="border-b border-border" style={{ background: "var(--surface-1)" }}>
                                     <tr>
-                                        <th className="p-4 font-mono text-[10px] uppercase text-muted-foreground">Date</th>
-                                        <th className="p-4 font-mono text-[10px] uppercase text-muted-foreground">Topic</th>
-                                        <th className="p-4 font-mono text-[10px] uppercase text-muted-foreground">Outcome</th>
+                                        <th className="p-4 text-eyebrow text-foreground-muted">Date</th>
+                                        <th className="p-4 text-eyebrow text-foreground-muted">Topic</th>
+                                        <th className="p-4 text-eyebrow text-foreground-muted">Outcome</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-border/50">
-                                    <tr className="hover:bg-muted/50 transition-colors">
-                                        <td className="p-4 font-mono text-muted-foreground">24 Mar</td>
-                                        <td className="p-4 font-bold text-foreground">Q1 Planning</td>
-                                        <td className="p-4 text-muted-foreground">Milestones defined</td>
+                                <tbody className="divide-y divide-border">
+                                    <tr className="transition-colors hover:bg-[color:var(--surface-1)]">
+                                        <td className="p-4 text-body-sm text-foreground-muted">24 Mar</td>
+                                        <td className="p-4 text-body-sm text-foreground font-medium">Q1 planning</td>
+                                        <td className="p-4 text-body-sm text-foreground-muted">Milestones defined</td>
                                     </tr>
-                                    <tr className="hover:bg-muted/50 transition-colors">
-                                        <td className="p-4 font-mono text-muted-foreground">17 Mar</td>
-                                        <td className="p-4 font-bold text-foreground">Budgeting Basics</td>
-                                        <td className="p-4 text-muted-foreground">Module passed</td>
+                                    <tr className="transition-colors hover:bg-[color:var(--surface-1)]">
+                                        <td className="p-4 text-body-sm text-foreground-muted">17 Mar</td>
+                                        <td className="p-4 text-body-sm text-foreground font-medium">Budgeting basics</td>
+                                        <td className="p-4 text-body-sm text-foreground-muted">Module passed</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -148,56 +158,183 @@ export default function MenteeDetail({ id }: { id: string }) {
                 </div>
 
                 {/* Right Columns (Sidebars) */}
-                <div className="xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-12">
-                     <div className="flex flex-col gap-8">
+                <div className="xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="flex flex-col gap-6">
                         {/* Attendance */}
-                        <section className="p-6 border border-border/50 rounded-lg bg-card">
-                            <h3 className="font-mono text-[10px] text-muted-foreground mb-2 uppercase tracking-wider">Attendance Rate</h3>
+                        <section
+                            className="rounded-lg border border-border bg-background p-6"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
+                        >
+                            <h3 className="text-eyebrow text-foreground-muted mb-2">Attendance rate</h3>
                             <div className="flex items-baseline gap-2 mb-4">
-                                <span className="text-5xl font-playfair font-black text-kenya-green">92%</span>
+                                <span className="text-display-lg" style={{ color: "var(--brand-green)" }}>92%</span>
                             </div>
                             <div className="flex items-end gap-1 h-12 mt-4">
-                                <div className="flex-1 bg-kenya-green/20 h-[60%] rounded-t-sm"></div>
-                                <div className="flex-1 bg-kenya-green/40 h-[80%] rounded-t-sm"></div>
-                                <div className="flex-1 bg-kenya-green/60 h-[70%] rounded-t-sm"></div>
-                                <div className="flex-1 bg-kenya-green/80 h-[90%] rounded-t-sm"></div>
-                                <div className="flex-1 bg-kenya-green h-full rounded-t-sm"></div>
+                                {[60, 80, 70, 90, 100].map((h, i) => {
+                                    const opacities = [0.2, 0.4, 0.6, 0.8, 1];
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="flex-1 rounded-t-sm"
+                                            style={{
+                                                height: `${h}%`,
+                                                background: "var(--brand-green)",
+                                                opacity: opacities[i],
+                                            }}
+                                        />
+                                    );
+                                })}
                             </div>
                         </section>
 
-                        <section className="p-6 border border-border/50 rounded-lg bg-card">
-                             <h3 className="font-mono text-[10px] text-muted-foreground mb-4 uppercase tracking-wider">Mood Journal (7 Days)</h3>
-                             <div className="grid grid-cols-7 gap-2 mb-4">
-                                 {['bg-kenya-green/10', 'bg-kenya-green/10', 'bg-primary/10', 'bg-kenya-green/10', 'bg-kenya-green/10', 'bg-kenya-green/10', 'bg-kenya-green/10'].map((bg, i) => (
-                                    <div key={i} className={`aspect-square ${bg} flex items-center justify-center text-lg rounded`}>
-                                        {i === 2 ? '😐' : '😊'}
-                                    </div>
-                                 ))}
-                             </div>
-                             <div className="pt-3 border-t border-border/50 text-center">
-                                 <span className="text-xs font-bold text-foreground">Generally Positive</span>
-                             </div>
+                        <section
+                            className="rounded-lg border border-border bg-background p-6"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
+                        >
+                            <h3 className="text-eyebrow text-foreground-muted mb-4">Mood journal (7 days)</h3>
+                            <div className="grid grid-cols-7 gap-2 mb-4">
+                                {[0, 1, 2, 3, 4, 5, 6].map(i => {
+                                    const isNeutral = i === 2;
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="aspect-square flex items-center justify-center text-lg rounded"
+                                            style={{
+                                                background: isNeutral
+                                                    ? "var(--surface-2)"
+                                                    : "var(--brand-green-soft)",
+                                            }}
+                                        >
+                                            {isNeutral ? "😐" : "😊"}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div className="pt-3 border-t border-border text-center">
+                                <span className="text-body-sm text-foreground font-medium">Generally positive</span>
+                            </div>
                         </section>
-                     </div>
+                    </div>
 
-                     <div className="flex flex-col gap-8">
-                        <section className="p-6 bg-kenya-green/5 border border-kenya-green/20 rounded-lg">
-                            <h3 className="font-mono text-[10px] text-kenya-green mb-4 uppercase tracking-wider font-bold">CSR/ESG Metric Impact</h3>
-                            <p className="text-xs mb-4 leading-relaxed text-foreground">
-                                Aisha's progress contributes to the <b className="font-bold">Corporate Social Responsibility Goal: Economic Empowerment</b>.
+                    <div className="flex flex-col gap-6">
+                        <section
+                            className="rounded-lg border p-6"
+                            style={{
+                                background: "var(--brand-green-soft)",
+                                borderColor: "var(--brand-green)",
+                            }}
+                        >
+                            <h3 className="text-eyebrow mb-4" style={{ color: "var(--brand-green)" }}>
+                                CSR / ESG metric impact
+                            </h3>
+                            <p className="text-body-sm text-foreground leading-relaxed">
+                                Aisha's progress contributes to the <strong className="font-medium">Corporate Social Responsibility Goal: Economic Empowerment</strong>.
                             </p>
                         </section>
 
-                        <section className="p-6 border border-border/50 rounded-lg bg-card">
-                            <h3 className="font-mono text-[10px] text-muted-foreground mb-4 uppercase tracking-wider">Flags & Alerts</h3>
-                            <div className="flex items-center gap-3 text-kenya-green">
+                        <section
+                            className="rounded-lg border border-border bg-background p-6"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
+                        >
+                            <h3 className="text-eyebrow text-foreground-muted mb-4">Flags & alerts</h3>
+                            <div className="flex items-center gap-3" style={{ color: "var(--brand-green)" }}>
                                 <Check className="w-5 h-5" />
-                                <span className="text-xs font-bold">No active flags</span>
+                                <span className="text-label">No active flags</span>
                             </div>
                         </section>
-                     </div>
+                    </div>
                 </div>
             </div>
+        </div>
+    );
+}
+
+function StatCard({
+    label,
+    value,
+    delta,
+    deltaColor,
+    deltaNode,
+}: {
+    label: string;
+    value: string;
+    delta?: string;
+    deltaColor?: string;
+    deltaNode?: React.ReactNode;
+}) {
+    return (
+        <div
+            className="rounded-lg border border-border bg-background p-6 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+        >
+            <p className="text-eyebrow text-foreground-muted mb-4">{label}</p>
+            <div className="flex items-end justify-between gap-2">
+                <span className="text-display-md text-foreground">{value}</span>
+                {deltaNode ?? (delta && (
+                    <span className="text-eyebrow mb-1" style={{ color: deltaColor }}>
+                        {delta}
+                    </span>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function PathwayStep({
+    status,
+    date,
+    title,
+    body,
+    progress,
+    nextMilestone,
+}: {
+    status: "completed" | "in_progress" | "pending";
+    date: string;
+    title: string;
+    body: string | null;
+    progress?: number;
+    nextMilestone?: string;
+}) {
+    const isCompleted = status === "completed";
+    const isInProgress = status === "in_progress";
+    const accentColor = isCompleted
+        ? "var(--brand-green)"
+        : isInProgress
+          ? "var(--brand-green)"
+          : "var(--foreground-subtle)";
+
+    return (
+        <div className="relative pl-12 pb-8">
+            <div
+                className="absolute left-0 top-1 w-6 h-6 rounded-full flex items-center justify-center z-10 border-2"
+                style={
+                    isCompleted
+                        ? { background: accentColor, borderColor: accentColor }
+                        : { background: "var(--background)", borderColor: accentColor }
+                }
+            >
+                {isCompleted ? (
+                    <Check className="text-white w-4 h-4" />
+                ) : isInProgress ? (
+                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: accentColor }} />
+                ) : null}
+            </div>
+            <p className="text-eyebrow mb-1" style={{ color: accentColor }}>{date}</p>
+            <h3 className="text-headline text-foreground mb-1">{title}</h3>
+            {body && <p className="text-body-sm text-foreground-muted">{body}</p>}
+            {isInProgress && (
+                <>
+                    <div className="w-full max-w-sm h-1.5 bg-border rounded-full overflow-hidden mt-2">
+                        <div
+                            className="h-full"
+                            style={{ width: `${progress ?? 40}%`, background: accentColor }}
+                        />
+                    </div>
+                    {nextMilestone && (
+                        <p className="text-eyebrow text-foreground-muted mt-2">{nextMilestone}</p>
+                    )}
+                </>
+            )}
         </div>
     );
 }

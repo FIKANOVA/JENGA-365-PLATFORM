@@ -41,21 +41,25 @@ export default function MentorshipQueue({ pendingRequests = [] }: MentorshipQueu
 
     return (
         <div className="flex flex-col gap-6">
-            <h2 className="font-playfair text-foreground text-[22px] font-bold leading-tight">
-                Mentorship Queue
-            </h2>
+            <h2 className="text-headline text-foreground">Mentorship queue</h2>
 
-            <div className="flex border-b border-border/50">
-                <button className="px-4 py-3 text-primary text-sm font-bold border-b-2 border-primary relative">
-                    Pending Requests ({pendingRequests.length})
+            <div className="flex border-b border-border">
+                <button
+                    className="px-4 py-3 text-label font-medium border-b-2 relative"
+                    style={{ borderColor: "var(--brand-green)", color: "var(--brand-green)" }}
+                >
+                    Pending requests ({pendingRequests.length})
                 </button>
-                <button className="px-4 py-3 text-muted-foreground text-sm font-medium hover:text-foreground transition-colors">
-                    Past Sessions
+                <button className="px-4 py-3 text-label text-foreground-muted hover:text-foreground transition-colors border-b-2 border-transparent">
+                    Past sessions
                 </button>
             </div>
 
             {pendingRequests.length === 0 ? (
-                <div className="border border-dashed border-border/50 rounded-lg p-8 text-center text-sm text-muted-foreground font-mono">
+                <div
+                    className="rounded-md border border-dashed border-border p-8 text-center text-body-sm text-foreground-muted"
+                    style={{ background: "var(--surface-1)" }}
+                >
                     No pending mentee requests right now.
                 </div>
             ) : (
@@ -63,45 +67,57 @@ export default function MentorshipQueue({ pendingRequests = [] }: MentorshipQueu
                     {pendingRequests.map((req) => (
                         <div
                             key={req.pairId}
-                            className="rounded-lg border border-border/50 bg-card p-5 flex flex-col gap-4 shadow-sm hover:border-border transition-colors"
+                            className="rounded-lg border border-border bg-background p-5 flex flex-col gap-4 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-lg font-bold text-muted-foreground border border-border/50 shrink-0">
+                                    <div
+                                        className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold border border-border shrink-0 text-foreground-muted"
+                                        style={{ background: "var(--surface-2)" }}
+                                    >
                                         {(req.mentee?.name ?? "?").charAt(0).toUpperCase()}
                                     </div>
                                     <div>
-                                        <h3 className="font-playfair text-foreground text-lg font-bold">
-                                            {req.mentee?.name ?? "Unknown Mentee"}
+                                        <h3 className="text-headline text-foreground">
+                                            {req.mentee?.name ?? "Unknown mentee"}
                                         </h3>
-                                        <p className="text-muted-foreground text-xs uppercase tracking-wider">
+                                        <p className="text-eyebrow text-foreground-muted">
                                             {req.mentee?.locationRegion ?? "Location not set"}
                                         </p>
                                     </div>
                                 </div>
-                                <span className="text-muted-foreground text-xs shrink-0">
+                                <span className="text-eyebrow text-foreground-muted shrink-0">
                                     {timeAgo(req.matchedAt)}
                                 </span>
                             </div>
 
                             {req.matchScore && (
-                                <div className="bg-muted/30 rounded p-3 text-sm border border-border/50">
-                                    <span className="font-bold text-foreground text-xs uppercase tracking-wider mb-1 block font-mono">
-                                        AI Match Score:
+                                <div
+                                    className="rounded-md p-3 border border-border"
+                                    style={{ background: "var(--surface-1)" }}
+                                >
+                                    <span className="text-eyebrow text-foreground-muted mb-1 block">
+                                        AI match score
                                     </span>
-                                    <span className="text-foreground font-mono">{Math.round(Number(req.matchScore))}% compatibility</span>
+                                    <span className="text-body-sm text-foreground">
+                                        {Math.round(Number(req.matchScore))}% compatibility
+                                    </span>
                                 </div>
                             )}
 
                             <div className="flex items-center gap-3 mt-2">
                                 {actioned.has(req.pairId) ? (
-                                    <span className="text-sm font-mono text-kenya-green font-bold">Actioned ✓</span>
+                                    <span className="text-label" style={{ color: "var(--brand-green)" }}>
+                                        Actioned ✓
+                                    </span>
                                 ) : (
                                     <>
                                         <button
                                             onClick={() => handleAction(req.pairId, "accept")}
                                             disabled={actioning === req.pairId}
-                                            className="px-6 py-2 bg-primary text-primary-foreground text-sm font-bold rounded hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+                                            className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-label font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+                                            style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
                                         >
                                             {actioning === req.pairId && <Loader2 className="w-3 h-3 animate-spin" />}
                                             Accept
@@ -109,14 +125,17 @@ export default function MentorshipQueue({ pendingRequests = [] }: MentorshipQueu
                                         <button
                                             onClick={() => handleAction(req.pairId, "decline")}
                                             disabled={actioning === req.pairId}
-                                            className="px-6 py-2 bg-transparent text-foreground text-sm font-bold rounded border border-border/50 hover:bg-muted transition-colors disabled:opacity-50"
+                                            className="inline-flex items-center h-9 rounded-md border border-border bg-background px-4 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)] disabled:opacity-50"
                                         >
                                             Decline
                                         </button>
                                     </>
                                 )}
-                                <button className="px-4 py-2 text-primary text-sm font-bold hover:underline ml-auto">
-                                    View Full Profile
+                                <button
+                                    className="ml-auto text-label hover:underline"
+                                    style={{ color: "var(--brand-green)" }}
+                                >
+                                    View full profile
                                 </button>
                             </div>
                         </div>
