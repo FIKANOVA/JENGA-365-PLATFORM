@@ -45,29 +45,31 @@ function LoginForm() {
     return (
         <div className="w-full max-w-sm space-y-8">
             <div className="space-y-2">
-                <h1 className="font-serif font-black text-3xl text-foreground uppercase tracking-tight">
-                    Welcome back
-                </h1>
-                <p className="font-sans font-light text-sm text-muted-foreground">
+                <h1 className="text-display-sm text-foreground">Welcome back</h1>
+                <p className="text-body-sm text-foreground-muted">
                     Sign in to your Jenga365 account.
                 </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                    <div className="bg-destructive/10 border border-destructive/20 text-destructive text-xs px-4 py-3">
+                    <div
+                        role="alert"
+                        className="rounded-md border border-[color:var(--brand-red-soft)] bg-[color:var(--brand-red-soft)] px-3 py-2 text-body-sm"
+                        style={{ color: "var(--brand-red)" }}
+                    >
                         {error}
                     </div>
                 )}
 
                 <div className="space-y-1.5">
-                    <label htmlFor="email" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
-                        Email Address
+                    <label htmlFor="email" className="text-label text-foreground">
+                        Email
                     </label>
                     <input
                         id="email"
                         type="email"
-                        className="jenga-input w-full"
+                        className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
                         placeholder="you@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -78,10 +80,14 @@ function LoginForm() {
 
                 <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                        <label htmlFor="password" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold block">
+                        <label htmlFor="password" className="text-label text-foreground">
                             Password
                         </label>
-                        <Link href="/forgot-password" className="font-mono text-[10px] uppercase tracking-widest text-primary hover:underline">
+                        <Link
+                            href="/forgot-password"
+                            className="text-label hover:underline"
+                            style={{ color: "var(--brand-green)" }}
+                        >
                             Forgot password?
                         </Link>
                     </div>
@@ -89,7 +95,7 @@ function LoginForm() {
                         <input
                             id="password"
                             type={showPassword ? "text" : "password"}
-                            className="jenga-input w-full pr-12"
+                            className="h-10 w-full rounded-md border border-border bg-background px-3 pr-10 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
                             placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -99,28 +105,34 @@ function LoginForm() {
                         <button
                             type="button"
                             onClick={() => setShowPassword((v) => !v)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-muted hover:text-foreground transition-colors"
                             tabIndex={-1}
+                            aria-label={showPassword ? "Hide password" : "Show password"}
                         >
-                            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
                     </div>
                 </div>
 
                 <button
                     type="submit"
-                    className="btn-primary w-full shadow-xl flex items-center justify-center gap-2"
                     disabled={loading}
+                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+                    style={{ background: "var(--brand-green)" }}
                 >
-                    {loading ? "Signing in…" : <><span>Sign In</span> <ArrowRight size={14} /></>}
+                    {loading ? "Signing in…" : (<><span>Sign in</span><ArrowRight className="h-4 w-4" /></>)}
                 </button>
             </form>
 
-            <div className="pt-6 border-t border-border text-center">
-                <p className="text-sm text-muted-foreground">
+            <div className="border-t border-border pt-6 text-center">
+                <p className="text-body-sm text-foreground-muted">
                     Don&apos;t have an account?{" "}
-                    <Link href="/register" className="font-bold text-primary hover:underline transition-colors">
-                        Create account
+                    <Link
+                        href="/register"
+                        className="font-medium hover:underline"
+                        style={{ color: "var(--brand-green)" }}
+                    >
+                        Create one
                     </Link>
                 </p>
             </div>
@@ -130,56 +142,46 @@ function LoginForm() {
 
 export default function LoginPage() {
     return (
-        <div className="min-h-screen flex">
-            {/* Left panel — brand image */}
-            <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-black flex-col justify-between p-16">
-                <img
-                    src="https://jenga365.com/wp-content/uploads/2025/07/Fanaka-Studios-SportPesa-Cheza-Dimba-Northrift-66-of-429-scaled.jpg"
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover object-center opacity-50"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                            "https://images.unsplash.com/photo-1544365558-35aa4afcf11f?q=80&w=1920&auto=format&fit=crop";
-                    }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
-
-                {/* Logo */}
+        <div className="min-h-screen flex bg-background">
+            {/* Left panel — quiet brand surface */}
+            <aside
+                className="hidden lg:flex lg:w-[44%] relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-hero-radial bg-topo"
+                style={{ backgroundColor: "var(--surface-1)" }}
+            >
                 <div className="relative z-10">
-                    <Logo variant="branding" theme="light" height={36} priority />
+                    <Logo size="lg" />
                 </div>
 
-                {/* Brand statement */}
-                <div className="relative z-10 space-y-6">
-                    <blockquote className="font-serif font-black text-4xl xl:text-5xl text-white leading-[1.05] uppercase">
-                        Building the{" "}
-                        <span className="text-primary italic">Total Athlete.</span>
-                        <br />365 days a year.
-                    </blockquote>
-                    <div className="flex items-center gap-3">
-                        <div className="h-px w-8 bg-primary" />
-                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/50">
-                            Kenya&apos;s Mentorship &amp; Rugby Platform
-                        </span>
-                    </div>
+                <div className="relative z-10 max-w-md space-y-6">
+                    <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                        Mentorship · Sport · Climate
+                    </p>
+                    <h2 className="text-display-sm text-foreground">
+                        Building the Total Athlete, 365 days a year.
+                    </h2>
+                    <p className="text-body text-foreground-muted">
+                        AI-matched mentorship plus measurable climate action — verified on the ground, surfaced in your dashboard.
+                    </p>
                 </div>
-            </div>
+
+                <div className="relative z-10 text-body-sm text-foreground-subtle">
+                    © {new Date().getFullYear()} Jenga365 · Nairobi
+                </div>
+            </aside>
 
             {/* Right panel — form */}
-            <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 bg-background">
+            <main className="flex-1 flex flex-col items-center justify-center px-6 py-16">
                 <div className="lg:hidden mb-12">
-                    <Logo variant="branding" theme="premium" height={32} priority />
+                    <Logo size="md" />
                 </div>
                 <Suspense
                     fallback={
-                        <div className="animate-pulse font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                            Loading…
-                        </div>
+                        <div className="text-body-sm text-foreground-muted animate-pulse">Loading…</div>
                     }
                 >
                     <LoginForm />
                 </Suspense>
-            </div>
+            </main>
         </div>
     );
 }

@@ -2,21 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { toast } from "sonner";
+import { ArrowRight, ArrowLeft, Check, ShieldCheck } from "lucide-react";
+
 import { signNDA, getNDADocument } from "@/lib/actions/nda";
 import { useSession } from "@/lib/auth/client";
-import { toast } from "sonner";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import Logo from "@/components/shared/Logo";
 
 export default function NDAPage() {
     const router = useRouter();
     const { data: session } = useSession();
-    const role = (session?.user as any)?.role || "Mentee";
+    const role = ((session?.user as any)?.role ?? "Mentee") as
+        | "Mentee"
+        | "Mentor"
+        | "CorporatePartner";
 
     const [name, setName] = useState("");
     const [agreed, setAgreed] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [docData, setDocData] = useState<{ version: string; hash: string; content: string } | null>(null);
+    const [docData, setDocData] = useState<{ version: string; hash: string; content: string } | null>(
+        null,
+    );
 
     useEffect(() => {
         if (role) {
@@ -43,7 +50,7 @@ export default function NDAPage() {
             });
 
             if (res.success) {
-                toast.success("NDA Signed Successfully");
+                toast.success("NDA signed");
                 router.push(res.redirectTo);
             }
         } catch (error: any) {
@@ -52,128 +59,208 @@ export default function NDAPage() {
         }
     };
 
+    const roleLabel = role === "CorporatePartner" ? "Corporate partner" : role;
+
     return (
-        <div className="min-h-screen bg-[#FBFBF9] flex flex-col font-sans">
-            {/* Minimal Header */}
-            <header className="border-b border-[#E8E4DC] bg-white">
-                <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-[#BB0000] rounded-sm flex items-center justify-center">
-                            <span className="text-white font-serif font-bold text-xs">J</span>
-                        </div>
-                        <span className="font-serif font-black text-xl tracking-tight text-[#1A1A1A]">Jenga365</span>
-                    </Link>
-                    <Link href="/" className="font-mono text-[10px] font-black uppercase tracking-widest hover:text-[#BB0000] transition-colors">
-                        Return to Platform
+        <div className="min-h-screen bg-background flex flex-col">
+            <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+                    <Logo size="md" />
+                    <Link
+                        href="/"
+                        className="inline-flex items-center gap-1.5 text-label text-foreground-muted hover:text-foreground transition-colors"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        Back to home
                     </Link>
                 </div>
             </header>
 
-            <main className="flex-1 container mx-auto px-6 py-12 max-w-6xl">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* DOC CONTENT */}
-                    <div className="lg:col-span-8 bg-white p-12 border border-[#E8E4DC] shadow-sm">
-                        <div className="mb-10">
-                            <h1 className="text-3xl font-serif font-black text-[#1A1A1A] mb-2">Non-Disclosure Agreement</h1>
-                            <p className="text-[#8A8A8A] font-mono text-[10px] uppercase tracking-widest">
-                                Effective Date: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            <main className="flex-1 mx-auto w-full max-w-6xl px-6 lg:px-8 py-10 lg:py-16">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Document */}
+                    <article
+                        className="lg:col-span-8 rounded-lg border border-border bg-background p-8 lg:p-12"
+                        style={{ boxShadow: "var(--shadow-sm)" }}
+                    >
+                        <header className="mb-8 space-y-2">
+                            <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                                Confidentiality protocol · v{docData?.version ?? "1.0"}
                             </p>
-                        </div>
+                            <h1 className="text-display-sm text-foreground">
+                                Non-Disclosure Agreement
+                            </h1>
+                            <p className="text-body-sm text-foreground-muted">
+                                Effective {new Date().toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                })}{" "}
+                                · For role: {roleLabel}
+                            </p>
+                        </header>
 
-                        <div className="space-y-8 font-body text-[15px] leading-relaxed text-[#4A4A4A]">
+                        <div className="space-y-6 text-body text-foreground-muted">
                             <p>
-                                This Non-Disclosure Agreement (the "Agreement") is entered into by and between Jenga365 ("Disclosing Party") and the individual accepting these terms ("Receiving Party").
+                                This Non-Disclosure Agreement (the "Agreement") is entered
+                                into by and between Jenga365 ("Disclosing Party") and the
+                                individual accepting these terms ("Receiving Party").
                             </p>
 
-                            <section className="space-y-3">
-                                <h3 className="font-serif font-bold text-[#1A1A1A]">1. Definition of Confidential Information</h3>
+                            <section className="space-y-2">
+                                <h3 className="text-title text-foreground">
+                                    1. Definition of Confidential Information
+                                </h3>
                                 <p>
-                                    "Confidential Information" shall mean any and all technical and non-technical information provided by the Disclosing Party, including but not limited to trade secrets, proprietary information, ideas, techniques, sketches, drawings, works of authorship, models, inventions, know-how, processes, apparatuses, equipment, algorithms, software programs, software source documents, and formulae related to the current, future, and proposed products and services of the Disclosing Party.
+                                    "Confidential Information" shall mean any and all technical
+                                    and non-technical information provided by the Disclosing
+                                    Party, including but not limited to trade secrets,
+                                    proprietary information, ideas, techniques, sketches,
+                                    drawings, works of authorship, models, inventions, know-how,
+                                    processes, apparatuses, equipment, algorithms, software
+                                    programs, software source documents, and formulae related
+                                    to the current, future, and proposed products and services
+                                    of the Disclosing Party.
                                 </p>
                             </section>
 
-                            <section className="space-y-3">
-                                <h3 className="font-serif font-bold text-[#1A1A1A]">2. Non-Disclosure and Non-Use Obligations</h3>
+                            <section className="space-y-2">
+                                <h3 className="text-title text-foreground">
+                                    2. Non-Disclosure and Non-Use Obligations
+                                </h3>
                                 <p>
-                                    The Receiving Party agrees that it shall take reasonable measures to protect the secrecy of and avoid disclosure and unauthorized use of the Confidential Information of the Disclosing Party. Without limiting the foregoing, the Receiving Party shall take at least those measures that it takes to protect its own most highly confidential information.
+                                    The Receiving Party agrees that it shall take reasonable
+                                    measures to protect the secrecy of and avoid disclosure and
+                                    unauthorized use of the Confidential Information of the
+                                    Disclosing Party. Without limiting the foregoing, the
+                                    Receiving Party shall take at least those measures that it
+                                    takes to protect its own most highly confidential
+                                    information.
                                 </p>
                             </section>
 
-                            <section className="space-y-3">
-                                <h3 className="font-serif font-bold text-[#1A1A1A]">3. Exceptions</h3>
+                            <section className="space-y-2">
+                                <h3 className="text-title text-foreground">3. Exceptions</h3>
                                 <p>
-                                    The obligations of the Receiving Party under Section 2 above shall not apply to any information that the Receiving Party can prove: a) was in the public domain at the time it was disclosed; b) entered the public domain after it was disclosed through no fault of the Receiving Party; c) was rightfully known to the Receiving Party, without restriction, at the time of disclosure.
+                                    The obligations of the Receiving Party under Section 2 above
+                                    shall not apply to any information that the Receiving Party
+                                    can prove: a) was in the public domain at the time it was
+                                    disclosed; b) entered the public domain after it was
+                                    disclosed through no fault of the Receiving Party; c) was
+                                    rightfully known to the Receiving Party, without
+                                    restriction, at the time of disclosure.
                                 </p>
                             </section>
 
-                            <section className="space-y-3">
-                                <h3 className="font-serif font-bold text-[#1A1A1A]">4. Term</h3>
+                            <section className="space-y-2">
+                                <h3 className="text-title text-foreground">4. Term</h3>
                                 <p>
-                                    The obligations of the Receiving Party shall survive for a period of five (5) years following the termination of the Receiving Party's account or relationship with Jenga365.
+                                    The obligations of the Receiving Party shall survive for a
+                                    period of five (5) years following the termination of the
+                                    Receiving Party's account or relationship with Jenga365.
                                 </p>
                             </section>
 
-                            {/* Injected conditional text from DB if applicable */}
                             {docData?.content && docData.content !== "Standard NDA terms apply." && (
-                                <section className="space-y-3 mt-8 pt-8 border-t border-[#E8E4DC]">
-                                    <h3 className="font-serif font-bold text-[#1A1A1A]">5. Role-Specific Terms</h3>
-                                    <p className="italic">{docData.content}</p>
+                                <section className="space-y-2 mt-8 pt-8 border-t border-border">
+                                    <h3
+                                        className="text-title"
+                                        style={{ color: "var(--brand-green)" }}
+                                    >
+                                        5. Role-specific terms
+                                    </h3>
+                                    <p>{docData.content}</p>
                                 </section>
                             )}
                         </div>
-                    </div>
+                    </article>
 
-                    {/* SIGNING BOX */}
-                    <div className="lg:col-span-4">
-                        <div className="sticky top-8 bg-[#FBFBF9] border border-[#E8E4DC] p-8 shadow-sm">
-                            <h2 className="font-serif font-bold text-xl text-[#1A1A1A] mb-8 text-center border-b border-[#E8E4DC] pb-4">
-                                <span className="text-[#D0CBC0] mr-2">✍️</span> Acceptance of Terms
-                            </h2>
+                    {/* Signing box */}
+                    <aside className="lg:col-span-4">
+                        <div
+                            className="sticky top-24 rounded-lg border border-border bg-background p-6 lg:p-8 space-y-6"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
+                        >
+                            <div className="space-y-1.5">
+                                <h2 className="text-headline text-foreground">
+                                    Acceptance of terms
+                                </h2>
+                                <p className="text-body-sm text-foreground-muted">
+                                    Sign below to confirm you have read and accept the
+                                    agreement.
+                                </p>
+                            </div>
 
-                            <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="font-mono text-[10px] font-black text-[#1A1A1A] uppercase tracking-widest block">Full Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter your full legal name"
-                                        className="w-full h-12 bg-white border border-[#E8E4DC] px-4 font-body text-sm focus:outline-none focus:border-[#BB0000] transition-all"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        disabled={isSubmitting}
-                                    />
-                                </div>
+                            <label className="block space-y-1.5">
+                                <span className="text-label text-foreground">
+                                    Full legal name
+                                </span>
+                                <input
+                                    type="text"
+                                    placeholder="Enter your full legal name"
+                                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    disabled={isSubmitting}
+                                />
+                            </label>
 
-                                <label className="flex gap-3 cursor-pointer items-start">
+                            <label className="flex gap-3 cursor-pointer items-start">
+                                <span
+                                    className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                                        agreed
+                                            ? "border-transparent"
+                                            : "border-border bg-background"
+                                    }`}
+                                    style={
+                                        agreed ? { background: "var(--brand-green)" } : undefined
+                                    }
+                                >
+                                    {agreed && (
+                                        <Check
+                                            className="h-3.5 w-3.5"
+                                            strokeWidth={3}
+                                            style={{ color: "var(--brand-green-fg)" }}
+                                        />
+                                    )}
                                     <input
                                         type="checkbox"
-                                        className="mt-1 w-4 h-4 text-[#BB0000] border-gray-300 rounded focus:ring-[#BB0000]"
+                                        className="sr-only"
                                         checked={agreed}
                                         onChange={(e) => setAgreed(e.target.checked)}
                                         disabled={isSubmitting}
                                     />
-                                    <span className="text-xs font-body text-[#4A4A4A] leading-relaxed">
-                                        I have read and agree to the terms of the Non-Disclosure Agreement. I understand this is a legally binding document.
-                                    </span>
-                                </label>
+                                </span>
+                                <span className="text-body-sm text-foreground-muted leading-relaxed">
+                                    I have read and agree to the terms of the Non-Disclosure
+                                    Agreement. I understand this is a legally binding document.
+                                </span>
+                            </label>
 
-                                <button
-                                    onClick={handleSubmit}
-                                    disabled={!canSign || isSubmitting}
-                                    className="w-full h-12 bg-[#BB0000] text-white font-mono font-bold text-[10px] uppercase tracking-widest hover:bg-[#8B0000] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
-                                >
-                                    {isSubmitting ? "PROCESSING..." : (
-                                        <>SIGN & CONTINUE <ArrowRight size={14} /></>
-                                    )}
-                                </button>
+                            <button
+                                onClick={handleSubmit}
+                                disabled={!canSign || isSubmitting}
+                                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{ background: "var(--brand-green)" }}
+                            >
+                                {isSubmitting ? (
+                                    "Processing…"
+                                ) : (
+                                    <>
+                                        <span>Sign &amp; continue</span>
+                                        <ArrowRight className="h-4 w-4" />
+                                    </>
+                                )}
+                            </button>
 
-                                <div className="text-center pt-4">
-                                    <p className="text-[9px] font-mono text-[#8A8A8A] uppercase tracking-widest">
-                                        Doc ID: {docData?.version || "Loading..."}
-                                    </p>
-                                </div>
+                            <div className="flex items-center justify-center gap-2 pt-2 text-body-sm text-foreground-subtle">
+                                <ShieldCheck className="h-3.5 w-3.5" />
+                                <span>
+                                    Doc hash: {docData?.hash?.substring(0, 12) ?? "loading…"}
+                                </span>
                             </div>
                         </div>
-                    </div>
+                    </aside>
                 </div>
             </main>
         </div>

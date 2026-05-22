@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getNDADocument } from "@/lib/actions/nda";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, ShieldCheck } from "lucide-react";
 
 interface RegistrationNDAStepProps {
     role: "Mentee" | "Mentor" | "CorporatePartner";
@@ -12,7 +12,13 @@ interface RegistrationNDAStepProps {
     onBack: () => void;
 }
 
-export default function RegistrationNDAStep({ role, onSignAndComplete, isLoading, error, onBack }: RegistrationNDAStepProps) {
+export default function RegistrationNDAStep({
+    role,
+    onSignAndComplete,
+    isLoading,
+    error,
+    onBack,
+}: RegistrationNDAStepProps) {
     const [name, setName] = useState("");
     const [agreed, setAgreed] = useState(false);
     const [docData, setDocData] = useState<{ version: string; hash: string; content: string } | null>(null);
@@ -32,146 +38,206 @@ export default function RegistrationNDAStep({ role, onSignAndComplete, isLoading
         onSignAndComplete({
             name,
             version: docData.version,
-            hash: docData.hash
+            hash: docData.hash,
         });
     };
 
-    return (
-        <div className="w-full max-w-5xl jenga-card shadow-2xl relative overflow-hidden p-0 border-0 flex flex-col">
-            {/* Top Identity Stripe */}
-            <div className="h-1 w-full bg-primary" />
+    const roleLabel =
+        role === "CorporatePartner" ? "Corporate partner" : role;
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[600px] flex-1">
-                {/* DOC CONTENT - The "Protocol" side */}
-                <div className="lg:col-span-7 p-10 md:p-16 border-b lg:border-b-0 lg:border-r border-border bg-accent/30">
-                    <div className="mb-12 space-y-4">
-                        <div className="flex items-center gap-4">
-                            <span className="font-mono text-[9px] text-primary font-bold uppercase tracking-[0.5em]">Protocol v{docData?.version || '1.0'}</span>
-                            <div className="h-px flex-1 bg-primary/20" />
-                        </div>
-                        <h2 className="text-4xl font-serif font-bold text-foreground uppercase tracking-tighter leading-none">
-                            Confidentiality <br />
-                            <span className="text-primary italic">Protocol.</span>
+    return (
+        <div
+            className="w-full max-w-5xl rounded-lg border border-border bg-background overflow-hidden"
+            style={{ boxShadow: "var(--shadow-lg)" }}
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-12">
+                {/* DOC CONTENT */}
+                <div
+                    className="lg:col-span-7 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-border"
+                    style={{ background: "var(--surface-1)" }}
+                >
+                    <div className="mb-8 space-y-3">
+                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                            Confidentiality protocol · v{docData?.version || "1.0"}
+                        </p>
+                        <h2 className="text-display-sm text-foreground">
+                            Non-Disclosure Agreement
                         </h2>
-                        <div className="flex items-center gap-6 pt-2">
-                             <p className="text-muted-foreground font-mono text-[9px] uppercase tracking-widest">
-                                Status: UNEXECUTED
-                            </p>
-                            <p className="text-muted-foreground font-mono text-[9px] uppercase tracking-widest">
-                                Date: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}
-                            </p>
-                        </div>
+                        <p className="text-body-sm text-foreground-muted">
+                            Effective {new Date().toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })}{" "}
+                            · For role: {roleLabel}
+                        </p>
                     </div>
 
-                    <div className="space-y-8 font-light text-base leading-relaxed text-muted-foreground h-[450px] overflow-y-auto pr-8 scrollbar-thin scrollbar-thumb-foreground/10">
-                        <p className="font-serif italic font-bold text-foreground">
-                            This Non-Disclosure & Community Integrity Agreement ("Agreement") governs your access to the Jenga365 Growth Ecosystem.
+                    <div className="space-y-6 max-h-[420px] overflow-y-auto pr-2 text-body-sm text-foreground-muted">
+                        <p className="text-body text-foreground">
+                            This Agreement governs your access to the Jenga365 Growth
+                            Ecosystem, including all proprietary mentorship methodologies,
+                            AI protocols, and partner data.
                         </p>
 
-                        <div className="space-y-4">
-                            <h3 className="section-label text-foreground">01. Information Gating</h3>
-                            <p className="text-sm">
-                                You acknowledge that all technical templates, mentorship methodologies, AI protocols, and partner datasets shared within Jenga365 are strictly confidential and proprietary.
+                        <section className="space-y-2">
+                            <h3 className="text-title text-foreground">01. Information Gating</h3>
+                            <p>
+                                All technical templates, mentorship methodologies, AI
+                                protocols, and partner datasets shared within Jenga365 are
+                                strictly confidential and proprietary.
                             </p>
-                        </div>
+                        </section>
 
-                        <div className="space-y-4">
-                            <h3 className="section-label text-foreground">02. Integrity Clause</h3>
-                            <p className="text-sm">
-                                Unauthorized redistribution, scraping, or external deployment of Jenga365 internal protocols is a violation of community trust and legal commitment.
+                        <section className="space-y-2">
+                            <h3 className="text-title text-foreground">02. Integrity Clause</h3>
+                            <p>
+                                Unauthorized redistribution, scraping, or external deployment
+                                of Jenga365 internal protocols is a violation of community
+                                trust and legal commitment.
                             </p>
-                        </div>
+                        </section>
 
-                        <div className="space-y-4">
-                            <h3 className="section-label text-foreground">03. Sustainable Protection</h3>
-                            <p className="text-sm">
-                                Obligations under this protocol remain active for five (5) orbital years following session termination to ensure long-term ecosystem security.
+                        <section className="space-y-2">
+                            <h3 className="text-title text-foreground">03. Term</h3>
+                            <p>
+                                Obligations under this protocol remain active for five (5)
+                                years following session termination to ensure long-term
+                                ecosystem security.
                             </p>
-                        </div>
+                        </section>
 
                         {docData?.content && docData.content !== "Standard NDA terms apply." && (
-                            <div className="space-y-4 pt-6 border-t border-border mt-8">
-                                <h3 className="section-label text-primary">04. Role-Specific Directives ({role})</h3>
-                                <p className="font-serif italic text-primary text-sm leading-relaxed">{docData.content}</p>
-                            </div>
+                            <section className="space-y-2 pt-4 border-t border-border">
+                                <h3
+                                    className="text-title"
+                                    style={{ color: "var(--brand-green)" }}
+                                >
+                                    04. Role-specific directives ({roleLabel})
+                                </h3>
+                                <p>{docData.content}</p>
+                            </section>
                         )}
-                        
-                        <div className="pt-10">
-                            <p className="font-mono text-[8px] text-muted-foreground/50 uppercase tracking-[0.4em]">Integrated Legal Framework. Nairobi, Kenya.</p>
+
+                        <div className="pt-4">
+                            <p className="text-eyebrow text-foreground-subtle">
+                                Nairobi, Kenya · Integrated Legal Framework
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                {/* SIGNING BOX - The "Execution" side */}
-                <div className="lg:col-span-5 p-10 md:p-16 flex flex-col bg-background relative">
-                    <div className="flex-1 space-y-12 relative z-10">
-                        <div className="space-y-2">
-                            <h3 className="font-serif font-bold text-2xl text-foreground uppercase tracking-tight">Execution</h3>
-                            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground">Sign to authenticate your membership</p>
+                {/* SIGNING BOX */}
+                <div className="lg:col-span-5 p-8 lg:p-12 bg-background flex flex-col">
+                    <div className="flex-1 space-y-8">
+                        <div className="space-y-1.5">
+                            <h3 className="text-headline text-foreground">Acceptance</h3>
+                            <p className="text-body-sm text-foreground-muted">
+                                Sign below to confirm you have read and accept the terms.
+                            </p>
                         </div>
 
-                        <div className="space-y-10">
-                            <div className="space-y-4 relative group">
-                                <label className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-[0.4em] group-focus-within:text-primary transition-colors">Full Legal Signature</label>
+                        <div className="space-y-5">
+                            <div className="space-y-1.5">
+                                <label
+                                    htmlFor="nda-signature"
+                                    className="text-label text-foreground"
+                                >
+                                    Full legal name
+                                </label>
                                 <input
+                                    id="nda-signature"
                                     type="text"
-                                    placeholder="TYPE YOUR FULL NAME"
-                                    className="w-full bg-transparent border-b border-border py-4 font-mono text-sm tracking-[0.2em] text-foreground focus:outline-none focus:border-primary transition-all placeholder:text-muted-foreground/30"
+                                    placeholder="Type your full name"
+                                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
                                     value={name}
-                                    onChange={(e) => setName(e.target.value.toUpperCase())}
+                                    onChange={(e) => setName(e.target.value)}
                                     disabled={isLoading}
                                 />
                             </div>
 
-                            <label className="flex gap-4 cursor-pointer items-start group">
-                                <div className={`mt-1 w-5 h-5 border transition-all duration-500 relative flex items-center justify-center shrink-0 ${agreed ? 'bg-primary border-primary' : 'bg-background border-border group-hover:border-foreground'}`}>
-                                    {agreed && <Check className="w-3 h-3 text-background" strokeWidth={4} />}
+                            <label className="flex gap-3 cursor-pointer items-start">
+                                <span
+                                    className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                                        agreed
+                                            ? "border-transparent"
+                                            : "border-border bg-background"
+                                    }`}
+                                    style={
+                                        agreed
+                                            ? {
+                                                  background: "var(--brand-green)",
+                                              }
+                                            : undefined
+                                    }
+                                >
+                                    {agreed && (
+                                        <Check
+                                            className="h-3.5 w-3.5"
+                                            strokeWidth={3}
+                                            style={{ color: "var(--brand-green-fg)" }}
+                                        />
+                                    )}
                                     <input
                                         type="checkbox"
-                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                        className="sr-only"
                                         checked={agreed}
                                         onChange={(e) => setAgreed(e.target.checked)}
                                         disabled={isLoading}
                                     />
-                                </div>
-                                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors leading-relaxed">
-                                    I certify that I have read the Confidentiality Protocol and accept absolute legal responsibility for ecosystem integrity.
+                                </span>
+                                <span className="text-body-sm text-foreground-muted leading-relaxed">
+                                    I have read and agree to the Confidentiality Protocol. I
+                                    understand this is a legally binding agreement.
                                 </span>
                             </label>
 
                             {error && (
-                                <div className="p-4 bg-primary/5 border-l-2 border-primary text-primary font-mono text-[10px] uppercase tracking-widest leading-relaxed">
-                                    <span className="font-bold">Error:</span> {error}
+                                <div
+                                    role="alert"
+                                    className="rounded-md border px-3 py-2 text-body-sm"
+                                    style={{
+                                        background: "var(--brand-red-soft)",
+                                        borderColor: "var(--brand-red-soft)",
+                                        color: "var(--brand-red)",
+                                    }}
+                                >
+                                    {error}
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className="pt-16 space-y-6 relative z-10">
+                    <div className="pt-8 space-y-3">
                         <button
                             onClick={handleSubmit}
                             disabled={!canSign || isLoading}
-                            className="w-full h-14 bg-foreground text-background font-mono font-bold text-[10px] uppercase tracking-[0.5em] hover:bg-primary border border-transparent hover:border-secondary transition-all flex items-center justify-center gap-4 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
+                            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                            style={{ background: "var(--brand-green)" }}
                         >
-                            <span className="relative z-10">{isLoading ? "PROCESSING AUTHENTICATION..." : "EXECUTE PROTOCOL"}</span>
-                            {!isLoading && <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform relative z-10" />}
+                            {isLoading ? (
+                                "Processing…"
+                            ) : (
+                                <>
+                                    <span>Sign &amp; continue</span>
+                                    <ArrowRight className="h-4 w-4" />
+                                </>
+                            )}
                         </button>
 
                         <button
                             onClick={onBack}
                             disabled={isLoading}
-                            className="w-full text-center font-mono text-[9px] text-muted-foreground font-bold tracking-[0.4em] uppercase hover:text-foreground transition-all"
+                            className="inline-flex h-10 w-full items-center justify-center rounded-md border border-border bg-background text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)] disabled:opacity-50"
                         >
-                            ← Back to commitment
+                            Back
                         </button>
 
-                        <div className="text-center pt-8">
-                            <div className="inline-flex items-center gap-3 px-4 py-2 bg-accent/50 border border-border">
-                                <span className="w-1 h-1 bg-primary animate-pulse" />
-                                <p className="text-[8px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
-                                    SECURE NODE: {docData?.hash?.substring(0, 12) || "PENDING"}
-                                </p>
-                            </div>
+                        <div className="pt-2 flex items-center justify-center gap-2 text-body-sm text-foreground-subtle">
+                            <ShieldCheck className="h-3.5 w-3.5" />
+                            <span>
+                                Doc hash: {docData?.hash?.substring(0, 12) ?? "loading…"}
+                            </span>
                         </div>
                     </div>
                 </div>

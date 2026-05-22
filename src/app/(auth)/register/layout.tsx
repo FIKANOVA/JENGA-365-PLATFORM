@@ -4,7 +4,7 @@ export default function RegisterLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="min-h-screen bg-white flex flex-col">
+        <div className="min-h-screen bg-background flex flex-col">
             {children}
         </div>
     );

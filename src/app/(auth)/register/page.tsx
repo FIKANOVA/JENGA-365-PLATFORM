@@ -2,168 +2,221 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+    ArrowRight,
+    GraduationCap,
+    Sparkles,
+    Building2,
+    Check,
+} from "lucide-react";
 import Logo from "@/components/shared/Logo";
 
-const ROLES = [
+type Role = {
+    id: "mentee" | "mentor" | "corporate";
+    name: string;
+    icon: React.ComponentType<{ className?: string }>;
+    tagline: string;
+    description: string;
+    benefits: string[];
+    badge: { label: string; tone: "success" | "warning" };
+    cta: string;
+};
+
+const ROLES: Role[] = [
     {
         id: "mentee",
         name: "Mentee",
-        icon: "school",
+        icon: GraduationCap,
         tagline: "Athletes & young professionals",
-        description: "Get matched with experienced mentors, access exclusive resources, and grow through structured community engagement.",
+        description:
+            "AI-matched mentorship, structured community engagement, and resources to compound your growth.",
         benefits: [
             "Professional mentorship matching",
             "Resource library & courses",
             "Community events & clinics",
             "AI-powered growth profile",
         ],
-        badge: "Instant Access",
-        badgeClass: "text-primary border-primary/40",
-        accentBar: "bg-primary",
-        cta: "Join as Mentee",
-        ctaClass: "btn-primary w-full shadow-lg",
+        badge: { label: "Instant access", tone: "success" },
+        cta: "Join as mentee",
     },
     {
         id: "mentor",
         name: "Mentor",
-        icon: "psychology",
+        icon: Sparkles,
         tagline: "Experienced professionals",
-        description: "Share your expertise, guide emerging leaders, and access exclusive founder circles and strategic networks.",
+        description:
+            "Share expertise in focused, time-boxed sessions. Access founder circles and strategic networks.",
         benefits: [
-            "Guide one mentee per month",
+            "Guide one focused hour per month",
             "Strategic network access",
             "Impact tracking dashboard",
             "Exclusive founder circles",
         ],
-        badge: "Requires Approval",
-        badgeClass: "text-amber-600 border-amber-400/40",
-        accentBar: "bg-amber-500",
-        cta: "Apply as Mentor",
-        ctaClass: "w-full py-4 bg-foreground text-background font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-primary transition-all shadow-lg",
+        badge: { label: "Approval required", tone: "warning" },
+        cta: "Apply as mentor",
     },
     {
         id: "corporate",
-        name: "Corporate",
-        icon: "business",
+        name: "Corporate partner",
+        icon: Building2,
         tagline: "Organisations & businesses",
-        description: "Integrate CSR impact, sponsor talent pipelines, and access aggregated performance metrics across the Jenga365 network.",
+        description:
+            "Integrate CSR impact, sponsor talent pipelines, and report on measurable climate action.",
         benefits: [
             "CSR impact integration",
             "Talent pipeline visibility",
-            "Partnership performance reports",
-            "Aggregated impact metrics",
+            "Quarterly Looker Studio reports",
+            "Aggregated trees-alive metrics",
         ],
-        badge: "Requires Approval",
-        badgeClass: "text-amber-600 border-amber-400/40",
-        accentBar: "bg-foreground",
-        cta: "Partner With Us",
-        ctaClass: "w-full py-4 bg-foreground text-background font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-primary transition-all shadow-lg",
+        badge: { label: "Approval required", tone: "warning" },
+        cta: "Partner with us",
     },
 ];
+
+function Badge({ tone, children }: { tone: "success" | "warning"; children: React.ReactNode }) {
+    const palette =
+        tone === "success"
+            ? {
+                  background: "var(--brand-green-soft)",
+                  color: "var(--brand-green)",
+              }
+            : {
+                  background: "color-mix(in srgb, var(--warning) 12%, transparent)",
+                  color: "var(--warning)",
+              };
+    return (
+        <span
+            className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium"
+            style={palette}
+        >
+            {children}
+        </span>
+    );
+}
 
 export default function RegisterHubPage() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-background flex flex-col overflow-hidden relative">
-            {/* Background watermark */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none flex items-center justify-center">
-                <span className="font-serif font-bold text-[35vw] text-foreground/[0.015] leading-none tracking-tighter uppercase whitespace-nowrap">
-                    365
-                </span>
-            </div>
-
-            {/* Header with logo + step label */}
-            <header className="w-full border-b border-border py-6 px-6 md:px-12 flex items-center justify-between relative z-10 bg-background/95 backdrop-blur-md sticky top-0">
-                <Link href="/">
-                    <Logo variant="premium" height={40} priority />
-                </Link>
-                <div className="flex items-center gap-3">
-                    <div className="h-px w-6 bg-primary" />
-                    <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground font-bold">Step 1 of 3</span>
+        <div className="min-h-screen bg-background flex flex-col">
+            {/* Minimal hub header */}
+            <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 h-16 flex items-center justify-between">
+                    <Logo size="md" />
+                    <div className="flex items-center gap-3">
+                        <span className="text-eyebrow text-foreground-muted">Step 1 of 3</span>
+                        <span className="hidden sm:inline-block h-px w-8 bg-border" />
+                        <Link
+                            href="/login"
+                            className="text-label text-foreground-muted hover:text-foreground transition-colors"
+                        >
+                            Sign in
+                        </Link>
+                    </div>
                 </div>
             </header>
 
-            <main className="flex-1 flex flex-col items-center py-16 px-6 relative z-10">
-                <div className="max-w-6xl w-full space-y-14">
-                    {/* Heading */}
-                    <div className="text-center space-y-5 max-w-2xl mx-auto">
-                        <div className="flex items-center justify-center gap-4">
-                            <span className="h-px w-8 bg-primary" />
-                            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary font-bold">Choose your role</span>
-                            <span className="h-px w-8 bg-primary" />
-                        </div>
-                        <h1 className="font-serif font-black text-5xl md:text-6xl text-foreground uppercase tracking-tighter leading-[0.92]">
-                            How will you<br />
-                            <span className="text-primary italic">contribute?</span>
-                        </h1>
-                        <p className="font-sans font-light text-lg text-muted-foreground leading-relaxed">
-                            Join the Jenga365 ecosystem. Each path is built for impact — at every level.
-                        </p>
-                    </div>
+            <main className="flex-1 mx-auto w-full max-w-7xl px-6 lg:px-8 py-16 lg:py-24">
+                {/* Heading */}
+                <div className="max-w-2xl mx-auto text-center space-y-4">
+                    <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                        Choose your role
+                    </p>
+                    <h1 className="text-display-md text-foreground">
+                        How will you contribute?
+                    </h1>
+                    <p className="text-body-lg text-foreground-muted">
+                        Each path is built for measurable impact — at every level.
+                    </p>
+                </div>
 
-                    {/* Uniform Role Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {ROLES.map((role) => (
+                {/* Role cards */}
+                <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {ROLES.map((role) => {
+                        const Icon = role.icon;
+                        return (
                             <div
                                 key={role.id}
-                                className="jenga-card group relative flex flex-col p-10 space-y-8 overflow-hidden hover:border-primary/50 transition-colors"
+                                className="group flex flex-col rounded-lg border border-border bg-background p-6 lg:p-8 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
                             >
-                                {/* Top accent bar */}
-                                <div className={`absolute top-0 left-0 w-full h-1 ${role.accentBar} group-hover:h-[3px] transition-all duration-300`} />
-
-                                {/* Header */}
-                                <div className="space-y-4">
-                                    <div className="flex items-start justify-between">
-                                        <span className="material-symbols-outlined text-4xl text-muted-foreground group-hover:text-primary transition-colors">
-                                            {role.icon}
-                                        </span>
-                                        <span className={`font-mono text-[8px] uppercase tracking-widest font-bold border px-2 py-1 ${role.badgeClass}`}>
-                                            {role.badge}
-                                        </span>
+                                <div className="flex items-start justify-between">
+                                    <div
+                                        className="inline-flex h-10 w-10 items-center justify-center rounded-md"
+                                        style={{ background: "var(--surface-2)" }}
+                                    >
+                                        <Icon className="h-5 w-5 text-foreground" />
                                     </div>
-                                    <div>
-                                        <h3 className="font-serif font-black text-3xl text-foreground uppercase tracking-tight">
-                                            {role.name}
-                                        </h3>
-                                        <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground font-bold mt-1">
-                                            {role.tagline}
-                                        </p>
-                                    </div>
-                                    <p className="font-sans font-light text-sm text-muted-foreground leading-relaxed">
-                                        {role.description}
-                                    </p>
+                                    <Badge tone={role.badge.tone}>{role.badge.label}</Badge>
                                 </div>
 
-                                {/* Benefits */}
-                                <ul className="space-y-3 flex-1">
-                                    {role.benefits.map((benefit) => (
-                                        <li key={benefit} className="flex gap-3 items-start">
-                                            <span className="material-symbols-outlined text-sm text-primary mt-0.5">adjust</span>
-                                            <span className="font-sans font-light text-sm text-muted-foreground leading-snug">{benefit}</span>
+                                <div className="mt-6 space-y-1.5">
+                                    <h3 className="text-headline text-foreground">{role.name}</h3>
+                                    <p className="text-body-sm text-foreground-muted">{role.tagline}</p>
+                                </div>
+
+                                <p className="mt-4 text-body-sm text-foreground-muted">
+                                    {role.description}
+                                </p>
+
+                                <ul className="mt-6 space-y-2.5 flex-1">
+                                    {role.benefits.map((b) => (
+                                        <li key={b} className="flex gap-2.5 items-start">
+                                            <Check
+                                                className="h-4 w-4 mt-0.5 shrink-0"
+                                                style={{ color: "var(--brand-green)" }}
+                                            />
+                                            <span className="text-body-sm text-foreground-muted">{b}</span>
                                         </li>
                                     ))}
                                 </ul>
 
                                 <button
                                     onClick={() => router.push(`/register/${role.id}`)}
-                                    className={role.ctaClass}
+                                    className="mt-8 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium transition-colors"
+                                    style={{
+                                        background:
+                                            role.id === "mentee"
+                                                ? "var(--brand-green)"
+                                                : "var(--foreground)",
+                                        color:
+                                            role.id === "mentee"
+                                                ? "var(--brand-green-fg)"
+                                                : "var(--background)",
+                                    }}
                                 >
-                                    {role.cta}
+                                    <span>{role.cta}</span>
+                                    <ArrowRight className="h-4 w-4" />
                                 </button>
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })}
+                </div>
 
-                    {/* Login link */}
-                    <div className="text-center pt-6 border-t border-border">
-                        <p className="text-sm text-muted-foreground">
-                            Already have an account?{" "}
-                            <Link href="/login" className="font-bold text-primary hover:underline transition-colors">
-                                Sign in
-                            </Link>
-                        </p>
-                    </div>
+                {/* Sweat-equity disclosure — required before any join CTA */}
+                <div
+                    className="mt-12 mx-auto max-w-3xl rounded-md border border-border p-4 lg:p-5 text-body-sm text-foreground-muted"
+                    style={{ background: "var(--surface-1)" }}
+                >
+                    <span className="font-medium text-foreground">Sweat equity:</span>{" "}
+                    Membership is reciprocal. Mentees are expected to complete a verified
+                    community give-back (tree planting, clean-up, book drive) each quarter.
+                    Missed contributions reset platform access — a three-strikes protocol
+                    keeps the ecosystem honest.
+                </div>
+
+                {/* Login link */}
+                <div className="mt-10 text-center">
+                    <p className="text-body-sm text-foreground-muted">
+                        Already have an account?{" "}
+                        <Link
+                            href="/login"
+                            className="font-medium hover:underline"
+                            style={{ color: "var(--brand-green)" }}
+                        >
+                            Sign in
+                        </Link>
+                    </p>
                 </div>
             </main>
         </div>

@@ -2,18 +2,27 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, ArrowLeft, Check, ShieldCheck } from "lucide-react";
+
 import { signUp } from "@/lib/auth/client";
 import { signNDA } from "@/lib/actions/nda";
 import { setUserRole } from "@/lib/actions/auth";
 import { sendMenteeRegistrationEmail } from "@/lib/actions/registration-emails";
-import Header from "@/components/shared/Header";
+
+import Logo from "@/components/shared/Logo";
 import RegistrationNDAStep from "@/components/auth/RegistrationNDAStep";
-import { motion, AnimatePresence } from "framer-motion";
+
+const STEPS = [
+    { id: 1, label: "Account" },
+    { id: 2, label: "Pledge" },
+    { id: 3, label: "Agreement" },
+] as const;
 
 export default function MenteeRegisterPage() {
     const router = useRouter();
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState<1 | 2 | 3>(1);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,12 +36,18 @@ export default function MenteeRegisterPage() {
         agreedToTerms: false,
     });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    ) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSignAndComplete = async (signatureData: { name: string; version: string; hash: string }) => {
+    const handleSignAndComplete = async (signatureData: {
+        name: string;
+        version: string;
+        hash: string;
+    }) => {
         setLoading(true);
         setError(null);
 
@@ -62,25 +77,26 @@ export default function MenteeRegisterPage() {
             });
 
             if (ndaResult.success) {
-                // Send NDA confirmation email (fire-and-forget)
                 sendMenteeRegistrationEmail(
                     formData.email,
                     formData.firstName,
                     formData.lastName,
                     signatureData.hash,
-                    "NDA-" + Math.random().toString(36).substring(7).toUpperCase()
+                    "NDA-" + Math.random().toString(36).substring(7).toUpperCase(),
                 );
 
-                // Trigger better-auth email verification (fire-and-forget)
                 import("@/lib/auth/client").then(({ authClient }) => {
-                    authClient.sendVerificationEmail({
-                        email: formData.email,
-                        callbackURL: "/onboarding",
-                    }).catch(() => {});
+                    authClient
+                        .sendVerificationEmail({
+                            email: formData.email,
+                            callbackURL: "/onboarding",
+                        })
+                        .catch(() => {});
                 });
 
-                // Redirect to check-email page with email param
-                router.push(`${ndaResult.redirectTo}?email=${encodeURIComponent(formData.email)}`);
+                router.push(
+                    `${ndaResult.redirectTo}?email=${encodeURIComponent(formData.email)}`,
+                );
             }
         } catch (err: any) {
             setError(err.message || "Something went wrong. Please try again.");
@@ -89,237 +105,209 @@ export default function MenteeRegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-background flex flex-col font-sans relative overflow-hidden">
-            {/* Background watermark */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none flex items-center justify-between">
-                <span className="font-serif font-bold text-[20vw] text-foreground/[0.02] leading-none tracking-tighter uppercase whitespace-nowrap transform -translate-x-[10%]">
-                    MENTEE
-                </span>
-                <span className="font-serif font-bold text-[20vw] text-foreground/[0.02] leading-none tracking-tighter uppercase whitespace-nowrap transform translate-x-[10%] mt-[20vh]">
-                    PROTOCOL
-                </span>
-            </div>
+        <div className="min-h-screen bg-background flex flex-col">
+            <RegistrationHeader step={step} />
 
-            <Header />
-
-            <main className="flex-1 container mx-auto px-6 py-24 flex flex-col items-center relative z-10">
+            <main className="flex-1 mx-auto w-full max-w-3xl px-6 lg:px-8 py-10 lg:py-16">
                 <AnimatePresence mode="wait">
-                    {/* STEP 1: Account Details */}
                     {step === 1 && (
-                        <motion.div
+                        <motion.section
                             key="step1"
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className="w-full max-w-4xl space-y-12"
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                            className="space-y-8"
                         >
-                            <div className="text-center space-y-4">
-                                <div className="flex items-center justify-center gap-4">
-                                    <span className="h-px w-8 bg-primary" />
-                                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary font-bold">Step 1 of 3 — Your Details</span>
-                                    <span className="h-px w-8 bg-primary" />
-                                </div>
-                                <h1 className="font-serif font-black text-5xl text-foreground uppercase tracking-tighter leading-none">
-                                    Create Your<br />
-                                    <span className="text-primary italic">Account.</span>
-                                </h1>
-                                <p className="font-sans font-light text-lg text-muted-foreground max-w-2xl mx-auto">
-                                    Tell us a little about yourself to get started as a Jenga365 mentee.
+                            <header className="space-y-2 text-center">
+                                <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                                    Step 1 · Your details
                                 </p>
-                            </div>
+                                <h1 className="text-display-sm text-foreground">
+                                    Create your account
+                                </h1>
+                                <p className="text-body text-foreground-muted">
+                                    A few details to get you matched with the right mentor.
+                                </p>
+                            </header>
 
-                            <div className="jenga-card p-10 space-y-8 max-w-2xl mx-auto shadow-xl relative overflow-hidden group">
-                                <div className="absolute top-0 left-0 w-full h-1 bg-primary group-hover:h-2 transition-all duration-500" />
-
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="jenga-label">First Name</label>
-                                        <input
-                                            type="text"
+                            <div
+                                className="rounded-lg border border-border bg-background p-6 lg:p-8 space-y-5"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <Field label="First name">
+                                        <Input
                                             name="firstName"
                                             value={formData.firstName}
                                             onChange={handleInputChange}
-                                            className="jenga-input w-full"
                                             placeholder="Given name"
                                         />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="jenga-label">Last Name</label>
-                                        <input
-                                            type="text"
+                                    </Field>
+                                    <Field label="Last name">
+                                        <Input
                                             name="lastName"
                                             value={formData.lastName}
                                             onChange={handleInputChange}
-                                            className="jenga-input w-full"
                                             placeholder="Surname"
                                         />
-                                    </div>
+                                    </Field>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="jenga-label">Email Address</label>
-                                    <input
+                                <Field label="Email">
+                                    <Input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        className="jenga-input w-full"
                                         placeholder="you@example.com"
+                                        autoComplete="email"
                                     />
-                                </div>
+                                </Field>
 
-                                <div className="space-y-2">
-                                    <label className="jenga-label">Password</label>
-                                    <input
+                                <Field label="Password">
+                                    <Input
                                         type="password"
                                         name="password"
                                         value={formData.password}
                                         onChange={handleInputChange}
-                                        className="jenga-input w-full"
                                         placeholder="Min. 8 characters"
+                                        autoComplete="new-password"
                                     />
-                                </div>
+                                </Field>
 
-                                <div className="space-y-2">
-                                    <label className="jenga-label">Current Academic Level</label>
-                                    <select
+                                <Field label="Current academic level">
+                                    <Select
                                         name="currentLevel"
                                         value={formData.currentLevel}
                                         onChange={handleInputChange}
-                                        className="jenga-input w-full bg-background"
                                     >
                                         <option value="">Select level</option>
-                                        <option value="High School">High School</option>
+                                        <option value="High School">High school</option>
                                         <option value="Undergraduate">Undergraduate</option>
                                         <option value="Postgraduate">Postgraduate</option>
-                                        <option value="Early Career">Early Career</option>
-                                    </select>
-                                </div>
+                                        <option value="Early Career">Early career</option>
+                                    </Select>
+                                </Field>
 
-                                <button
+                                <PrimaryButton
                                     onClick={() => {
-                                        if (formData.firstName && formData.lastName && formData.email && formData.password) {
+                                        if (
+                                            formData.firstName &&
+                                            formData.lastName &&
+                                            formData.email &&
+                                            formData.password
+                                        ) {
                                             setError(null);
                                             setStep(2);
                                         } else {
                                             setError("Please fill in all required fields.");
                                         }
                                     }}
-                                    className="btn-primary w-full shadow-lg h-14 flex items-center justify-center gap-2"
                                 >
-                                    Continue <ArrowRight size={16} />
-                                </button>
+                                    Continue <ArrowRight className="h-4 w-4" />
+                                </PrimaryButton>
                             </div>
-                        </motion.div>
+
+                            <p className="text-center text-body-sm text-foreground-muted">
+                                Already a member?{" "}
+                                <Link
+                                    href="/login"
+                                    className="font-medium hover:underline"
+                                    style={{ color: "var(--brand-green)" }}
+                                >
+                                    Sign in
+                                </Link>
+                            </p>
+                        </motion.section>
                     )}
 
-                    {/* STEP 2: Community Pledge */}
                     {step === 2 && (
-                        <motion.div
+                        <motion.section
                             key="step2"
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className="w-full max-w-5xl jenga-card shadow-2xl relative overflow-hidden flex flex-col lg:flex-row p-0 border-0"
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                            className="space-y-8"
                         >
-                            <div className="absolute top-0 left-0 w-full h-1 bg-foreground" />
+                            <header className="space-y-2 text-center">
+                                <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                                    Step 2 · Community pledge
+                                </p>
+                                <h1 className="text-display-sm text-foreground">
+                                    Sweat equity, before access
+                                </h1>
+                                <p className="text-body text-foreground-muted">
+                                    Premium mentorship is earned through verified community
+                                    contribution.
+                                </p>
+                            </header>
 
-                            {/* Left — info */}
-                            <div className="p-12 md:p-16 space-y-10 bg-accent/30 border-b lg:border-b-0 lg:border-r border-border flex-1">
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-4">
-                                        <span className="font-mono text-[9px] text-primary font-bold uppercase tracking-[0.5em]">Step 2 of 3</span>
-                                        <div className="h-px flex-1 bg-primary/10" />
-                                    </div>
-                                    <h1 className="font-serif font-black text-4xl text-foreground uppercase tracking-tighter leading-none">
-                                        Give Back to<br />
-                                        <span className="text-primary italic">the Community.</span>
-                                    </h1>
-                                </div>
-
-                                <div className="space-y-8">
-                                    <div className="p-8 bg-foreground text-background space-y-4 shadow-xl">
-                                        <h3 className="section-label text-muted">How it works</h3>
-                                        <p className="font-sans font-light text-sm leading-relaxed opacity-80">
-                                            Access to premium mentorship is earned through community contribution. We believe in a reciprocal ecosystem.
-                                        </p>
-                                    </div>
-
-                                    <ul className="space-y-6">
-                                        {[
-                                            "Minimum one community activity per quarter.",
-                                            "Activities include: tree planting, clean-ups, book drives.",
-                                            "Participation is verified through Jenga365.",
-                                            "Failure to contribute resets your platform access.",
-                                        ].map((text) => (
-                                            <li key={text} className="flex gap-4 items-start">
-                                                <span className="material-symbols-outlined text-base text-primary mt-0.5">verified_user</span>
-                                                <span className="font-sans font-light text-sm text-muted-foreground leading-snug">{text}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            {/* Right — accept */}
-                            <div className="p-12 md:p-16 flex flex-col justify-center space-y-12 flex-1">
-                                <div className="space-y-6">
-                                    <h3 className="font-serif font-black text-2xl text-foreground uppercase tracking-tight leading-snug">
-                                        Do you accept the<br />
-                                        community give-back<br />
-                                        terms?
-                                    </h3>
-
-                                    <label className="flex gap-4 cursor-pointer items-start group">
-                                        <div className={`mt-1 w-6 h-6 border transition-all duration-500 relative flex items-center justify-center shrink-0 ${formData.agreedToTerms ? "bg-foreground border-foreground" : "bg-background border-border group-hover:border-foreground"}`}>
-                                            {formData.agreedToTerms && <Check className="w-4 h-4 text-background" strokeWidth={4} />}
-                                            <input
-                                                type="checkbox"
-                                                className="absolute inset-0 opacity-0 cursor-pointer"
-                                                checked={formData.agreedToTerms}
-                                                onChange={(e) => setFormData(p => ({ ...p, agreedToTerms: e.target.checked }))}
+                            <div
+                                className="rounded-lg border border-border bg-background p-6 lg:p-8 space-y-6"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <ul className="space-y-3">
+                                    {[
+                                        "Minimum one community activity per quarter.",
+                                        "Activities include tree planting, clean-ups, book drives.",
+                                        "Participation is verified through Jenga365 and KoBoToolbox field forms.",
+                                        "A three-strikes protocol resets platform access for missed contributions.",
+                                    ].map((text) => (
+                                        <li key={text} className="flex gap-2.5 items-start">
+                                            <Check
+                                                className="h-4 w-4 mt-0.5 shrink-0"
+                                                style={{ color: "var(--brand-green)" }}
                                             />
-                                        </div>
-                                        <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors leading-relaxed">
-                                            I agree to complete at least one community impact activity per quarter as a condition of my Jenga365 membership.
-                                        </span>
-                                    </label>
+                                            <span className="text-body-sm text-foreground-muted">
+                                                {text}
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <div className="border-t border-border pt-5">
+                                    <CheckboxRow
+                                        checked={formData.agreedToTerms}
+                                        onChange={(checked) =>
+                                            setFormData((p) => ({ ...p, agreedToTerms: checked }))
+                                        }
+                                        label="I agree to complete at least one community impact activity per quarter as a condition of my Jenga365 membership."
+                                    />
                                 </div>
 
-                                <div className="space-y-4">
-                                    <button
+                                <div className="flex flex-col-reverse sm:flex-row gap-3">
+                                    <SecondaryButton onClick={() => setStep(1)}>
+                                        <ArrowLeft className="h-4 w-4" /> Back
+                                    </SecondaryButton>
+                                    <PrimaryButton
                                         onClick={() => {
                                             if (formData.agreedToTerms) {
                                                 setError(null);
                                                 setStep(3);
                                             } else {
-                                                setError("Please accept the community terms to continue.");
+                                                setError(
+                                                    "Please accept the community terms to continue.",
+                                                );
                                             }
                                         }}
-                                        className="w-full h-14 bg-foreground text-background font-mono font-bold text-[10px] uppercase tracking-[0.5em] hover:bg-secondary border border-transparent hover:border-secondary transition-all flex items-center justify-center gap-4 shadow-xl"
                                     >
-                                        Continue to Agreement <ArrowRight size={16} />
-                                    </button>
-
-                                    <button
-                                        onClick={() => setStep(1)}
-                                        className="w-full py-4 text-center font-mono text-[9px] text-muted-foreground font-black tracking-[0.4em] uppercase hover:text-foreground transition-all"
-                                    >
-                                        ← Go Back
-                                    </button>
+                                        Continue to agreement <ArrowRight className="h-4 w-4" />
+                                    </PrimaryButton>
                                 </div>
                             </div>
-                        </motion.div>
+                        </motion.section>
                     )}
 
-                    {/* STEP 3: NDA Signing */}
                     {step === 3 && (
-                        <motion.div
+                        <motion.section
                             key="step3"
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.98 }}
-                            className="w-full flex justify-center"
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                            className="flex justify-center"
                         >
                             <RegistrationNDAStep
                                 role="Mentee"
@@ -328,17 +316,169 @@ export default function MenteeRegisterPage() {
                                 error={error}
                                 onBack={() => setStep(2)}
                             />
-                        </motion.div>
+                        </motion.section>
                     )}
                 </AnimatePresence>
             </main>
 
             {error && (
-                <div className="fixed bottom-12 left-1/2 -translate-x-1/2 px-8 py-4 bg-primary text-background font-mono text-[10px] uppercase tracking-widest font-black shadow-2xl z-[200] flex items-center gap-4 border border-secondary">
-                    <span className="material-symbols-outlined text-sm">error</span>
+                <div
+                    role="alert"
+                    className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 inline-flex items-center gap-2 rounded-md border px-3 py-2 text-body-sm"
+                    style={{
+                        background: "var(--brand-red-soft)",
+                        borderColor: "var(--brand-red-soft)",
+                        color: "var(--brand-red)",
+                        boxShadow: "var(--shadow)",
+                    }}
+                >
+                    <ShieldCheck className="h-4 w-4" />
                     {error}
                 </div>
             )}
         </div>
+    );
+}
+
+/* ─── Local UI primitives (page-scoped to avoid premature abstraction) ─── */
+
+function RegistrationHeader({ step }: { step: 1 | 2 | 3 }) {
+    return (
+        <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+                <Logo size="md" />
+                <nav
+                    aria-label="Registration progress"
+                    className="hidden sm:flex items-center gap-3 text-eyebrow text-foreground-muted"
+                >
+                    {STEPS.map((s, i) => (
+                        <span key={s.id} className="flex items-center gap-3">
+                            <span
+                                className={
+                                    s.id === step
+                                        ? "text-foreground"
+                                        : s.id < step
+                                          ? "text-foreground-muted"
+                                          : "text-foreground-subtle"
+                                }
+                            >
+                                {s.id}. {s.label}
+                            </span>
+                            {i < STEPS.length - 1 && (
+                                <span className="h-px w-6 bg-border" />
+                            )}
+                        </span>
+                    ))}
+                </nav>
+                <span className="sm:hidden text-eyebrow text-foreground-muted">
+                    Step {step} of 3
+                </span>
+            </div>
+        </header>
+    );
+}
+
+function Field({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
+    return (
+        <label className="block space-y-1.5">
+            <span className="text-label text-foreground">{label}</span>
+            {children}
+        </label>
+    );
+}
+
+function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
+    return (
+        <input
+            {...props}
+            className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+        />
+    );
+}
+
+function Select(props: React.SelectHTMLAttributes<HTMLSelectElement> & { children: React.ReactNode }) {
+    const { children, ...rest } = props;
+    return (
+        <select
+            {...rest}
+            className="h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+        >
+            {children}
+        </select>
+    );
+}
+
+function PrimaryButton({
+    children,
+    onClick,
+}: {
+    children: React.ReactNode;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className="inline-flex h-11 w-full sm:flex-1 items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+            style={{ background: "var(--brand-green)" }}
+        >
+            {children}
+        </button>
+    );
+}
+
+function SecondaryButton({
+    children,
+    onClick,
+}: {
+    children: React.ReactNode;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className="inline-flex h-11 w-full sm:w-auto sm:px-5 items-center justify-center gap-2 rounded-md border border-border bg-background text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+        >
+            {children}
+        </button>
+    );
+}
+
+function CheckboxRow({
+    checked,
+    onChange,
+    label,
+}: {
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+    label: string;
+}) {
+    return (
+        <label className="flex gap-3 cursor-pointer items-start">
+            <span
+                className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                    checked ? "border-transparent" : "border-border bg-background"
+                }`}
+                style={checked ? { background: "var(--brand-green)" } : undefined}
+            >
+                {checked && (
+                    <Check
+                        className="h-3.5 w-3.5"
+                        strokeWidth={3}
+                        style={{ color: "var(--brand-green-fg)" }}
+                    />
+                )}
+                <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={checked}
+                    onChange={(e) => onChange(e.target.checked)}
+                />
+            </span>
+            <span className="text-body-sm text-foreground-muted leading-relaxed">
+                {label}
+            </span>
+        </label>
     );
 }
