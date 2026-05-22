@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Heart } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
+import DonateButton from "@/components/shared/DonateButton";
 
 export default function AboutHero() {
     const { data: session } = useSession();
@@ -24,13 +25,12 @@ export default function AboutHero() {
                         socio-economic support systems.
                     </p>
                     <div className="flex flex-wrap items-center gap-3">
-                        <Link
-                            href="/donate"
+                        <DonateButton
                             className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
                             style={{ background: "var(--brand-green)" }}
                         >
                             <Heart className="h-4 w-4" /> Donate
-                        </Link>
+                        </DonateButton>
                         <Link
                             href={isAuthenticated ? "/dashboard" : "/register"}
                             className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
