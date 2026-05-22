@@ -34,62 +34,72 @@ export default function MentorDashboard({
     upcomingSessions = [],
 }: MentorDashboardProps) {
     const stats = [
-        { label: "Pending Requests", value: String(pendingRequests.length) },
-        { label: "Active Mentees", value: String(activeMenteeCount) },
-        { label: "Sessions This Month", value: String(upcomingSessions.length) },
-        { label: "Profile Status", value: "Active" },
+        { label: "Pending requests", value: String(pendingRequests.length) },
+        { label: "Active mentees", value: String(activeMenteeCount) },
+        { label: "Sessions this month", value: String(upcomingSessions.length) },
+        { label: "Profile status", value: "Active" },
     ];
 
     return (
-        <div className="flex-1 p-6 sm:p-10 flex flex-col gap-8 text-foreground bg-background h-full overflow-y-auto">
-            <div className="flex flex-col">
-                <h2 className="font-playfair text-[24px] font-bold leading-tight">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-8">
+            <header className="border-b border-border pb-6 space-y-1">
+                <p className="text-eyebrow text-foreground-muted">Mentor overview</p>
+                <h2 className="text-display-sm text-foreground">
                     Good morning, {userName.split(" ")[0]}
                 </h2>
-                <p className="text-muted-foreground text-sm font-normal">
-                    Here is your mentor overview for today.
+                <p className="text-body-sm text-foreground-muted">
+                    Here&apos;s your mentor overview for today.
                 </p>
-            </div>
+            </header>
 
-            {/* Stats Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {stats.map((stat, i) => (
+            {/* Stats */}
+            <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {stats.map((stat) => (
                     <div
-                        key={i}
-                        className="flex flex-col gap-2 rounded-lg border border-border/50 p-6 bg-card shadow-sm hover:shadow transition-shadow"
+                        key={stat.label}
+                        className="rounded-lg border border-border bg-background p-5 space-y-2"
+                        style={{ boxShadow: "var(--shadow-sm)" }}
                     >
-                        <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
-                            {stat.label}
-                        </p>
-                        <p className="font-playfair text-[28px] font-black leading-none">
-                            {stat.value}
-                        </p>
+                        <p className="text-eyebrow text-foreground-muted">{stat.label}</p>
+                        <p className="text-display-sm text-foreground">{stat.value}</p>
                     </div>
                 ))}
-            </div>
+            </section>
 
-            {/* AI Insights Panel */}
-            <div className="rounded-lg border border-primary bg-kenya-red/5 p-5 flex gap-4 items-start shadow-sm">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-primary">
-                    <Lightbulb className="w-5 h-5" />
-                </div>
-                <div className="flex flex-col gap-1">
-                    <h3 className="font-playfair text-foreground text-lg font-bold">
-                        AI Intervention Recommendation
+            {/* AI insight */}
+            <section
+                className="rounded-lg border border-border p-5 flex gap-4 items-start"
+                style={{ background: "var(--brand-green-soft)" }}
+            >
+                <span
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md"
+                    style={{ background: "var(--background)" }}
+                >
+                    <Lightbulb
+                        className="h-5 w-5"
+                        style={{ color: "var(--brand-green)" }}
+                    />
+                </span>
+                <div className="flex-1 space-y-1.5">
+                    <h3 className="text-title text-foreground">
+                        AI intervention recommendation
                     </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed font-sans mt-1">
+                    <p className="text-body-sm text-foreground-muted">
                         {pendingRequests.length > 0
                             ? `You have ${pendingRequests.length} pending mentee request${pendingRequests.length > 1 ? "s" : ""} awaiting your review.`
                             : "Your mentee queue is clear. Consider updating your profile to attract new matches."}
                     </p>
-                    <button className="mt-2 text-primary text-sm font-bold flex items-center gap-1 hover:underline w-fit outline-none focus:ring-1 focus:ring-primary rounded-sm">
-                        Review queue <ArrowRight className="w-4 h-4" />
+                    <button
+                        className="inline-flex items-center gap-1.5 text-label font-medium hover:underline"
+                        style={{ color: "var(--brand-green)" }}
+                    >
+                        Review queue <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                 </div>
-            </div>
+            </section>
 
-            <div className="flex flex-col lg:flex-row gap-8">
-                <div className="flex-1 flex flex-col gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                <div className="lg:col-span-2 space-y-6">
                     <MentorshipQueue pendingRequests={pendingRequests} />
                 </div>
                 <UpcomingSessions sessions={upcomingSessions} />

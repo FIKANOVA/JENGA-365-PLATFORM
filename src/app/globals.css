@@ -452,6 +452,14 @@
   font-family: var(--font-sans);
 }
 
+/* Legacy color hooks — pre-token Kenya-flag accents alias to the brand tokens. */
+.text-kenya-green { color: var(--brand-green); }
+.bg-kenya-green { background-color: var(--brand-green); }
+.border-kenya-green { border-color: var(--brand-green); }
+.text-kenya-red { color: var(--brand-red); }
+.bg-kenya-red { background-color: var(--brand-red); }
+.border-kenya-red { border-color: var(--brand-red); }
+
 /* Hide the literal "material-symbols-outlined" text label when the Google icon
    font isn't loaded. Once a surface is swept to lucide-react, the class drops. */
 .material-symbols-outlined {

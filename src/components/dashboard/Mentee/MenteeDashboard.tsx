@@ -43,106 +43,146 @@ export default function MenteeDashboard({
     onboarded = false,
     hasMentorMatch = false,
 }: MenteeDashboardProps) {
-    const allComplete = ndaSigned && onboarded && hasMentorMatch;
+    const completed = [ndaSigned, onboarded, hasMentorMatch].filter(Boolean).length;
+    const allComplete = completed === 3;
+
     return (
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 grid grid-cols-1 xl:grid-cols-3 gap-8 bg-background h-full">
-            <div className="xl:col-span-2 space-y-8">
-                {/* Welcome & Status */}
-                <div className="flex items-end justify-between">
-                    <div>
-                        <h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-2">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8 py-6 lg:py-8 grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+            <div className="xl:col-span-2 space-y-6 lg:space-y-8">
+                {/* Welcome + status */}
+                <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-border pb-6">
+                    <div className="space-y-1.5">
+                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                            Jenga365 member
+                        </p>
+                        <h2 className="text-display-sm text-foreground">
                             Welcome back, {userName.split(" ")[0]}
                         </h2>
-                        <span className="inline-block bg-kenya-green text-white font-mono text-xs px-3 py-1 rounded tracking-wider shadow-sm">
-                            JENGA365 MEMBER
-                        </span>
                     </div>
-                    <button className="bg-primary/10 text-primary font-bold px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-primary/20 transition-colors outline-none ring-primary focus:ring-1">
-                        <Plus className="w-4 h-4" />
-                        NEW ENTRY
+                    <button
+                        className="inline-flex h-10 items-center gap-2 rounded-md px-4 text-label font-medium text-white transition-opacity hover:opacity-90"
+                        style={{ background: "var(--brand-green)" }}
+                    >
+                        <Plus className="h-4 w-4" />
+                        New journal entry
                     </button>
-                </div>
+                </header>
 
-                {/* Onboarding Checklist */}
+                {/* Getting started checklist */}
                 {!allComplete && (
-                    <div className="bg-card border border-border/50 rounded-xl p-6 space-y-4">
+                    <section
+                        className="rounded-lg border border-border bg-background p-6 space-y-4"
+                        style={{ boxShadow: "var(--shadow-sm)" }}
+                    >
                         <div className="flex items-center justify-between">
-                            <h3 className="font-playfair font-bold text-lg">Getting Started</h3>
-                            <span className="font-mono text-xs text-muted-foreground">
-                                {[ndaSigned, onboarded, hasMentorMatch].filter(Boolean).length}/3 complete
+                            <h3 className="text-headline text-foreground">
+                                Getting started
+                            </h3>
+                            <span className="text-body-sm text-foreground-muted">
+                                {completed}/3 complete
                             </span>
                         </div>
-                        <div className="space-y-3">
+                        <ul className="space-y-3">
                             {[
-                                { label: "Sign your NDA", done: ndaSigned, href: "/dashboard/mentee" },
-                                { label: "Complete onboarding interview", done: onboarded, href: "/dashboard/mentee" },
-                                { label: "Get matched with a mentor", done: hasMentorMatch, href: "/dashboard/mentee" },
+                                { label: "Sign your NDA", done: ndaSigned },
+                                { label: "Complete onboarding interview", done: onboarded },
+                                { label: "Get matched with a mentor", done: hasMentorMatch },
                             ].map((step) => (
-                                <div key={step.label} className="flex items-center gap-3">
-                                    {step.done
-                                        ? <CheckCircle2 className="w-5 h-5 text-kenya-green shrink-0" />
-                                        : <Circle className="w-5 h-5 text-muted-foreground/40 shrink-0" />
-                                    }
-                                    <span className={`font-lato text-sm ${step.done ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                                <li key={step.label} className="flex items-center gap-3">
+                                    {step.done ? (
+                                        <CheckCircle2
+                                            className="h-4 w-4 shrink-0"
+                                            style={{ color: "var(--brand-green)" }}
+                                        />
+                                    ) : (
+                                        <Circle className="h-4 w-4 shrink-0 text-foreground-subtle" />
+                                    )}
+                                    <span
+                                        className={`text-body-sm ${
+                                            step.done
+                                                ? "line-through text-foreground-muted"
+                                                : "text-foreground"
+                                        }`}
+                                    >
                                         {step.label}
                                     </span>
-                                </div>
+                                </li>
                             ))}
-                        </div>
-                    </div>
+                        </ul>
+                    </section>
                 )}
 
                 <LearningPathwayTracker pathway={pathway} />
                 <AiMentorMatches matches={matches} />
             </div>
 
-            {/* Right Column — Mood Journal */}
-            <div className="xl:col-span-1">
-                <div className="bg-muted/30 rounded-xl p-6 border border-border/50 sticky top-4">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="font-playfair text-xl font-bold">My Journal</h3>
-                    </div>
+            {/* Right column — journal */}
+            <aside className="xl:col-span-1">
+                <div
+                    className="rounded-lg border border-border bg-background p-6 sticky top-4"
+                    style={{ boxShadow: "var(--shadow-sm)" }}
+                >
+                    <header className="flex items-center justify-between mb-5">
+                        <h3 className="text-headline text-foreground">My journal</h3>
+                    </header>
 
                     {journalEntries.length === 0 ? (
-                        <div className="py-8 text-center text-sm text-muted-foreground font-mono">
-                            No journal entries yet. <br />Start tracking your mood after sessions.
+                        <div
+                            className="rounded-md border border-dashed border-border p-6 text-center text-body-sm text-foreground-muted"
+                            style={{ background: "var(--surface-1)" }}
+                        >
+                            No journal entries yet. Track your mood after sessions.
                         </div>
                     ) : (
-                        <div className="space-y-4">
+                        <ul className="space-y-3">
                             {journalEntries.map((entry) => {
-                                const sentiment = entry.moodScore >= 4 ? "POSITIVE" : entry.moodScore <= 2 ? "LOW" : "NEUTRAL";
+                                const sentiment =
+                                    entry.moodScore >= 4
+                                        ? "Positive"
+                                        : entry.moodScore <= 2
+                                          ? "Low"
+                                          : "Neutral";
+                                const palette =
+                                    sentiment === "Positive"
+                                        ? {
+                                              background: "var(--brand-green-soft)",
+                                              color: "var(--brand-green)",
+                                          }
+                                        : {
+                                              background: "var(--surface-2)",
+                                              color: "var(--foreground-muted)",
+                                          };
                                 return (
-                                    <div
+                                    <li
                                         key={entry.id}
-                                        className="bg-background p-4 rounded-lg border border-border/50 hover:border-border transition-colors"
+                                        className="rounded-md border border-border bg-background p-3"
                                     >
-                                        <div className="flex justify-between items-start mb-2 gap-2">
-                                            <span className="font-mono text-xs text-muted-foreground">
+                                        <div className="flex justify-between items-start mb-1.5 gap-2">
+                                            <span className="text-body-sm text-foreground-muted">
                                                 {new Date(entry.recordedAt).toLocaleDateString()}
                                             </span>
-                                            <span className={`font-mono text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1 shrink-0 ${
-                                                sentiment === "POSITIVE"
-                                                    ? "bg-kenya-green/10 text-kenya-green"
-                                                    : "bg-muted text-muted-foreground"
-                                            }`}>
-                                                <Smile className="w-3 h-3" />
-                                                AI: {sentiment}
+                                            <span
+                                                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-medium shrink-0"
+                                                style={palette}
+                                            >
+                                                <Smile className="h-3 w-3" />
+                                                {sentiment}
                                             </span>
                                         </div>
-                                        <p className="font-lato text-sm text-muted-foreground line-clamp-2">
+                                        <p className="text-body-sm text-foreground-muted line-clamp-2">
                                             {entry.notes ?? "No notes"}
                                         </p>
-                                    </div>
+                                    </li>
                                 );
                             })}
-                        </div>
+                        </ul>
                     )}
 
-                    <button className="w-full py-3 text-center text-sm font-lato font-bold text-muted-foreground hover:text-primary transition-colors border border-dashed border-border rounded-lg mt-4 bg-transparent outline-none focus:ring-1 focus:ring-primary">
-                        View All Entries
+                    <button className="mt-4 w-full inline-flex h-10 items-center justify-center rounded-md border border-dashed border-border text-label text-foreground-muted hover:bg-[color:var(--surface-2)] transition-colors">
+                        View all entries
                     </button>
                 </div>
-            </div>
+            </aside>
         </div>
     );
 }

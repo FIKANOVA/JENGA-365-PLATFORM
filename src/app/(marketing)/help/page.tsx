@@ -1,5 +1,13 @@
-import Link from 'next/link';
-import { Search, BookOpen, Users, ShieldCheck, MessageCircle, Mail } from 'lucide-react';
+import Link from "next/link";
+import {
+    Search,
+    BookOpen,
+    Users,
+    ShieldCheck,
+    MessageCircle,
+    Mail,
+    ArrowRight,
+} from "lucide-react";
 import FAQSection from "@/components/marketing/FAQSection";
 
 export const metadata = {
@@ -7,114 +15,156 @@ export const metadata = {
     description: "Get support and find answers to common questions about Jenga365.",
 };
 
+const MANUAL_CARDS = [
+    {
+        title: "General user manual",
+        body: "Everything you need as a mentee or mentor — profile setup, messaging, and course access.",
+        Icon: BookOpen,
+        badge: null,
+    },
+    {
+        title: "Collaborator manual",
+        body: "Guides for corporate partners and moderators — managing programs and content compliance.",
+        Icon: Users,
+        badge: { label: "Restricted", tone: "muted" as const },
+    },
+    {
+        title: "SuperAdmin manual",
+        body: "Internal operations, database management, and platform-wide configuration for IT staff.",
+        Icon: ShieldCheck,
+        badge: { label: "Confidential", tone: "brand" as const },
+    },
+];
+
+const POPULAR_TOPICS = [
+    { title: "How to find a mentor", desc: "Step-by-step guide to finding the right match for your career." },
+    { title: "Approving articles", desc: "For moderators: the standard checklist for content quality." },
+    { title: "KYC verification", desc: "Understanding the identification process for mentors." },
+    { title: "Setting up payments", desc: "Connect your local bank account or mobile wallet." },
+    { title: "Live sessions guide", desc: "How to use the built-in video conferencing tool." },
+    { title: "Reporting harassment", desc: "Safety first — how to report inappropriate behavior." },
+    { title: "Certificates & badges", desc: "Earning and sharing your accomplishments." },
+    { title: "Account deletion", desc: "Data privacy and permanent account removal." },
+];
+
 export default function HelpPage() {
     return (
-        <main className="min-h-screen bg-[#F5F5F5]">
-            {/* Hero Section */}
-            <section className="bg-[#F5F5F5] py-20 px-6">
-                <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-5xl md:text-5xl mb-8 leading-tight font-bold text-[#000000] uppercase tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>
-                        How can we help you today?
-                    </h1>
+        <main className="bg-background">
+            {/* Hero */}
+            <section className="bg-hero-radial border-b border-border">
+                <div className="mx-auto max-w-3xl px-6 lg:px-8 py-20 lg:py-28 text-center space-y-8">
+                    <div className="space-y-3">
+                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                            Help center
+                        </p>
+                        <h1 className="text-display-lg text-foreground">
+                            How can we help you today?
+                        </h1>
+                    </div>
 
-                    {/* Search Bar Container */}
-                    <div className="max-w-3xl mx-auto relative cursor-text">
-                        <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-                            <Search className="w-5 h-5 text-[#000000]/40" />
-                        </div>
+                    <div className="relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground-muted" />
                         <input
                             type="text"
-                            className="w-full pl-14 pr-6 py-5 rounded-sm border border-[#000000]/10 shadow-sm focus:ring-[var(--primary-green)] focus:border-[var(--primary-green)] text-lg text-[#000000] placeholder:text-[#000000]/40 font-lato transition-all"
-                            placeholder="Search documentation, tutorials, or FAQs..."
+                            className="h-12 w-full rounded-md border border-border bg-background pl-11 pr-4 text-body text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+                            placeholder="Search documentation, tutorials, or FAQs…"
                         />
                     </div>
-                    <p className="mt-6 text-[#000000]/60 text-sm italic font-lato">
-                        Popular searches: Mentor onboarding, article approval, profile verification
+                    <p className="text-body-sm text-foreground-muted">
+                        Popular: mentor onboarding · article approval · profile verification
                     </p>
                 </div>
             </section>
 
-            {/* Manual Access Cards */}
-            <section className="py-12 px-6 max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {/* Card 1: General */}
-                    <div className="border border-[#000000]/10 p-10 flex flex-col hover:shadow-lg transition-all duration-300 bg-white rounded-sm group cursor-pointer hover:border-[var(--primary-green)]/50">
-                        <div className="mb-6">
-                            <BookOpen className="w-12 h-12 text-[var(--mentorship-green)]" />
+            {/* Manuals */}
+            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {MANUAL_CARDS.map(({ title, body, Icon, badge }) => (
+                        <div
+                            key={title}
+                            className="rounded-lg border border-border bg-background p-6 lg:p-8 flex flex-col group hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                            style={{ boxShadow: "var(--shadow-sm)" }}
+                        >
+                            <div className="flex items-start justify-between">
+                                <span
+                                    className="inline-flex h-10 w-10 items-center justify-center rounded-md"
+                                    style={{ background: "var(--surface-2)" }}
+                                >
+                                    <Icon className="h-5 w-5 text-foreground" />
+                                </span>
+                                {badge && (
+                                    <span
+                                        className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium"
+                                        style={
+                                            badge.tone === "brand"
+                                                ? {
+                                                      background: "var(--brand-green-soft)",
+                                                      color: "var(--brand-green)",
+                                                  }
+                                                : {
+                                                      background: "var(--surface-2)",
+                                                      color: "var(--foreground-muted)",
+                                                  }
+                                        }
+                                    >
+                                        {badge.label}
+                                    </span>
+                                )}
+                            </div>
+                            <h3 className="mt-5 text-headline text-foreground">{title}</h3>
+                            <p className="mt-3 text-body-sm text-foreground-muted flex-1">
+                                {body}
+                            </p>
+                            <button
+                                className="mt-6 inline-flex items-center gap-1.5 text-label font-medium self-start hover:underline"
+                                style={{ color: "var(--brand-green)" }}
+                            >
+                                Read manual <ArrowRight className="h-3.5 w-3.5" />
+                            </button>
                         </div>
-                        <h3 className="text-2xl mb-3 font-bold text-[#000000] uppercase tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>General User Manual</h3>
-                        <p className="text-[#000000]/80 mb-8 flex-grow leading-relaxed font-lato">
-                            Everything you need to know as a mentee or mentor on the Jenga365 platform. Profile setup, messaging, and course access.
-                        </p>
-                        <button className="text-[var(--primary-green)] font-bold flex items-center gap-2 group-hover:gap-3 transition-all underline-offset-4 font-mono text-xs uppercase tracking-widest mt-auto">
-                            Read Manual <span>→</span>
-                        </button>
-                    </div>
-
-                    {/* Card 2: Collaborator */}
-                    <div className="border border-[#000000]/10 p-10 flex flex-col hover:shadow-lg transition-all duration-300 bg-white relative overflow-hidden rounded-sm group cursor-pointer hover:border-[#000000]/30">
-                        {/* Restricted Badge */}
-                        <div className="absolute top-0 right-0 bg-[#000000] text-white px-4 py-1.5 text-[10px] uppercase font-bold tracking-widest font-mono">
-                            Restricted
-                        </div>
-                        <div className="mb-6">
-                            <Users className="w-12 h-12 text-[var(--primary-green)]" />
-                        </div>
-                        <h3 className="text-2xl mb-3 font-bold text-[#000000] uppercase tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>Collaborator Manual</h3>
-                        <p className="text-[#000000]/80 mb-8 flex-grow leading-relaxed font-lato">
-                            Guides for corporate partners and moderators. Manage group mentorship programs and content compliance.
-                        </p>
-                        <button className="text-[var(--primary-green)] font-bold flex items-center gap-2 group-hover:gap-3 transition-all underline-offset-4 font-mono text-xs uppercase tracking-widest mt-auto">
-                            Read Manual <span>→</span>
-                        </button>
-                    </div>
-
-                    {/* Card 3: SuperAdmin */}
-                    <div className="border border-[var(--primary-green)]/30 p-10 flex flex-col hover:shadow-lg transition-all duration-300 bg-white relative overflow-hidden rounded-sm group cursor-pointer hover:border-[var(--primary-green)]">
-                        {/* Confidential Badge */}
-                        <div className="absolute top-0 right-0 bg-[var(--primary-green)] text-white px-4 py-1.5 text-[10px] uppercase font-bold tracking-widest font-mono">
-                            Confidential
-                        </div>
-                        <div className="mb-6">
-                            <ShieldCheck className="w-12 h-12 text-[#000000]" />
-                        </div>
-                        <h3 className="text-2xl mb-3 font-bold text-[#000000] uppercase tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>SuperAdmin Manual</h3>
-                        <p className="text-[#000000]/80 mb-8 flex-grow leading-relaxed font-lato">
-                            Internal system operations, database management, and platform-wide configuration settings for IT staff.
-                        </p>
-                        <button className="text-[var(--primary-green)] font-bold flex items-center gap-2 group-hover:gap-3 transition-all underline-offset-4 font-mono text-xs uppercase tracking-widest mt-auto">
-                            Read Manual <span>→</span>
-                        </button>
-                    </div>
+                    ))}
                 </div>
             </section>
 
-            {/* Popular Topics */}
-            <section className="py-20 bg-[#F5F5F5] px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 border-b border-[#000000]/10 pb-6 gap-4">
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#000000] uppercase tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>Popular Topics</h2>
-                        <Link href="/" className="text-[var(--primary-green)] font-bold hover:underline mb-2 font-mono text-xs uppercase tracking-widest">
-                            View all topics →
+            {/* Popular topics */}
+            <section
+                className="border-y border-border"
+                style={{ background: "var(--surface-1)" }}
+            >
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-20">
+                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-10">
+                        <div className="space-y-2">
+                            <p
+                                className="text-eyebrow"
+                                style={{ color: "var(--brand-green)" }}
+                            >
+                                Knowledge base
+                            </p>
+                            <h2 className="text-display-md text-foreground">
+                                Popular topics
+                            </h2>
+                        </div>
+                        <Link
+                            href="/"
+                            className="inline-flex items-center gap-1.5 text-label hover:underline"
+                            style={{ color: "var(--brand-green)" }}
+                        >
+                            View all topics <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {[
-                            { title: "How to find a mentor", desc: "A step-by-step guide to finding the right match for your career." },
-                            { title: "Approving articles", desc: "For moderators: The standard checklist for content quality." },
-                            { title: "KYC Verification", desc: "Understanding the identification process for mentors." },
-                            { title: "Setting up Payments", desc: "Connect your local bank account or mobile wallet." },
-                            { title: "Live Sessions Guide", desc: "How to use the built-in video conferencing tool." },
-                            { title: "Reporting Harassment", desc: "Safety first: How to report inappropriate behavior." },
-                            { title: "Certificates & Badges", desc: "Earning and sharing your accomplishments on social media." },
-                            { title: "Account Deletion", desc: "Data privacy and permanent account removal process." }
-                        ].map((topic, i) => (
-                            <Link key={i} href="/" className="group p-8 bg-white rounded-sm border border-transparent hover:border-[var(--primary-green)] hover:shadow-md transition-all duration-300 h-full flex flex-col justify-start text-left">
-                                <h4 className="font-bold mb-3 text-lg text-[#000000] group-hover:text-[var(--primary-green)] transition-colors" style={{ fontFamily: "var(--font-playfair)" }}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {POPULAR_TOPICS.map((topic) => (
+                            <Link
+                                key={topic.title}
+                                href="/"
+                                className="block rounded-lg border border-border bg-background p-5 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors group"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <h4 className="text-title text-foreground group-hover:text-foreground">
                                     {topic.title}
                                 </h4>
-                                <p className="text-sm text-[#000000]/60 font-lato leading-relaxed">
+                                <p className="mt-2 text-body-sm text-foreground-muted">
                                     {topic.desc}
                                 </p>
                             </Link>
@@ -123,30 +173,49 @@ export default function HelpPage() {
                 </div>
             </section>
 
-            {/* FAQ Section */}
             <FAQSection />
 
             {/* Support CTA */}
-            <section className="py-24 text-center px-6">
-                <div className="max-w-7xl mx-auto bg-[#000000] text-white py-20 px-10 rounded-sm relative overflow-hidden shadow-2xl">
-                    {/* Decor (Mentorship Colors) */}
-                    <div className="absolute top-0 left-0 h-[6px] w-full bg-[var(--primary-green)]"></div>
-                    <div className="absolute top-[6px] left-0 h-[6px] w-full bg-[var(--mentorship-green)]"></div>
-
-                    <h2 className="text-4xl md:text-5xl mb-6 font-bold uppercase tracking-tight" style={{ fontFamily: "var(--font-playfair)" }}>Still need help?</h2>
-                    <p className="text-white/70 max-w-xl mx-auto mb-12 font-lato text-lg">
-                        Our support team is available 24/7 to assist you with any technical issues or platform inquiries.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row justify-center gap-6">
-                        <button className="bg-[var(--primary-green)] border border-transparent hover:border-[var(--red)] hover:bg-black text-white px-10 py-5 font-bold rounded-sm flex items-center justify-center gap-3 transition-colors uppercase tracking-widest text-xs font-mono">
-                            <MessageCircle className="w-5 h-5" />
-                            Start Live Chat
-                        </button>
-                        <button className="border border-white/30 hover:bg-white hover:text-[#000000] text-white px-10 py-5 font-bold rounded-sm flex items-center justify-center gap-3 transition-colors uppercase tracking-widest text-xs font-mono">
-                            <Mail className="w-5 h-5" />
-                            Email Support
-                        </button>
+            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-24">
+                <div
+                    className="rounded-lg border border-border p-10 lg:p-14 text-center"
+                    style={{ background: "var(--foreground)" }}
+                >
+                    <div className="max-w-2xl mx-auto space-y-5">
+                        <p
+                            className="text-eyebrow"
+                            style={{ color: "var(--brand-green)" }}
+                        >
+                            Still stuck?
+                        </p>
+                        <h2 className="text-display-sm" style={{ color: "var(--background)" }}>
+                            We&apos;re here to help
+                        </h2>
+                        <p
+                            className="text-body"
+                            style={{ color: "color-mix(in srgb, var(--background) 70%, transparent)" }}
+                        >
+                            Our support team is available 24/7 for technical issues and
+                            platform inquiries.
+                        </p>
+                        <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+                            <button
+                                className="inline-flex h-11 items-center justify-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                                style={{ background: "var(--brand-green)" }}
+                            >
+                                <MessageCircle className="h-4 w-4" /> Start live chat
+                            </button>
+                            <Link
+                                href="/contact"
+                                className="inline-flex h-11 items-center justify-center gap-2 rounded-md border px-5 text-label font-medium transition-colors"
+                                style={{
+                                    borderColor: "color-mix(in srgb, var(--background) 25%, transparent)",
+                                    color: "var(--background)",
+                                }}
+                            >
+                                <Mail className="h-4 w-4" /> Email support
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>
