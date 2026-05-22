@@ -1,6 +1,6 @@
 "use client"
 
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 interface Props {
     pathway: any;
@@ -17,75 +17,98 @@ export default function LearningPathway({ pathway }: Props) {
     ];
 
     return (
-        <section className="jenga-card p-8">
+        <section
+            className="rounded-lg border border-border bg-background p-8"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+        >
             <div className="flex justify-between items-start mb-8">
                 <div className="space-y-1">
-                    <span className="section-label">Learning Pathway</span>
-                    <h2 className="font-playfair font-bold text-2xl text-foreground">
-                        Milestone Progress
-                    </h2>
+                    <span className="text-eyebrow text-foreground-muted">Learning pathway</span>
+                    <h2 className="text-display-sm text-foreground">Milestone progress</h2>
                 </div>
                 <div className="text-right">
-                    <div className="font-playfair font-black text-3xl text-foreground">
+                    <div className="text-display-md text-foreground">
                         {pathway?.progress || 67}%
                     </div>
-                    <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-                        of pathway complete
-                    </p>
+                    <p className="text-eyebrow text-foreground-muted">of pathway complete</p>
                 </div>
             </div>
 
             <div className="relative space-y-12">
                 {/* Vertical Spine */}
-                <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-[#E8E4DC]" />
+                <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-border" />
 
-                {milestones.map((m: any, idx: number) => (
-                    <div key={m.id} className={`relative pl-10 ${m.status === 'pending' ? 'opacity-50' : ''}`}>
-                        {/* Node */}
-                        <div className={`absolute left-0 top-1.5 w-6 h-6 rounded-full flex items-center justify-center bg-white z-10 border-2 ${m.status === 'completed' ? 'border-[#006600] text-[#006600]' :
-                                m.status === 'in_progress' ? 'border-[#BB0000] text-[#BB0000] animate-pulse-red' :
-                                    'border-[#D0CBC0] text-[#D0CBC0]'
-                            }`}>
-                            {m.status === 'completed' ? <CheckCircle2 className="w-3.5 h-3.5 fill-current" /> : <div className="w-2 h-2 rounded-full bg-current" />}
-                        </div>
-
-                        <div>
-                            <div className="flex items-center gap-3 mb-1">
-                                <h4 className="font-lato font-bold text-base text-foreground">
-                                    {m.title}
-                                </h4>
-                                {m.status === 'in_progress' && (
-                                    <span className="bg-[#FFF0F0] text-[#BB0000] px-2 py-0.5 rounded-full font-mono text-[9px] uppercase tracking-tighter">
-                                        Active Milestone
-                                    </span>
+                {milestones.map((m: any) => {
+                    const nodeStyle =
+                        m.status === "completed"
+                            ? { borderColor: "var(--brand-green)", color: "var(--brand-green)" }
+                            : m.status === "in_progress"
+                              ? { borderColor: "var(--brand-red)", color: "var(--brand-red)" }
+                              : { borderColor: "var(--border)", color: "var(--foreground-subtle)" };
+                    return (
+                        <div
+                            key={m.id}
+                            className={`relative pl-10 ${m.status === "pending" ? "opacity-50" : ""}`}
+                        >
+                            <div
+                                className={`absolute left-0 top-1.5 w-6 h-6 rounded-full flex items-center justify-center bg-background z-10 border-2 ${
+                                    m.status === "in_progress" ? "animate-pulse" : ""
+                                }`}
+                                style={nodeStyle}
+                            >
+                                {m.status === "completed" ? (
+                                    <CheckCircle2 className="w-3.5 h-3.5 fill-current" />
+                                ) : (
+                                    <div className="w-2 h-2 rounded-full bg-current" />
                                 )}
                             </div>
-                            <p className="font-mono text-[10px] text-muted-foreground uppercase mb-2">
-                                {m.date}
-                            </p>
 
-                            {m.notes && (
-                                <div className="space-y-2">
-                                    <p className="font-lato italic text-[13px] text-[#4A4A4A] leading-relaxed max-w-lg">
-                                        "{m.notes}"
-                                    </p>
-                                    <button className="font-mono text-[10px] text-primary uppercase tracking-widest hover:underline">
-                                        View session notes →
-                                    </button>
+                            <div>
+                                <div className="flex items-center gap-3 mb-1">
+                                    <h4 className="text-headline text-foreground">{m.title}</h4>
+                                    {m.status === "in_progress" && (
+                                        <span
+                                            className="px-2 py-0.5 rounded-full text-eyebrow"
+                                            style={{
+                                                background: "var(--brand-red-soft)",
+                                                color: "var(--brand-red)",
+                                            }}
+                                        >
+                                            Active milestone
+                                        </span>
+                                    )}
                                 </div>
-                            )}
+                                <p className="text-eyebrow text-foreground-muted mb-2">{m.date}</p>
 
-                            {m.status === 'in_progress' && (
-                                <div className="mt-4 w-full max-w-xs h-1 bg-[#E8E4DC] rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-gradient-to-r from-[#BB0000] to-[#006600] transition-all duration-1000"
-                                        style={{ width: `${m.progress || 0}%` }}
-                                    />
-                                </div>
-                            )}
+                                {m.notes && (
+                                    <div className="space-y-2">
+                                        <p className="text-body-sm text-foreground-muted italic leading-relaxed max-w-lg">
+                                            “{m.notes}”
+                                        </p>
+                                        <button
+                                            className="text-eyebrow hover:underline"
+                                            style={{ color: "var(--brand-green)" }}
+                                        >
+                                            View session notes →
+                                        </button>
+                                    </div>
+                                )}
+
+                                {m.status === "in_progress" && (
+                                    <div className="mt-4 w-full max-w-xs h-1 bg-border rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full transition-all duration-1000"
+                                            style={{
+                                                width: `${m.progress || 0}%`,
+                                                background: "var(--brand-green)",
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </section>
     );

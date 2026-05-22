@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import AdminMatchingDashboard from "../shared/AdminMatchingDashboard";
-import { UserPlus, Settings2, ArrowLeft } from "lucide-react";
+import { Settings2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Props {
@@ -12,16 +14,20 @@ interface Props {
 export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props) {
     const [isMatching, setIsMatching] = useState(false);
 
-    // If no pair exists, we start in a "Matching Recommendation" state or prompt to find one
     const mentor = pair?.mentor;
 
     if (isMatching || !mentor) {
         return (
-            <section className="bg-white border border-border rounded-3xl p-8 animate-fade-up shadow-sm">
+            <section
+                className="rounded-lg border border-border bg-background p-8 animate-fade-up"
+                style={{ boxShadow: "var(--shadow-sm)" }}
+            >
                 <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h3 className="text-2xl font-bold font-outfit">Mentor Matching</h3>
-                        <p className="text-sm text-muted-foreground">Select the best mentor for {menteeName}</p>
+                    <div className="space-y-1">
+                        <h3 className="text-display-sm text-foreground">Mentor matching</h3>
+                        <p className="text-body-sm text-foreground-muted">
+                            Select the best mentor for {menteeName}
+                        </p>
                     </div>
                     {mentor && (
                         <Button
@@ -45,13 +51,16 @@ export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props
     }
 
     return (
-        <section className="bg-[#FAFAF8] border border-border rounded-[2px] p-6 animate-fade-up">
+        <section
+            className="rounded-lg border border-border p-6 animate-fade-up"
+            style={{ background: "var(--surface-1)" }}
+        >
             <div className="flex items-center justify-between mb-6">
-                <span className="section-label">Assigned Mentor</span>
+                <span className="text-eyebrow text-foreground-muted">Assigned mentor</span>
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 hover:bg-primary/5 text-muted-foreground hover:text-primary"
+                    className="h-8 w-8 text-foreground-muted"
                     onClick={() => setIsMatching(true)}
                 >
                     <Settings2 className="w-4 h-4" />
@@ -59,24 +68,29 @@ export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props
             </div>
 
             <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full bg-muted border border-border overflow-hidden">
-                    <div className="w-full h-full flex items-center justify-center font-playfair font-black text-[#BB0000]">
-                        {mentor.name?.substring(0, 1)}
-                    </div>
+                <div
+                    className="w-12 h-12 rounded-full border border-border overflow-hidden flex items-center justify-center text-display-sm"
+                    style={{ background: "var(--background)", color: "var(--brand-red)" }}
+                >
+                    {mentor.name?.substring(0, 1)}
                 </div>
                 <div>
-                    <h4 className="font-playfair font-bold text-lg text-foreground">
-                        {mentor.name}
-                    </h4>
-                    <span className="bg-[#FFF0F0] text-[#BB0000] px-2 py-0.5 rounded-full font-mono text-[9px] uppercase tracking-tighter">
-                        MENTOR
+                    <h4 className="text-headline text-foreground">{mentor.name}</h4>
+                    <span
+                        className="px-2 py-0.5 rounded-full text-eyebrow"
+                        style={{ background: "var(--brand-red-soft)", color: "var(--brand-red)" }}
+                    >
+                        Mentor
                     </span>
                 </div>
             </div>
 
             <div className="flex flex-wrap gap-2 mb-6">
                 {(mentor.expertise || []).map((exp: string) => (
-                    <span key={exp} className="bg-white border border-border px-3 py-1 rounded-full font-mono text-[9px] text-[#4A4A4A] uppercase tracking-tighter">
+                    <span
+                        key={exp}
+                        className="bg-background border border-border px-3 py-1 rounded-full text-eyebrow text-foreground-muted"
+                    >
                         {exp}
                     </span>
                 ))}
@@ -84,35 +98,33 @@ export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props
 
             <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="space-y-1">
-                    <p className="font-playfair font-black text-2xl text-[#BB0000]">
+                    <p className="text-display-sm" style={{ color: "var(--brand-red)" }}>
                         {pair.matchScore || "90"}%
                     </p>
-                    <p className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest">
-                        Match Score
-                    </p>
+                    <p className="text-eyebrow text-foreground-muted">Match score</p>
                 </div>
                 <div className="space-y-1">
-                    <p className="font-playfair font-black text-2xl text-foreground">
+                    <p className="text-display-sm text-foreground">
                         {mentor.sessionsTogether || 0}
                     </p>
-                    <p className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest">
-                        Sessions
-                    </p>
+                    <p className="text-eyebrow text-foreground-muted">Sessions</p>
                 </div>
             </div>
 
             <div className="space-y-3">
-                <button className="w-full font-mono text-[11px] text-[#BB0000] uppercase tracking-widest hover:underline py-2">
-                    View Mentor Profile →
+                <button
+                    className="w-full text-eyebrow hover:underline py-2 text-left"
+                    style={{ color: "var(--brand-red)" }}
+                >
+                    View mentor profile →
                 </button>
                 <button
-                    className="w-full font-mono text-[11px] text-muted-foreground uppercase tracking-widest hover:text-foreground transition-colors py-2 border border-transparent hover:border-border"
+                    className="w-full text-eyebrow text-foreground-muted hover:text-foreground transition-colors py-2 border border-transparent hover:border-border rounded-md"
                     onClick={() => setIsMatching(true)}
                 >
-                    Reassign Mentor
+                    Reassign mentor
                 </button>
             </div>
         </section>
     );
 }
-

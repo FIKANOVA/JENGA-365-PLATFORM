@@ -16,28 +16,41 @@ export default function MoodJournalCard({ menteeId }: Props) {
     ];
 
     return (
-        <section className="jenga-card p-6 animate-fade-up" style={{ animationDelay: "100ms" }}>
-            <span className="section-label mb-2">Mood Journal</span>
-            <p className="font-lato text-[13px] text-muted-foreground mb-6">
+        <section
+            className="rounded-lg border border-border bg-background p-6 animate-fade-up"
+            style={{ animationDelay: "100ms", boxShadow: "var(--shadow-sm)" }}
+        >
+            <span className="text-eyebrow text-foreground-muted mb-2 block">Mood journal</span>
+            <p className="text-body-sm text-foreground-muted mb-6">
                 Mentee self-reported wellbeing during sessions
             </p>
 
             <div className="grid grid-cols-7 gap-2 mb-8">
                 {journal.map((day, i) => (
-                    <div key={i} className="flex flex-col items-center gap-1.5 p-2 bg-muted/5 rounded border border-transparent hover:border-border transition-all">
-                        <span className="font-mono text-[9px] text-muted-foreground uppercase">{day.date}</span>
-                        <span className="text-xl" title="Feeling Good">{day.emoji}</span>
+                    <div
+                        key={i}
+                        className="flex flex-col items-center gap-1.5 p-2 rounded border border-transparent hover:border-border transition-all"
+                        style={{ background: "var(--surface-1)" }}
+                    >
+                        <span className="text-eyebrow text-foreground-muted">{day.date}</span>
+                        <span className="text-xl" title="Mood">{day.emoji}</span>
                     </div>
                 ))}
             </div>
 
             <div className="flex items-center justify-between mb-6">
-                <div className="bg-[#F0FFF0] text-[#006600] px-4 py-2 rounded-full font-mono text-[11px] uppercase tracking-tight font-medium">
-                    Generally Positive
+                <div
+                    className="px-4 py-2 rounded-full text-label"
+                    style={{ background: "var(--brand-green-soft)", color: "var(--brand-green)" }}
+                >
+                    Generally positive
                 </div>
             </div>
 
-            <button className="w-full font-mono text-[10px] text-[#BB0000] uppercase tracking-widest hover:underline text-left">
+            <button
+                className="w-full text-eyebrow hover:underline text-left"
+                style={{ color: "var(--brand-red)" }}
+            >
                 View full journal →
             </button>
         </section>

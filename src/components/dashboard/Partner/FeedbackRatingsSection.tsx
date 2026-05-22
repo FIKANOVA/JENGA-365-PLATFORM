@@ -16,29 +16,35 @@ export default function FeedbackRatingsSection({ menteeId }: Props) {
         categories: [
             { label: "Communication", score: 95 },
             { label: "Engagement", score: 88 },
-            { label: "Goal Adherence", score: 92 },
+            { label: "Goal adherence", score: 92 },
             { label: "Punctuality", score: 85 },
         ]
     };
 
     return (
         <section className="space-y-8 animate-fade-up">
-            <span className="section-label">Mentor Feedback & Ratings</span>
+            <span className="text-eyebrow text-foreground-muted">Mentor feedback & ratings</span>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Latest Feedback */}
-                <div className="jenga-card p-8 border-l-4 border-l-primary relative overflow-hidden">
-                    <div className="flex text-primary mb-6 gap-0.5">
+                <div
+                    className="rounded-lg border border-l-4 border-border bg-background p-8 relative overflow-hidden"
+                    style={{ borderLeftColor: "var(--brand-green)", boxShadow: "var(--shadow-sm)" }}
+                >
+                    <div className="flex mb-6 gap-0.5" style={{ color: "var(--brand-green)" }}>
                         {"★".repeat(feedback.latest.rating)}{"☆".repeat(5 - feedback.latest.rating)}
                     </div>
-                    <blockquote className="font-playfair italic text-xl md:text-2xl text-foreground leading-relaxed mb-8">
-                        "{feedback.latest.quote}"
+                    <blockquote className="text-display-sm italic text-foreground leading-relaxed mb-8">
+                        “{feedback.latest.quote}”
                     </blockquote>
                     <div className="flex items-center justify-between">
-                        <p className="font-lato text-sm text-[#4A4A4A]">
-                            By <span className="font-bold">{feedback.latest.author}</span> • {feedback.latest.date}
+                        <p className="text-body-sm text-foreground-muted">
+                            By <span className="font-medium text-foreground">{feedback.latest.author}</span> • {feedback.latest.date}
                         </p>
-                        <button className="font-mono text-[10px] text-primary uppercase tracking-widest hover:underline">
+                        <button
+                            className="text-eyebrow hover:underline"
+                            style={{ color: "var(--brand-green)" }}
+                        >
                             View all feedback →
                         </button>
                     </div>
@@ -47,28 +53,29 @@ export default function FeedbackRatingsSection({ menteeId }: Props) {
                 {/* Ratings Breakdown */}
                 <div className="space-y-6">
                     <div className="flex items-baseline gap-3 mb-8">
-                        <h3 className="font-playfair font-black text-5xl text-foreground">
-                            {feedback.average}
-                        </h3>
+                        <h3 className="text-display-lg text-foreground">{feedback.average}</h3>
                         <div className="space-y-0.5">
-                            <div className="text-primary text-xs">★★★★★</div>
-                            <p className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest">
-                                Overall Rating
-                            </p>
+                            <div className="text-body-sm" style={{ color: "var(--brand-green)" }}>★★★★★</div>
+                            <p className="text-eyebrow text-foreground-muted">Overall rating</p>
                         </div>
                     </div>
 
                     <div className="space-y-6">
                         {feedback.categories.map(cat => (
                             <div key={cat.label} className="space-y-2">
-                                <div className="flex justify-between font-mono text-[10px] uppercase tracking-widest">
-                                    <span>{cat.label}</span>
-                                    <span className="text-primary font-bold">{cat.score}%</span>
+                                <div className="flex justify-between text-eyebrow">
+                                    <span className="text-foreground-muted">{cat.label}</span>
+                                    <span
+                                        className="font-medium"
+                                        style={{ color: "var(--brand-green)" }}
+                                    >
+                                        {cat.score}%
+                                    </span>
                                 </div>
-                                <div className="h-1.5 w-full bg-[#E8E4DC] rounded-full overflow-hidden">
+                                <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-gradient-to-r from-primary to-[#006600] animate-progress-fill"
-                                        style={{ width: `${cat.score}%` }}
+                                        className="h-full animate-progress-fill"
+                                        style={{ width: `${cat.score}%`, background: "var(--brand-green)" }}
                                     />
                                 </div>
                             </div>

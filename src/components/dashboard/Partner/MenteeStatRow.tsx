@@ -1,7 +1,5 @@
 "use client"
 
-import { formatDistanceToNow } from "date-fns";
-
 interface Props {
     sessionsCount: number;
     progress: number;
@@ -14,47 +12,76 @@ export default function MenteeStatRow({ sessionsCount, progress, lastSessionDate
         ? Math.floor((new Date().getTime() - new Date(lastSessionDate).getTime()) / (1000 * 3600 * 24))
         : null;
 
+    const overdueLast = daysSinceLastSession !== null && daysSinceLastSession > 14;
+
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-                label="Sessions Completed"
+                label="Sessions completed"
                 value={sessionsCount.toString()}
                 delta="Live"
-                deltaColor="text-[#006600]"
+                deltaColor="var(--brand-green)"
             />
             <StatCard
-                label="Pathway Progress"
+                label="Pathway progress"
                 value={`${progress}%`}
                 delta="Live"
-                deltaColor="text-[#006600]"
-                suffix={<div className="w-8 h-8 rounded-full border-2 border-[#006600] border-t-transparent animate-spin ml-2" />}
+                deltaColor="var(--brand-green)"
+                suffix={
+                    <div
+                        className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin ml-2"
+                        style={{ borderColor: "var(--brand-green)", borderTopColor: "transparent" }}
+                    />
+                }
             />
             <StatCard
-                label="Days Since Last Session"
-                value={daysSinceLastSession !== null ? daysSinceLastSession.toString() : "-"}
-                delta={daysSinceLastSession !== null && daysSinceLastSession > 14 ? "Overdue" : "On track"}
-                deltaColor={daysSinceLastSession !== null && daysSinceLastSession > 14 ? "text-[#BB0000]" : "text-[#006600]"}
+                label="Days since last session"
+                value={daysSinceLastSession !== null ? daysSinceLastSession.toString() : "—"}
+                delta={overdueLast ? "Overdue" : "On track"}
+                deltaColor={overdueLast ? "var(--brand-red)" : "var(--brand-green)"}
             />
             <StatCard
-                label="Mentor Match Score"
+                label="Mentor match score"
                 value={typeof matchScorePct === "number" ? `${matchScorePct}%` : "—"}
                 delta="Goals · Location · Availability"
-                deltaColor="text-muted-foreground"
-                valueColor="text-[#BB0000]"
+                deltaColor="var(--foreground-muted)"
+                valueColor="var(--brand-red)"
             />
         </div>
     );
 }
 
-function StatCard({ label, value, delta, deltaColor, suffix, valueColor = "text-foreground" }: any) {
+function StatCard({
+    label,
+    value,
+    delta,
+    deltaColor,
+    suffix,
+    valueColor,
+}: {
+    label: string;
+    value: string;
+    delta: string;
+    deltaColor: string;
+    suffix?: React.ReactNode;
+    valueColor?: string;
+}) {
     return (
-        <div className="jenga-card p-6 flex flex-col justify-between">
-            <span className="section-label mb-4">{label}</span>
+        <div
+            className="rounded-lg border border-border bg-background p-6 flex flex-col justify-between"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+        >
+            <span className="text-eyebrow text-foreground-muted mb-4">{label}</span>
             <div className="flex items-baseline gap-2">
-                <h3 className={`font-playfair font-black text-4xl ${valueColor}`}>{value}</h3>
+                <h3
+                    className="text-display-md"
+                    style={valueColor ? { color: valueColor } : { color: "var(--foreground)" }}
+                >
+                    {value}
+                </h3>
                 {suffix}
             </div>
-            <p className={`font-mono text-[10px] uppercase tracking-wider mt-4 ${deltaColor}`}>
+            <p className="text-eyebrow mt-4" style={{ color: deltaColor }}>
                 {delta}
             </p>
         </div>

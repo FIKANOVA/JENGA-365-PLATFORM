@@ -15,13 +15,17 @@ export default function SessionLog({ sessions, menteeId }: Props) {
     ];
 
     return (
-        <section className="jenga-card p-8">
+        <section
+            className="rounded-lg border border-border bg-background p-8"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+        >
             <div className="flex justify-between items-center mb-6">
-                <div className="space-y-1">
-                    <span className="section-label">Session History</span>
-                </div>
-                <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 font-mono text-[11px] uppercase tracking-widest hover:opacity-90 transition-opacity">
-                    <Plus className="w-4 h-4" /> Log New Session
+                <span className="text-eyebrow text-foreground-muted">Session history</span>
+                <button
+                    className="inline-flex items-center gap-2 h-9 rounded-md px-3 text-label font-medium transition-opacity hover:opacity-90"
+                    style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
+                >
+                    <Plus className="w-4 h-4" /> Log new session
                 </button>
             </div>
 
@@ -30,7 +34,7 @@ export default function SessionLog({ sessions, menteeId }: Props) {
                     <thead>
                         <tr className="border-b border-border">
                             {["Date", "Duration", "Type", "Notes", "Rating", "Actions"].map(h => (
-                                <th key={h} className="pb-4 font-mono text-[9px] uppercase tracking-widest text-muted-foreground font-normal">
+                                <th key={h} className="pb-4 text-eyebrow text-foreground-muted font-normal">
                                     {h}
                                 </th>
                             ))}
@@ -38,26 +42,27 @@ export default function SessionLog({ sessions, menteeId }: Props) {
                     </thead>
                     <tbody className="divide-y divide-border">
                         {displaySessions.map((s: any) => (
-                            <tr key={s.id} className="group hover:bg-muted/5 transition-colors">
-                                <td className="py-4 font-lato text-sm text-foreground">
-                                    {s.date}
-                                </td>
-                                <td className="py-4 font-lato text-sm text-[#4A4A4A]">
+                            <tr key={s.id} className="group transition-colors hover:bg-[color:var(--surface-1)]">
+                                <td className="py-4 text-body-sm text-foreground">{s.date}</td>
+                                <td className="py-4 text-body-sm text-foreground-muted">
                                     {s.duration || `${s.durationMinutes} min`}
                                 </td>
                                 <td className="py-4">
-                                    <span className="bg-muted px-2 py-0.5 rounded font-mono text-[9px] uppercase text-muted-foreground">
+                                    <span
+                                        className="px-2 py-0.5 rounded text-eyebrow text-foreground-muted"
+                                        style={{ background: "var(--surface-2)" }}
+                                    >
                                         {s.type || "Video Call"}
                                     </span>
                                 </td>
-                                <td className="py-4 font-lato text-sm text-[#4A4A4A] italic">
-                                    {s.notes?.substring(0, 30)}...
+                                <td className="py-4 text-body-sm text-foreground-muted italic">
+                                    {s.notes?.substring(0, 30)}…
                                 </td>
-                                <td className="py-4 text-primary text-xs">
+                                <td className="py-4 text-body-sm" style={{ color: "var(--brand-green)" }}>
                                     {"★".repeat(s.rating)}{"☆".repeat(5 - s.rating)}
                                 </td>
                                 <td className="py-4">
-                                    <button className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-tighter text-muted-foreground group-hover:text-primary transition-colors">
+                                    <button className="inline-flex items-center gap-1.5 text-eyebrow text-foreground-muted group-hover:text-foreground transition-colors">
                                         <Eye className="w-3.5 h-3.5" /> View
                                     </button>
                                 </td>
@@ -67,7 +72,10 @@ export default function SessionLog({ sessions, menteeId }: Props) {
                 </table>
             </div>
 
-            <button className="w-full mt-6 py-4 border-t border-border font-mono text-[10px] text-primary uppercase tracking-[0.2em] hover:bg-accent/5 transition-colors">
+            <button
+                className="w-full mt-6 py-4 border-t border-border text-eyebrow transition-colors hover:bg-[color:var(--surface-1)]"
+                style={{ color: "var(--brand-green)" }}
+            >
                 Load more sessions →
             </button>
         </section>
