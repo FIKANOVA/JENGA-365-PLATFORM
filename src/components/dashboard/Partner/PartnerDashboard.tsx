@@ -1,6 +1,13 @@
 "use client";
 
-import { TrendingUp, School, Check, ChevronRight, MapPin, Download, Database, Plus } from "lucide-react";
+import {
+    TrendingUp,
+    School,
+    ChevronRight,
+    MapPin,
+    Plus,
+    BarChart3,
+} from "lucide-react";
 
 interface CsrStats {
     menteesSponsored: number;
@@ -41,147 +48,207 @@ export default function PartnerDashboard({
 }: PartnerDashboardProps) {
     const metrics = [
         {
-            label: "Mentees Sponsored",
+            label: "Mentees sponsored",
             value: csrStats ? String(csrStats.menteesSponsored) : "—",
             change: csrStats ? "Live data" : "No partner linked",
-            icon: TrendingUp,
         },
         {
-            label: "Active Mentorships",
+            label: "Active mentorships",
             value: csrStats ? String(csrStats.activeMentorships) : "—",
             change: csrStats ? "Live data" : "No partner linked",
-            icon: TrendingUp,
         },
         {
-            label: "Total Donations",
-            value: csrStats ? `KES ${csrStats.donationsTotal.toLocaleString()}` : "—",
+            label: "Total donations",
+            value: csrStats
+                ? `KES ${csrStats.donationsTotal.toLocaleString()}`
+                : "—",
             change: csrStats ? "Live data" : "No partner linked",
-            icon: School,
         },
     ];
 
     return (
-        <div className="flex-1 bg-background h-full overflow-y-auto">
-            <div className="max-w-6xl mx-auto p-6 md:p-8 flex flex-col gap-8">
-                {/* Header */}
-                <header className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-border/50 pb-6">
-                    <h2 className="font-playfair font-bold text-2xl text-foreground flex items-center gap-2 tracking-tight">
-                        <span className="w-1.5 h-6 bg-[#996600] inline-block" />
-                        {company} Impact Portal
-                    </h2>
-                    <div className="flex gap-4 items-center">
-                        <div className="text-right sm:text-left">
-                            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Partner Level</p>
-                            <p className="font-bold text-[#996600]">{tier ?? "Partner"}</p>
+        <div className="mx-auto max-w-6xl px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-8">
+            {/* Header */}
+            <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-border pb-6">
+                <div className="space-y-1">
+                    <p className="text-eyebrow text-foreground-muted">
+                        {company}
+                    </p>
+                    <h2 className="text-display-sm text-foreground">Impact portal</h2>
+                </div>
+                <div
+                    className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-eyebrow self-start sm:self-auto"
+                    style={{
+                        background: "var(--brand-green-soft)",
+                        color: "var(--brand-green)",
+                    }}
+                >
+                    {tier ?? "Partner"} tier
+                </div>
+            </header>
+
+            {/* Impact metrics */}
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {metrics.map((metric) => (
+                    <div
+                        key={metric.label}
+                        className="rounded-lg border border-border bg-background p-5"
+                        style={{ boxShadow: "var(--shadow-sm)" }}
+                    >
+                        <p className="text-eyebrow text-foreground-muted">
+                            {metric.label}
+                        </p>
+                        <p className="mt-2 text-display-sm text-foreground">
+                            {metric.value}
+                        </p>
+                        <div className="mt-3 flex items-center gap-1.5 text-body-sm text-foreground-muted">
+                            <TrendingUp
+                                className="h-3.5 w-3.5"
+                                style={{ color: "var(--brand-green)" }}
+                            />
+                            <span>{metric.change}</span>
                         </div>
                     </div>
-                </header>
+                ))}
+            </section>
 
-                {/* Impact Metrics */}
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {metrics.map((metric, i) => (
-                        <div key={i} className="border border-border/50 rounded-lg p-6 bg-card relative overflow-hidden group shadow-sm hover:border-[#996600] transition-colors">
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-[#996600]/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110" />
-                            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider mb-2">{metric.label}</p>
-                            <p className="font-playfair font-black text-[28px] text-foreground">{metric.value}</p>
-                            <div className="mt-4 flex items-center gap-2 text-sm text-kenya-green">
-                                <TrendingUp className="w-4 h-4" />
-                                <span>{metric.change}</span>
-                            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                {/* Sponsored mentors */}
+                <section>
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-headline text-foreground">
+                            Your mentors ({mentors.length})
+                        </h3>
+                        <button
+                            className="text-label hover:underline"
+                            style={{ color: "var(--brand-green)" }}
+                        >
+                            View all
+                        </button>
+                    </div>
+
+                    {mentors.length === 0 ? (
+                        <div
+                            className="rounded-md border border-dashed border-border p-6 text-center text-body-sm text-foreground-muted"
+                            style={{ background: "var(--surface-1)" }}
+                        >
+                            No mentors linked to this partner yet.
                         </div>
-                    ))}
+                    ) : (
+                        <div className="flex gap-4 overflow-x-auto pb-4">
+                            {mentors.map((mentor) => (
+                                <div
+                                    key={mentor.id}
+                                    className="flex flex-col items-center min-w-[72px]"
+                                >
+                                    <div
+                                        className="h-12 w-12 rounded-full flex items-center justify-center text-label font-medium mb-2"
+                                        style={{
+                                            background: "var(--surface-2)",
+                                            color: "var(--foreground-muted)",
+                                        }}
+                                    >
+                                        {(mentor.name ?? "?").charAt(0).toUpperCase()}
+                                    </div>
+                                    <span className="text-body-sm text-foreground text-center truncate w-full">
+                                        {mentor.name ?? "—"}
+                                    </span>
+                                </div>
+                            ))}
+                            <button className="flex flex-col items-center min-w-[72px]">
+                                <div
+                                    className="h-12 w-12 rounded-full border border-dashed border-border flex items-center justify-center mb-2 text-foreground-muted hover:text-foreground hover:border-strong transition-colors"
+                                >
+                                    <Plus className="h-4 w-4" />
+                                </div>
+                                <span className="text-body-sm text-foreground-muted">
+                                    Invite
+                                </span>
+                            </button>
+                        </div>
+                    )}
                 </section>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                    {/* Sponsored Mentors */}
-                    <section>
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="font-playfair font-bold text-xl text-foreground">
-                                Your Mentors ({mentors.length})
-                            </h3>
-                            <button className="text-sm font-mono text-primary hover:underline outline-none">View All</button>
+                {/* Upcoming events */}
+                <section>
+                    <h3 className="text-headline text-foreground mb-4">
+                        Upcoming partner events
+                    </h3>
+                    {upcomingEvents.length === 0 ? (
+                        <div
+                            className="rounded-md border border-dashed border-border p-6 text-center text-body-sm text-foreground-muted"
+                            style={{ background: "var(--surface-1)" }}
+                        >
+                            No upcoming events.
                         </div>
-
-                        {mentors.length === 0 ? (
-                            <div className="border border-dashed border-border/50 rounded-lg p-8 text-center text-sm text-muted-foreground font-mono">
-                                No mentors linked to this partner yet.
-                            </div>
-                        ) : (
-                            <div className="flex gap-4 overflow-x-auto pb-4">
-                                {mentors.map((mentor) => (
-                                    <div key={mentor.id} className="flex flex-col items-center min-w-[80px]">
-                                        <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center text-lg font-bold text-muted-foreground border-2 border-transparent hover:border-primary transition-colors cursor-pointer mb-2">
-                                            {(mentor.name ?? "?").charAt(0).toUpperCase()}
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            {upcomingEvents.map((evt) => {
+                                const d = new Date(evt.date);
+                                return (
+                                    <div
+                                        key={evt.id}
+                                        className="flex items-center gap-4 rounded-md border border-border bg-background p-3 hover:bg-[color:var(--surface-2)] transition-colors group cursor-pointer"
+                                    >
+                                        <div
+                                            className="flex flex-col items-center justify-center h-12 w-12 rounded-md shrink-0"
+                                            style={{
+                                                background: "var(--surface-2)",
+                                            }}
+                                        >
+                                            <span className="text-eyebrow text-foreground-muted">
+                                                {d.toLocaleString("en", { month: "short" })}
+                                            </span>
+                                            <span className="text-title text-foreground leading-none">
+                                                {d.getDate()}
+                                            </span>
                                         </div>
-                                        <span className="text-xs font-medium text-foreground text-center truncate w-full text-center">{mentor.name ?? "—"}</span>
-                                    </div>
-                                ))}
-                                <div className="flex flex-col items-center min-w-[80px] justify-center">
-                                    <div className="w-14 h-14 rounded-full bg-muted border-2 border-dashed border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary cursor-pointer transition-colors mb-2">
-                                        <Plus className="w-5 h-5" />
-                                    </div>
-                                    <span className="text-xs font-medium text-muted-foreground text-center">Invite</span>
-                                </div>
-                            </div>
-                        )}
-                    </section>
-
-                    {/* Upcoming Events */}
-                    <section>
-                        <h3 className="font-playfair font-bold text-xl text-foreground mb-6">Upcoming Partner Events</h3>
-                        {upcomingEvents.length === 0 ? (
-                            <div className="border border-dashed border-border/50 rounded-lg p-8 text-center text-sm text-muted-foreground font-mono">
-                                No upcoming events.
-                            </div>
-                        ) : (
-                            <div className="flex flex-col gap-3">
-                                {upcomingEvents.map((evt) => {
-                                    const d = new Date(evt.date);
-                                    return (
-                                        <div key={evt.id} className="flex items-center gap-4 p-3 rounded-lg border border-border/50 bg-card hover:border-[#996600]/50 transition-colors cursor-pointer group shadow-sm">
-                                            <div className="flex flex-col items-center justify-center w-12 h-12 bg-background rounded border border-border/50 text-primary shrink-0">
-                                                <span className="text-xs font-mono font-bold uppercase">
-                                                    {d.toLocaleString("en", { month: "short" })}
-                                                </span>
-                                                <span className="text-lg font-playfair font-black leading-none">{d.getDate()}</span>
-                                            </div>
-                                            <div className="flex-1">
-                                                <h4 className="font-medium text-foreground text-sm group-hover:text-primary transition-colors">{evt.title}</h4>
-                                                <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1 font-mono">
-                                                    <MapPin className="w-3 h-3" />
-                                                    {evt.isOnline ? "Online" : (evt.location ?? "TBD")}
-                                                </p>
-                                            </div>
-                                            <ChevronRight className="text-muted-foreground group-hover:text-primary transition-colors w-5 h-5" />
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="text-body text-foreground font-medium truncate">
+                                                {evt.title}
+                                            </h4>
+                                            <p className="mt-0.5 flex items-center gap-1 text-body-sm text-foreground-muted">
+                                                <MapPin className="h-3 w-3" />
+                                                {evt.isOnline
+                                                    ? "Online"
+                                                    : evt.location ?? "TBD"}
+                                            </p>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </section>
-                </div>
-
-                {/* Footer Reporting Section */}
-                <section className="mt-4 border-t border-border/50 pt-8">
-                    <div className="bg-card rounded-lg p-6 border border-border/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
-                        <div>
-                            <span className="text-primary font-mono text-[10px] uppercase tracking-widest font-bold mb-2 block">Impact Documentation</span>
-                            <h3 className="font-playfair font-bold text-lg text-foreground tracking-tight">Need a detailed report?</h3>
-                            <p className="text-sm text-muted-foreground mt-1 max-w-md">Download your latest metrics or request specific data for your ESG reporting.</p>
+                                        <ChevronRight className="h-4 w-4 text-foreground-muted group-hover:text-foreground transition-colors" />
+                                    </div>
+                                );
+                            })}
                         </div>
-                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                            <button className="px-4 py-2 bg-transparent border border-border/50 rounded font-mono text-xs font-bold text-foreground hover:bg-muted transition-colors flex items-center justify-center gap-2">
-                                <Download className="w-4 h-4" />
-                                DOWNLOAD IMPACT REPORT
-                            </button>
-                            <button className="px-4 py-2 bg-transparent border border-border/50 rounded font-mono text-xs font-bold text-foreground hover:bg-muted transition-colors flex items-center justify-center gap-2">
-                                <Database className="w-4 h-4" />
-                                REQUEST CUSTOM EXPORT
-                            </button>
-                        </div>
-                    </div>
+                    )}
                 </section>
             </div>
+
+            {/* Reporting pointer — canonical reporting is the Looker Studio embed above per CLAUDE.md §10.5/§11 */}
+            <section
+                className="rounded-lg border border-border p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                style={{ background: "var(--surface-1)" }}
+            >
+                <div className="flex items-start gap-3">
+                    <span
+                        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md"
+                        style={{ background: "var(--background)" }}
+                    >
+                        <BarChart3
+                            className="h-5 w-5"
+                            style={{ color: "var(--brand-green)" }}
+                        />
+                    </span>
+                    <div className="space-y-1">
+                        <h3 className="text-title text-foreground">
+                            ESG reports live in Looker Studio
+                        </h3>
+                        <p className="text-body-sm text-foreground-muted max-w-md">
+                            Use the embedded dashboard above for live metrics, or copy
+                            the share link to forward reports to your board.
+                        </p>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }
