@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/config";
 import PartnerDashboard from "@/components/dashboard/Partner/PartnerDashboard";
+import LookerEmbed from "@/components/dashboard/Partner/LookerEmbed";
 import { getCsrStats } from "@/lib/actions/csr";
 import { db } from "@/lib/db";
 import { corporatePartners, users, events } from "@/lib/db/schema";
@@ -38,12 +39,21 @@ export default async function PartnerDashboardPage() {
     ]);
 
     return (
-        <PartnerDashboard
-            company={partner?.orgName ?? session?.user?.name ?? "Your Organisation"}
-            tier={partner?.sponsorshipTier ?? "Partner"}
-            csrStats={csrStats}
-            mentors={sponsoredMentors}
-            upcomingEvents={upcomingEvents}
-        />
+        <div className="flex-1 bg-background h-full overflow-y-auto">
+            <div className="mx-auto max-w-6xl px-6 lg:px-8 pt-6 lg:pt-8">
+                <LookerEmbed
+                    reportId={partner?.lookerReportId ?? null}
+                    shareUrl={partner?.lookerShareUrl ?? null}
+                    partnerName={partner?.orgName ?? session?.user?.name ?? "Your Organisation"}
+                />
+            </div>
+            <PartnerDashboard
+                company={partner?.orgName ?? session?.user?.name ?? "Your Organisation"}
+                tier={partner?.sponsorshipTier ?? "Partner"}
+                csrStats={csrStats}
+                mentors={sponsoredMentors}
+                upcomingEvents={upcomingEvents}
+            />
+        </div>
     );
 }
