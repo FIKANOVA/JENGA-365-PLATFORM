@@ -1,6 +1,7 @@
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
 import HeroSection from "@/components/marketing/HeroSection";
 import ImpactTicker from "@/components/marketing/ImpactTicker";
+import SweatEquityBand from "@/components/marketing/SweatEquityBand";
 import WhatWeDoSection from "@/components/marketing/WhatWeDoSection";
 import EventsSection from "@/components/marketing/EventsSection";
 import HomeArticlesSection from "@/components/marketing/HomeArticlesSection";
@@ -32,6 +33,7 @@ export default async function HomePage() {
             <HeroSection />
             <ImpactTicker stats={stats} />
             <WhatWeDoSection />
+            <SweatEquityBand />
             <EventsSection events={events} />
             <HomeArticlesSection articles={articles} />
             <FinalCTAStrip />

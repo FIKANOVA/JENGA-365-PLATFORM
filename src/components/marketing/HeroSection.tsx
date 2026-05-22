@@ -1,195 +1,98 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
-import { ArrowRight, ShoppingCart, Heart, ChevronDown } from "lucide-react";
-import { motion } from "framer-motion";
 
-const fadeUp = {
-    hidden: { opacity: 0, y: 24 },
-    show: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" as const } }),
-};
-
+/**
+ * Landing hero — Total Athlete + Dual-Engine narrative.
+ * DESIGN.md §11: clean neutral surface with a subtle radial accent.
+ * No background images. No vanity animations.
+ */
 export default function HeroSection() {
     const { data: session } = useSession();
     const isAuthenticated = !!session?.user;
 
-    if (isAuthenticated) {
-        const firstName = session.user?.name?.split(" ")[0] ?? "Back";
-        return (
-            <section className="relative min-h-[60vh] flex items-center bg-background overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-20">
-                    <div className="space-y-8">
-                        <div className="h-px w-10 bg-primary" />
-                        <h1 className="font-serif font-black text-5xl md:text-6xl text-foreground leading-none uppercase tracking-tighter">
-                            Welcome Back,{" "}
-                            <span className="text-primary italic">{firstName}.</span>
-                        </h1>
-                        <p className="font-sans text-lg text-muted-foreground max-w-md leading-relaxed">
-                            Your support keeps the mission alive. Head to your dashboard or take action below.
-                        </p>
-                        <div className="flex flex-wrap gap-4">
-                            <Link href="/dashboard" className="btn-primary shadow-lg flex items-center gap-2">
-                                My Dashboard <ArrowRight size={14} />
-                            </Link>
-                            <Link href="/donate" className="flex items-center gap-2 px-6 py-3 border border-[var(--secondary)] text-[var(--secondary)] font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-[var(--secondary)] hover:text-white transition-all">
-                                <Heart size={13} /> Donate
-                            </Link>
-                            <Link href="/shop" className="flex items-center gap-2 px-6 py-3 border border-border text-foreground font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-accent transition-all">
-                                <ShoppingCart size={13} /> Shop
-                            </Link>
-                        </div>
-                    </div>
-                    <div className="hidden lg:block aspect-[4/3] overflow-hidden border border-border shadow-xl">
-                        <img
-                            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop"
-                            alt="Mentorship"
-                            className="w-full h-full object-cover grayscale opacity-80"
-                        />
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
     return (
-        <section className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden">
-            {/* Full-bleed background image */}
-            <div className="absolute inset-0 z-0">
-                <img
-                    src="https://jenga365.com/wp-content/uploads/2025/07/Fanaka-Studios-SportPesa-Cheza-Dimba-Northrift-66-of-429-scaled.jpg"
-                    alt=""
-                    className="w-full h-full object-cover object-center"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                            "https://images.unsplash.com/photo-1546519638405-a2b98cd5d9f2?q=80&w=1920&auto=format&fit=crop";
-                    }}
-                />
-                {/* Dark overlay so text stays readable */}
-                <div className="absolute inset-0 bg-black/65" />
-                {/* Subtle green-tinted left glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
-            </div>
+        <section className="relative overflow-hidden bg-background">
+            <div className="absolute inset-0 bg-hero-radial pointer-events-none" aria-hidden />
+            <div className="absolute inset-0 bg-topo opacity-[0.35] pointer-events-none" aria-hidden />
 
-            {/* Accent lines */}
-            <div className="absolute inset-0 pointer-events-none z-10">
-                <div className="absolute bottom-0 left-0 w-px h-[40%] bg-gradient-to-t from-primary to-transparent" />
-            </div>
-
-            <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center py-20 lg:py-0 relative z-20">
-                {/* Text block */}
-                <div className="lg:col-span-7 space-y-8">
-                    <motion.div
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="show"
-                        custom={0}
-                        className="flex items-center gap-3"
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32 lg:py-40">
+                <div className="max-w-3xl">
+                    <div
+                        className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border"
+                        style={{ background: "var(--surface-1)", borderColor: "var(--border)" }}
                     >
-                        <div className="h-px w-8 bg-primary" />
-                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary font-bold">
-                            Kenya's Rugby &amp; Mentorship Platform
+                        <Sparkles className="h-3.5 w-3.5" style={{ color: "var(--brand-green)" }} />
+                        <span className="text-eyebrow" style={{ color: "var(--foreground-muted)" }}>
+                            AI-Native Mentorship Platform
                         </span>
-                    </motion.div>
+                    </div>
 
-                    <motion.h1
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="show"
-                        custom={1}
-                        className="font-serif font-black text-5xl md:text-7xl lg:text-[5.5rem] text-white leading-[0.92] uppercase tracking-tighter"
-                    >
-                        Building <span className="text-primary italic">Growth.</span>
+                    <h1 className="text-display-lg md:text-display-xl">
+                        Build the{" "}
+                        <span style={{ color: "var(--brand-green)" }}>Total Athlete.</span>
                         <br />
-                        Connecting
-                        <br />
-                        Futures.
-                    </motion.h1>
+                        365 days a year.
+                    </h1>
 
-                    <motion.p
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="show"
-                        custom={2}
-                        className="font-sans text-lg md:text-xl text-white/75 max-w-xl leading-relaxed"
+                    <p
+                        className="mt-6 text-body-lg max-w-2xl"
+                        style={{ color: "var(--foreground-muted)" }}
                     >
-                        Jenga365 is a dual-engine AI platform — building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
-                    </motion.p>
+                        Jenga365 is Kenya&apos;s dual-engine platform connecting human capital with
+                        environmental stewardship. AI-matched mentorship pairs athletes and young
+                        professionals with seasoned veterans. Quarterly M&amp;E and GPS-verified
+                        climate action gives corporate sponsors the ESG data they need.
+                    </p>
 
-                    {/* 4 actions */}
-                    <motion.div
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="show"
-                        custom={3}
-                        className="flex flex-col gap-4 pt-2"
+                    <div className="mt-10 flex flex-col sm:flex-row gap-3">
+                        {isAuthenticated ? (
+                            <Link
+                                href="/dashboard"
+                                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
+                                style={{ background: "var(--brand-green)" }}
+                            >
+                                Go to dashboard
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/register"
+                                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
+                                    style={{ background: "var(--brand-green)" }}
+                                >
+                                    Apply for mentorship
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+                                <Link
+                                    href="/impact"
+                                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors"
+                                >
+                                    Corporate ESG partnership
+                                </Link>
+                            </>
+                        )}
+                    </div>
+
+                    <p
+                        className="mt-6 text-body-sm"
+                        style={{ color: "var(--foreground-subtle)" }}
                     >
-                        <div className="flex flex-wrap gap-3">
-                            <Link
-                                href="/register"
-                                className="btn-primary flex items-center gap-2 shadow-xl shadow-primary/30"
-                            >
-                                Join Free <ArrowRight size={14} strokeWidth={2.5} />
-                            </Link>
-                            <Link
-                                href="/donate"
-                                className="flex items-center gap-2 px-6 py-3 border border-[var(--secondary)] text-[var(--secondary)] font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-[var(--secondary)] hover:text-white transition-all"
-                            >
-                                <Heart size={13} strokeWidth={2} />
-                                Donate
-                            </Link>
-                            <Link
-                                href="/shop"
-                                className="flex items-center gap-2 px-6 py-3 border border-white/50 text-white font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-white/15 hover:border-white transition-all"
-                            >
-                                <ShoppingCart size={13} strokeWidth={1.5} />
-                                Store
-                            </Link>
-                            <Link
-                                href="/about"
-                                className="flex items-center gap-2 px-1 py-3 text-white/60 font-mono text-[10px] uppercase tracking-widest font-bold hover:text-white transition-colors group"
-                            >
-                                Explore
-                                <span className="inline-block w-6 h-px bg-white/50 group-hover:w-10 group-hover:bg-white transition-all duration-300" />
-                                <ArrowRight size={12} strokeWidth={1.5} className="opacity-60 group-hover:opacity-100 -ml-1.5 transition-opacity" />
-                            </Link>
-                        </div>
-                    </motion.div>
+                        Mentorship is earned — not free. Read the{" "}
+                        <Link
+                            href="#sweat-equity"
+                            className="underline underline-offset-4"
+                            style={{ color: "var(--foreground)" }}
+                        >
+                            Sweat Equity protocol
+                        </Link>
+                        .
+                    </p>
                 </div>
-
-                {/* Stats panel — right column, 2×2 grid */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="show"
-                    custom={4}
-                    className="hidden lg:grid lg:col-span-5 grid-cols-2 gap-px border border-white/10 self-center"
-                >
-                    {[
-                        { val: "750K+", label: "Lives Impacted", sub: "since 2023" },
-                        { val: "12,000", label: "Mentors Registered", sub: "& growing" },
-                        { val: "$1.2M", label: "Funding Granted", sub: "to community hubs" },
-                        { val: "45", label: "Community Hubs", sub: "across East Africa" },
-                    ].map((s) => (
-                        <div key={s.label} className="p-8 border border-white/10 hover:bg-white/5 transition-colors">
-                            <p className="font-serif font-black text-4xl xl:text-5xl text-white leading-none">{s.val}</p>
-                            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/70 mt-2">{s.label}</p>
-                            <p className="font-mono text-[8px] text-white/30 mt-0.5">{s.sub}</p>
-                        </div>
-                    ))}
-                </motion.div>
             </div>
-
-            {/* Scroll cue */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/50 z-20"
-            >
-                <span className="font-mono text-[8px] uppercase tracking-[0.3em]">Scroll</span>
-                <ChevronDown size={14} className="animate-bounce" />
-            </motion.div>
         </section>
     );
 }

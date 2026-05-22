@@ -1,81 +1,78 @@
-"use client";
-
-import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type LogoVariant = "premium" | "dark" | "white" | "black" | "symbol" | "text" | "branding";
-type LogoTheme = "light" | "dark" | "premium" | "mono";
+type LogoTone = "default" | "light" | "dark";
+type LogoSize = "sm" | "md" | "lg";
 
 interface LogoProps {
-    variant?: LogoVariant;
-    theme?: LogoTheme;
-    showText?: boolean;
+    /** Wraps the wordmark in a Link to `/`. Defaults true; pass false for embeds (e.g. inside a Sheet). */
+    asLink?: boolean;
+    tone?: LogoTone;
+    size?: LogoSize;
     className?: string;
+}
+
+/**
+ * Jenga365 wordmark — pure text per DESIGN.md §10.
+ * No image files. Replace with custom SVG when ready (update only this component).
+ *
+ * Legacy props (`variant`, `theme`, `showText`, `width`, `height`, `priority`) are
+ * silently accepted-and-ignored so call sites elsewhere in the codebase keep
+ * compiling during the rollout.
+ */
+type LegacyProps = {
+    variant?: string;
+    theme?: string;
+    showText?: boolean;
     width?: number;
     height?: number;
     priority?: boolean;
-}
+};
 
 export default function Logo({
-    variant = "premium",
-    theme = "premium",
-    showText = false,
+    asLink = true,
+    tone = "default",
+    size = "md",
     className,
-    width,
-    height,
-    priority = false
-}: LogoProps) {
-    // ── Brand Text Logic ──────────────────────────────────────────────────────
-    const renderText = (size: number) => {
-        const textClass = cn(
-            "font-serif italic font-black transition-colors",
-            theme === "dark" ? "text-white" : "text-black",
-            theme === "mono" ? (variant === "white" ? "text-white" : "text-black") : ""
-        );
+}: LogoProps & LegacyProps) {
+    const toneClass =
+        tone === "light"
+            ? "text-white"
+            : tone === "dark"
+              ? "text-zinc-950"
+              : "text-foreground";
 
-        return (
-            <div className={cn(textClass, className)} style={{ fontSize: size }}>
-                <span className="text-[var(--red)]">J</span>
-                <span>enga36</span>
-                <span className="text-[var(--primary-green)]">5</span>
-            </div>
-        );
-    };
+    const sizeClass =
+        size === "sm"
+            ? "text-lg"
+            : size === "lg"
+              ? "text-2xl"
+              : "text-xl";
 
-    if (variant === "text" || variant === "branding") {
-        return renderText(height ? height * 0.4 : 24);
-    }
+    const mark = (
+        <span
+            className={cn(
+                "font-sans font-bold tracking-tight inline-flex items-baseline gap-0",
+                sizeClass,
+                toneClass,
+                className,
+            )}
+            style={{ letterSpacing: "-0.02em" }}
+        >
+            <span>Jenga</span>
+            <span style={{ color: "var(--brand-green)" }}>365</span>
+        </span>
+    );
 
-    const logoMap: Record<Exclude<LogoVariant, "text" | "branding">, string> = {
-        premium: "/assets/logos/jenga365-premium.png",
-        dark: "/assets/logos/jenga365-dark.png",
-        white: "/assets/logos/jenga365-mono-white.png",
-        black: "/assets/logos/jenga365-mono-black.png",
-        symbol: "/assets/logos/jenga365-symbol.png",
-    };
-
-    const defaultDimensions: Record<Exclude<LogoVariant, "text" | "branding">, { w: number; h: number }> = {
-        premium: { w: 180, h: 48 },
-        dark: { w: 180, h: 48 },
-        white: { w: 180, h: 48 },
-        black: { w: 180, h: 48 },
-        symbol: { w: 48, h: 48 },
-    };
-
-    const dims = defaultDimensions[variant] || defaultDimensions.premium;
+    if (!asLink) return mark;
 
     return (
-        <div className={cn("flex items-center gap-3", className)}>
-            <Image
-                src={logoMap[variant as keyof typeof logoMap]}
-                alt="Jenga365"
-                width={width || dims.w}
-                height={height || dims.h}
-                className="h-auto object-contain"
-                style={{ height: height || "auto" }}
-                priority={priority}
-            />
-            {showText && renderText(height ? height * 0.4 : 20)}
-        </div>
+        <Link
+            href="/"
+            aria-label="Jenga365 home"
+            className="inline-flex items-center transition-opacity hover:opacity-80"
+        >
+            {mark}
+        </Link>
     );
 }
