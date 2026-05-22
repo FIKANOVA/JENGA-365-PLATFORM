@@ -3,15 +3,51 @@
 import NextLink from "next/link";
 import { useSession } from "@/lib/auth/client";
 import { format } from "date-fns";
+import { MapPin, ArrowRight, Calendar } from "lucide-react";
 
-const FALLBACK_EVENTS = [
-    { _id: "e1", title: "Total Athlete Summit — Nairobi 2026", type: "CONFERENCE", date: new Date(Date.now() + 14 * 86400000).toISOString(), location: "KICC, Nairobi", isOnline: false, description: "Our flagship annual summit bringing together mentors, athletes, and corporate partners.", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800" },
-    { _id: "e2", title: "Financial Literacy Workshop for Athletes", type: "WORKSHOP", date: new Date(Date.now() + 21 * 86400000).toISOString(), location: "Online (Zoom)", isOnline: true, description: "A practical 3-hour workshop on budgeting, savings, and investment basics for young athletes.", image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800" },
-    { _id: "e3", title: "Mentor Matching Open Day", type: "NETWORKING", date: new Date(Date.now() + 35 * 86400000).toISOString(), location: "Strathmore University, Nairobi", isOnline: false, description: "Meet potential mentors face-to-face and begin your Jenga365 mentorship journey.", image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=800" },
+interface JenEvent {
+    _id: string;
+    title: string;
+    type?: string;
+    date: string;
+    location?: string;
+    isOnline?: boolean;
+    description?: string;
+    image?: string;
+}
+
+const FALLBACK_EVENTS: JenEvent[] = [
+    {
+        _id: "e1",
+        title: "Total Athlete Summit — Nairobi 2026",
+        type: "Conference",
+        date: new Date(Date.now() + 14 * 86400000).toISOString(),
+        location: "KICC, Nairobi",
+        isOnline: false,
+        description: "Our flagship annual summit bringing together mentors, athletes, and corporate partners.",
+    },
+    {
+        _id: "e2",
+        title: "Financial Literacy Workshop for Athletes",
+        type: "Workshop",
+        date: new Date(Date.now() + 21 * 86400000).toISOString(),
+        location: "Online (Zoom)",
+        isOnline: true,
+        description: "A practical 3-hour workshop on budgeting, savings, and investment basics.",
+    },
+    {
+        _id: "e3",
+        title: "Mentor Matching Open Day",
+        type: "Networking",
+        date: new Date(Date.now() + 35 * 86400000).toISOString(),
+        location: "Strathmore University, Nairobi",
+        isOnline: false,
+        description: "Meet potential mentors face-to-face and begin your Jenga365 mentorship journey.",
+    },
 ];
 
 interface EventsSectionProps {
-    events?: any[];
+    events?: JenEvent[];
 }
 
 export default function EventsSection({ events = [] }: EventsSectionProps) {
@@ -21,65 +57,87 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
     const displayEvents = (events && events.length > 0 ? events : FALLBACK_EVENTS).slice(0, 3);
 
     return (
-        <section className="bg-primary/5 py-20">
-            <div className="max-w-7xl mx-auto px-6 md:px-12">
-                <div className="flex justify-between items-end mb-12">
-                    <div>
-                        <h4 className="text-primary font-bold uppercase tracking-widest text-sm mb-2 font-mono">Join Us</h4>
-                        <h2 className="text-3xl md:text-5xl font-black text-foreground font-playfair uppercase">Upcoming Events</h2>
+        <section className="bg-background" style={{ background: "var(--surface-1)" }}>
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32">
+                <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
+                    <div className="max-w-xl">
+                        <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                            Upcoming Events
+                        </span>
+                        <h2 className="mt-3 text-display-md">Join the community in person.</h2>
                     </div>
-                    <NextLink href="/events" className="text-primary font-bold font-mono text-sm flex items-center gap-1 hover:underline">
-                        View All <span className="hidden sm:inline">Events</span>
-                        <span className="material-symbols-outlined text-[1.2rem]">chevron_right</span>
+                    <NextLink
+                        href="/events"
+                        className="inline-flex items-center gap-1.5 text-label font-medium hover:underline underline-offset-4"
+                        style={{ color: "var(--foreground)" }}
+                    >
+                        View all events
+                        <ArrowRight className="h-4 w-4" />
                     </NextLink>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {displayEvents.map((event) => {
                         const dateObj = new Date(event.date);
                         const day = format(dateObj, "dd");
-                        const month = format(dateObj, "MMM");
+                        const month = format(dateObj, "MMM").toUpperCase();
                         return (
-                            <div key={event._id} className="bg-card rounded-xl overflow-hidden border border-border/50 shadow-sm group hover:shadow-md transition-shadow">
-                                <div className="h-48 relative overflow-hidden">
+                            <article
+                                key={event._id}
+                                className="group flex flex-col rounded-lg border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
+                            >
+                                <div className="relative h-44 overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {event.image ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
                                         <img
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                             src={event.image}
                                             alt={event.title}
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-black/5 italic font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
-                                            No Visual Asset
+                                        <div className="flex h-full w-full items-center justify-center" style={{ color: "var(--foreground-subtle)" }}>
+                                            <Calendar className="h-10 w-10" aria-hidden />
                                         </div>
                                     )}
-                                    <div className="absolute top-4 left-4 bg-primary text-white py-2 px-3 rounded shadow-lg text-center min-w-[50px]">
-                                        <span className="block text-xl font-bold font-playfair">{day}</span>
-                                        <span className="block text-xs uppercase font-bold font-mono tracking-wider">{month}</span>
+                                    <div
+                                        className="absolute top-3 left-3 rounded-md px-2.5 py-1.5 text-center shadow"
+                                        style={{ background: "var(--background)" }}
+                                    >
+                                        <div className="text-headline leading-none" style={{ color: "var(--brand-green)" }}>{day}</div>
+                                        <div className="text-eyebrow mt-0.5" style={{ color: "var(--foreground-muted)" }}>{month}</div>
                                     </div>
                                     {event.isOnline && (
-                                        <span className="absolute top-4 right-4 bg-black/70 text-white font-mono text-[8px] uppercase tracking-widest px-2 py-1 rounded">
+                                        <span
+                                            className="absolute top-3 right-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium"
+                                            style={{ background: "var(--brand-black)", color: "#fff" }}
+                                        >
                                             Online
                                         </span>
                                     )}
                                 </div>
-                                <div className="p-6 flex flex-col justify-between h-[180px]">
-                                    <div>
-                                        <h3 className="text-xl font-bold font-playfair mb-2 leading-tight group-hover:text-primary transition-colors line-clamp-2">{event.title}</h3>
-                                        <p className="text-muted-foreground font-sans text-sm flex items-center gap-1 line-clamp-1">
-                                            <span className="material-symbols-outlined text-sm">location_on</span>
+                                <div className="flex flex-col flex-1 p-6 gap-3">
+                                    {event.type && (
+                                        <span className="text-eyebrow" style={{ color: "var(--foreground-muted)" }}>{event.type}</span>
+                                    )}
+                                    <h3 className="text-headline line-clamp-2" style={{ color: "var(--foreground)" }}>
+                                        {event.title}
+                                    </h3>
+                                    {event.location && (
+                                        <div className="flex items-center gap-1.5 text-body-sm" style={{ color: "var(--foreground-muted)" }}>
+                                            <MapPin className="h-3.5 w-3.5" aria-hidden />
                                             {event.location}
-                                        </p>
-                                    </div>
+                                        </div>
+                                    )}
                                     <NextLink
                                         href={isAuthenticated ? `/dashboard/events/${event._id}` : "/register"}
-                                        className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-black text-white font-mono text-[10px] uppercase tracking-widest font-bold hover:bg-primary transition-all"
+                                        className="mt-auto inline-flex items-center justify-center h-10 px-4 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                                        style={{ background: "var(--brand-black)" }}
                                     >
                                         Register
-                                        <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                        <ArrowRight className="h-4 w-4 ml-1.5" />
                                     </NextLink>
                                 </div>
-                            </div>
+                            </article>
                         );
                     })}
                 </div>

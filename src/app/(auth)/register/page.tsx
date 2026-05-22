@@ -173,16 +173,14 @@ export default function RegisterHubPage() {
 
                                 <button
                                     onClick={() => router.push(`/register/${role.id}`)}
-                                    className="mt-8 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium transition-colors"
+                                    className="mt-8 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-colors hover:opacity-90"
                                     style={{
                                         background:
                                             role.id === "mentee"
                                                 ? "var(--brand-green)"
-                                                : "var(--foreground)",
-                                        color:
-                                            role.id === "mentee"
-                                                ? "var(--brand-green-fg)"
-                                                : "var(--background)",
+                                                : role.id === "mentor"
+                                                  ? "var(--brand-red)"
+                                                  : "var(--brand-black)",
                                     }}
                                 >
                                     <span>{role.cta}</span>
