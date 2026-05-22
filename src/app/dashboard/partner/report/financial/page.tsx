@@ -1,5 +1,6 @@
-"use client";
-import FinancialSummaryReport from "@/components/reports/FinancialSummaryReport";
-export default function FinancialSummaryPage() {
-    return <FinancialSummaryReport />;
+import { redirect } from "next/navigation";
+
+// CLAUDE.md §10.5 / §11: in-app partner reporting is deprecated.
+export default function PartnerReportFinancialPage() {
+    redirect("/dashboard/partner");
 }

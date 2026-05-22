@@ -1,7 +1,6 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import ReportBuilder from "@/components/reports/ReportBuilder";
-
-export default function ReportBuilderRoute() {
-    return <ReportBuilder />;
+// CLAUDE.md §10.5 / §11: in-app partner reporting is deprecated.
+export default function PartnerReportBuilderPage() {
+    redirect("/dashboard/partner");
 }

@@ -1,5 +1,6 @@
-"use client";
-import DonationReportPage from "@/components/reports/DonationReportPage";
-export default function DonationPage() {
-    return <DonationReportPage />;
+import { redirect } from "next/navigation";
+
+// CLAUDE.md §10.5 / §11: in-app partner reporting is deprecated.
+export default function PartnerReportDonatePage() {
+    redirect("/dashboard/partner");
 }
