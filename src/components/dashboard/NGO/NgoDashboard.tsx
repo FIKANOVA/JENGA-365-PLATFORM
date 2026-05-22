@@ -31,19 +31,19 @@ export default function NgoDashboard({ orgName, mouStatus, exchangeLog }: NgoDas
 
     const metrics = [
         {
-            label: "Resources Contributed",
+            label: "Resources contributed",
             value: String(totalResourcesLogged),
             sub: "exchange events logged",
             icon: Package,
         },
         {
-            label: "Total Units Mobilised",
+            label: "Total units mobilised",
             value: totalUnits > 0 ? String(totalUnits) : "—",
             sub: "across all resource types",
             icon: Users,
         },
         {
-            label: "Resource Categories",
+            label: "Resource categories",
             value: resourceTypeSet.size > 0 ? String(resourceTypeSet.size) : "—",
             sub: Array.from(resourceTypeSet).slice(0, 2).join(", ") || "none yet",
             icon: CalendarCheck,
@@ -51,26 +51,31 @@ export default function NgoDashboard({ orgName, mouStatus, exchangeLog }: NgoDas
     ];
 
     return (
-        <div className="p-6 lg:p-10 space-y-10 max-w-6xl mx-auto">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8 py-6 lg:py-8 space-y-10">
             {/* Header */}
-            <div className="space-y-1">
-                <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-muted-foreground">
-                    NGO Resource Exchange Portal
+            <header className="space-y-1.5 border-b border-border pb-6">
+                <p className="text-eyebrow text-foreground-muted">
+                    NGO Resource Exchange portal
                 </p>
-                <h1 className="font-serif font-black text-4xl uppercase tracking-tighter leading-none">
-                    {orgName}
-                </h1>
-                <p className="text-sm text-muted-foreground font-light">
+                <h1 className="text-display-sm text-foreground">{orgName}</h1>
+                <p className="text-body-sm text-foreground-muted">
                     You provide the resources. We mobilise the workforce.
                 </p>
-            </div>
+            </header>
 
             {/* MOU Status Banner */}
             {mouStatus?.signed && (
-                <div className="flex items-center gap-4 px-6 py-4 border border-green-600/30 bg-green-600/5 text-sm">
-                    <FileCheck className="w-4 h-4 text-green-600 shrink-0" />
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-green-700">
-                        Resource Exchange MOU Active
+                <div
+                    className="flex items-center gap-3 rounded-md border px-5 py-3"
+                    style={{
+                        borderColor: "var(--brand-green)",
+                        background: "var(--brand-green-soft)",
+                        color: "var(--brand-green)",
+                    }}
+                >
+                    <FileCheck className="h-4 w-4 shrink-0" />
+                    <span className="text-label">
+                        Resource Exchange MOU active
                         {mouStatus.signedAt
                             ? ` — signed ${new Date(mouStatus.signedAt).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}`
                             : ""}
@@ -86,56 +91,56 @@ export default function NgoDashboard({ orgName, mouStatus, exchangeLog }: NgoDas
                 {metrics.map(({ label, value, sub, icon: Icon }) => (
                     <div
                         key={label}
-                        className="jenga-card p-6 space-y-4 border-foreground/10 hover:border-foreground/30 transition-all"
+                        className="rounded-lg border border-border bg-background p-6 space-y-4 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                        style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <div className="flex items-start justify-between">
-                            <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-muted-foreground">
-                                {label}
-                            </p>
-                            <Icon className="w-4 h-4 text-muted-foreground" />
+                            <p className="text-eyebrow text-foreground-muted">{label}</p>
+                            <Icon className="h-4 w-4 text-foreground-subtle" />
                         </div>
-                        <p className="font-serif font-black text-4xl tracking-tighter">{value}</p>
-                        <p className="text-xs text-muted-foreground">{sub}</p>
+                        <p className="text-display-sm text-foreground">{value}</p>
+                        <p className="text-body-sm text-foreground-muted">{sub}</p>
                     </div>
                 ))}
             </div>
 
             {/* Exchange Log */}
-            <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                    <h2 className="font-mono text-[10px] uppercase tracking-[0.4em] text-foreground font-bold">
-                        Resource Exchange Log
-                    </h2>
-                </div>
+            <section className="space-y-4">
+                <h2 className="text-headline text-foreground">Resource exchange log</h2>
 
                 {exchangeLog.length === 0 ? (
-                    <div className="jenga-card p-10 text-center space-y-4 border-dashed">
-                        <Package className="w-8 h-8 text-muted-foreground mx-auto" />
-                        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                            No exchanges logged yet
-                        </p>
-                        <p className="text-sm text-muted-foreground font-light max-w-xs mx-auto">
+                    <div
+                        className="rounded-md border border-dashed border-border p-10 text-center space-y-3"
+                        style={{ background: "var(--surface-1)" }}
+                    >
+                        <Package className="mx-auto h-8 w-8 text-foreground-subtle" />
+                        <p className="text-label text-foreground-muted">No exchanges logged yet</p>
+                        <p className="text-body-sm text-foreground-muted max-w-xs mx-auto">
                             Resource exchanges will appear here as your team contributes materials, seedlings, or expertise to Jenga365 projects.
                         </p>
                     </div>
                 ) : (
-                    <div className="divide-y divide-border border border-border">
+                    <div className="rounded-md border border-border bg-background divide-y divide-border overflow-hidden">
                         {exchangeLog.map((entry) => (
-                            <div key={entry.id} className="px-6 py-4 flex items-center justify-between gap-4 hover:bg-muted/30 transition-colors">
+                            <div
+                                key={entry.id}
+                                className="px-6 py-4 flex items-center justify-between gap-4 transition-colors"
+                                style={{ background: "transparent" }}
+                            >
                                 <div className="space-y-0.5 min-w-0">
-                                    <p className="font-mono text-[10px] uppercase tracking-widest font-bold truncate">
+                                    <p className="text-label text-foreground truncate">
                                         {entry.resourceType}
                                     </p>
                                     {entry.notes && (
-                                        <p className="text-xs text-muted-foreground truncate">{entry.notes}</p>
+                                        <p className="text-body-sm text-foreground-muted truncate">{entry.notes}</p>
                                     )}
                                 </div>
                                 <div className="text-right shrink-0 space-y-0.5">
                                     {entry.quantity != null && (
-                                        <p className="font-serif font-black text-xl">{entry.quantity}</p>
+                                        <p className="text-headline text-foreground">{entry.quantity}</p>
                                     )}
                                     {entry.exchangedAt && (
-                                        <p className="font-mono text-[9px] text-muted-foreground">
+                                        <p className="text-eyebrow text-foreground-muted">
                                             {new Date(entry.exchangedAt).toLocaleDateString("en-KE", {
                                                 day: "2-digit",
                                                 month: "short",
@@ -148,30 +153,30 @@ export default function NgoDashboard({ orgName, mouStatus, exchangeLog }: NgoDas
                         ))}
                     </div>
                 )}
-            </div>
+            </section>
 
             {/* Quick links */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Link
                     href="/dashboard/ngo/mou"
-                    className="flex items-center justify-between px-6 py-5 border border-border hover:border-foreground transition-all group"
+                    className="group flex items-center justify-between rounded-md border border-border bg-background px-6 py-5 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                 >
-                    <div>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-muted-foreground">Agreement</p>
-                        <p className="font-serif font-bold text-lg mt-1">View / Renew MOU</p>
+                    <div className="space-y-1">
+                        <p className="text-eyebrow text-foreground-muted">Agreement</p>
+                        <p className="text-headline text-foreground">View / renew MOU</p>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-foreground-subtle group-hover:translate-x-1 group-hover:text-foreground transition-all" />
                 </Link>
 
                 <Link
                     href="/dashboard/settings"
-                    className="flex items-center justify-between px-6 py-5 border border-border hover:border-foreground transition-all group"
+                    className="group flex items-center justify-between rounded-md border border-border bg-background px-6 py-5 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                 >
-                    <div>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-muted-foreground">Organisation</p>
-                        <p className="font-serif font-bold text-lg mt-1">Profile & Settings</p>
+                    <div className="space-y-1">
+                        <p className="text-eyebrow text-foreground-muted">Organisation</p>
+                        <p className="text-headline text-foreground">Profile & settings</p>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-foreground-subtle group-hover:translate-x-1 group-hover:text-foreground transition-all" />
                 </Link>
             </div>
         </div>
