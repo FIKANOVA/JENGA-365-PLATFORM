@@ -71,17 +71,17 @@ export function middleware(request: NextRequest) {
     let sessionUser: CookieUser | null = null;
 
     if (sessionToken) {
+        // Session token present = authenticated. The actual token expiry is
+        // enforced server-side by Better Auth on every API call.
+        isAuthenticated = true;
         if (sessionDataCookie) {
             const data = parseSessionDataCookie(sessionDataCookie.value);
             if (data) {
                 const expired = data.expiresAt ? data.expiresAt < Date.now() : false;
                 if (!expired) {
-                    isAuthenticated = true;
                     sessionUser = data.session?.user ?? null;
                 }
             }
-        } else {
-            isAuthenticated = true;
         }
     }
 
