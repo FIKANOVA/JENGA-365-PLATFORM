@@ -11,7 +11,24 @@ import { impactStatsType } from "./impactStatsType";
 import { productType } from "./productType";
 import { videoType } from "./videoType";
 import { voicesType } from "./voicesType";
+import { siteSettingsType } from "./siteSettingsType";
+import { teamOfficialType } from "./teamOfficialType";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-    types: [authorType, articleType, eventType, eventCommentType, speakerType, partnerType, coachType, resourceType, impactStatsType, productType, videoType, voicesType],
+    types: [
+        siteSettingsType,
+        teamOfficialType,
+        authorType,
+        articleType,
+        eventType,
+        eventCommentType,
+        speakerType,
+        partnerType,
+        coachType,
+        resourceType,
+        impactStatsType,
+        productType,
+        videoType,
+        voicesType,
+    ],
 };

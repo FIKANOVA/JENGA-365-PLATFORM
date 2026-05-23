@@ -83,6 +83,33 @@ export const eventType = defineType({
             options: { hotspot: true },
         }),
         defineField({
+            name: "gallery",
+            title: "Event Gallery",
+            type: "array",
+            description:
+                "Photo gallery shown on the event detail surface (webinars, clinics, etc.).",
+            of: [
+                {
+                    type: "image",
+                    options: { hotspot: true },
+                    fields: [
+                        defineField({
+                            name: "alt",
+                            title: "Alt text",
+                            type: "string",
+                            validation: (Rule) => Rule.required(),
+                        }),
+                        defineField({
+                            name: "caption",
+                            title: "Caption",
+                            type: "string",
+                        }),
+                    ],
+                },
+            ],
+            options: { layout: "grid" },
+        }),
+        defineField({
             name: "description",
             title: "Description",
             type: "array",

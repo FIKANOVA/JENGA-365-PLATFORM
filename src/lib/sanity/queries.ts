@@ -1,6 +1,42 @@
 import { groq } from "next-sanity";
 import { client } from "./client";
 
+// ── Site Settings (singleton) ───────────────────────────────
+export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
+  landingHeroImage { asset->{ _id, url }, alt, hotspot, crop },
+  aboutHeroImage { asset->{ _id, url }, alt, hotspot, crop },
+  openGraphImage { asset->{ _id, url }, hotspot, crop },
+  aboutOpenGraphImage { asset->{ _id, url }, hotspot, crop }
+}`;
+
+export async function fetchSiteSettings() {
+    try {
+        return await client.fetch(siteSettingsQuery);
+    } catch {
+        return null;
+    }
+}
+
+// ── Team Officials ──────────────────────────────────────────
+export const teamOfficialsQuery = groq`*[_type == "teamOfficial" && isPublished == true] | order(order asc, name asc) {
+  _id,
+  name,
+  slug,
+  role,
+  bio,
+  linkedinUrl,
+  order,
+  headshot { asset->{ _id, url }, alt, hotspot, crop }
+}`;
+
+export async function fetchTeamOfficials() {
+    try {
+        return await client.fetch(teamOfficialsQuery);
+    } catch {
+        return [];
+    }
+}
+
 // ── Articles ────────────────────────────────────────────────
 export const articlesQuery = groq`*[_type == "article" && publishedAt < now()] | order(publishedAt desc) {
   _id,
@@ -52,17 +88,52 @@ export async function fetchRelatedArticles(slug: string) {
 export const eventsQuery = groq`*[_type == "event" && date >= now()] | order(date asc) {
   _id,
   title,
-  type,
+  "type": eventType,
   date,
   location,
   isOnline,
   capacity,
-  "image": image.asset->url,
+  "image": mainImage.asset->url,
+  "galleryCount": count(gallery),
   description
 }`;
 
 export async function fetchEvents() {
     return await client.fetch(eventsQuery);
+}
+
+export const eventByIdQuery = groq`*[_type == "event" && _id == $id][0] {
+  _id,
+  title,
+  "type": eventType,
+  date,
+  location,
+  isOnline,
+  capacity,
+  registrationLink,
+  mainImage { asset->{ _id, url }, hotspot, crop },
+  description,
+  gallery[] {
+    _key,
+    asset->{ _id, url },
+    alt,
+    caption,
+    hotspot,
+    crop
+  }
+}`;
+
+/**
+ * Fetch a Sanity event by its document `_id`. Use this with the `sanity_doc_id`
+ * stored on the Neon `events` table to hydrate event detail pages with media.
+ */
+export async function fetchEventBySanityId(sanityDocId: string) {
+    if (!sanityDocId) return null;
+    try {
+        return await client.fetch(eventByIdQuery, { id: sanityDocId });
+    } catch {
+        return null;
+    }
 }
 
 // ── Partners ─────────────────────────────────────────────────
