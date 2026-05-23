@@ -5,12 +5,20 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 export interface CartProduct {
     _id: string;
     title: string;
-    category?: string;
+    category?: string | null;
     price: number;
     discountPrice?: number;
-    stockStatus?: string;
-    mainImage?: { asset?: { url: string } };
-    description?: string;
+    stockCount: number;
+    imageUrl?: string | null;
+    imageGallery?: string[];
+    description?: string | null;
+    variants?: Array<{
+        sku: string;
+        label: string;
+        size?: string;
+        color?: string;
+        priceOverride?: number;
+    }>;
 }
 
 export interface CartItem {

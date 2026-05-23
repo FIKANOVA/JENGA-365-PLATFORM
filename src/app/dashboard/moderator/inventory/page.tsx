@@ -72,9 +72,13 @@ export default async function ModeratorInventoryPage() {
                                     )}
                                     <div
                                         className="absolute top-2 right-2 px-2 py-1 text-eyebrow rounded"
-                                        style={{ background: "var(--background)", color: "var(--foreground)", boxShadow: "var(--shadow-sm)" }}
+                                        style={{
+                                            background: "var(--background)",
+                                            color: initialStock === 0 ? "var(--brand-red)" : initialStock <= 5 ? "#b45309" : "var(--brand-green)",
+                                            boxShadow: "var(--shadow-sm)",
+                                        }}
                                     >
-                                        {product.stockStatus === "inStock" ? "In stock" : product.stockStatus === "lowStock" ? "Low stock" : "Out of stock"}
+                                        {initialStock === 0 ? "Out of stock" : `${initialStock} in stock`}
                                     </div>
                                     {!initialActive && (
                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">

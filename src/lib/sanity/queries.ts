@@ -98,6 +98,8 @@ export async function fetchImpactStats() {
 }
 
 // ── Products ─────────────────────────────────────────────────
+// Used by the moderator inventory page to mirror the Sanity catalog.
+// Stock counts live in Neon (merchandise table), so they are not selected here.
 export const productsQuery = groq`*[_type == "product"] | order(title asc) {
   _id,
   title,
@@ -105,7 +107,6 @@ export const productsQuery = groq`*[_type == "product"] | order(title asc) {
   category,
   price,
   discountPrice,
-  stockStatus,
   mainImage { asset->{ _id, url } },
   description
 }`;

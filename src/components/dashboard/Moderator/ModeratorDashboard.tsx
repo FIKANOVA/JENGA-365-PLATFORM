@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X, Eye, AlertTriangle, UserCheck, Loader2, MapPin, Briefcase, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, X, Eye, AlertTriangle, UserCheck, Loader2, MapPin, Briefcase, ChevronDown, ChevronUp, ShoppingBag } from "lucide-react";
 import { approveUser, rejectUser, approveArticle, rejectArticle } from "@/lib/actions/moderation";
 import { getScopePermissions, SCOPE_TIER_LABELS } from "@/lib/constants/moderator-scopes";
+import SyncStoreInventoryButton from "@/components/dashboard/shared/SyncStoreInventoryButton";
 
 interface ArticleItem {
     id: string;
@@ -178,6 +179,8 @@ export default function ModeratorDashboard({
         finally { setActioning(null); }
     }
 
+    const showCommerceSection = perms.contentModeration;
+
     if (!perms.contentModeration && !perms.userApprovals && !perms.eventsManagement) {
         return (
             <div className="flex-1 p-8 flex flex-col items-center justify-center bg-background h-full">
@@ -209,6 +212,31 @@ export default function ModeratorDashboard({
                         {tierLabel}
                     </span>
                 </header>
+
+                {showCommerceSection && (
+                    <div
+                        className="rounded-lg border border-border bg-background p-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                        style={{ boxShadow: "var(--shadow-sm)" }}
+                    >
+                        <div className="flex items-start gap-3">
+                            <div
+                                className="w-9 h-9 rounded-md flex items-center justify-center shrink-0"
+                                style={{ background: "var(--surface-2)", color: "var(--brand-green)" }}
+                            >
+                                <ShoppingBag className="w-4 h-4" />
+                            </div>
+                            <div>
+                                <p className="text-eyebrow text-foreground-muted">Commerce & Editorial</p>
+                                <h4 className="text-headline text-foreground">Store inventory</h4>
+                                <p className="text-body-sm text-foreground-muted max-w-xl mt-1">
+                                    Pull the latest catalog from Sanity into Neon. Names, prices, images and variants
+                                    are refreshed; stock counts are preserved.
+                                </p>
+                            </div>
+                        </div>
+                        <SyncStoreInventoryButton />
+                    </div>
+                )}
 
                 {/* Tabs — only show tabs the scope allows */}
                 <div className="flex border-b border-border mb-6 overflow-x-auto">

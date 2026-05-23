@@ -47,28 +47,110 @@ export const productType = defineType({
             description: "Optional. Setting this will show the item on sale.",
         }),
         defineField({
+            name: "description",
+            title: "Description",
+            type: "text",
+        }),
+        defineField({
             name: "mainImage",
             title: "Main Image",
             type: "image",
             options: { hotspot: true },
+            description: "Primary product image used in card listings.",
         }),
         defineField({
-            name: "stockStatus",
-            title: "Stock Status",
-            type: "string",
-            options: {
-                list: [
-                    { title: "In Stock", value: "inStock" },
-                    { title: "Low Stock", value: "lowStock" },
-                    { title: "Out of Stock", value: "outOfStock" },
-                ],
-            },
-            initialValue: "inStock",
+            name: "gallery",
+            title: "Image Gallery",
+            type: "array",
+            description: "Additional product photography. First gallery entry is used after mainImage on detail surfaces.",
+            of: [
+                {
+                    type: "image",
+                    options: { hotspot: true },
+                    fields: [
+                        defineField({
+                            name: "alt",
+                            title: "Alt text",
+                            type: "string",
+                            validation: (Rule) => Rule.required(),
+                        }),
+                    ],
+                },
+            ],
+            options: { layout: "grid" },
         }),
         defineField({
-            name: "description",
-            title: "Description",
-            type: "text",
+            name: "variants",
+            title: "Variants",
+            type: "array",
+            description: "Size, color, or other variant options. Stock per variant lives on the Neon merchandise table.",
+            of: [
+                {
+                    type: "object",
+                    name: "variant",
+                    fields: [
+                        defineField({
+                            name: "label",
+                            title: "Label",
+                            type: "string",
+                            description: "Human-facing label shown in the storefront (e.g. \"Medium · Black\").",
+                            validation: (Rule) => Rule.required(),
+                        }),
+                        defineField({
+                            name: "sku",
+                            title: "SKU",
+                            type: "string",
+                            description: "Stable identifier used as the variant key in Neon.",
+                            validation: (Rule) => Rule.required(),
+                        }),
+                        defineField({
+                            name: "size",
+                            title: "Size",
+                            type: "string",
+                            options: {
+                                list: [
+                                    { title: "Extra Small (XS)", value: "XS" },
+                                    { title: "Small (S)", value: "S" },
+                                    { title: "Medium (M)", value: "M" },
+                                    { title: "Large (L)", value: "L" },
+                                    { title: "Extra Large (XL)", value: "XL" },
+                                    { title: "Double XL (XXL)", value: "XXL" },
+                                    { title: "One Size", value: "ONE" },
+                                ],
+                            },
+                        }),
+                        defineField({
+                            name: "color",
+                            title: "Color",
+                            type: "string",
+                        }),
+                        defineField({
+                            name: "priceOverride",
+                            title: "Price Override (KES)",
+                            type: "number",
+                            description: "Optional. Overrides the base price for this variant.",
+                        }),
+                    ],
+                    preview: {
+                        select: { title: "label", subtitle: "sku" },
+                    },
+                },
+            ],
+            validation: (Rule) =>
+                Rule.custom((variants) => {
+                    if (!Array.isArray(variants)) return true;
+                    const skus = variants
+                        .map((v) => (v as { sku?: string })?.sku)
+                        .filter((s): s is string => !!s);
+                    return skus.length === new Set(skus).size || "Variant SKUs must be unique within a product";
+                }),
+        }),
+        defineField({
+            name: "isActive",
+            title: "Active",
+            type: "boolean",
+            description: "Toggle off to hide from the storefront without deleting.",
+            initialValue: true,
         }),
     ],
     preview: {

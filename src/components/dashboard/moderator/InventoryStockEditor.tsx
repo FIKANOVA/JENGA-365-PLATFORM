@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { upsertMerchandiseStock } from "@/lib/actions/merchandise";
+import { setMerchandiseStockCount } from "@/lib/actions/merchandise";
 import { toast } from "sonner";
 import { Check, Loader2 } from "lucide-react";
 
@@ -13,18 +13,20 @@ interface Props {
     initialActive: boolean;
 }
 
-export default function InventoryStockEditor({ sanityProductId, name, price, initialStock, initialActive }: Props) {
+export default function InventoryStockEditor({ sanityProductId, initialStock, initialActive }: Props) {
     const [stockCount, setStockCount] = useState(initialStock);
     const [isActive, setIsActive] = useState(initialActive);
     const [isPending, startTransition] = useTransition();
 
     const handleSave = () => {
         startTransition(async () => {
-            const result = await upsertMerchandiseStock(sanityProductId, name, stockCount, isActive, price);
-            if (result.success) {
+            try {
+                await setMerchandiseStockCount(sanityProductId, stockCount, isActive);
                 toast.success("Stock updated");
-            } else {
-                toast.error("Failed to update stock");
+            } catch (err) {
+                toast.error((err as Error).message === "MERCHANDISE_NOT_FOUND"
+                    ? "Run \"Sync Store Inventory\" first to register this product"
+                    : "Failed to update stock");
             }
         });
     };

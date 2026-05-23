@@ -254,8 +254,19 @@ export const merchandise = pgTable("merchandise", {
     price: decimal("price", { precision: 12, scale: 2 }).notNull(),
     stockCount: integer("stock_count").default(0).notNull(),
     imageUrl: text("image_url"),
+    imageGallery: text("image_gallery").array(),
     category: varchar("category", { length: 100 }),
+    // Snapshot of Sanity variants (sku, label, size, color, priceOverride).
+    // Stock is tracked at the product level via stockCount; variants are display-only here.
+    variants: jsonb("variants").$type<Array<{
+        sku: string;
+        label: string;
+        size?: string;
+        color?: string;
+        priceOverride?: number;
+    }>>(),
     isActive: boolean("is_active").default(true).notNull(),
+    lastSyncedAt: timestamp("last_synced_at"),
 });
 
 export const orders = pgTable("orders", {

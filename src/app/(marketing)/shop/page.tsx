@@ -1,4 +1,4 @@
-import { fetchProducts } from "@/lib/sanity/queries";
+import { getStorefrontMerchandise } from "@/lib/actions/merchandise";
 import ShopClient from "@/components/marketing/ShopClient";
 
 export const metadata = {
@@ -6,11 +6,10 @@ export const metadata = {
     description: "Shop Jenga365 merchandise to support our impact fund.",
 };
 
-// Revalidate every 60 seconds
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ShopPage() {
-    const products = await fetchProducts();
-
+    const products = await getStorefrontMerchandise();
     return <ShopClient initialProducts={products} />;
 }

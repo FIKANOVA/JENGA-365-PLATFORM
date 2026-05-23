@@ -27,6 +27,10 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
     const [orderConfirmation, setOrderConfirmation] = useState<OrderConfirmation | null>(null);
 
     const handleAddToCart = (product: CartProduct) => {
+        if (product.stockCount <= 0) {
+            toast.error(`${product.title} is out of stock`);
+            return;
+        }
         addToCart(product);
         toast.success(`Added ${product.title} to cart`);
     };
@@ -152,9 +156,9 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                         <div key={product._id} className="group flex flex-col bg-white border border-[var(--border)] transition-all duration-500 hover:border-black hover:shadow-2xl relative h-full rounded-sm overflow-hidden">
                                             {/* Visual Area */}
                                             <div className="relative h-80 bg-[var(--surface-1)] overflow-hidden">
-                                                {product.mainImage?.asset?.url ? (
+                                                {product.imageUrl ? (
                                                     <img
-                                                        src={product.mainImage.asset.url}
+                                                        src={product.imageUrl}
                                                         alt={product.title}
                                                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 opacity-80"
                                                     />
@@ -164,9 +168,14 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                     </div>
                                                 )}
                                                 <div className="absolute top-4 left-4 flex flex-col gap-2">
-                                                    {product.stockStatus === "outOfStock" && (
+                                                    {product.stockCount === 0 && (
                                                         <span className="px-2 py-1 bg-black text-white font-mono text-[8px] uppercase tracking-widest font-bold rounded-sm">
-                                                            SOLD OUT
+                                                            OUT OF STOCK
+                                                        </span>
+                                                    )}
+                                                    {product.stockCount > 0 && product.stockCount <= 5 && (
+                                                        <span className="px-2 py-1 bg-[var(--brand-red)] text-white font-mono text-[8px] uppercase tracking-widest font-bold rounded-sm">
+                                                            ONLY {product.stockCount} LEFT
                                                         </span>
                                                     )}
                                                     {product.discountPrice && (
@@ -203,14 +212,14 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
 
                                                     <button
                                                         onClick={() => handleAddToCart(product)}
-                                                        disabled={product.stockStatus === "outOfStock"}
-                                                        className={`w-full h-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-widest font-bold transition-all rounded-sm shadow-sm ${product.stockStatus === "outOfStock"
+                                                        disabled={product.stockCount === 0}
+                                                        className={`w-full h-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-widest font-bold transition-all rounded-sm shadow-sm ${product.stockCount === 0
                                                             ? "bg-[var(--surface-1)] text-[var(--foreground-subtle)] cursor-not-allowed"
                                                             : "bg-black text-white hover:bg-[var(--brand-green)]"
                                                             }`}
                                                     >
-                                                        {product.stockStatus === "outOfStock" ? "NOT AVAILABLE" : "ADD TO CART"}
-                                                        {product.stockStatus === "outOfStock" ? <Ban className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
+                                                        {product.stockCount === 0 ? "OUT OF STOCK" : "ADD TO CART"}
+                                                        {product.stockCount === 0 ? <Ban className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
                                                     </button>
                                                 </div>
                                             </div>
@@ -261,8 +270,8 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                 cartItems.map(item => (
                                     <div key={item.product._id} className="flex gap-4 border-b border-[var(--border)] pb-4">
                                         <div className="size-16 bg-[var(--surface-1)] shrink-0">
-                                            {item.product.mainImage?.asset?.url && (
-                                                <img src={item.product.mainImage.asset.url} alt={item.product.title} className="w-full h-full object-cover" />
+                                            {item.product.imageUrl && (
+                                                <img src={item.product.imageUrl} alt={item.product.title} className="w-full h-full object-cover" />
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">

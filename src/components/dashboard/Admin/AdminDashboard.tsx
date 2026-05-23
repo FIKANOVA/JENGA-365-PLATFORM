@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect, useTransition } from "react";
-import { TrendingUp, Minus, AlertTriangle, Filter, MoreVertical, Plus, CheckCircle, XCircle, Ban, X, Send, ChevronDown, ChevronUp, MapPin, Briefcase } from "lucide-react";
+import { TrendingUp, Minus, AlertTriangle, Filter, MoreVertical, Plus, CheckCircle, XCircle, Ban, X, Send, ChevronDown, ChevronUp, MapPin, Briefcase, ShoppingBag } from "lucide-react";
 import { SCOPE_TIER_LABELS } from "@/lib/constants/moderator-scopes";
 import { approveUser, rejectUser, suspendUser } from "@/lib/actions/moderation";
 import { createModeratorInvite } from "@/lib/actions/auth";
 import { toast } from "sonner";
+import SyncStoreInventoryButton from "@/components/dashboard/shared/SyncStoreInventoryButton";
 
 interface UserRow {
     id: string;
@@ -407,6 +408,29 @@ export default function AdminDashboard({
                             </div>
                         );
                     })}
+                </div>
+
+                {/* Commerce & Editorial — sync store inventory */}
+                <div
+                    className="rounded-lg border border-border bg-background p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    style={{ boxShadow: "var(--shadow-sm)" }}
+                >
+                    <div className="flex items-start gap-3">
+                        <div
+                            className="w-9 h-9 rounded-md flex items-center justify-center shrink-0"
+                            style={{ background: "var(--surface-2)", color: "var(--brand-green)" }}
+                        >
+                            <ShoppingBag className="w-4 h-4" />
+                        </div>
+                        <div>
+                            <p className="text-eyebrow text-foreground-muted">Commerce & Editorial</p>
+                            <h4 className="text-headline text-foreground">Store inventory</h4>
+                            <p className="text-body-sm text-foreground-muted max-w-xl mt-1">
+                                Refresh the Neon merchandise table from Sanity. Stock counts are preserved.
+                            </p>
+                        </div>
+                    </div>
+                    <SyncStoreInventoryButton />
                 </div>
 
                 {/* User Management Table */}
