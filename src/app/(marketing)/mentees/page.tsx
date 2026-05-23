@@ -34,7 +34,7 @@ export default function MenteesPage() {
             >
                 <div className="flex flex-wrap items-center gap-3">
                     <Link
-                        href="/register"
+                        href="/register/mentorship"
                         className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
                         style={{ background: "var(--brand-green)" }}
                     >

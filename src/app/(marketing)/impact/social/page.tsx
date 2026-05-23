@@ -54,7 +54,7 @@ export default async function ImpactSocialPage() {
                         View funding map <ArrowRight className="h-4 w-4" />
                     </Link>
                     <Link
-                        href="/register"
+                        href="/register/mentorship"
                         className="inline-flex items-center gap-2 h-11 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
                     >
                         Join the movement

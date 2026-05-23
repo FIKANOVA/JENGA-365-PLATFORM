@@ -146,7 +146,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                                 Jenga365 is more than a platform; it's an ecosystem of excellence. Join thousands of high-performers today.
                             </p>
                             <div className="flex flex-wrap justify-center gap-6 pt-6">
-                                <Link href="/register" className="px-12 py-5 bg-[var(--brand-green)] text-white font-mono text-[10px] uppercase tracking-widest rounded-sm hover:bg-black transition-all">
+                                <Link href="/register/mentorship" className="px-12 py-5 bg-[var(--brand-green)] text-white font-mono text-[10px] uppercase tracking-widest rounded-sm hover:bg-black transition-all">
                                     CREATE FREE ACCOUNT
                                 </Link>
                                 <Link href="/login" className="px-12 py-5 border border-[var(--border)] text-black font-mono text-[10px] uppercase tracking-widest rounded-sm hover:bg-black hover:text-white transition-all">

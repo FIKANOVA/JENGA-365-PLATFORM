@@ -82,7 +82,7 @@ export default function HeroSection({ heroImage }: HeroSectionProps) {
                         ) : (
                             <>
                                 <Link
-                                    href="/register"
+                                    href="/register/mentorship"
                                     className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
                                     style={{ background: "var(--brand-green)" }}
                                 >

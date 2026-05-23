@@ -111,7 +111,7 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                             {/* CTA */}
                             {item.locked ? (
                                 <Link
-                                    href="/register"
+                                    href="/register/mentorship"
                                     className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--foreground-subtle)] hover:text-black transition-colors"
                                 >
                                     <Lock className="h-4 w-4" />

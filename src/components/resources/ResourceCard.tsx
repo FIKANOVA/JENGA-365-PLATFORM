@@ -97,7 +97,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                             <p className="text-white text-display-sm italic leading-tight">Access locked.</p>
                             <p className="text-[var(--foreground-subtle)] text-[11px] leading-relaxed max-w-[200px] mx-auto">Requires verified Jenga365 account to download strategic assets.</p>
                         </div>
-                        <Link href="/register" className="w-full">
+                        <Link href="/register/mentorship" className="w-full">
                             <button className="w-full bg-[var(--brand-green)] text-white py-4 px-6 font-mono text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all rounded-sm shadow-2xl">
                                 REGISTER TO UNLOCK
                             </button>

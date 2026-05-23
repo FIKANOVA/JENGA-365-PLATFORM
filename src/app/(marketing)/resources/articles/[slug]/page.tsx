@@ -137,7 +137,7 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
                             </h2>
                             <div className="flex flex-wrap justify-center gap-3 pt-2">
                                 <Link
-                                    href="/register"
+                                    href="/register/mentorship"
                                     className="inline-flex items-center h-11 rounded-md px-6 text-label font-medium transition-opacity hover:opacity-90"
                                     style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}
                                 >

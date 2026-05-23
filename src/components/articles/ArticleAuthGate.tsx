@@ -16,7 +16,7 @@ export default function ArticleAuthGate() {
                     </p>
                 </div>
                 <Link
-                    href="/register"
+                    href="/register/mentorship"
                     className="block w-full bg-[var(--brand-green)] text-white py-5 px-6 font-mono text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all rounded-sm shadow-2xl text-center"
                 >
                     CREATE FREE ACCOUNT

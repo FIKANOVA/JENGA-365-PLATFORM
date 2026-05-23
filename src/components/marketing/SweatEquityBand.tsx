@@ -57,7 +57,7 @@ export default function SweatEquityBand() {
 
                 <div className="mt-10">
                     <Link
-                        href="/register"
+                        href="/register/mentorship"
                         className="inline-flex items-center justify-center h-11 px-5 rounded-md font-medium text-white"
                         style={{ background: "var(--brand-green)" }}
                     >
