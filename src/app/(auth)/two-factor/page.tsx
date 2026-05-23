@@ -30,7 +30,7 @@ function TwoFactorForm() {
         setLoading(true);
 
         try {
-            const result = await authClient.twoFactor.verifyTOTP({
+            const result = await authClient.twoFactor.verifyTotp({
                 code,
                 trustDevice,
             });
