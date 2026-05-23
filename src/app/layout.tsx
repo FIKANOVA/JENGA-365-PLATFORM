@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cartContext";
+import { DonateProvider } from "@/components/shared/DonateProvider";
 
 // Single typography family per DESIGN.md §2. Inter for everything except
 // monospace contexts (code, IDs) which use JetBrains Mono.
@@ -31,7 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground">
-        <CartProvider>{children}</CartProvider>
+        <DonateProvider>
+          <CartProvider>{children}</CartProvider>
+        </DonateProvider>
       </body>
     </html>
   );

@@ -225,22 +225,30 @@ export interface StorefrontMerchandise {
  * call (keyed by sanityProductId) keeps working without changes.
  */
 export async function getStorefrontMerchandise(): Promise<StorefrontMerchandise[]> {
-    const rows = await db.select().from(merchandise).where(eq(merchandise.isActive, true));
+    try {
+        const rows = await db.select().from(merchandise).where(eq(merchandise.isActive, true));
 
-    return rows
-        .filter((r): r is typeof r & { sanityProductId: string } => !!r.sanityProductId)
-        .map((r) => ({
-            _id: r.sanityProductId,
-            title: r.name,
-            description: r.description,
-            category: r.category,
-            price: Number(r.price),
-            stockCount: r.stockCount,
-            imageUrl: r.imageUrl,
-            imageGallery: r.imageGallery ?? [],
-            variants: r.variants ?? [],
-            isActive: r.isActive,
-        }));
+        return rows
+            .filter((r): r is typeof r & { sanityProductId: string } => !!r.sanityProductId)
+            .map((r) => ({
+                _id: r.sanityProductId,
+                title: r.name,
+                description: r.description,
+                category: r.category,
+                price: Number(r.price),
+                stockCount: r.stockCount,
+                imageUrl: r.imageUrl,
+                imageGallery: r.imageGallery ?? [],
+                variants: r.variants ?? [],
+                isActive: r.isActive,
+            }));
+    } catch (error) {
+        // Most likely cause in prod: 0015 migration not yet applied so
+        // variants/image_gallery columns don't exist. Log and return empty
+        // so /shop renders an empty state instead of crashing.
+        console.error("Failed to load storefront merchandise:", error);
+        return [];
+    }
 }
 
 export async function getMerchandiseMap(): Promise<Record<string, { stockCount: number; isActive: boolean }>> {
