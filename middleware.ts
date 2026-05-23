@@ -16,7 +16,7 @@ const AUTH_ONLY_ROUTES = ["/login", "/register"];
 const ONBOARDING_ROUTES = [
     "/legal/nda", "/onboarding", "/verify-email",
     "/pending-approval", "/pending", "/moderator-invite", "/admin-setup",
-    "/email-test", "/forgot-password", "/reset-password",
+    "/email-test", "/forgot-password", "/reset-password", "/two-factor",
 ];
 
 interface CookieUser {

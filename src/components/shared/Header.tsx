@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
  * Get Involved for discoverability.
  */
 
-type NavItem = { label: string; href?: string; isDonate?: boolean; description?: string };
+type NavItem = { label: string; href?: string; isDonate?: boolean; description?: string; newTab?: boolean };
 type NavGroup = { label: string; items: NavItem[] };
 
 const NAV_GROUPS: NavGroup[] = [
@@ -51,7 +51,7 @@ const NAV_GROUPS: NavGroup[] = [
         items: [
             { label: "Join Free", href: "/register/mentorship", description: "Sign up as mentee or mentor" },
             { label: "Donate", isDonate: true, description: "Fund the engine via Paystack" },
-            { label: "Shop", href: "/shop", description: "Merchandise — proceeds fund the field" },
+            { label: "Shop", href: "/shop", description: "Merchandise — proceeds fund the field", newTab: true },
             { label: "Become a Partner", href: "/register/partner", description: "Corporate or NGO partnerships" },
         ],
     },
@@ -178,6 +178,7 @@ function NavDropdown({ group, onItemClick }: { group: NavGroup; onItemClick?: ()
                                         href={item.href!}
                                         role="menuitem"
                                         onClick={close}
+                                        {...(item.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                                         className="flex items-start gap-3 px-4 py-3 hover:bg-surface-2"
                                     >
                                         <span className="flex flex-col">
@@ -219,6 +220,8 @@ function GlobalCTAs() {
             </DonateButton>
             <Link
                 href="/shop"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label hover:bg-surface-2 transition-colors"
                 style={{ color: "var(--foreground-muted)" }}
             >
@@ -317,6 +320,8 @@ function AvatarMenu({ name, image, role }: { name: string; image?: string; role?
                         <li>
                             <Link
                                 href="/dashboard"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 role="menuitem"
                                 onClick={() => setOpen(false)}
                                 className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-surface-2 text-foreground"
@@ -461,6 +466,8 @@ function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; 
                 </DonateButton>
                 <Link
                     href="/shop"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={onClose}
                     className="flex items-center gap-2.5 px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground"
                 >

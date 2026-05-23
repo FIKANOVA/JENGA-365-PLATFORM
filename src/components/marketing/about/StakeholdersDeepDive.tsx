@@ -147,6 +147,8 @@ export default function StakeholdersDeepDive() {
                                     {isAuthenticated ? (
                                         <Link
                                             href="/dashboard"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                             className="inline-flex h-10 items-center gap-1.5 rounded-md px-4 text-label font-medium text-white transition-opacity hover:opacity-90"
                                             style={{ background: s.color }}
                                         >

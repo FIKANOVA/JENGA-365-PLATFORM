@@ -73,6 +73,8 @@ export default function HeroSection({ heroImage }: HeroSectionProps) {
                         {isAuthenticated ? (
                             <Link
                                 href="/dashboard"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
                                 style={{ background: "var(--brand-green)" }}
                             >

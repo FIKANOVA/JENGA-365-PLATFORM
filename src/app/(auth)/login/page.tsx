@@ -24,13 +24,11 @@ function LoginForm() {
         setLoading(true);
 
         try {
-            const result = await signIn.email({
-                email,
-                password,
-                callbackURL: callbackUrl,
-            });
+            const result = await signIn.email({ email, password });
 
-            if (result?.error) {
+            if ((result?.data as Record<string, unknown>)?.twoFactorRedirect) {
+                router.push(`/two-factor?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+            } else if (result?.error) {
                 setError("Invalid email or password. Please try again.");
             } else {
                 router.push(callbackUrl);

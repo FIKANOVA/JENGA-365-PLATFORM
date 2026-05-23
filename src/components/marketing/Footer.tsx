@@ -91,6 +91,7 @@ export default function Footer() {
                                         ) : (
                                             <Link
                                                 href={link.href}
+                                                {...(link.label === "Shop" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                                                 className="font-sans text-sm text-white/50 hover:text-white transition-colors"
                                             >
                                                 {link.label}

@@ -66,6 +66,7 @@ export default function ResourcesHubPage() {
                         <Link
                             key={href}
                             href={href}
+                            {...(label === "Downloads" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                             className="group relative rounded-lg border border-border bg-background overflow-hidden flex flex-col p-6 lg:p-8 min-h-[260px] transition-shadow hover:shadow-md"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
