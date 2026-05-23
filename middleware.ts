@@ -59,8 +59,13 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const sessionToken = request.cookies.get("better-auth.session_token");
-    const sessionDataCookie = request.cookies.get("better-auth.session_data");
+    // Better Auth prefixes cookie names with __Secure- on HTTPS (production).
+    const sessionToken =
+        request.cookies.get("__Secure-better-auth.session_token") ??
+        request.cookies.get("better-auth.session_token");
+    const sessionDataCookie =
+        request.cookies.get("__Secure-better-auth.session_data") ??
+        request.cookies.get("better-auth.session_data");
 
     let isAuthenticated = false;
     let sessionUser: CookieUser | null = null;
