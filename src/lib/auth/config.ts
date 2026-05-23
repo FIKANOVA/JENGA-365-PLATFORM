@@ -137,7 +137,37 @@ export const auth = betterAuth({
 
     // Plugins for 2FA and Verification
     plugins: [
-        twoFactor(),
+        twoFactor({
+            otpOptions: {
+                sendOTP: async ({ user, otp }) => {
+                    try {
+                        const { Resend } = await import("resend");
+                        const resend = new Resend(process.env.RESEND_API_KEY);
+                        await resend.emails.send({
+                            from: process.env.RESEND_FROM_EMAIL ?? "noreply@jenga365.com",
+                            to: user.email,
+                            subject: "Your Jenga365 login code",
+                            html: `
+                                <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;">
+                                    <h2 style="font-size:22px;font-weight:700;margin-bottom:8px;">Your login code</h2>
+                                    <p style="color:#666;margin-bottom:24px;">
+                                        Use the code below to complete sign-in. It expires in 3 minutes.
+                                    </p>
+                                    <div style="font-family:monospace;font-size:36px;font-weight:700;letter-spacing:0.2em;background:#f4f4f5;padding:20px 32px;border-radius:8px;text-align:center;">
+                                        ${otp}
+                                    </div>
+                                    <p style="color:#999;font-size:12px;margin-top:24px;">
+                                        If you didn't request this, you can safely ignore this email.
+                                    </p>
+                                </div>
+                            `,
+                        });
+                    } catch (err) {
+                        console.error("[auth] 2FA OTP email failed:", err);
+                    }
+                },
+            },
+        }),
         admin(),
     ],
 

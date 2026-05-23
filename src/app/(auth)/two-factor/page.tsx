@@ -5,22 +5,62 @@ import Link from "next/link";
 import Logo from "@/components/shared/Logo";
 import { authClient } from "@/lib/auth/client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Mail } from "lucide-react";
+
+type Mode = "totp" | "otp";
 
 function TwoFactorForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
 
+    const [mode, setMode] = useState<Mode>("totp");
     const [code, setCode] = useState("");
     const [trustDevice, setTrustDevice] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [info, setInfo] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [sending, setSending] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         inputRef.current?.focus();
-    }, []);
+    }, [mode]);
+
+    async function sendEmailCode() {
+        setSending(true);
+        setError(null);
+        setInfo(null);
+        try {
+            const result = await authClient.twoFactor.sendOtp();
+            if (result?.error) {
+                setError("Failed to send code. Please try again.");
+            } else {
+                setInfo("A 6-digit code has been sent to your email address.");
+                setCode("");
+                inputRef.current?.focus();
+            }
+        } catch {
+            setError("Failed to send code. Please try again.");
+        } finally {
+            setSending(false);
+        }
+    }
+
+    async function switchToEmail() {
+        setMode("otp");
+        setCode("");
+        setError(null);
+        setInfo(null);
+        await sendEmailCode();
+    }
+
+    function switchToTotp() {
+        setMode("totp");
+        setCode("");
+        setError(null);
+        setInfo(null);
+    }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -30,13 +70,17 @@ function TwoFactorForm() {
         setLoading(true);
 
         try {
-            const result = await authClient.twoFactor.verifyTotp({
-                code,
-                trustDevice,
-            });
+            const result =
+                mode === "totp"
+                    ? await authClient.twoFactor.verifyTotp({ code, trustDevice })
+                    : await authClient.twoFactor.verifyOtp({ code, trustDevice });
 
             if (result?.error) {
-                setError("Invalid code. Check your authenticator app and try again.");
+                const msg =
+                    mode === "totp"
+                        ? "Invalid code. Check your authenticator app and try again."
+                        : "Invalid or expired code. Request a new one.";
+                setError(msg);
                 setCode("");
                 inputRef.current?.focus();
             } else {
@@ -61,11 +105,17 @@ function TwoFactorForm() {
                     className="flex h-10 w-10 items-center justify-center rounded-full"
                     style={{ background: "var(--surface-2)" }}
                 >
-                    <ShieldCheck className="h-5 w-5" style={{ color: "var(--brand-green)" }} />
+                    {mode === "totp" ? (
+                        <ShieldCheck className="h-5 w-5" style={{ color: "var(--brand-green)" }} />
+                    ) : (
+                        <Mail className="h-5 w-5" style={{ color: "var(--brand-green)" }} />
+                    )}
                 </div>
                 <h1 className="text-display-sm text-foreground">Two-factor authentication</h1>
                 <p className="text-body-sm text-foreground-muted">
-                    Enter the 6-digit code from your authenticator app.
+                    {mode === "totp"
+                        ? "Enter the 6-digit code from your authenticator app."
+                        : "Enter the 6-digit code sent to your email address."}
                 </p>
             </div>
 
@@ -81,6 +131,14 @@ function TwoFactorForm() {
                         }}
                     >
                         {error}
+                    </div>
+                )}
+                {info && (
+                    <div
+                        role="status"
+                        className="rounded-md border border-border bg-[color:var(--surface-1)] px-3 py-2 text-body-sm text-foreground-muted"
+                    >
+                        {info}
                     </div>
                 )}
 
@@ -125,7 +183,37 @@ function TwoFactorForm() {
                 </button>
             </form>
 
-            <div className="border-t border-border pt-6 text-center">
+            <div className="border-t border-border pt-6 space-y-3 text-center">
+                {mode === "totp" ? (
+                    <button
+                        type="button"
+                        onClick={switchToEmail}
+                        disabled={sending}
+                        className="block w-full text-body-sm transition-colors hover:text-foreground disabled:opacity-60"
+                        style={{ color: "var(--brand-green)" }}
+                    >
+                        {sending ? "Sending…" : "Can't access your app? Get a code by email"}
+                    </button>
+                ) : (
+                    <div className="space-y-2">
+                        <button
+                            type="button"
+                            onClick={sendEmailCode}
+                            disabled={sending}
+                            className="block w-full text-body-sm transition-colors hover:text-foreground disabled:opacity-60"
+                            style={{ color: "var(--brand-green)" }}
+                        >
+                            {sending ? "Sending…" : "Resend code"}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={switchToTotp}
+                            className="block w-full text-body-sm text-foreground-muted transition-colors hover:text-foreground"
+                        >
+                            Use authenticator app instead
+                        </button>
+                    </div>
+                )}
                 <Link
                     href="/login"
                     className="inline-flex items-center gap-1.5 text-body-sm text-foreground-muted transition-colors hover:text-foreground"
