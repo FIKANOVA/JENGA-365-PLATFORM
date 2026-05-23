@@ -1021,4 +1021,5 @@ export const vPublicImpactAggregate = pgView("v_public_impact_aggregate", {
     mentorshipHoursTotal: integer("mentorship_hours_total"),
     youthEngagedActive: integer("youth_engaged_active"),
     activeCorporatePartners: integer("active_corporate_partners"),
+    activeNgoPartners: integer("active_ngo_partners"),
 }).existing();

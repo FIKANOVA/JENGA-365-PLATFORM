@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Timer, Users, GraduationCap, Trees, Leaf, Building2, ArrowRight, Heart } from "lucide-react";
+import { Timer, Users, GraduationCap, Trees, Leaf, Building2, ArrowRight, Heart, HandHeart } from "lucide-react";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
@@ -49,6 +49,7 @@ export default async function ImpactPage() {
             Icon: Leaf,
         },
         { value: fmt(dbStats?.activeCorporatePartners),  label: "Corporate Partners",        Icon: Building2 },
+        { value: fmt(dbStats?.activeNgoPartners),        label: "NGO Partners",              Icon: HandHeart },
     ];
 
     const ENVIRONMENTAL_STATS = [
@@ -66,6 +67,11 @@ export default async function ImpactPage() {
             value: fmt(dbStats?.activeCorporatePartners),
             label: "Active ESG Partners",
             description: "Corporate partners with verified milestone-based impact agreements.",
+        },
+        {
+            value: fmt(dbStats?.activeNgoPartners),
+            label: "Active NGO Partners",
+            description: "Non-profit collaborators delivering field programmes alongside the network.",
         },
     ];
 

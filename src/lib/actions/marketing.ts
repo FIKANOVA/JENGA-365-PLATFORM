@@ -11,6 +11,7 @@ export type GlobalImpactStats = {
     mentorshipHoursTotal: number;
     youthEngagedActive: number;
     activeCorporatePartners: number;
+    activeNgoPartners: number;
     activeMentors: number;
 };
 
@@ -34,6 +35,7 @@ export async function getGlobalImpactStats(): Promise<GlobalImpactStats | null> 
             mentorshipHoursTotal: Number(row.mentorshipHoursTotal ?? 0),
             youthEngagedActive: Number(row.youthEngagedActive ?? 0),
             activeCorporatePartners: Number(row.activeCorporatePartners ?? 0),
+            activeNgoPartners: Number(row.activeNgoPartners ?? 0),
             activeMentors: Number(mentorsRow?.count ?? 0),
         };
     } catch (error) {

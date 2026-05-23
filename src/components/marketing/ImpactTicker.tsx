@@ -13,6 +13,7 @@ interface ImpactStats {
     mentorshipHours?: number;
     treesPlanted?: number;
     activePartnerships?: number;
+    activeNgoPartners?: number;
     countriesReached?: number;
 }
 
@@ -30,6 +31,7 @@ export default function ImpactTicker({ stats }: { stats?: ImpactStats }) {
         { label: "Mentorship hours", value: fmt(stats?.mentorshipHours) },
         { label: "Trees planted (verified)", value: fmt(stats?.treesPlanted) },
         { label: "Corporate partners", value: fmt(stats?.activePartnerships) },
+        { label: "NGO partners", value: fmt(stats?.activeNgoPartners) },
     ];
 
     return (
@@ -39,7 +41,7 @@ export default function ImpactTicker({ stats }: { stats?: ImpactStats }) {
             aria-label="Verified impact metrics"
         >
             <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8">
                     {items.map((item) => (
                         <div key={item.label} className="flex flex-col gap-1">
                             <span className="text-display-sm" style={{ color: "var(--foreground)" }}>

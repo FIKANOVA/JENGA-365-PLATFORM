@@ -53,6 +53,7 @@ export default async function HomePage() {
             mentorshipHours: dbStats.mentorshipHoursTotal,
             treesPlanted: dbStats.treesPlantedTotal,
             activePartnerships: dbStats.activeCorporatePartners,
+            activeNgoPartners: dbStats.activeNgoPartners,
         }
         : undefined;
 
