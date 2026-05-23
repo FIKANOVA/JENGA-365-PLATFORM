@@ -141,13 +141,22 @@ export const auth = betterAuth({
         admin(),
     ],
 
-    // Database Hooks to force UUIDs if generateId is ignored
+    // Database Hooks to force UUIDs if generateId is ignored, and to coerce
+    // the role field. The `admin()` plugin defaults role to "user", but our
+    // user_role pg enum is [SuperAdmin, Moderator, CorporatePartner, Mentor,
+    // Mentee] — inserting "user" raises 22P02 (invalid enum input). Map any
+    // non-enum role to "Mentee" on insert.
     databaseHooks: {
         user: {
             create: {
                 before: async (user) => {
                     user.id = randomUUID();
-                    console.log('>>> DATABASE HOOK GENERATED UUID:', user.id);
+                    const VALID_ROLES = ["SuperAdmin", "Moderator", "CorporatePartner", "Mentor", "Mentee"] as const;
+                    const u = user as Record<string, unknown>;
+                    const role = u.role as string | undefined;
+                    if (!role || !VALID_ROLES.includes(role as typeof VALID_ROLES[number])) {
+                        u.role = "Mentee";
+                    }
                     return { data: user };
                 }
             }
