@@ -1,11 +1,11 @@
-import { NgoStudio } from "@/components/sanity/NgoStudio";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-static";
-
-export default function NgoStudioPage() {
-    return (
-        <div className="w-full h-[calc(100vh-64px)] overflow-hidden">
-            <NgoStudio basePath="/dashboard/ngo/studio" />
-        </div>
-    );
+export default async function NgoStudioRedirectPage({
+    params,
+}: {
+    params: Promise<{ tool?: string[] }>;
+}) {
+    const { tool } = await params;
+    const suffix = tool && tool.length ? "/" + tool.join("/") : "";
+    redirect("/studio" + suffix);
 }

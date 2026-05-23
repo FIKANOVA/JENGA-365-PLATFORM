@@ -57,10 +57,15 @@ export const articleBySlugQuery = groq`*[_type == "article" && slug.current == $
   slug,
   excerpt,
   category,
-  mainImage { asset->{ _id, url } },
-  author->{ name, role, image { asset->{ url } } },
+  tags,
+  mainImage { asset->{ _id, url }, alt },
+  author->{ name, role, bio, image { asset->{ url } } },
+  coAuthors[]->{ name, role, image { asset->{ url } } },
   publishedAt,
-  body,
+  body[]{
+    ...,
+    _type == "image" => { ..., "url": asset->url }
+  },
   "readTime": round(length(pt::text(body)) / 200)
 }`;
 

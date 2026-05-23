@@ -1,11 +1,11 @@
-import { Studio } from "@/components/sanity/Studio";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-static";
-
-export default function MenteeStudioPage() {
-    return (
-        <div className="w-full h-[calc(100vh-64px)] overflow-hidden">
-            <Studio basePath="/dashboard/mentee/studio" />
-        </div>
-    );
+export default async function MenteeStudioRedirectPage({
+    params,
+}: {
+    params: Promise<{ tool?: string[] }>;
+}) {
+    const { tool } = await params;
+    const suffix = tool && tool.length ? "/" + tool.join("/") : "";
+    redirect("/studio" + suffix);
 }

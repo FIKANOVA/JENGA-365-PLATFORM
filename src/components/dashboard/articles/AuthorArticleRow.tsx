@@ -1,7 +1,10 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import Link from "next/link";
-import { AlertCircle, CheckCircle2, Circle, CircleDot, XCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { AlertCircle, CheckCircle2, Circle, CircleDot, Loader2, XCircle } from "lucide-react";
+import { deleteArticleDraft } from "@/lib/actions/articleAuthoring";
 
 export type ArticleStatus = "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "REJECTED";
 
@@ -16,6 +19,21 @@ interface AuthorArticleRowProps {
 
 export default function AuthorArticleRow({ id, title, category, date, status, feedback }: AuthorArticleRowProps) {
     const isRejected = status === "REJECTED";
+    const router = useRouter();
+    const [pending, start] = useTransition();
+    const [showFeedback, setShowFeedback] = useState(false);
+
+    const handleDelete = () => {
+        if (!window.confirm(`Delete "${title}"? This cannot be undone.`)) return;
+        start(async () => {
+            try {
+                await deleteArticleDraft(id);
+                router.refresh();
+            } catch (err) {
+                alert(err instanceof Error ? err.message : "Delete failed");
+            }
+        });
+    };
 
     return (
         <div
@@ -60,10 +78,23 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                         </>
                     ) : isRejected ? (
                         <>
-                            <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-white dark:bg-slate-800 border border-[#BB0000] text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors shadow-sm">
+                            <button
+                                type="button"
+                                onClick={() => setShowFeedback(true)}
+                                disabled={!feedback}
+                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-white dark:bg-slate-800 border border-[#BB0000] text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 REVIEW FEEDBACK
                             </button>
-                            <Link href={`/articles/${id}/edit`}>
+                            <button
+                                type="button"
+                                onClick={handleDelete}
+                                disabled={pending}
+                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 border border-red-200 text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors disabled:opacity-50"
+                            >
+                                {pending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "DELETE"}
+                            </button>
+                            <Link href={`/dashboard/articles/${id}/edit`}>
                                 <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-[#BB0000] hover:bg-[#8B0000] text-white text-[10px] font-mono font-bold transition-colors shadow-lg">
                                     EDIT
                                 </button>
@@ -71,10 +102,15 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                         </>
                     ) : (
                         <>
-                            <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 border border-red-200 text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors">
-                                DELETE
+                            <button
+                                type="button"
+                                onClick={handleDelete}
+                                disabled={pending}
+                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 border border-red-200 text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors disabled:opacity-50"
+                            >
+                                {pending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "DELETE"}
                             </button>
-                            <Link href={`/articles/${id}/edit`}>
+                            <Link href={`/dashboard/articles/${id}/edit`}>
                                 <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-[#BB0000] hover:bg-[#8B0000] text-white text-[10px] font-mono font-bold transition-colors shadow-lg">
                                     EDIT
                                 </button>
@@ -112,6 +148,53 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                     <span className={`text-[10px] font-mono tracking-widest uppercase ${status === "PUBLISHED" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"}`}>Published</span>
                 </div>
             </div>
+
+            {showFeedback && feedback && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    onClick={() => setShowFeedback(false)}
+                >
+                    <div
+                        className="max-w-lg w-full rounded-lg border border-border bg-background p-6 space-y-4"
+                        style={{ boxShadow: "var(--shadow-md, var(--shadow-sm))" }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center gap-3">
+                            <div
+                                className="w-9 h-9 rounded-md flex items-center justify-center"
+                                style={{ background: "var(--brand-red-soft, #FEE2E2)", color: "var(--brand-red)" }}
+                            >
+                                <AlertCircle className="w-4 h-4" />
+                            </div>
+                            <div>
+                                <p className="text-eyebrow text-foreground-muted">Moderator feedback</p>
+                                <h4 className="text-headline text-foreground">{title}</h4>
+                            </div>
+                        </div>
+                        <p className="text-body-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                            {feedback}
+                        </p>
+                        <div className="flex justify-end gap-2 pt-2">
+                            <button
+                                type="button"
+                                onClick={() => setShowFeedback(false)}
+                                className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background px-4 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+                            >
+                                Close
+                            </button>
+                            <Link
+                                href={`/dashboard/articles/${id}/edit`}
+                                className="inline-flex h-9 items-center gap-2 rounded-md px-4 text-label font-medium text-white transition-opacity hover:opacity-90"
+                                style={{ background: "var(--brand-red)" }}
+                            >
+                                Revise article
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

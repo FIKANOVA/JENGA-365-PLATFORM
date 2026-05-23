@@ -1,6 +1,7 @@
 "use client";
 
-import { Bell, MessageSquare, Search } from "lucide-react";
+import { MessageSquare, Search } from "lucide-react";
+import NotificationBell from "./NotificationBell";
 
 export default function DashboardHeader() {
     return (
@@ -19,16 +20,7 @@ export default function DashboardHeader() {
                 </label>
             </div>
             <div className="flex items-center gap-4">
-                <button
-                    className="relative text-foreground-muted hover:text-foreground transition-colors"
-                    aria-label="Notifications"
-                >
-                    <Bell className="w-5 h-5" />
-                    <span
-                        className="absolute top-0 right-0 w-2 h-2 rounded-full border-2 border-background"
-                        style={{ background: "var(--brand-red)" }}
-                    />
-                </button>
+                <NotificationBell />
                 <button
                     className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-label font-medium transition-opacity hover:opacity-90"
                     style={{ background: "var(--brand-green)", color: "var(--brand-green-fg)" }}

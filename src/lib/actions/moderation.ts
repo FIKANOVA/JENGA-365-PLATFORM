@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { createNotification } from "@/lib/notifications/service";
 import { hasCapability, parseScopes, type Capability, type Role } from "@/lib/auth/roles";
+import { publishArticleToSanity, unpublishArticleFromSanity } from "@/lib/sanity/syncArticle";
 
 async function requireModerator() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -112,24 +113,42 @@ export async function approveArticle(articleId: string) {
     });
     if (!article) throw new Error("Article not found");
 
+    const publishedAt = new Date();
     await db.update(articles)
-        .set({ status: "published", approvedBy: mod.id, publishedAt: new Date() })
+        .set({ status: "published", approvedBy: mod.id, publishedAt })
         .where(eq(articles.id, articleId));
+
+    // Mirror to Sanity so the public /articles/[slug] route can render it.
+    // Failure here doesn't roll back the Neon flip — log + alert the moderator.
+    let sanityDocId: string | null = null;
+    try {
+        sanityDocId = await publishArticleToSanity(articleId);
+    } catch (err) {
+        console.error("[approveArticle] Sanity sync failed", { articleId, err });
+    }
 
     await db.insert(moderationLog).values({
         moderatorId: mod.id,
         actionType: "article_approved",
         targetId: articleId,
         targetType: "article",
+        notes: sanityDocId ? `Mirrored to Sanity (${sanityDocId})` : "Sanity mirror failed — manual repair required",
     });
 
-    createNotification(article.authorId, "article_approved", {
-        title: "Article Published",
-        body: `Your article "${article.title}" has been approved and is now live.`,
-        link: `/articles/${article.slug}`,
-    }).catch(() => {});
+    const audience = [article.authorId, ...(article.coAuthorIds ?? [])].filter(
+        (id, idx, arr) => id && arr.indexOf(id) === idx,
+    );
+    for (const recipientId of audience) {
+        createNotification(recipientId, "article_approved", {
+            title: "Article Published",
+            body: recipientId === article.authorId
+                ? `Your article "${article.title}" has been approved and is now live.`
+                : `An article you co-authored, "${article.title}", is now live.`,
+            link: `/articles/${article.slug}`,
+        }).catch(() => {});
+    }
 
-    return { success: true };
+    return { success: true, sanityDocId };
 }
 
 export async function rejectArticle(articleId: string, feedback?: string) {
@@ -140,6 +159,8 @@ export async function rejectArticle(articleId: string, feedback?: string) {
     });
     if (!article) throw new Error("Article not found");
 
+    const wasPublished = article.status === "published";
+
     await db.update(articles)
         .set({
             status: "rejected",
@@ -147,6 +168,14 @@ export async function rejectArticle(articleId: string, feedback?: string) {
             rejectionFeedback: feedback ?? null,
         })
         .where(eq(articles.id, articleId));
+
+    // If we previously mirrored to Sanity, pull it back so the public route 404s
+    // instead of continuing to serve a now-rejected article.
+    if (wasPublished || article.sanityDocId) {
+        await unpublishArticleFromSanity(articleId).catch((err) => {
+            console.error("[rejectArticle] Sanity unpublish failed", { articleId, err });
+        });
+    }
 
     await db.insert(moderationLog).values({
         moderatorId: mod.id,
@@ -156,11 +185,16 @@ export async function rejectArticle(articleId: string, feedback?: string) {
         notes: feedback,
     });
 
-    createNotification(article.authorId, "article_rejected", {
-        title: "Article Needs Revision",
-        body: feedback ?? `Your article "${article.title}" requires changes before publishing.`,
-        link: "/dashboard/mentor",
-    }).catch(() => {});
+    const audience = [article.authorId, ...(article.coAuthorIds ?? [])].filter(
+        (id, idx, arr) => id && arr.indexOf(id) === idx,
+    );
+    for (const recipientId of audience) {
+        createNotification(recipientId, "article_rejected", {
+            title: "Article Needs Revision",
+            body: feedback ?? `An article you co-authored requires changes before publishing.`,
+            link: "/dashboard/articles",
+        }).catch(() => {});
+    }
 
     return { success: true };
 }

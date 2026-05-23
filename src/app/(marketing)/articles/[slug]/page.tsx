@@ -63,9 +63,15 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
     const authorName = article.author?.name ?? "Jenga365 Team";
     const authorRole = article.author?.role ?? "STAFF";
+    const authorBio = article.author?.bio ?? `${authorName} — ${authorRole} at Jenga365`;
     const heroImage = article.mainImage?.asset?.url ?? article.image ?? "";
     const readTime = article.readTime ? `${article.readTime} min read` : "5 min read";
     const publishedDate = article.publishedAt ? formatDate(article.publishedAt) : "";
+    const coAuthors = (article.coAuthors ?? []).map((c: any) => ({
+        name: c?.name ?? "",
+        role: c?.role ?? "",
+        avatar: c?.image?.asset?.url ?? "",
+    })).filter((c: { name: string }) => c.name);
 
     return (
         <div className="min-h-screen bg-white">
@@ -117,10 +123,13 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                                     name: authorName,
                                     role: authorRole,
                                     avatar: article.author?.image?.asset?.url ?? "",
-                                    bio: `${authorName} — ${authorRole} at Jenga365`,
+                                    bio: authorBio,
                                 }}
+                                coAuthors={coAuthors}
                                 content={article.body}
                                 publishedAt={publishedDate}
+                                tags={article.tags ?? []}
+                                category={article.category ?? null}
                             />
                         </div>
 

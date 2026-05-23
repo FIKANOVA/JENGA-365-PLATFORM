@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '8mb',
+    },
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.sanity.io' },
@@ -23,15 +27,18 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.stripe.com *.mapbox.com *.paystack.com js.paystack.co",
-              "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
-              "font-src 'self' fonts.gstatic.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: *.stripe.com *.mapbox.com *.paystack.com js.paystack.co *.sanity.io",
+              "style-src 'self' 'unsafe-inline' fonts.googleapis.com *.sanity.io",
+              "font-src 'self' data: fonts.gstatic.com *.sanity.io",
               // img-src: all image hosts used across the platform
               "img-src 'self' data: blob: *.sanity.io *.r2.cloudflarestorage.com *.cloudfront.net *.mapbox.com images.unsplash.com jenga365.com *.jenga365.com lh3.googleusercontent.com api.qrserver.com *.stripe.com",
-              // connect-src: APIs and real-time services (include Vercel preview URLs for auth)
-              `connect-src 'self' ${process.env.NEXT_PUBLIC_APP_URL ?? ''} *.vercel.app *.stripe.com *.mapbox.com api.anthropic.com *.sanity.io *.neon.tech *.paystack.com wss://*.paystack.com`,
-              // frame-src: payment iframes + Google Maps
-              "frame-src *.stripe.com *.paystack.com maps.google.com *.google.com",
+              // connect-src: APIs + Sanity Studio realtime + Vercel preview URLs
+              `connect-src 'self' ${process.env.NEXT_PUBLIC_APP_URL ?? ''} *.vercel.app *.stripe.com *.mapbox.com api.anthropic.com *.sanity.io *.apicdn.sanity.io wss://*.sanity.io *.neon.tech *.paystack.com wss://*.paystack.com`,
+              // frame-src: payment iframes, Google Maps, Sanity auth + preview iframes
+              "frame-src 'self' *.stripe.com *.paystack.com maps.google.com *.google.com *.sanity.io",
+              // Sanity Studio bootstraps web workers from blob URLs
+              "worker-src 'self' blob:",
+              "child-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",
             ].join('; '),

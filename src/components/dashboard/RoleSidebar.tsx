@@ -28,20 +28,13 @@ const ROLE_DASHBOARD: Record<string, string> = {
     SuperAdmin: "/dashboard/admin",
 };
 
-const ROLE_STUDIO: Record<string, string> = {
-    Mentee: "/dashboard/mentee/studio",
-    Mentor: "/dashboard/mentor/studio",
-    CorporatePartner: "/dashboard/partner/studio",
-    NGO: "/dashboard/ngo/studio",
-    Moderator: "/dashboard/moderator/studio",
-    SuperAdmin: "/dashboard/admin/studio",
-};
+const STUDIO_HREF = "/studio";
 
 export default function RoleSidebar({ role }: { role: string }) {
     const pathname = usePathname();
     const router = useRouter();
     const dashboardHref = ROLE_DASHBOARD[role] ?? "/dashboard";
-    const studioHref = ROLE_STUDIO[role] ?? "/dashboard/admin/studio";
+    const studioHref = STUDIO_HREF;
 
     const links = [
         { href: dashboardHref, label: "Dashboard", icon: LayoutDashboard },
@@ -52,12 +45,13 @@ export default function RoleSidebar({ role }: { role: string }) {
             icon: Users,
             roles: ["Mentee", "Mentor"],
         },
-        { href: "/dashboard/content", label: "Resources", icon: LibraryBig },
+        { href: "/dashboard/content", label: "Content", icon: LibraryBig },
         { href: "/dashboard/journal", label: "Journal", icon: BookOpen, roles: ["Mentee"] },
         { href: "/dashboard/ngo/mou", label: "MOU agreement", icon: FileText, roles: ["NGO"] },
         { href: "/dashboard/stats", label: "Impact stats", icon: BarChart3, roles: ["Mentor", "CorporatePartner", "NGO", "SuperAdmin"] },
         { href: "/dashboard/profile", label: "AI interview", icon: BrainCircuit, roles: ["Mentee", "Mentor", "CorporatePartner", "NGO"] },
-        { href: studioHref, label: "Content studio", icon: PenSquare },
+        { href: "/dashboard/articles", label: "My articles", icon: PenSquare, roles: ["Mentor", "Mentee"] },
+        { href: studioHref, label: "Sanity Studio", icon: PenSquare, roles: ["SuperAdmin", "Moderator", "CorporatePartner", "NGO"], external: true },
         { href: "/events", label: "Events", icon: CalendarDays, roles: ["SuperAdmin", "Moderator"] },
         { href: "/dashboard/moderator/inventory", label: "Shop inventory", icon: Package, roles: ["SuperAdmin", "Moderator"] },
         { href: "/dashboard/settings", label: "Settings", icon: Settings },
@@ -87,11 +81,13 @@ export default function RoleSidebar({ role }: { role: string }) {
 
             <nav className="flex-1 px-3 py-4 space-y-1">
                 {links.map((link) => {
-                    const active = isActive(link.href);
+                    const active = !link.external && isActive(link.href);
                     return (
                         <Link
                             key={link.href}
                             href={link.href}
+                            target={link.external ? "_blank" : undefined}
+                            rel={link.external ? "noopener noreferrer" : undefined}
                             className="flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors text-label"
                             style={
                                 active

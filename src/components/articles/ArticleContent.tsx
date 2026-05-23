@@ -3,6 +3,12 @@
 import Image from "next/image";
 import { PortableText } from "@portabletext/react";
 
+interface CoAuthor {
+    readonly name: string;
+    readonly role: string;
+    readonly avatar: string;
+}
+
 interface ArticleContentProps {
     readonly content: any; // Sanity block content array or null
     readonly author: {
@@ -11,10 +17,24 @@ interface ArticleContentProps {
         readonly bio: string;
         readonly avatar: string;
     };
+    readonly coAuthors?: readonly CoAuthor[];
     readonly publishedAt?: string;
+    readonly tags?: readonly string[];
+    readonly category?: string | null;
 }
 
-export default function ArticleContent({ author, content, publishedAt }: ArticleContentProps) {
+export default function ArticleContent({ author, coAuthors, content, publishedAt, tags, category }: ArticleContentProps) {
+    const topicTags = (() => {
+        const seen = new Set<string>();
+        const add = (v: string | null | undefined) => {
+            if (!v) return;
+            const t = v.toUpperCase();
+            if (!seen.has(t)) seen.add(t);
+        };
+        if (category) add(category);
+        tags?.forEach(add);
+        return Array.from(seen).slice(0, 6);
+    })();
     return (
         <div className="flex flex-col lg:flex-row gap-16 py-10">
             {/* Sidebar / Info */}
@@ -47,21 +67,55 @@ export default function ArticleContent({ author, content, publishedAt }: Article
                                 Follow Profile
                             </button>
                         </div>
+
+                        {coAuthors && coAuthors.length > 0 && (
+                            <div className="pt-6 border-t border-[var(--border)] space-y-3">
+                                <h4 className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">
+                                    Co-authors
+                                </h4>
+                                <ul className="space-y-3">
+                                    {coAuthors.map((c) => (
+                                        <li key={c.name} className="flex items-center gap-3">
+                                            <div className="relative size-9 rounded-sm border border-[var(--border)] overflow-hidden bg-[var(--surface-1)] shrink-0">
+                                                {c.avatar && (
+                                                    <Image
+                                                        src={c.avatar}
+                                                        alt={c.name}
+                                                        fill
+                                                        className="object-cover grayscale"
+                                                    />
+                                                )}
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="text-body-sm text-foreground truncate">{c.name}</p>
+                                                {c.role && (
+                                                    <p className="font-mono text-[9px] uppercase tracking-widest text-[var(--brand-green)] truncate">
+                                                        {c.role}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
 
                     {/* Meta Info */}
-                    <div className="space-y-6 pt-10 border-t border-[var(--border)]">
-                        <div className="space-y-4">
-                            <h4 className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">Topic Area</h4>
-                            <div className="flex flex-wrap gap-2">
-                                {["MENTORSHIP", "RUGBY", "IMPACT"].map(tag => (
-                                    <span key={tag} className="px-3 py-1 bg-[var(--surface-1)] border border-[var(--border)] text-[9px] font-mono tracking-widest uppercase">
-                                        {tag}
-                                    </span>
-                                ))}
+                    {topicTags.length > 0 && (
+                        <div className="space-y-6 pt-10 border-t border-[var(--border)]">
+                            <div className="space-y-4">
+                                <h4 className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">Topic Area</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    {topicTags.map(tag => (
+                                        <span key={tag} className="px-3 py-1 bg-[var(--surface-1)] border border-[var(--border)] text-[9px] font-mono tracking-widest uppercase">
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </aside>
 
