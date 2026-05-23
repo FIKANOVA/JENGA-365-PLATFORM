@@ -7,22 +7,43 @@ import ChoosePathSection from "@/components/marketing/ChoosePathSection";
 import EventsSection from "@/components/marketing/EventsSection";
 import HomeArticlesSection from "@/components/marketing/HomeArticlesSection";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
+import PartnerCarousel from "@/components/marketing/about/PartnerCarousel";
 
-import { fetchEvents, fetchArticles } from "@/lib/sanity/queries";
+import {
+    fetchEvents,
+    fetchArticles,
+    fetchPartners,
+    fetchSiteSettings,
+} from "@/lib/sanity/queries";
+import { urlFor } from "@/lib/sanity/client";
 
-export const metadata = {
-    title: "Jenga365 — Building Growth. Connecting Futures.",
-    description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
-};
+export async function generateMetadata() {
+    const settings = await fetchSiteSettings();
+    const ogUrl = settings?.openGraphImage?.asset?.url
+        ? urlFor(settings.openGraphImage).width(1200).height(630).fit("crop").url()
+        : undefined;
+
+    return {
+        title: "Jenga365 — Building Growth. Connecting Futures.",
+        description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
+        openGraph: {
+            title: "Jenga365 — Building Growth. Connecting Futures.",
+            description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
+            ...(ogUrl ? { images: [{ url: ogUrl }] } : {}),
+        },
+    };
+}
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function HomePage() {
-    const [dbStats, events, articles] = await Promise.all([
+    const [dbStats, events, articles, partners, settings] = await Promise.all([
         getGlobalImpactStats(),
         fetchEvents(),
         fetchArticles().catch(() => []),
+        fetchPartners().catch(() => []),
+        fetchSiteSettings(),
     ]);
 
     const tickerStats = dbStats
@@ -37,12 +58,13 @@ export default async function HomePage() {
 
     return (
         <div className="flex flex-col">
-            <HeroSection />
+            <HeroSection heroImage={settings?.landingHeroImage ?? null} />
             <ImpactTicker stats={tickerStats} />
             <WhatWeDoSection />
             <ChoosePathSection />
             <SweatEquityBand />
             <EventsSection events={events} />
+            <PartnerCarousel partners={partners} />
             <HomeArticlesSection articles={articles} />
             <FinalCTAStrip />
         </div>

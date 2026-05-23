@@ -7,34 +7,43 @@ import WhyJenga from "@/components/marketing/about/WhyJenga";
 import Testimonials from "@/components/marketing/about/Testimonials";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PartnerCarousel from "@/components/marketing/about/PartnerCarousel";
-import { fetchPartners } from "@/lib/sanity/queries";
+import { fetchPartners, fetchSiteSettings, fetchTeamOfficials } from "@/lib/sanity/queries";
+import { urlFor } from "@/lib/sanity/client";
 
-export const metadata = {
-    title: "About Jenga365 | More Than a Game",
-    description:
-        "Jenga365 is a dual-engine mentorship and rugby impact platform rooted in Kenyan heritage. Learn about our journey, our team, and the principles behind the Total Athlete model.",
-    openGraph: {
-        title: "About Jenga365",
-        description: "Mentorship. Stewardship. Impact. Building the Total Athlete — 365 days a year.",
-        images: [
-            {
-                url: "https://jenga365.com/wp-content/uploads/2025/07/Fanaka-Studios-SportPesa-Cheza-Dimba-Northrift-66-of-429-scaled.jpg",
-            },
-        ],
-    },
-};
+export async function generateMetadata() {
+    const settings = await fetchSiteSettings();
+    const ogSource = settings?.aboutOpenGraphImage ?? settings?.openGraphImage ?? null;
+    const ogUrl = ogSource?.asset?.url
+        ? urlFor(ogSource).width(1200).height(630).fit("crop").url()
+        : undefined;
+
+    return {
+        title: "About Jenga365 | More Than a Game",
+        description:
+            "Jenga365 is a dual-engine mentorship and rugby impact platform rooted in Kenyan heritage. Learn about our journey, our team, and the principles behind the Total Athlete model.",
+        openGraph: {
+            title: "About Jenga365",
+            description: "Mentorship. Stewardship. Impact. Building the Total Athlete — 365 days a year.",
+            ...(ogUrl ? { images: [{ url: ogUrl }] } : {}),
+        },
+    };
+}
 
 export default async function AboutPage() {
-    const partners = await fetchPartners();
+    const [partners, settings, team] = await Promise.all([
+        fetchPartners(),
+        fetchSiteSettings(),
+        fetchTeamOfficials(),
+    ]);
 
     return (
         <div className="flex flex-col">
-            <AboutHero />
+            <AboutHero heroImage={settings?.aboutHeroImage ?? null} />
             <OurPhilosophy />
             <StakeholdersDeepDive />
             <HistoryTimeline />
             <WhyJenga />
-            <LeadershipGrid />
+            <LeadershipGrid team={team} />
             <Testimonials />
             <PartnerCarousel partners={partners} />
             <AboutCTAStrip />

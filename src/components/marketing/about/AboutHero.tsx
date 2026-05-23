@@ -4,14 +4,37 @@ import Link from "next/link";
 import { ArrowRight, Heart } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
 import DonateButton from "@/components/shared/DonateButton";
+import { urlFor } from "@/lib/sanity/client";
 
-export default function AboutHero() {
+interface SanityImage {
+    asset?: { _id?: string; url?: string };
+    alt?: string;
+}
+
+interface AboutHeroProps {
+    readonly heroImage?: SanityImage | null;
+}
+
+export default function AboutHero({ heroImage }: AboutHeroProps) {
     const { data: session } = useSession();
     const isAuthenticated = !!session?.user;
 
+    const heroUrl = heroImage?.asset?.url
+        ? urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
+        : null;
+
     return (
         <section className="relative overflow-hidden bg-hero-radial bg-topo border-b border-border">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32">
+            {heroUrl && (
+                <div className="absolute inset-0 pointer-events-none" aria-hidden>
+                    <img
+                        src={heroUrl}
+                        alt=""
+                        className="h-full w-full object-cover opacity-[0.12]"
+                    />
+                </div>
+            )}
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32">
                 <div className="max-w-3xl space-y-8">
                     <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                         Established 2023 · Nairobi, Kenya

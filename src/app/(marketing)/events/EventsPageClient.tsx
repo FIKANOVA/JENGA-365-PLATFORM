@@ -39,8 +39,6 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                     eyebrow="Global Network"
                     heading={<>Community <span className="italic text-primary">Events.</span></>}
                     description="Join our ecosystem of workshops, high-performance clinics, and strategic summits designed to foster growth and excellence."
-                    bgImage="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1920&auto=format&fit=crop"
-                    bgFallback="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1920&auto=format&fit=crop"
                 >
                     <div className="relative max-w-2xl group">
                         <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-white/40 group-focus-within:text-primary">

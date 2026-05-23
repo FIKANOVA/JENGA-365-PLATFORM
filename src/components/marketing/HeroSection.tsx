@@ -3,18 +3,40 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
+import { urlFor } from "@/lib/sanity/client";
+
+interface SanityImage {
+    asset?: { _id?: string; url?: string };
+    alt?: string;
+}
+
+interface HeroSectionProps {
+    readonly heroImage?: SanityImage | null;
+}
 
 /**
  * Landing hero — Total Athlete + Dual-Engine narrative.
  * DESIGN.md §11: clean neutral surface with a subtle radial accent.
- * No background images. No vanity animations.
+ * Optional background image is rendered at low opacity behind the radial+topo overlay.
  */
-export default function HeroSection() {
+export default function HeroSection({ heroImage }: HeroSectionProps) {
     const { data: session } = useSession();
     const isAuthenticated = !!session?.user;
 
+    const heroUrl = heroImage?.asset?.url
+        ? urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
+        : null;
+
     return (
         <section className="relative overflow-hidden bg-background">
+            {heroUrl && (
+                <img
+                    src={heroUrl}
+                    alt=""
+                    aria-hidden
+                    className="absolute inset-0 h-full w-full object-cover opacity-[0.12] pointer-events-none"
+                />
+            )}
             <div className="absolute inset-0 bg-hero-radial pointer-events-none" aria-hidden />
             <div className="absolute inset-0 bg-topo opacity-[0.35] pointer-events-none" aria-hidden />
 
