@@ -149,25 +149,6 @@ export async function fetchPartners() {
     return await client.fetch(partnersQuery);
 }
 
-// ── Impact Stats ─────────────────────────────────────────────
-export const impactStatsQuery = groq`*[_type == "impactStats"][0] {
-  activeMentors,
-  youthImpacted,
-  mentorshipHours,
-  clinicsHeld,
-  treesPlanted,
-  activePartnerships,
-  countriesReached
-}`;
-
-export async function fetchImpactStats() {
-    try {
-        return await client.fetch(impactStatsQuery);
-    } catch {
-        return null;
-    }
-}
-
 // ── Products ─────────────────────────────────────────────────
 // Used by the moderator inventory page to mirror the Sanity catalog.
 // Stock counts live in Neon (merchandise table), so they are not selected here.

@@ -111,12 +111,6 @@ export const RESOURCES: Resource[] = [
     },
 ];
 
-export const STATS = [
-    { value: "482+", label: "ACTIVE MENTORS" },
-    { value: "1,200+", label: "YOUTH IMPACTED" },
-    { value: "9,840", label: "MENTORSHIP HOURS" },
-];
-
 export const NDA_CONTENT = {
     version: "2.1",
     lastUpdated: "2024-02-15",

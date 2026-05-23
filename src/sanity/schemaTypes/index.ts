@@ -7,7 +7,6 @@ import { speakerType } from "./speakerType";
 import { partnerType } from "./partnerType";
 import { coachType } from "./coachType";
 import { resourceType } from "./resourceType";
-import { impactStatsType } from "./impactStatsType";
 import { productType } from "./productType";
 import { videoType } from "./videoType";
 import { voicesType } from "./voicesType";
@@ -26,7 +25,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
         partnerType,
         coachType,
         resourceType,
-        impactStatsType,
         productType,
         videoType,
         voicesType,

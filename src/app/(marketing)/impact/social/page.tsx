@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { getGlobalImpactStats } from "@/lib/actions/marketing";
 
-export default function ImpactSocialPage() {
+function fmt(n: number | undefined | null): string {
+    if (n === undefined || n === null || !Number.isFinite(Number(n)) || Number(n) <= 0) return "—";
+    return new Intl.NumberFormat("en-US").format(Number(n));
+}
+
+export default async function ImpactSocialPage() {
+    const stats = await getGlobalImpactStats();
+
     return (
         <div className="flex flex-col min-h-screen">
             <main className="flex-1 py-20 container mx-auto px-4">
@@ -16,10 +24,26 @@ export default function ImpactSocialPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-20">
-                    <ImpactCard title="Mentorship hubs" value="12" sub="Across 6 counties" />
-                    <ImpactCard title="Active mentees" value="1,200+" sub="Sustainable growth" />
-                    <ImpactCard title="Success rate" value="94%" sub="Post-mentorship employment" />
+                    <ImpactCard
+                        title="Active mentees"
+                        value={fmt(stats?.youthEngagedActive)}
+                        sub="Verified, currently engaged"
+                    />
+                    <ImpactCard
+                        title="Active mentors"
+                        value={fmt(stats?.activeMentors)}
+                        sub="Approved & active"
+                    />
+                    <ImpactCard
+                        title="Mentorship hours"
+                        value={fmt(stats?.mentorshipHoursTotal)}
+                        sub="Logged across the platform"
+                    />
                 </div>
+
+                <p className="max-w-2xl mx-auto text-center text-body-sm text-foreground-muted italic mb-12">
+                    Verified figures from our operational data. We display a dash (—) for any metric pending M&amp;E sign-off.
+                </p>
 
                 <div className="flex flex-wrap justify-center gap-3">
                     <Link
