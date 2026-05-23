@@ -1,3 +1,5 @@
+"use client";
+
 import { GraduationCap, Sparkles } from "lucide-react";
 import { RoleCard } from "../_components/RoleCard";
 import { RegisterShell } from "../_components/RegisterShell";

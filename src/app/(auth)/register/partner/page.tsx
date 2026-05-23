@@ -1,3 +1,5 @@
+"use client";
+
 import { Building2, HandHeart } from "lucide-react";
 import { RoleCard } from "../_components/RoleCard";
 import { RegisterShell } from "../_components/RegisterShell";

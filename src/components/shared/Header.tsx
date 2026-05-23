@@ -14,17 +14,47 @@ import { cn } from "@/lib/utils";
 
 /**
  * Three header variants driven by AUTH STATUS, not by route:
- *   1. Public      — guest on general pages: Logo + nav + Donate/Store + Log In + Sign Up (red)
- *   2. Authenticated — any logged-in role: Logo + nav + Donate/Store + Avatar/Bell/Badge
- *   3. Minimal     — guest on /login | /register | /legal/nda | /verify-email: Logo only
+ *   1. Public        — guest on general pages: Logo + grouped dropdown nav + Donate/Store + Log In + Sign Up
+ *   2. Authenticated — any logged-in role: Logo + grouped dropdown nav + Donate/Store + Avatar/Bell/Badge
+ *   3. Minimal       — guest on /login | /register | /legal/nda | /verify-email: Logo only
+ *
+ * Nav is grouped into three dropdowns: Platform, Community, Get Involved.
+ * Donate + Store remain visible primary CTAs (CLAUDE.md §6) AND appear inside
+ * Get Involved for discoverability.
  */
 
-const NAV_LINKS = [
-    { label: "About", href: "/about" },
-    { label: "Articles", href: "/articles" },
-    { label: "Events", href: "/events" },
-    { label: "Resources", href: "/resources" },
-] as const;
+type NavItem = { label: string; href?: string; isDonate?: boolean; description?: string };
+type NavGroup = { label: string; items: NavItem[] };
+
+const NAV_GROUPS: NavGroup[] = [
+    {
+        label: "Platform",
+        items: [
+            { label: "About Us", href: "/about", description: "Who we are and how the engine works" },
+            { label: "Impact", href: "/impact", description: "Verified outcomes and ESG metrics" },
+            { label: "Events", href: "/events", description: "Clinics, summits, and community drives" },
+            { label: "Contact", href: "/contact", description: "Reach the team" },
+        ],
+    },
+    {
+        label: "Community",
+        items: [
+            { label: "Mentors", href: "/mentors", description: "Apply or learn how mentorship works" },
+            { label: "Mentees", href: "/mentees", description: "Find your structured mentorship path" },
+            { label: "Articles", href: "/articles", description: "Insights from the field" },
+            { label: "Resources", href: "/resources", description: "Downloads, video, and voices" },
+        ],
+    },
+    {
+        label: "Get Involved",
+        items: [
+            { label: "Join Free", href: "/register/mentorship", description: "Sign up as mentee or mentor" },
+            { label: "Donate", isDonate: true, description: "Fund the engine via Paystack" },
+            { label: "Shop", href: "/shop", description: "Merchandise — proceeds fund the field" },
+            { label: "Become a Partner", href: "/register/partner", description: "Corporate or NGO partnerships" },
+        ],
+    },
+];
 
 const MINIMAL_PREFIXES = ["/login", "/register", "/legal/nda", "/verify-email", "/admin-setup", "/moderator-invite", "/forgot-password", "/reset-password"];
 
@@ -64,20 +94,113 @@ function MinimalHeader() {
     );
 }
 
-// ── Shared: nav links list ───────────────────────────────────────────────────
-function PrimaryNav({ onItemClick }: { onItemClick?: () => void }) {
+// ── Nav dropdown ─────────────────────────────────────────────────────────────
+function NavDropdown({ group, onItemClick }: { group: NavGroup; onItemClick?: () => void }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+    const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+        function onDocClick(e: MouseEvent) {
+            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+        }
+        function onEscape(e: KeyboardEvent) {
+            if (e.key === "Escape") setOpen(false);
+        }
+        document.addEventListener("mousedown", onDocClick);
+        document.addEventListener("keydown", onEscape);
+        return () => {
+            document.removeEventListener("mousedown", onDocClick);
+            document.removeEventListener("keydown", onEscape);
+        };
+    }, []);
+
+    function handleEnter() {
+        if (hoverTimer.current) clearTimeout(hoverTimer.current);
+        setOpen(true);
+    }
+    function handleLeave() {
+        hoverTimer.current = setTimeout(() => setOpen(false), 120);
+    }
+    function close() {
+        setOpen(false);
+        onItemClick?.();
+    }
+
+    return (
+        <div
+            className="relative"
+            ref={ref}
+            onMouseEnter={handleEnter}
+            onMouseLeave={handleLeave}
+        >
+            <button
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={open}
+                onClick={() => setOpen((v) => !v)}
+                className="inline-flex items-center gap-1 px-3 py-2 text-label rounded-md hover:bg-surface-2 transition-colors"
+                style={{ color: "var(--foreground-muted)" }}
+            >
+                {group.label}
+                <ChevronDown
+                    className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
+                    aria-hidden
+                />
+            </button>
+
+            {open && (
+                <div
+                    role="menu"
+                    className="absolute left-0 mt-2 w-72 rounded-lg border border-border bg-background shadow-lg overflow-hidden z-50"
+                >
+                    <ul className="py-2">
+                        {group.items.map((item) => (
+                            <li key={item.label}>
+                                {item.isDonate ? (
+                                    <DonateButton
+                                        onAfterClick={close}
+                                        className="flex w-full items-start gap-3 px-4 py-3 hover:bg-surface-2 text-left"
+                                    >
+                                        <Heart className="h-4 w-4 mt-0.5 shrink-0" style={{ color: "var(--brand-red)" }} aria-hidden />
+                                        <span className="flex flex-col">
+                                            <span className="text-label font-medium" style={{ color: "var(--brand-red)" }}>
+                                                {item.label}
+                                            </span>
+                                            {item.description && (
+                                                <span className="text-body-sm text-foreground-muted">{item.description}</span>
+                                            )}
+                                        </span>
+                                    </DonateButton>
+                                ) : (
+                                    <Link
+                                        href={item.href!}
+                                        role="menuitem"
+                                        onClick={close}
+                                        className="flex items-start gap-3 px-4 py-3 hover:bg-surface-2"
+                                    >
+                                        <span className="flex flex-col">
+                                            <span className="text-label font-medium text-foreground">{item.label}</span>
+                                            {item.description && (
+                                                <span className="text-body-sm text-foreground-muted">{item.description}</span>
+                                            )}
+                                        </span>
+                                    </Link>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function PrimaryNav() {
     return (
         <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
-            {NAV_LINKS.map((l) => (
-                <Link
-                    key={l.href}
-                    href={l.href}
-                    onClick={onItemClick}
-                    className="px-3 py-2 text-label rounded-md hover:bg-surface-2 transition-colors"
-                    style={{ color: "var(--foreground-muted)" }}
-                >
-                    {l.label}
-                </Link>
+            {NAV_GROUPS.map((g) => (
+                <NavDropdown key={g.label} group={g} />
             ))}
         </nav>
     );
@@ -278,20 +401,47 @@ function AuthenticatedHeader({
 // ── Mobile drawer (shared, render outside Shell for full-width) ──────────────
 function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; onClose: () => void }) {
     return (
-        <div className="md:hidden border-t border-border bg-background">
+        <div className="md:hidden border-t border-border bg-background max-h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="mx-auto max-w-7xl px-6 py-3 flex flex-col gap-1">
-                {NAV_LINKS.map((l) => (
-                    <Link
-                        key={l.href}
-                        href={l.href}
-                        onClick={onClose}
-                        className="px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground"
-                    >
-                        {l.label}
-                    </Link>
+                {NAV_GROUPS.map((group) => (
+                    <details key={group.label} className="group/section">
+                        <summary className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground cursor-pointer list-none">
+                            <span className="font-medium">{group.label}</span>
+                            <ChevronDown className="h-4 w-4 text-foreground-muted transition-transform group-open/section:rotate-180" aria-hidden />
+                        </summary>
+                        <ul className="pl-3 pb-2 flex flex-col gap-0.5">
+                            {group.items.map((item) =>
+                                item.isDonate ? (
+                                    <li key={item.label}>
+                                        <DonateButton
+                                            onAfterClick={onClose}
+                                            className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-md hover:bg-surface-2 text-body text-left"
+                                            style={{ color: "var(--brand-red)" }}
+                                        >
+                                            <Heart className="h-4 w-4" aria-hidden /> {item.label}
+                                        </DonateButton>
+                                    </li>
+                                ) : (
+                                    <li key={item.label}>
+                                        <Link
+                                            href={item.href!}
+                                            onClick={onClose}
+                                            className="flex items-center gap-2.5 px-3 py-2.5 rounded-md hover:bg-surface-2 text-body text-foreground"
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ),
+                            )}
+                        </ul>
+                    </details>
                 ))}
+
                 <div className="h-px bg-border my-2" />
+
+                {/* Primary CTAs stay visible at the bottom of the drawer */}
                 <DonateButton
+                    onAfterClick={onClose}
                     className="flex items-center gap-2.5 px-3 py-3 rounded-md hover:bg-surface-2 text-body text-left"
                     style={{ color: "var(--brand-red)" }}
                 >
@@ -304,6 +454,7 @@ function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; 
                 >
                     <ShoppingBag className="h-4 w-4" aria-hidden /> Store
                 </Link>
+
                 {!isAuthenticated && (
                     <>
                         <div className="h-px bg-border my-2" />

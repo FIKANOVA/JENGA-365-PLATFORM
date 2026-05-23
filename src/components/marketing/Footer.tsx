@@ -27,10 +27,10 @@ const footerNav = [
     {
         title: "Get Involved",
         links: [
-            { label: "Join Free", href: "/register" },
-            { label: "Donate", href: "/donate" },
+            { label: "Join Free", href: "/register/mentorship" },
+            { label: "Donate", href: "#donate" },
             { label: "Shop", href: "/shop" },
-            { label: "Become a Partner", href: "/register" },
+            { label: "Become a Partner", href: "/register/partner" },
         ],
     },
 ];

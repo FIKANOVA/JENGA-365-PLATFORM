@@ -17,9 +17,10 @@ interface DonateButtonProps {
     className?: string;
     style?: React.CSSProperties;
     "aria-label"?: string;
+    onAfterClick?: () => void;
 }
 
-export default function DonateButton({ children, className, style, ...rest }: DonateButtonProps) {
+export default function DonateButton({ children, className, style, onAfterClick, ...rest }: DonateButtonProps) {
     const { data: session } = useSession();
     const [open, setOpen] = useState(false);
     const [selectedAmount, setSelectedAmount] = useState<number | null>(1000);
@@ -88,7 +89,10 @@ export default function DonateButton({ children, className, style, ...rest }: Do
         <>
             <button
                 type="button"
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                    setOpen(true);
+                    onAfterClick?.();
+                }}
                 className={className}
                 style={style}
                 aria-label={rest["aria-label"] ?? "Donate"}
