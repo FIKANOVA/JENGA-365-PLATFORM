@@ -1,6 +1,12 @@
 "use client";
 
-const nodes = [
+interface TimelineNode {
+    title: string;
+    date?: string | null;
+    content?: string | null;
+}
+
+const DEFAULT_NODES: TimelineNode[] = [
     {
         title: "The Genesis",
         date: "Established 2024",
@@ -23,7 +29,12 @@ const nodes = [
     },
 ];
 
-export default function HistoryTimeline() {
+interface HistoryTimelineProps {
+    readonly nodes?: readonly TimelineNode[] | null;
+}
+
+export default function HistoryTimeline({ nodes: propNodes }: HistoryTimelineProps = {}) {
+    const nodes = propNodes && propNodes.length > 0 ? propNodes : DEFAULT_NODES;
     return (
         <section className="py-24 md:py-32 bg-accent relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 md:px-12">

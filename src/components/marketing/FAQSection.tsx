@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 
-const FAQ_ITEMS = [
+interface FaqItem {
+    question: string;
+    answer: string;
+}
+
+const DEFAULT_FAQ_ITEMS: FaqItem[] = [
     {
         question: "How do I register as a mentor or mentee?",
         answer: "Visit our registration page and select your role. Mentors go through a verification process including an AI interview, while mentees complete a matching questionnaire to find the right mentor.",
@@ -26,8 +31,13 @@ const FAQ_ITEMS = [
     },
 ];
 
-export default function FAQSection() {
+interface FAQSectionProps {
+    readonly items?: readonly FaqItem[] | null;
+}
+
+export default function FAQSection({ items }: FAQSectionProps) {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const FAQ_ITEMS = items && items.length > 0 ? items : DEFAULT_FAQ_ITEMS;
 
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);

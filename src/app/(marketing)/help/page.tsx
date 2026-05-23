@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import FAQSection from "@/components/marketing/FAQSection";
 import { auth } from "@/lib/auth/config";
-import { fetchUserManuals, fetchHelpTopics } from "@/lib/sanity/queries";
+import { fetchUserManuals, fetchHelpTopics, fetchSiteSettings } from "@/lib/sanity/queries";
 import { canViewHelpDoc, type HelpAudience, type HelpSessionContext } from "@/lib/auth/helpAccess";
 import type { Role } from "@/lib/auth/roles";
 
@@ -62,9 +62,10 @@ export default async function HelpPage() {
           }
         : null;
 
-    const [manuals, topics] = await Promise.all([
+    const [manuals, topics, settings] = await Promise.all([
         fetchUserManuals() as Promise<UserManual[]>,
         fetchHelpTopics() as Promise<HelpTopic[]>,
+        fetchSiteSettings(),
     ]);
 
     const visibleManuals = manuals.filter((m) => canViewHelpDoc(ctx, m.allowedRoles));
@@ -194,7 +195,7 @@ export default async function HelpPage() {
                 </section>
             )}
 
-            <FAQSection />
+            <FAQSection items={settings?.faqItems ?? null} />
 
             {/* Support CTA */}
             <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-24">

@@ -6,7 +6,21 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   landingHeroImage { asset->{ _id, url }, alt, hotspot, crop },
   aboutHeroImage { asset->{ _id, url }, alt, hotspot, crop },
   openGraphImage { asset->{ _id, url }, hotspot, crop },
-  aboutOpenGraphImage { asset->{ _id, url }, hotspot, crop }
+  aboutOpenGraphImage { asset->{ _id, url }, hotspot, crop },
+  landingHero,
+  featuredVideoHeading,
+  featuredVideo->{
+    _id,
+    title,
+    description,
+    videoUrl,
+    duration,
+    thumbnail { asset->{ _id, url } }
+  },
+  impactTestimonials[]{ quote, name, role },
+  environmentalStats[]{ value, label, description },
+  historyTimeline[]{ title, date, content },
+  faqItems[]{ question, answer }
 }`;
 
 export async function fetchSiteSettings() {

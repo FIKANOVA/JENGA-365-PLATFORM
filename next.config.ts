@@ -34,8 +34,8 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: blob: *.sanity.io *.r2.cloudflarestorage.com *.cloudfront.net *.mapbox.com images.unsplash.com jenga365.com *.jenga365.com lh3.googleusercontent.com api.qrserver.com *.stripe.com",
               // connect-src: APIs + Sanity Studio realtime + Vercel preview URLs
               `connect-src 'self' ${process.env.NEXT_PUBLIC_APP_URL ?? ''} *.vercel.app *.stripe.com *.mapbox.com api.anthropic.com *.sanity.io *.apicdn.sanity.io wss://*.sanity.io *.neon.tech *.paystack.com wss://*.paystack.com`,
-              // frame-src: payment iframes, Google Maps, Sanity auth + preview iframes
-              "frame-src 'self' *.stripe.com *.paystack.com maps.google.com *.google.com *.sanity.io",
+              // frame-src: payment iframes, Google Maps, Sanity auth + preview iframes, video embeds
+              "frame-src 'self' *.stripe.com *.paystack.com maps.google.com *.google.com *.sanity.io *.youtube.com youtube.com *.youtube-nocookie.com player.vimeo.com",
               // Sanity Studio bootstraps web workers from blob URLs
               "worker-src 'self' blob:",
               "child-src 'self' blob:",

@@ -3,6 +3,7 @@ import { Timer, Users, GraduationCap, Trees, Leaf, Building2, ArrowRight, Heart,
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
+import { fetchSiteSettings } from "@/lib/sanity/queries";
 import DonateButton from "@/components/shared/DonateButton";
 
 export const metadata = {
@@ -10,7 +11,19 @@ export const metadata = {
     description: "Explore the social and environmental impact of the Jenga365 platform. From mentorship hours to career placements, see our data-driven results.",
 };
 
-const IMPACT_STORIES = [
+interface ImpactStory {
+    quote: string;
+    name: string;
+    role: string;
+}
+
+interface EnvStat {
+    value: string;
+    label: string;
+    description?: string | null;
+}
+
+const DEFAULT_IMPACT_STORIES: ImpactStory[] = [
     {
         quote: "Jenga365 didn't just match me with a mentor — it matched me with a future. I went from uncertainty to leading a tech team in 18 months.",
         name: "Grace Wanjiku",
@@ -33,8 +46,34 @@ function fmt(n: number | undefined | null): string {
     return n.toLocaleString();
 }
 
+// Resolves a Sanity-authored stat value. Supports the `{{metricToken}}` placeholders
+// listed in the schema description so editors can pin a card to a live metric.
+function resolveStatValue(raw: string, dbStats: Awaited<ReturnType<typeof getGlobalImpactStats>>): string {
+    const trimmed = (raw ?? "").trim();
+    const map: Record<string, string> = {
+        "{{treesAlive}}":         fmt(dbStats?.treesAliveLatestAudit),
+        "{{treesPlanted}}":       fmt(dbStats?.treesPlantedTotal),
+        "{{corporatePartners}}":  fmt(dbStats?.activeCorporatePartners),
+        "{{ngoPartners}}":        fmt(dbStats?.activeNgoPartners),
+        "{{activeMentors}}":      fmt(dbStats?.activeMentors),
+        "{{youthEngaged}}":       fmt(dbStats?.youthEngagedActive),
+        "{{mentorshipHours}}":    fmt(dbStats?.mentorshipHoursTotal),
+        "{{survivalRate}}":       dbStats?.survivalRatePct && dbStats.survivalRatePct > 0
+                                      ? `${dbStats.survivalRatePct}%`
+                                      : "—",
+    };
+    return map[trimmed] ?? trimmed;
+}
+
 export default async function ImpactPage() {
-    const dbStats = await getGlobalImpactStats();
+    const [dbStats, settings] = await Promise.all([
+        getGlobalImpactStats(),
+        fetchSiteSettings(),
+    ]);
+
+    const stories: ImpactStory[] = settings?.impactTestimonials?.length
+        ? settings.impactTestimonials
+        : DEFAULT_IMPACT_STORIES;
 
     const IMPACT_STATS = [
         { value: fmt(dbStats?.mentorshipHoursTotal),     label: "Mentorship Hours Logged",   Icon: Timer },
@@ -52,28 +91,37 @@ export default async function ImpactPage() {
         { value: fmt(dbStats?.activeNgoPartners),        label: "NGO Partners",              Icon: HandHeart },
     ];
 
-    const ENVIRONMENTAL_STATS = [
+    const DEFAULT_ENVIRONMENTAL_STATS: EnvStat[] = [
         {
             value: "100%",
             label: "Digital-First Operations",
             description: "Zero paper waste through AI-driven digital mentorship matching and reporting.",
         },
         {
-            value: fmt(dbStats?.treesAliveLatestAudit),
+            value: "{{treesAlive}}",
             label: "Trees Alive (Latest Audit)",
             description: "GPS-anchored survival audits at 6/12/24-month intervals via KoBoToolbox.",
         },
         {
-            value: fmt(dbStats?.activeCorporatePartners),
+            value: "{{corporatePartners}}",
             label: "Active ESG Partners",
             description: "Corporate partners with verified milestone-based impact agreements.",
         },
         {
-            value: fmt(dbStats?.activeNgoPartners),
+            value: "{{ngoPartners}}",
             label: "Active NGO Partners",
             description: "Non-profit collaborators delivering field programmes alongside the network.",
         },
     ];
+
+    const sourceStats: EnvStat[] = settings?.environmentalStats?.length
+        ? settings.environmentalStats
+        : DEFAULT_ENVIRONMENTAL_STATS;
+    const ENVIRONMENTAL_STATS = sourceStats.map((stat) => ({
+        value: resolveStatValue(stat.value, dbStats),
+        label: stat.label,
+        description: stat.description ?? "",
+    }));
 
     return (
         <div className="min-h-screen bg-background">
@@ -117,7 +165,7 @@ export default async function ImpactPage() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {IMPACT_STORIES.map((story) => (
+                            {stories.map((story) => (
                                 <div
                                     key={story.name}
                                     className="rounded-lg border p-6 space-y-5"

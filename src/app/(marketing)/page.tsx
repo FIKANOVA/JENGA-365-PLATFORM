@@ -1,5 +1,6 @@
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
 import HeroSection from "@/components/marketing/HeroSection";
+import FeaturedVideoSection from "@/components/marketing/FeaturedVideoSection";
 import ImpactTicker from "@/components/marketing/ImpactTicker";
 import SweatEquityBand from "@/components/marketing/SweatEquityBand";
 import WhatWeDoSection from "@/components/marketing/WhatWeDoSection";
@@ -59,7 +60,14 @@ export default async function HomePage() {
 
     return (
         <div className="flex flex-col">
-            <HeroSection heroImage={settings?.landingHeroImage ?? null} />
+            <HeroSection
+                heroImage={settings?.landingHeroImage ?? null}
+                copy={settings?.landingHero ?? null}
+            />
+            <FeaturedVideoSection
+                video={settings?.featuredVideo ?? null}
+                heading={settings?.featuredVideoHeading ?? null}
+            />
             <ImpactTicker stats={tickerStats} />
             <WhatWeDoSection />
             <ChoosePathSection />

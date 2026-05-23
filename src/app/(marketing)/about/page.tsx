@@ -41,7 +41,7 @@ export default async function AboutPage() {
             <AboutHero heroImage={settings?.aboutHeroImage ?? null} />
             <OurPhilosophy />
             <StakeholdersDeepDive />
-            <HistoryTimeline />
+            <HistoryTimeline nodes={settings?.historyTimeline ?? null} />
             <WhyJenga />
             <LeadershipGrid team={team} />
             <Testimonials />
