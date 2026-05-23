@@ -5,13 +5,17 @@ import { db } from "@/lib/db";
 import { treeSurvivalChecks, treeSurvivalAudits, giveBackTracking, treePlantingEvents } from "@/lib/db/schema";
 import { checkAndUnlockMilestones } from "@/lib/actions/corporateUnlock";
 
+// KoBo serializes _id as an integer in REST Service payloads. Accept either
+// form and normalize to string so it slots into the text() column.
+const KoboId = z.union([z.string(), z.number()]).transform(String);
+
 const KoboTreeSchema = z.object({
     form_type: z.literal("tree_survival"),
-    _id: z.string(),
+    _id: KoboId,
     _submission_time: z.string(),
-    trees_planted: z.number(),
-    trees_alive: z.number(),
-    check_interval_months: z.number(),
+    trees_planted: z.coerce.number(),
+    trees_alive: z.coerce.number(),
+    check_interval_months: z.coerce.number(),
     survey_date: z.string(),
     surveyor_name: z.string().optional(),
     project_location_id: z.string().uuid().optional(),
@@ -22,7 +26,7 @@ const KoboTreeSchema = z.object({
 
 const KoboGiveBackSchema = z.object({
     form_type: z.literal("give_back"),
-    _id: z.string(),
+    _id: KoboId,
     user_id: z.string().uuid(),
     quarter: z.string(),
     activity_type: z.string().optional(),
@@ -33,10 +37,10 @@ const KoboGiveBackSchema = z.object({
 
 const KoboPlantingSchema = z.object({
     form_type: z.literal("tree_planting"),
-    _id: z.string(),
+    _id: KoboId,
     project_location_id: z.string().uuid(),
     planted_at: z.string(),
-    trees_planted: z.number().int().positive(),
+    trees_planted: z.coerce.number().int().positive(),
     species: z.string().optional(),
     planted_by: z.string().uuid().optional(),
     _geolocation: z.tuple([z.number(), z.number()]).optional(),
@@ -63,6 +67,11 @@ export async function POST(request: NextRequest) {
 
     const parsed = KoboPayloadSchema.safeParse(body);
     if (!parsed.success) {
+        console.error("[kobo-webhook] 422 schema reject", {
+            issues: parsed.error.issues,
+            receivedKeys: body && typeof body === "object" ? Object.keys(body as object) : null,
+            body,
+        });
         return NextResponse.json({ error: "Invalid payload", issues: parsed.error.issues }, { status: 422 });
     }
 
