@@ -149,6 +149,66 @@ export async function fetchPartners() {
     return await client.fetch(partnersQuery);
 }
 
+// ── Help Center ──────────────────────────────────────────────
+// Audience filtering happens server-side in code, not in GROQ, because the
+// access tokens (guest/mentee/mentor/corporate/ngo/content/all) need to be
+// resolved against Better Auth session + moderationScope. See lib/auth/helpAccess.ts.
+export const userManualsQuery = groq`*[_type == "userManual"] | order(order asc, title asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  description,
+  iconName,
+  badge,
+  allowedRoles,
+  order
+}`;
+
+export const userManualBySlugQuery = groq`*[_type == "userManual" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  description,
+  iconName,
+  badge,
+  body,
+  allowedRoles
+}`;
+
+export const helpTopicsQuery = groq`*[_type == "helpTopic"] | order(order asc, title asc) {
+  _id,
+  title,
+  "slug": slug.current,
+  description,
+  allowedRoles,
+  order
+}`;
+
+export async function fetchUserManuals() {
+    try {
+        return await client.fetch(userManualsQuery);
+    } catch {
+        return [];
+    }
+}
+
+export async function fetchUserManualBySlug(slug: string) {
+    if (!slug) return null;
+    try {
+        return await client.fetch(userManualBySlugQuery, { slug });
+    } catch {
+        return null;
+    }
+}
+
+export async function fetchHelpTopics() {
+    try {
+        return await client.fetch(helpTopicsQuery);
+    } catch {
+        return [];
+    }
+}
+
 // ── Products ─────────────────────────────────────────────────
 // Used by the moderator inventory page to mirror the Sanity catalog.
 // Stock counts live in Neon (merchandise table), so they are not selected here.

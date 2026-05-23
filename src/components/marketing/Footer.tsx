@@ -13,6 +13,7 @@ const footerNav = [
             { label: "Impact", href: "/impact" },
             { label: "Events", href: "/events" },
             { label: "Contact", href: "/contact" },
+            { label: "Help & Support", href: "/help" },
         ],
     },
     {

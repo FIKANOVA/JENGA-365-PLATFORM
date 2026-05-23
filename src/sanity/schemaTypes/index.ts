@@ -12,6 +12,8 @@ import { videoType } from "./videoType";
 import { voicesType } from "./voicesType";
 import { siteSettingsType } from "./siteSettingsType";
 import { teamOfficialType } from "./teamOfficialType";
+import { helpTopicType } from "./helpTopicType";
+import { userManualType } from "./userManualType";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
     types: [
@@ -28,5 +30,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
         productType,
         videoType,
         voicesType,
+        helpTopicType,
+        userManualType,
     ],
 };

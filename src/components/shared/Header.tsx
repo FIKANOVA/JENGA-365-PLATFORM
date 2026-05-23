@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Heart, ShoppingBag, ChevronDown, LayoutDashboard, Settings, LogOut } from "lucide-react";
+import { Menu, X, Heart, ShoppingBag, ChevronDown, LayoutDashboard, Settings, LogOut, LifeBuoy } from "lucide-react";
 import Logo from "@/components/shared/Logo";
 import UserAvatar from "@/components/shared/UserAvatar";
 import NotificationBell from "@/components/shared/NotificationBell";
@@ -34,6 +34,7 @@ const NAV_GROUPS: NavGroup[] = [
             { label: "Impact", href: "/impact", description: "Verified outcomes and ESG metrics" },
             { label: "Events", href: "/events", description: "Clinics, summits, and community drives" },
             { label: "Contact", href: "/contact", description: "Reach the team" },
+            { label: "Help & Support", href: "/help", description: "Manuals, FAQs, and support" },
         ],
     },
     {
@@ -333,6 +334,17 @@ function AvatarMenu({ name, image, role }: { name: string; image?: string; role?
                             >
                                 <Settings className="h-4 w-4" aria-hidden />
                                 Settings
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="/help"
+                                role="menuitem"
+                                onClick={() => setOpen(false)}
+                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-surface-2 text-foreground"
+                            >
+                                <LifeBuoy className="h-4 w-4" aria-hidden />
+                                Help Center
                             </Link>
                         </li>
                         <li className="border-t border-border my-1" aria-hidden />
