@@ -71,3 +71,9 @@ plans/
 
 # Claude Code session-local state (lock files, settings overrides)
 .claude/
+
+# Development-only docs (kept local, not for GitHub)
+docs/PROJECT_STATE.md
+docs/QA_AUDIT.md
+docs/SUPERADMIN_USER_MANUAL.md
+docs/SANITY_CMS_STATE.md

@@ -66,7 +66,7 @@ export default function RoleSidebar({ role }: { role: string }) {
 
     return (
         <aside
-            className="w-64 text-white flex flex-col h-full shrink-0 min-h-screen"
+            className="w-64 text-white flex flex-col h-screen shrink-0 sticky top-0"
             style={{ background: "#0a0a0a" }}
         >
             <div className="p-6 flex items-center gap-3 border-b border-white/10">
@@ -79,7 +79,7 @@ export default function RoleSidebar({ role }: { role: string }) {
                 <h1 className="text-headline tracking-wide">Jenga365</h1>
             </div>
 
-            <nav className="flex-1 px-3 py-4 space-y-1">
+            <nav className="flex-1 min-h-0 overflow-y-auto px-3 py-4 space-y-1">
                 {links.map((link) => {
                     const active = !link.external && isActive(link.href);
                     return (

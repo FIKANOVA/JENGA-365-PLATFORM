@@ -68,11 +68,11 @@ export default async function DashboardLayout({
     }
 
     return (
-        <div className="flex min-h-screen bg-muted/5">
+        <div className="flex h-screen overflow-hidden bg-muted/5">
             <RoleSidebar role={effectiveRole} />
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-w-0 h-screen">
                 <DashboardHeader />
-                <main className="flex-1 overflow-y-auto">
+                <main className="flex-1 overflow-y-auto min-h-0">
                     {children}
                 </main>
             </div>

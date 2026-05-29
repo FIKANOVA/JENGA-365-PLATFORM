@@ -42,7 +42,21 @@ const DEFAULT_STATS: StatItem[] = [
     { label: "Active mentees", value: "—", trend: "up", change: "" },
 ];
 
-const ROLES = ["All Roles", "SuperAdmin", "Moderator", "CorporatePartner", "Mentor", "Mentee"];
+// NGOs share the CorporatePartner role, distinguished by metadata.orgType === "NGO".
+// Filter options surface them as a first-class choice and split true Corporates out.
+const ROLE_FILTERS: { value: string; label: string }[] = [
+    { value: "All Roles", label: "All Roles" },
+    { value: "SuperAdmin", label: "SuperAdmin" },
+    { value: "Moderator", label: "Moderator" },
+    { value: "CorporatePartner", label: "Corporate Partner" },
+    { value: "NGO", label: "NGO Partner" },
+    { value: "Mentor", label: "Mentor" },
+    { value: "Mentee", label: "Mentee" },
+];
+
+const isNgo = (u: UserRow) =>
+    u.role === "CorporatePartner" &&
+    String((u.metadata as Record<string, unknown> | null)?.orgType ?? "").toUpperCase() === "NGO";
 
 const SCOPE_OPTIONS = [
     { value: "E", label: "Tier 1 — Senior Moderator (Full Access)" },
@@ -107,7 +121,13 @@ function ExpandableUserRow({ user, onAction }: { user: UserRow; onAction: () => 
                         </div>
                     </div>
                 </td>
-                <td className="p-4 text-body-sm text-foreground-muted">{user.role}</td>
+                <td className="p-4 text-body-sm text-foreground-muted">
+                    {user.role === "CorporatePartner"
+                        ? (String((user.metadata as Record<string, unknown> | null)?.orgType ?? "").toUpperCase() === "NGO"
+                            ? "NGO Partner"
+                            : "Corporate Partner")
+                        : user.role}
+                </td>
                 <td className="p-4">
                     <span
                         className="inline-flex items-center px-2 py-0.5 rounded-full text-eyebrow border"
@@ -361,12 +381,29 @@ export default function AdminDashboard({
     currentUserId,
 }: AdminDashboardProps) {
     const [roleFilter, setRoleFilter] = useState("All Roles");
+    const [search, setSearch] = useState("");
     const [inviteModalOpen, setInviteModalOpen] = useState(false);
     const handleAction = () => {}; // triggers re-render via toast feedback
 
-    const filtered = roleFilter === "All Roles"
-        ? users
-        : users.filter((u) => u.role === roleFilter);
+    const filtered = users.filter((u) => {
+        const matchesRole =
+            roleFilter === "All Roles"
+                ? true
+                : roleFilter === "NGO"
+                  ? isNgo(u)
+                  : roleFilter === "CorporatePartner"
+                    ? u.role === "CorporatePartner" && !isNgo(u)
+                    : u.role === roleFilter;
+        if (!matchesRole) return false;
+        const q = search.trim().toLowerCase();
+        if (!q) return true;
+        const org = String((u.metadata as Record<string, unknown> | null)?.orgName ?? "");
+        return (
+            (u.name ?? "").toLowerCase().includes(q) ||
+            u.email.toLowerCase().includes(q) ||
+            org.toLowerCase().includes(q)
+        );
+    });
 
     return (
         <div className="flex-1 bg-background h-full overflow-y-auto">
@@ -438,6 +475,13 @@ export default function AdminDashboard({
                     <div className="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <h2 className="text-headline text-foreground">User management</h2>
                         <div className="flex items-center gap-3">
+                            <input
+                                type="search"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Search name, email, org…"
+                                className="h-9 w-56 rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle focus:outline-none focus:border-[color:var(--border-strong,#D4D4D8)]"
+                            />
                             <div className="relative">
                                 <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-subtle w-4 h-4" />
                                 <select
@@ -445,7 +489,7 @@ export default function AdminDashboard({
                                     onChange={(e) => setRoleFilter(e.target.value)}
                                     className="pl-9 pr-8 py-1.5 h-9 rounded-md border border-border bg-background text-body-sm text-foreground appearance-none focus:outline-none focus:border-[color:var(--border-strong,#D4D4D8)]"
                                 >
-                                    {ROLES.map((r) => <option key={r}>{r}</option>)}
+                                    {ROLE_FILTERS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
                                 </select>
                             </div>
                         </div>
