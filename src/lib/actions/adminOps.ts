@@ -35,10 +35,25 @@ export async function setPartnerLooker(
     const reportId = lookerReportId.trim() || null;
     const shareUrl = lookerShareUrl.trim() || null;
 
-    await db
-        .update(corporatePartners)
-        .set({ lookerReportId: reportId, lookerShareUrl: shareUrl })
-        .where(eq(corporatePartners.id, partnerId));
+    // Validate up front so the operator gets a clear message instead of a raw DB
+    // CHECK-constraint error (corporate_partners_looker_share_url_format, migration 0009).
+    if (shareUrl && !shareUrl.startsWith("https://lookerstudio.google.com/")) {
+        return { error: "Share URL must start with https://lookerstudio.google.com/" };
+    }
+    // reportId becomes part of the embed iframe src — keep it to a safe token charset.
+    if (reportId && !/^[A-Za-z0-9_-]+$/.test(reportId)) {
+        return { error: "Report ID may contain only letters, numbers, hyphens and underscores." };
+    }
+
+    try {
+        await db
+            .update(corporatePartners)
+            .set({ lookerReportId: reportId, lookerShareUrl: shareUrl })
+            .where(eq(corporatePartners.id, partnerId));
+    } catch (err) {
+        console.error("[setPartnerLooker] update failed:", err);
+        return { error: "Could not save Looker settings. Check the report ID and share URL." };
+    }
 
     revalidatePath("/dashboard/admin/esg-unlock");
     revalidatePath("/dashboard/partner");
