@@ -71,8 +71,8 @@ function Shell({ scrolled, children }: { scrolled: boolean; children: React.Reac
             className={cn(
                 "sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter] duration-200",
                 scrolled
-                    ? "bg-background/85 backdrop-blur-md border-b border-border"
-                    : "bg-transparent border-b border-transparent",
+                    ? "bg-background/60 backdrop-blur-xl backdrop-saturate-150 border-b border-border/60 shadow-lg shadow-black/5"
+                    : "bg-background/30 backdrop-blur-md backdrop-saturate-150 border-b border-transparent",
             )}
         >
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -153,7 +153,7 @@ function NavDropdown({ group, onItemClick }: { group: NavGroup; onItemClick?: ()
             {open && (
                 <div
                     role="menu"
-                    className="absolute left-0 mt-2 w-72 rounded-lg border border-border bg-background shadow-lg overflow-hidden z-50"
+                    className="absolute left-0 mt-2 w-72 rounded-lg border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
                 >
                     <ul className="py-2">
                         {group.items.map((item) => (
@@ -308,9 +308,9 @@ function AvatarMenu({ name, image, role }: { name: string; image?: string; role?
             {open && (
                 <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-64 rounded-lg border border-border bg-background shadow-lg overflow-hidden"
+                    className="absolute right-0 mt-2 w-64 rounded-lg border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
                 >
-                    <div className="px-4 py-3 border-b border-border bg-surface-1">
+                    <div className="px-4 py-3 border-b border-border/60 bg-surface-1/60">
                         <p className="text-label font-semibold text-foreground truncate">{name}</p>
                         <div className="mt-1.5">
                             <RoleBadge role={role} />
@@ -418,7 +418,7 @@ function AuthenticatedHeader({
 // ── Mobile drawer (shared, render outside Shell for full-width) ──────────────
 function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; onClose: () => void }) {
     return (
-        <div className="md:hidden border-t border-border bg-background max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <div className="md:hidden border-t border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 max-h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="mx-auto max-w-7xl px-6 py-3 flex flex-col gap-1">
                 {NAV_GROUPS.map((group) => (
                     <details key={group.label} className="group/section">
