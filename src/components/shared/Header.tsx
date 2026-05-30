@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
  *   3. Minimal       — guest on /login | /register | /legal/nda | /verify-email: Logo only
  *
  * Nav is grouped into three dropdowns: Platform, Community, Get Involved.
- * Donate + Store remain visible primary CTAs (CLAUDE.md §6) AND appear inside
- * Get Involved for discoverability.
+ * Donate + Store + Sign Up remain visible header CTAs (CLAUDE.md §6); they are NOT
+ * duplicated inside the Get Involved dropdown, which carries only distinct links.
  */
 
 type NavItem = { label: string; href?: string; isDonate?: boolean; description?: string; newTab?: boolean };
@@ -49,9 +49,6 @@ const NAV_GROUPS: NavGroup[] = [
     {
         label: "Get Involved",
         items: [
-            { label: "Join Free", href: "/register/mentorship", description: "Sign up as mentee or mentor" },
-            { label: "Donate", isDonate: true, description: "Fund the engine via Paystack" },
-            { label: "Shop", href: "/shop", description: "Merchandise — proceeds fund the field", newTab: true },
             { label: "Become a Partner", href: "/register/partner", description: "Corporate or NGO partnerships" },
         ],
     },
