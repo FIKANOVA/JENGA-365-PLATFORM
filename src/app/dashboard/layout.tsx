@@ -1,9 +1,6 @@
 import RoleSidebar from "@/components/dashboard/RoleSidebar";
 import DashboardHeader from "@/components/dashboard/shared/DashboardHeader";
 import { auth } from "@/lib/auth/config";
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -20,7 +17,12 @@ export default async function DashboardLayout({
         redirect("/login");
     }
 
-    const userRole = (session.user as any).role as string;
+    const sessionUser = session.user as {
+        role?: string;
+        intakeCompleted?: boolean;
+    };
+    const userRole = sessionUser.role ?? "Mentee";
+    const effectiveRole = userRole;
 
     // Role-based dashboard map
     const roleDashboardMap: Record<string, string> = {
@@ -29,30 +31,17 @@ export default async function DashboardLayout({
         Mentor: "/dashboard/mentor",
         Mentee: "/dashboard/mentee",
         CorporatePartner: "/dashboard/partner",
+        NGO: "/dashboard/ngo",
     };
 
-    let correctDashboard = roleDashboardMap[userRole] || "/dashboard/mentee";
-    // effectiveRole is passed to the sidebar — NGOs get "NGO" so they see NGO-specific nav
-    let effectiveRole = userRole;
-
-    // NGO partners share CorporatePartner role but own /dashboard/ngo
-    if (userRole === "CorporatePartner") {
-        const dbUser = await db.query.users.findFirst({
-            where: eq(users.id, session.user.id),
-            columns: { metadata: true },
-        });
-        if (dbUser?.metadata?.orgType === "NGO") {
-            correctDashboard = "/dashboard/ngo";
-            effectiveRole = "NGO";
-        }
-    }
+    const correctDashboard = roleDashboardMap[effectiveRole] || "/dashboard/mentee";
 
     // Use the x-pathname header set by middleware (falls back to no check if missing)
     const headersList = await headers();
     const pathname = headersList.get("x-pathname") || headersList.get("x-invoke-path") || "";
 
     // Gate: Intake must be complete for Mentees
-    const intakeCompleted = (session.user as any).intakeCompleted ?? false;
+    const intakeCompleted = sessionUser.intakeCompleted ?? false;
     if (userRole === "Mentee" && !intakeCompleted) {
         redirect("/onboarding/intake");
     }

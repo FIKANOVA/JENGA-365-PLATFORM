@@ -11,7 +11,7 @@ import { createNotification } from "@/lib/notifications/service";
 const signNDASchema = z.object({
     signatureName: z.string().min(2).max(100),
     ndaVersion: z.string().min(1),
-    role: z.enum(["Mentee", "Mentor", "CorporatePartner", "Moderator", "SuperAdmin"]),
+    role: z.enum(["Mentee", "Mentor", "CorporatePartner", "NGO", "Moderator", "SuperAdmin"]),
     additionalDeclarations: z.array(z.boolean()).refine(all => all.every(v => v === true), "All declarations must be accepted"),
     ipAddress: z.string().optional(),
     userAgent: z.string().optional(),
@@ -54,6 +54,7 @@ export async function signNDA(payload: z.infer<typeof signNDASchema>) {
     if (validated.role === "Mentee") redirectTo = "/check-email";
     else if (validated.role === "Mentor") redirectTo = "/pending-approval?role=Mentor";
     else if (validated.role === "CorporatePartner") redirectTo = "/pending-approval?role=Corporate Partner";
+    else if (validated.role === "NGO") redirectTo = "/pending-approval?role=NGO Partner";
     else if (validated.role === "Moderator") redirectTo = "/dashboard/moderator";
     else if (validated.role === "SuperAdmin") redirectTo = "/dashboard/admin";
 
@@ -105,6 +106,11 @@ export async function getNDADocument(role: string, _version?: string) {
             version: "2025.06.1",
             hash: "sha256-corporate-v2025-06-1-placeholder-hash",
             content: "As a Corporate Partner, you have access to aggregated impact data. You agree not to disclose individual mentee data or circumvent the platform's social impact metrics."
+        },
+        NGO: {
+            version: "2025.06.1",
+            hash: "sha256-ngo-v2025-06-1-placeholder-hash",
+            content: "As an NGO Partner, you have access to aggregated impact data and field collaboration tools. You agree not to disclose individual mentee data or circumvent the platform's social impact metrics."
         },
         Moderator: {
             version: "2025.06.1",

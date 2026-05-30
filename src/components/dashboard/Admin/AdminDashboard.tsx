@@ -42,8 +42,8 @@ const DEFAULT_STATS: StatItem[] = [
     { label: "Active mentees", value: "—", trend: "up", change: "" },
 ];
 
-// NGOs share the CorporatePartner role, distinguished by metadata.orgType === "NGO".
-// Filter options surface them as a first-class choice and split true Corporates out.
+// NGO is a first-class role. Legacy NGO accounts (pre-migration 0018) may still carry the
+// CorporatePartner role with metadata.orgType === "NGO" — isNgo() catches both.
 const ROLE_FILTERS: { value: string; label: string }[] = [
     { value: "All Roles", label: "All Roles" },
     { value: "SuperAdmin", label: "SuperAdmin" },
@@ -55,8 +55,9 @@ const ROLE_FILTERS: { value: string; label: string }[] = [
 ];
 
 const isNgo = (u: UserRow) =>
-    u.role === "CorporatePartner" &&
-    String((u.metadata as Record<string, unknown> | null)?.orgType ?? "").toUpperCase() === "NGO";
+    u.role === "NGO" ||
+    (u.role === "CorporatePartner" &&
+        String((u.metadata as Record<string, unknown> | null)?.orgType ?? "").toUpperCase() === "NGO");
 
 const SCOPE_OPTIONS = [
     { value: "E", label: "Tier 1 — Senior Moderator (Full Access)" },
@@ -122,11 +123,11 @@ function ExpandableUserRow({ user, onAction }: { user: UserRow; onAction: () => 
                     </div>
                 </td>
                 <td className="p-4 text-body-sm text-foreground-muted">
-                    {user.role === "CorporatePartner"
-                        ? (String((user.metadata as Record<string, unknown> | null)?.orgType ?? "").toUpperCase() === "NGO"
-                            ? "NGO Partner"
-                            : "Corporate Partner")
-                        : user.role}
+                    {isNgo(user)
+                        ? "NGO Partner"
+                        : user.role === "CorporatePartner"
+                            ? "Corporate Partner"
+                            : user.role}
                 </td>
                 <td className="p-4">
                     <span

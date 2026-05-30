@@ -106,14 +106,23 @@ export function middleware(request: NextRequest) {
 
     if (sessionUser) {
         const { role, moderationScope, ndaSigned, intakeCompleted } = sessionUser;
+        const isOrgPartner = role === "CorporatePartner" || role === "NGO";
 
-        // CorporatePartner: NDA gate
-        if (role === "CorporatePartner" && !ndaSigned) {
+        // Org partners (corporate + NGO) sign an NDA at registration — gate until signed.
+        if (isOrgPartner && !ndaSigned) {
             if (!pathname.startsWith("/legal/nda") && !matchesPrefix(pathname, ONBOARDING_ROUTES)) {
                 const url = new URL("/legal/nda", request.url);
                 url.searchParams.set("next", pathname);
                 return NextResponse.redirect(url);
             }
+        }
+
+        // Keep the two partner portals separated.
+        if (role === "NGO" && pathname.startsWith("/dashboard/partner")) {
+            return NextResponse.redirect(new URL("/dashboard/ngo", request.url));
+        }
+        if (role === "CorporatePartner" && pathname.startsWith("/dashboard/ngo")) {
+            return NextResponse.redirect(new URL("/dashboard/partner", request.url));
         }
 
         // Mentee: intake gate on dashboard routes
@@ -137,7 +146,12 @@ export function middleware(request: NextRequest) {
         }
     }
 
-    return NextResponse.next();
+    // Expose the current path to Server Components (the dashboard layout uses this to
+    // redirect users who land on a dashboard that isn't theirs). Without this header the
+    // role-separation redirect in src/app/dashboard/layout.tsx is a no-op.
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-pathname", pathname);
+    return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {

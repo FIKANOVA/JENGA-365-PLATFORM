@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type Role = "Mentee" | "Mentor" | "CorporatePartner" | "Moderator" | "SuperAdmin";
+type Role = "Mentee" | "Mentor" | "CorporatePartner" | "NGO" | "Moderator" | "SuperAdmin";
 
 interface RoleBadgeProps {
     role: Role | string | null | undefined;
@@ -32,6 +32,11 @@ const ROLE_STYLES: Record<Role, StyleEntry> = {
         background: "var(--brand-red-soft)",
         color: "var(--brand-red)",
         label: "Partner",
+    },
+    NGO: {
+        background: "var(--brand-green-soft)",
+        color: "var(--brand-green)",
+        label: "NGO",
     },
     Moderator: {
         background: "#FFF8DB",

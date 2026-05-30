@@ -32,6 +32,7 @@ export default async function OnboardingPage({
             Mentee: "/dashboard/mentee",
             Mentor: "/dashboard/mentor",
             CorporatePartner: "/dashboard/partner",
+            NGO: "/dashboard/ngo",
             Moderator: "/dashboard/moderator",
             SuperAdmin: "/dashboard/admin",
         };

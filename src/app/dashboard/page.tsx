@@ -1,7 +1,4 @@
 import { auth } from "@/lib/auth/config";
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -9,6 +6,7 @@ const ROLE_REDIRECTS: Record<string, string> = {
     Mentee: "/dashboard/mentee",
     Mentor: "/dashboard/mentor",
     CorporatePartner: "/dashboard/partner",
+    NGO: "/dashboard/ngo",
     Moderator: "/dashboard/moderator",
     SuperAdmin: "/dashboard/admin",
 };
@@ -18,22 +16,13 @@ export default async function DashboardRootPage() {
 
     if (!session) redirect("/login");
 
-    const user = session.user as any;
+    const user = session.user as { role?: string; ndaSigned?: boolean };
+    const role = user.role ?? "Mentee";
 
-    if (!user.ndaSigned) redirect("/legal/nda");
-
-    let target = ROLE_REDIRECTS[user.role] ?? "/dashboard/mentee";
-
-    // NGO partners share the CorporatePartner role but get their own dashboard
-    if (user.role === "CorporatePartner") {
-        const dbUser = await db.query.users.findFirst({
-            where: eq(users.id, user.id),
-            columns: { metadata: true },
-        });
-        if (dbUser?.metadata?.orgType === "NGO") {
-            target = "/dashboard/ngo";
-        }
+    // Org partners (corporate + NGO) sign an NDA at registration; gate until signed.
+    if ((role === "CorporatePartner" || role === "NGO") && !user.ndaSigned) {
+        redirect("/legal/nda");
     }
 
-    redirect(target);
+    redirect(ROLE_REDIRECTS[role] ?? "/dashboard/mentee");
 }

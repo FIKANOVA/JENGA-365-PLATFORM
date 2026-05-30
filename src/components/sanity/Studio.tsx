@@ -24,6 +24,11 @@ const PRIVILEGED_ROLES: EffectiveRole[] = ["SuperAdmin", "Moderator"];
 // Server-side `requireCapability("PUBLISH_ARTICLE")` remains the source of truth.
 const GATED_ARTICLE_ACTIONS = new Set(["publish", "unpublish", "delete", "duplicate"]);
 
+// Single-instance documents — exactly one doc, fixed id, no create/delete/duplicate.
+// Kept in sync with sanity.config.ts so every Studio mount enforces the singleton.
+const SINGLETON_TYPES = new Set(["siteSettings"]);
+const SINGLETON_BLOCKED_ACTIONS = new Set(["unpublish", "delete", "duplicate"]);
+
 export function Studio({
     basePath,
     allowedSchemaTypes,
@@ -91,6 +96,15 @@ export function Studio({
             .items(
                 visibleNames.flatMap((name) => {
                     if (name === "article") return articleNodes;
+                    if (SINGLETON_TYPES.has(name)) {
+                        // Pin to a single fixed document — no list, no "create new".
+                        return [
+                            S.listItem()
+                                .id(name)
+                                .title(name === "siteSettings" ? "Site Settings" : name)
+                                .child(S.document().schemaType(name).documentId(name)),
+                        ];
+                    }
                     return [S.documentTypeListItem(name)];
                 }),
             );
@@ -102,7 +116,16 @@ export function Studio({
         dataset,
         schema,
         document: {
+            newDocumentOptions: (prev) =>
+                prev.filter((tmpl) => !SINGLETON_TYPES.has(tmpl.templateId)),
             actions: (prev, ctx): DocumentActionComponent[] => {
+                // Singletons: strip create/delete/duplicate/unpublish everywhere.
+                if (SINGLETON_TYPES.has(ctx.schemaType)) {
+                    return prev.filter(
+                        (action) => !SINGLETON_BLOCKED_ACTIONS.has(action.action ?? ""),
+                    );
+                }
+
                 if (ctx.schemaType !== "article") return prev;
 
                 // Non-privileged roles: hide all dangerous actions entirely.

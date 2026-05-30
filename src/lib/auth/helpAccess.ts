@@ -49,6 +49,7 @@ export function canViewHelpDoc(
     }
     if (role === "Mentee" && allowedRoles.includes("mentee")) return true;
     if (role === "Mentor" && allowedRoles.includes("mentor")) return true;
-    if (role === "CorporatePartner" && (allowedRoles.includes("corporate") || allowedRoles.includes("ngo"))) return true;
+    if (role === "CorporatePartner" && allowedRoles.includes("corporate")) return true;
+    if (role === "NGO" && allowedRoles.includes("ngo")) return true;
     return false;
 }

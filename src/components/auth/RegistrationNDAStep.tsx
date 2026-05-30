@@ -5,7 +5,7 @@ import { getNDADocument } from "@/lib/actions/nda";
 import { Check, ArrowRight, ShieldCheck } from "lucide-react";
 
 interface RegistrationNDAStepProps {
-    role: "Mentee" | "Mentor" | "CorporatePartner";
+    role: "Mentee" | "Mentor" | "CorporatePartner" | "NGO";
     onSignAndComplete: (signatureData: { name: string; version: string; hash: string }) => void;
     isLoading: boolean;
     error?: string | null;
@@ -43,7 +43,7 @@ export default function RegistrationNDAStep({
     };
 
     const roleLabel =
-        role === "CorporatePartner" ? "Corporate partner" : role;
+        role === "CorporatePartner" ? "Corporate partner" : role === "NGO" ? "NGO partner" : role;
 
     return (
         <div

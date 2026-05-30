@@ -5,6 +5,7 @@
     { "path": "/api/cron/corporate-unlock",       "schedule": "0 2 * * *" },
     { "path": "/api/cron/impact-report",          "schedule": "0 1 * * *" },
     { "path": "/api/cron/resilience-check",       "schedule": "0 3 * * *" },
-    { "path": "/api/cron/cleanup-orphan-assets",  "schedule": "0 4 * * 0" }
+    { "path": "/api/cron/cleanup-orphan-assets",  "schedule": "0 4 * * 0" },
+    { "path": "/api/cron/refresh-embeddings",     "schedule": "0 5 * * *" }
   ]
 }

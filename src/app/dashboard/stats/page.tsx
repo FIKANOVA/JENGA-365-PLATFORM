@@ -13,7 +13,7 @@ export default async function StatsPage() {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session) redirect("/login");
     const role = (session.user as any).role as string;
-    if (!["Mentor", "CorporatePartner", "SuperAdmin"].includes(role)) redirect("/dashboard");
+    if (!["Mentor", "CorporatePartner", "NGO", "SuperAdmin"].includes(role)) redirect("/dashboard");
 
     const stats = await getGlobalImpactStats();
 

@@ -181,7 +181,7 @@ export const auth = betterAuth({
             create: {
                 before: async (user) => {
                     user.id = randomUUID();
-                    const VALID_ROLES = ["SuperAdmin", "Moderator", "CorporatePartner", "Mentor", "Mentee"] as const;
+                    const VALID_ROLES = ["SuperAdmin", "Moderator", "CorporatePartner", "NGO", "Mentor", "Mentee"] as const;
                     const u = user as Record<string, unknown>;
                     const role = u.role as string | undefined;
                     if (!role || !VALID_ROLES.includes(role as typeof VALID_ROLES[number])) {

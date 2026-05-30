@@ -10,11 +10,12 @@ const ROLE_DASHBOARD: Record<string, string> = {
     Mentee: "/dashboard/mentee",
     Mentor: "/dashboard/mentor",
     CorporatePartner: "/dashboard/partner",
+    NGO: "/dashboard/ngo",
     Moderator: "/dashboard/moderator",
     SuperAdmin: "/dashboard/admin",
 };
 
-const ROLES_NEEDING_APPROVAL = new Set(["Mentor", "CorporatePartner"]);
+const ROLES_NEEDING_APPROVAL = new Set(["Mentor", "CorporatePartner", "NGO"]);
 
 export async function completeOnboarding(_summary: string) {
     const session = await auth.api.getSession({ headers: await headers() });

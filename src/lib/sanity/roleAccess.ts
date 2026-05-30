@@ -32,6 +32,8 @@ export async function resolveEffectiveRole(
     userId: string,
     role: string,
 ): Promise<EffectiveRole> {
+    // NGO is now a first-class role. Legacy fallback: older NGO accounts that were left on
+    // the CorporatePartner role (pre-migration 0018) are still detected via metadata.orgType.
     if (role === "CorporatePartner") {
         const dbUser = await db.query.users.findFirst({
             where: eq(users.id, userId),
@@ -45,7 +47,8 @@ export async function resolveEffectiveRole(
         role === "Moderator" ||
         role === "Mentor" ||
         role === "Mentee" ||
-        role === "CorporatePartner"
+        role === "CorporatePartner" ||
+        role === "NGO"
     ) {
         return role;
     }

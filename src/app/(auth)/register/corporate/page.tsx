@@ -119,8 +119,10 @@ function CorporateRegisterInner() {
                 return;
             }
 
+            const partnerRole = formData.orgType === "NGO" ? "NGO" : "CorporatePartner";
+
             if (result?.data?.user?.id) {
-                await setUserRole(result.data.user.id, "CorporatePartner");
+                await setUserRole(result.data.user.id, partnerRole);
                 await saveUserMetadata(result.data.user.id, {
                     orgType: formData.orgType,
                     contributionType: formData.contributionType,
@@ -132,7 +134,7 @@ function CorporateRegisterInner() {
             const ndaResult = await signNDA({
                 signatureName: signatureData.name,
                 ndaVersion: signatureData.version,
-                role: "CorporatePartner",
+                role: partnerRole,
                 additionalDeclarations: [true],
                 documentHash: signatureData.hash,
             });
@@ -414,7 +416,7 @@ function CorporateRegisterInner() {
                             className="flex justify-center"
                         >
                             <RegistrationNDAStep
-                                role="CorporatePartner"
+                                role={formData.orgType === "NGO" ? "NGO" : "CorporatePartner"}
                                 onSignAndComplete={handleSignAndComplete}
                                 isLoading={loading}
                                 error={error}

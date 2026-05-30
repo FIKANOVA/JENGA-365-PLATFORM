@@ -123,7 +123,7 @@ export async function createModeratorInvite(
  */
 export async function setUserRole(
     userId: string,
-    role: "Mentee" | "Mentor" | "CorporatePartner" | "Moderator" | "SuperAdmin"
+    role: "Mentee" | "Mentor" | "CorporatePartner" | "NGO" | "Moderator" | "SuperAdmin"
 ) {
     try {
         await db.update(users).set({ role } as any).where(eq(users.id, userId));

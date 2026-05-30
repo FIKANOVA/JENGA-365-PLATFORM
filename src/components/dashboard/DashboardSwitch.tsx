@@ -24,6 +24,8 @@ export default async function DashboardSwitch() {
             return <MentorDashboard />;
         case "CorporatePartner":
             return <PartnerDashboard />;
+        case "NGO":
+            redirect("/dashboard/ngo");
         case "Mentee":
         default:
             return <MenteeDashboard />;

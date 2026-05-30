@@ -16,7 +16,8 @@ export default function NDAPage() {
     const role = ((session?.user as any)?.role ?? "Mentee") as
         | "Mentee"
         | "Mentor"
-        | "CorporatePartner";
+        | "CorporatePartner"
+        | "NGO";
 
     const [name, setName] = useState("");
     const [agreed, setAgreed] = useState(false);
@@ -59,7 +60,7 @@ export default function NDAPage() {
         }
     };
 
-    const roleLabel = role === "CorporatePartner" ? "Corporate partner" : role;
+    const roleLabel = role === "CorporatePartner" ? "Corporate partner" : role === "NGO" ? "NGO partner" : role;
 
     return (
         <div className="min-h-screen bg-background flex flex-col">

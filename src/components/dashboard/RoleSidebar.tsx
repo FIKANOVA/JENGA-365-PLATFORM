@@ -16,6 +16,9 @@ import {
     CalendarDays,
     Package,
     FileText,
+    Mail,
+    Unlock,
+    ShieldAlert,
 } from "lucide-react";
 import { signOut } from "@/lib/auth/client";
 
@@ -45,6 +48,7 @@ export default function RoleSidebar({ role }: { role: string }) {
             icon: Users,
             roles: ["Mentee", "Mentor"],
         },
+        { href: "/dashboard/people", label: "User directory", icon: Users, roles: ["Moderator"] },
         { href: "/dashboard/content", label: "Content", icon: LibraryBig },
         { href: "/dashboard/journal", label: "Journal", icon: BookOpen, roles: ["Mentee"] },
         { href: "/dashboard/ngo/mou", label: "MOU agreement", icon: FileText, roles: ["NGO"] },
@@ -54,6 +58,9 @@ export default function RoleSidebar({ role }: { role: string }) {
         { href: studioHref, label: "Sanity Studio", icon: PenSquare, roles: ["SuperAdmin", "Moderator", "CorporatePartner", "NGO"], external: true },
         { href: "/events", label: "Events", icon: CalendarDays, roles: ["SuperAdmin", "Moderator"] },
         { href: "/dashboard/moderator/inventory", label: "Shop inventory", icon: Package, roles: ["SuperAdmin", "Moderator"] },
+        { href: "/dashboard/admin/corporate-invite", label: "Corporate invite", icon: Mail, roles: ["SuperAdmin"] },
+        { href: "/dashboard/admin/esg-unlock", label: "ESG unlock", icon: Unlock, roles: ["SuperAdmin"] },
+        { href: "/dashboard/admin/cosign", label: "Suspension co-sign", icon: ShieldAlert, roles: ["SuperAdmin"] },
         { href: "/dashboard/settings", label: "Settings", icon: Settings },
     ].filter(link => !link.roles || link.roles.includes(role));
 

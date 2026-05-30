@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     description: "Refine your profile with Amani AI to improve your mentor match quality.",
 };
 
-const ALLOWED_ROLES = ["Mentee", "Mentor", "CorporatePartner"];
+const ALLOWED_ROLES = ["Mentee", "Mentor", "CorporatePartner", "NGO"];
 
 export default async function AIProfilePage() {
     const session = await auth.api.getSession({ headers: await headers() });

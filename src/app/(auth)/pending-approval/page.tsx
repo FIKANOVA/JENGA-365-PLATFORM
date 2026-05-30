@@ -15,6 +15,7 @@ export default async function PendingApprovalPage() {
             Mentee: "/dashboard/mentee",
             Mentor: "/dashboard/mentor",
             CorporatePartner: "/dashboard/partner",
+            NGO: "/dashboard/ngo",
             Moderator: "/dashboard/moderator",
             SuperAdmin: "/dashboard/admin",
         };

@@ -2,8 +2,14 @@ export type Role =
     | "Mentee"
     | "Mentor"
     | "CorporatePartner"
+    | "NGO"
     | "Moderator"
     | "SuperAdmin";
+
+/** Both org-partner roles share partner surfaces (impact stats, partner profile, studio). */
+export function isPartnerRole(role: string | null | undefined): boolean {
+    return role === "CorporatePartner" || role === "NGO";
+}
 
 export type ModeratorScope = "mentor_applications" | "corporate" | "content" | "all";
 
@@ -83,24 +89,19 @@ export function hasCapability(
 }
 
 export function requiresApproval(role: Role): boolean {
-    return role === "Mentor" || role === "CorporatePartner";
+    return role === "Mentor" || role === "CorporatePartner" || role === "NGO";
 }
 
+// NOTE: only routes that actually ship as pages belong here. Moderator approval
+// queues are consolidated into the single /dashboard/moderator hub (sections, not
+// routes) and are gated inside that page by scope — so they are intentionally not
+// listed. Creating a moderator is a modal on the /dashboard/admin hub, not a route.
 export const ROUTE_CAPABILITIES: Array<[string, Capability]> = [
-    ["/dashboard/moderator/mentor-queue",    "APPROVE_MENTOR_APPLICATION"],
-    ["/dashboard/moderator/mentee-flags",    "INITIATE_THREE_STRIKES_SUSPENSION"],
-    ["/dashboard/moderator/clinics",         "APPROVE_RUGBY_CLINIC"],
-    ["/dashboard/moderator/webinars",        "MANAGE_WEBINAR_LOGISTICS"],
-    ["/dashboard/moderator/corporate-queue", "VET_CORPORATE_PARTNER"],
-    ["/dashboard/moderator/spatial",         "INTAKE_SPATIAL_DATA"],
-    ["/dashboard/moderator/tree-audits",     "VERIFY_TREE_SURVIVAL_AUDIT"],
-    ["/dashboard/moderator/articles",        "APPROVE_ARTICLE"],
     ["/dashboard/moderator/inventory",       "UPSERT_MERCHANDISE_STOCK"],
     ["/dashboard/admin/shadow",              "ACCESS_SHADOW_VIEW"],
     ["/dashboard/admin/cosign",              "COSIGN_PERMANENT_SUSPENSION"],
     ["/dashboard/admin/corporate-invite",    "GENERATE_CORPORATE_INVITE_JWT"],
     ["/dashboard/admin/esg-unlock",          "UNLOCK_CORPORATE_ESG_FUNDS"],
-    ["/dashboard/admin/moderators",          "CREATE_MODERATOR_ACCOUNT"],
 ];
 
 export function capabilityForRoute(pathname: string): Capability | null {
