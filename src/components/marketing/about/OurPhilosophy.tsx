@@ -15,6 +15,7 @@ export default async function OurPhilosophy() {
         { val: fmt(stats?.youthEngagedActive),          label: "Mentees engaged" },
         { val: fmt(stats?.activeMentors),               label: "Active mentors" },
         { val: fmt(stats?.activeCorporatePartners),     label: "Corporate partners" },
+        { val: fmt(stats?.activeNgoPartners),           label: "NGO partners" },
     ];
 
     return (
@@ -71,7 +72,7 @@ export default async function OurPhilosophy() {
                     </div>
                 </div>
 
-                <div className="mt-16 pt-10 border-t border-border grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="mt-16 pt-10 border-t border-border grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                     {bottomStats.map((s) => (
                         <div key={s.label}>
                             <p className="text-display-sm text-foreground">{s.val}</p>

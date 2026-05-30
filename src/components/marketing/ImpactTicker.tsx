@@ -34,35 +34,46 @@ export default function ImpactTicker({ stats }: { stats?: ImpactStats }) {
         { label: "NGO partners", value: fmt(stats?.activeNgoPartners) },
     ];
 
+    const Stat = ({ label, value }: { label: string; value: string }) => (
+        <div className="flex items-center gap-3 px-8 shrink-0">
+            <span className="text-display-sm leading-none" style={{ color: "#ffffff" }}>
+                {value}
+            </span>
+            <span className="text-label whitespace-nowrap" style={{ color: "rgba(255,255,255,0.65)" }}>
+                {label}
+            </span>
+            <span className="ml-5 h-5 w-px" style={{ background: "rgba(255,255,255,0.15)" }} aria-hidden />
+        </div>
+    );
+
     return (
         <section
-            className="border-y border-border"
-            style={{ background: "var(--surface-1)" }}
+            className="jenga-marquee relative border-y"
+            style={{ background: "var(--brand-black)", borderColor: "rgba(255,255,255,0.08)" }}
             aria-label="Verified impact metrics"
         >
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8">
-                    {items.map((item) => (
-                        <div key={item.label} className="flex flex-col gap-1">
-                            <span className="text-display-sm" style={{ color: "var(--foreground)" }}>
-                                {item.value}
-                            </span>
-                            <span
-                                className="text-label"
-                                style={{ color: "var(--foreground-muted)" }}
-                            >
-                                {item.label}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-                <p
-                    className="mt-6 text-body-sm"
-                    style={{ color: "var(--foreground-subtle)" }}
-                >
-                    Verified, GPS-anchored where applicable. We publish dashes (—) for metrics
-                    pending M&amp;E sign-off.
-                </p>
+            {/* Screen-reader / no-motion accessible version */}
+            <ul className="sr-only">
+                {items.map((i) => (
+                    <li key={i.label}>{i.label}: {i.value}</li>
+                ))}
+            </ul>
+
+            {/* Edge fades */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 z-10"
+                 style={{ background: "linear-gradient(to right, var(--brand-black), transparent)" }} aria-hidden />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 z-10"
+                 style={{ background: "linear-gradient(to left, var(--brand-black), transparent)" }} aria-hidden />
+
+            {/* Two identical sets => seamless -50% loop */}
+            <div className="jenga-marquee-track py-6" aria-hidden>
+                {[0, 1].map((set) => (
+                    <div key={set} className="flex shrink-0">
+                        {items.map((item) => (
+                            <Stat key={`${set}-${item.label}`} label={item.label} value={item.value} />
+                        ))}
+                    </div>
+                ))}
             </div>
         </section>
     );
