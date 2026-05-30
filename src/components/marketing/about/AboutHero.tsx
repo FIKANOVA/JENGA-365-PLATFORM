@@ -22,27 +22,40 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
     const heroUrl = heroImage?.asset?.url
         ? urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
         : null;
+    const hasImage = !!heroUrl;
+
+    const headingColor = hasImage ? "#ffffff" : "var(--foreground)";
+    const mutedColor = hasImage ? "rgba(255,255,255,0.88)" : "var(--foreground-muted)";
 
     return (
         <section className="relative overflow-hidden bg-hero-radial bg-topo border-b border-border">
-            {heroUrl && (
-                <div className="absolute inset-0 pointer-events-none" aria-hidden>
+            {hasImage && (
+                <>
                     <img
-                        src={heroUrl}
+                        src={heroUrl!}
                         alt=""
-                        className="h-full w-full object-cover opacity-[0.12]"
+                        aria-hidden
+                        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                     />
-                </div>
+                    <div
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/60 to-black/35"
+                        aria-hidden
+                    />
+                    <div
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 to-transparent"
+                        aria-hidden
+                    />
+                </>
             )}
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32">
                 <div className="max-w-3xl space-y-8">
-                    <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                    <p className="text-eyebrow" style={{ color: hasImage ? "#7CE2A8" : "var(--brand-green)" }}>
                         Established 2023 · Nairobi, Kenya
                     </p>
-                    <h1 className="text-display-xl text-foreground">
+                    <h1 className="text-display-xl" style={{ color: headingColor }}>
                         More than a game.
                     </h1>
-                    <p className="text-body-lg text-foreground-muted max-w-2xl">
+                    <p className="text-body-lg max-w-2xl" style={{ color: mutedColor }}>
                         A dual-engine development initiative committed to sustainable
                         community uplift — through elite sports training and integrated
                         socio-economic support systems.

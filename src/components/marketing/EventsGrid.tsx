@@ -32,7 +32,7 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
                                 <img 
                                     src={event.image} 
                                     alt={event.title} 
-                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 opacity-80" 
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-black/5 italic font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)]">

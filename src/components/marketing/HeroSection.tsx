@@ -56,39 +56,64 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     const heroUrl = heroImage?.asset?.url
         ? urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
         : null;
+    const hasImage = !!heroUrl;
+
+    // With a photo behind the hero we show it fully and darken it for legibility,
+    // flipping the copy to light. Without a photo we keep the light radial/topo design.
+    const headingColor = hasImage ? "#ffffff" : "var(--foreground)";
+    const mutedColor = hasImage ? "rgba(255,255,255,0.88)" : "var(--foreground-muted)";
+    const subtleColor = hasImage ? "rgba(255,255,255,0.72)" : "var(--foreground-subtle)";
 
     return (
         <section className="relative overflow-hidden bg-background">
-            {heroUrl && (
-                <img
-                    src={heroUrl}
-                    alt=""
-                    aria-hidden
-                    className="absolute inset-0 h-full w-full object-cover opacity-[0.12] pointer-events-none"
-                />
+            {hasImage ? (
+                <>
+                    <img
+                        src={heroUrl!}
+                        alt=""
+                        aria-hidden
+                        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                    />
+                    {/* Darkening scrim — heavier on the text (left) side for contrast. */}
+                    <div
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/60 to-black/35"
+                        aria-hidden
+                    />
+                    <div
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 to-transparent"
+                        aria-hidden
+                    />
+                    <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
+                </>
+            ) : (
+                <>
+                    <div className="absolute inset-0 bg-hero-radial pointer-events-none" aria-hidden />
+                    <div className="absolute inset-0 bg-topo opacity-[0.35] pointer-events-none" aria-hidden />
+                </>
             )}
-            <div className="absolute inset-0 bg-hero-radial pointer-events-none" aria-hidden />
-            <div className="absolute inset-0 bg-topo opacity-[0.35] pointer-events-none" aria-hidden />
 
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32 lg:py-40">
                 <div className="max-w-3xl">
                     <div
-                        className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border"
-                        style={{ background: "var(--surface-1)", borderColor: "var(--border)" }}
+                        className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm"
+                        style={{
+                            background: hasImage ? "rgba(255,255,255,0.12)" : "var(--surface-1)",
+                            borderColor: hasImage ? "rgba(255,255,255,0.25)" : "var(--border)",
+                        }}
                     >
-                        <Sparkles className="h-3.5 w-3.5" style={{ color: "var(--brand-green)" }} />
-                        <span className="text-eyebrow" style={{ color: "var(--foreground-muted)" }}>
+                        <Sparkles className="h-3.5 w-3.5" style={{ color: hasImage ? "#7CE2A8" : "var(--brand-green)" }} />
+                        <span className="text-eyebrow" style={{ color: mutedColor }}>
                             {eyebrow}
                         </span>
                     </div>
 
-                    <h1 className="text-display-lg md:text-display-xl whitespace-pre-line">
+                    <h1 className="text-display-lg md:text-display-xl whitespace-pre-line" style={{ color: headingColor }}>
                         {heading}
                     </h1>
 
                     <p
                         className="mt-6 text-body-lg max-w-2xl"
-                        style={{ color: "var(--foreground-muted)" }}
+                        style={{ color: mutedColor }}
                     >
                         {description}
                     </p>
@@ -117,7 +142,11 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                                 </Link>
                                 <Link
                                     href={secondaryCtaHref}
-                                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors"
+                                    className={
+                                        hasImage
+                                            ? "inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-white/30 text-white backdrop-blur-sm hover:bg-white/10 transition-colors"
+                                            : "inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors"
+                                    }
                                 >
                                     {secondaryCtaLabel}
                                 </Link>
@@ -127,13 +156,13 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
 
                     <p
                         className="mt-6 text-body-sm"
-                        style={{ color: "var(--foreground-subtle)" }}
+                        style={{ color: subtleColor }}
                     >
                         Mentorship is earned — not free. Read the{" "}
                         <Link
                             href="#sweat-equity"
                             className="underline underline-offset-4"
-                            style={{ color: "var(--foreground)" }}
+                            style={{ color: headingColor }}
                         >
                             Sweat Equity protocol
                         </Link>

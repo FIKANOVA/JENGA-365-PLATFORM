@@ -66,7 +66,7 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
                                         <img
                                             src={imgUrl}
                                             alt={alt}
-                                            className="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-[var(--surface-2)]" aria-hidden />
