@@ -32,8 +32,6 @@ const NAV_GROUPS: NavGroup[] = [
         items: [
             { label: "About Us", href: "/about", description: "Who we are and how the engine works" },
             { label: "Impact", href: "/impact", description: "Verified outcomes and ESG metrics" },
-            { label: "Events", href: "/events", description: "Clinics, summits, and community drives" },
-            { label: "Contact", href: "/contact", description: "Reach the team" },
             { label: "Help & Support", href: "/help", description: "Manuals, FAQs, and support" },
         ],
     },
@@ -50,6 +48,8 @@ const NAV_GROUPS: NavGroup[] = [
         label: "Get Involved",
         items: [
             { label: "Become a Partner", href: "/register/partner", description: "Corporate or NGO partnerships" },
+            { label: "Events", href: "/events", description: "Clinics, summits, and community drives" },
+            { label: "Contact", href: "/contact", description: "Reach the team" },
         ],
     },
 ];
