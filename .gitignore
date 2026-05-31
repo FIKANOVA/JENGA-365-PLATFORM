@@ -73,6 +73,7 @@ plans/
 .claude/
 
 # Development-only docs (kept local, not for GitHub)
+docs/SESSION_HANDOVER.md
 docs/PROJECT_STATE.md
 docs/QA_AUDIT.md
 docs/SUPERADMIN_USER_MANUAL.md

@@ -1,7 +1,25 @@
 # Jenga365 — Global Architectural Rules & Agent Guidelines
 
-> Authoritative source-of-truth for any AI agent (Claude Code, Cursor, Windsurf, etc.) working on this repository. Last updated 2026-05-22.
-> Where this document conflicts with an earlier note, this document wins. Where founder Bruce Nondies's directives (relayed by the user) conflict with this document, Bruce wins — update this file in lockstep.
+> Authoritative source-of-truth for any AI agent (Claude Code, Cursor, Windsurf, etc.) working on this repository. Last updated 2026-05-31.
+> Conflict resolution is governed by §0 (Decision authority). Update this file in lockstep with any decision from the authority that owns the relevant domain.
+
+---
+
+## 0. Decision authority (set 2026-05-31)
+
+Final say is split by domain. There is no single "founder lock" — authority depends on what is being changed.
+
+| Domain | Final decision maker |
+|---|---|
+| **Design system & dev/implementation** | **Moseti (Software Engineer)** |
+| **Business logic** | **Bruce Nondies (Founder)** |
+
+- **Moseti owns** (his call, may override anything below in these areas — including this document's design guidance and all of `DESIGN.md`): the design system (typography, palette, tokens, components, layout, motion, `DESIGN.md` in full), frontend/UI behaviour (§6, §9 UI/UX, §12), code architecture, refactors, tooling, and dev workflow.
+- **Bruce owns** (still locked; do not change without his directive, relayed by Moseti): business logic — AI matching algorithm & weights (§4), mentor 1:2 capacity protocol (§5), RBAC roles & approval flows (§3), the two-database architecture & schema/data rules (§1, §2, §10.1–§10.5), KoBo ingestion contract (§2), race-safe inventory (§8), Looker reporting model (§11), cron security (§7), and any GPS/GDPR/ESG-compliance behaviour.
+
+**Boundary rule:** when a code change *encodes a business rule* (e.g. editing matching weights, RBAC scopes, survival-counting SQL, inventory decrement), it is **business logic → Bruce's domain**, even though it's "dev work." Pure presentation/implementation is Moseti's. When genuinely ambiguous, ask Moseti and note the founder-domain risk.
+
+The agent still gives honest engineering counsel before executing a decision (e.g. flagging that a choice conflicts with the locked Linear/Vercel direction), then implements the decision-maker's call without re-litigating.
 
 ---
 

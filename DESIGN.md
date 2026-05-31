@@ -1,7 +1,7 @@
 # Jenga365 — Design System
 
-> Locked 2026-05-22. Source-of-truth for all UI work. Inspired by Linear, Vercel, Arc, Anthropic.
-> Where `CLAUDE.md §12` summarizes, this file is canonical.
+> Source-of-truth for all UI work. Inspired by Linear, Vercel, Arc, Anthropic.
+> Owned by Moseti (Software Engineer) per `CLAUDE.md §0` — he has final say and may change anything here. The agent should advise on tradeoffs (e.g. deviating from the Linear/Vercel direction), then implement his decision. Where `CLAUDE.md §12` summarizes, this file is canonical.
 
 ---
 
