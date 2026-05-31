@@ -95,7 +95,7 @@ export default function ContactPage() {
                                     <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Reach out</p>
                                     <h2 className="text-display-md text-foreground">Let&apos;s start a conversation.</h2>
                                     <p className="text-body-lg text-foreground-muted max-w-md">
-                                        Whether you&apos;re a corporate partner looking to fund impact, a prospective mentor, or a youth seeking growth — our doors are open.
+                                        Whether you&apos;re a corporate partner looking to fund impact, a prospective mentor, or a youth seeking growth, our doors are open.
                                     </p>
                                 </div>
 
@@ -118,7 +118,7 @@ export default function ContactPage() {
                                     <ContactItem
                                         Icon={Clock}
                                         label="Office hours"
-                                        lines={["Monday — Friday", "8:00 AM — 6:00 PM EAT"]}
+                                        lines={["Monday-Friday", "8:00 AM-6:00 PM EAT"]}
                                     />
                                 </div>
 
@@ -159,7 +159,7 @@ export default function ContactPage() {
                                         <div className="space-y-1">
                                             <h3 className="text-headline text-foreground">Message sent</h3>
                                             <p className="text-body-sm text-foreground-muted">
-                                                We&apos;ve received your message and will respond within 1–2 business days.
+                                                We&apos;ve received your message and will respond within 1-2 business days.
                                             </p>
                                         </div>
                                         <button

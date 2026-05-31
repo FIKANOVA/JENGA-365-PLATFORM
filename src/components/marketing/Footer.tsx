@@ -56,7 +56,7 @@ export default function Footer() {
                             <Logo variant="white" theme="dark" height={40} />
                         </Link>
                         <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs hidden md:block">
-                            Kenya&apos;s dual-engine AI platform — building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
+                            Kenya&apos;s dual-engine AI platform, building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
                         </p>
                         <div className="flex items-center gap-3">
                             {socials.map(({ icon: Icon, href, label }) => (

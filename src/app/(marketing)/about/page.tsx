@@ -22,7 +22,7 @@ export async function generateMetadata() {
             "Jenga365 is a dual-engine mentorship and rugby impact platform rooted in Kenyan heritage. Learn about our journey, our team, and the principles behind the Total Athlete model.",
         openGraph: {
             title: "About Jenga365",
-            description: "Mentorship. Stewardship. Impact. Building the Total Athlete — 365 days a year.",
+            description: "Mentorship. Stewardship. Impact. Building the Total Athlete, 365 days a year.",
             ...(ogUrl ? { images: [{ url: ogUrl }] } : {}),
         },
     };

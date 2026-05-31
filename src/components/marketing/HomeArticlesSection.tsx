@@ -121,13 +121,15 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                                             {article.excerpt}
                                         </p>
                                     )}
-                                    <div className="mt-auto flex items-center justify-between pt-2">
+                                    <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
                                         <span className="text-label" style={{ color: "var(--foreground-subtle)" }}>{date}</span>
-                                        <ArrowRight
-                                            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                                            style={{ color: "var(--brand-green)" }}
-                                            aria-hidden
-                                        />
+                                        <span className="inline-flex items-center gap-1.5 text-label font-medium text-muted-foreground transition-colors group-hover:text-primary">
+                                            Read article
+                                            <ArrowRight
+                                                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                                                aria-hidden
+                                            />
+                                        </span>
                                     </div>
                                 </div>
                             </NextLink>

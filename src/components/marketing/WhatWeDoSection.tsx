@@ -5,11 +5,11 @@ import { Brain, Leaf, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 /**
- * Dual-Engine section — Engine A (AI-driven mentorship) + Engine B
+ * Dual-Engine section, Engine A (AI-driven mentorship) + Engine B
  * (Environmental Stewardship & Green Technology, corporate-ESG framing).
  *
- * Transformed into an interactive dark-themed presentation to reduce
- * boredom and capture attention.
+ * Engine B copy is the verbatim corporate-friendly draft Moseti relayed on
+ * 2026-05-22, Green Technology and measurable climate action.
  */
 export default function WhatWeDoSection() {
   return (
@@ -34,7 +34,7 @@ export default function WhatWeDoSection() {
             style={{ color: "var(--foreground-muted)" }}
           >
             We don&apos;t separate human development from environmental
-            stewardship. Every athlete on Jenga365 is a mentee and a steward —
+            stewardship. Every athlete on Jenga365 is a mentee and a steward,
             earning their growth through verified climate action.
           </p>
         </motion.div>
@@ -46,7 +46,7 @@ export default function WhatWeDoSection() {
             icon={Brain}
             body="Our pgvector matching engine pairs each mentee with a mentor on six weighted signals: semantic profile similarity, location, availability, goal alignment, partner affiliation, and profile completeness. Every mentor is capped at two active mentees so attention isn't diluted."
             bullets={[
-              "AI-matched 1:2 mentorship — never more than two mentees per mentor",
+              "AI-matched 1:2 mentorship, never more than two mentees per mentor",
               "Quarterly resilience assessments with delta tracking",
               "Structured career, financial-literacy, and welfare pathways",
             ]}
@@ -59,10 +59,10 @@ export default function WhatWeDoSection() {
             eyebrow="Engine B"
             title="Environmental Stewardship & Green Technology"
             icon={Leaf}
-            body="True impact extends beyond the pitch and into the soil. Through signature campaigns like Trees for Tries, we empower athletes — recognized as worthy stakeholders in our planet's future — to lead community clean-ups, advocate for sustainable waste management, and execute targeted ecosystem restoration."
+            body="True impact extends beyond the pitch and into the soil. Through signature campaigns like Trees for Tries, we empower athletes, recognized as worthy stakeholders in our planet's future, to lead community clean-ups, advocate for sustainable waste management, and execute targeted ecosystem restoration."
             bullets={[
               "Quarterly Monitoring & Evaluation (M&E) with GPS-anchored evidence",
-              "Tree-survival audits — we track survival, not just planting",
+              "Tree-survival audits, we track survival, not just planting",
               "Transparent, verifiable ESG data for corporate sustainability reports",
             ]}
             href="/impact"

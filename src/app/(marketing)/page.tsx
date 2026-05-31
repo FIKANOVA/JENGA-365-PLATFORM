@@ -23,10 +23,10 @@ export async function generateMetadata() {
         : undefined;
 
     return {
-        title: "Jenga365 — Building Growth. Connecting Futures.",
+        title: "Jenga365: Building Growth. Connecting Futures.",
         description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
         openGraph: {
-            title: "Jenga365 — Building Growth. Connecting Futures.",
+            title: "Jenga365: Building Growth. Connecting Futures.",
             description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
             ...(ogUrl ? { images: [{ url: ogUrl }] } : {}),
         },
@@ -61,12 +61,13 @@ export default async function HomePage() {
                 heroImage={settings?.landingHeroImage ?? null}
                 copy={settings?.landingHero ?? null}
             />
+            <PartnerCarousel partners={partners} />
+            <ImpactTicker stats={tickerStats} />
+            <WhatWeDoSection />
             <FeaturedVideoSection
                 video={settings?.featuredVideo ?? null}
                 heading={settings?.featuredVideoHeading ?? null}
             />
-            <ImpactTicker stats={tickerStats} />
-            <WhatWeDoSection />
             <ChoosePathSection />
             <SweatEquityBand />
             <EventsSection events={events} />

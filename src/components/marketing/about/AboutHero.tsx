@@ -97,7 +97,7 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
                         style={{ color: mutedColor }}
                     >
                         A dual-engine development initiative committed to sustainable
-                        community uplift — through elite sports training and integrated
+                        community uplift, through elite sports training and integrated
                         socio-economic support systems.
                     </motion.p>
 

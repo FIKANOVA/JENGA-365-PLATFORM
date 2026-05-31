@@ -79,7 +79,9 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     };
 
     return (
-        <section className="relative overflow-hidden bg-background">
+        <section
+            className={`relative overflow-hidden bg-background ${hasImage ? "-mt-16" : ""}`}
+        >
             {hasImage ? (
                 <>
                     <motion.img
@@ -108,7 +110,9 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                 </>
             )}
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 lg:py-32">
+            <div
+                className={`relative mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pt-40 pb-24 md:pt-48 md:pb-32 lg:pt-56 lg:pb-40" : "py-24 md:py-32 lg:py-40"}`}
+            >
                 <div className="max-w-3xl">
                     <motion.div
                         custom={0}
@@ -199,10 +203,10 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                         className="mt-6 text-body-sm"
                         style={{ color: subtleColor }}
                     >
-                        Mentorship is earned — not free. Read the{" "}
+                        Mentorship is earned, not free. Read the{" "}
                         <Link
                             href="#sweat-equity"
-                            className="underline underline-offset-4 transition-colors hover:text-[color:var(--brand-green)]"
+                            className="font-medium underline decoration-1 underline-offset-4 transition-opacity hover:opacity-70"
                             style={{ color: headingColor }}
                         >
                             Sweat Equity protocol
