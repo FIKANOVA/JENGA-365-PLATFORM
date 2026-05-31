@@ -62,7 +62,7 @@ function isMinimalRoute(pathname: string | null): boolean {
 }
 
 // ── Outer shell ──────────────────────────────────────────────────────────────
-function Shell({ scrolled, children }: { scrolled: boolean; children: React.ReactNode }) {
+function Shell({ scrolled, children, drawer }: { scrolled: boolean; children: React.ReactNode; drawer?: React.ReactNode }) {
     return (
         <header
             className={cn(
@@ -75,6 +75,7 @@ function Shell({ scrolled, children }: { scrolled: boolean; children: React.Reac
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between gap-4">{children}</div>
             </div>
+            {drawer}
         </header>
     );
 }
@@ -232,7 +233,10 @@ function GlobalCTAs() {
 // ── Variant 1: Public ────────────────────────────────────────────────────────
 function PublicHeader({ scrolled, mobileOpen, setMobileOpen }: { scrolled: boolean; mobileOpen: boolean; setMobileOpen: (v: boolean) => void }) {
     return (
-        <Shell scrolled={scrolled}>
+        <Shell
+            scrolled={scrolled}
+            drawer={mobileOpen ? <MobileDrawer isAuthenticated={false} onClose={() => setMobileOpen(false)} /> : null}
+        >
             <Logo size="md" />
             <PrimaryNav />
 
@@ -385,7 +389,10 @@ function AuthenticatedHeader({
 }) {
     const displayName = user.name ?? "User";
     return (
-        <Shell scrolled={scrolled}>
+        <Shell
+            scrolled={scrolled}
+            drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} onClose={() => setMobileOpen(false)} /> : null}
+        >
             <div className="flex items-center gap-4">
                 <Logo size="md" />
                 <RoleBadge role={user.role ?? null} className="hidden lg:inline-flex" />
@@ -534,25 +541,18 @@ export default function Header() {
         );
     }
 
-    return (
-        <>
-            {isAuthenticated && session?.user ? (
-                <AuthenticatedHeader
-                    user={{
-                        name: session.user.name ?? "User",
-                        image: (session.user as { image?: string | null }).image ?? null,
-                        role: (session.user as { role?: string | null }).role ?? null,
-                    }}
-                    scrolled={scrolled}
-                    mobileOpen={mobileOpen}
-                    setMobileOpen={setMobileOpen}
-                />
-            ) : (
-                <PublicHeader scrolled={scrolled} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-            )}
-            {mobileOpen && (
-                <MobileDrawer isAuthenticated={isAuthenticated} onClose={() => setMobileOpen(false)} />
-            )}
-        </>
+    return isAuthenticated && session?.user ? (
+        <AuthenticatedHeader
+            user={{
+                name: session.user.name ?? "User",
+                image: (session.user as { image?: string | null }).image ?? null,
+                role: (session.user as { role?: string | null }).role ?? null,
+            }}
+            scrolled={scrolled}
+            mobileOpen={mobileOpen}
+            setMobileOpen={setMobileOpen}
+        />
+    ) : (
+        <PublicHeader scrolled={scrolled} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
     );
 }

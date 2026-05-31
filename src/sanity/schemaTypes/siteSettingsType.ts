@@ -57,6 +57,27 @@ export const siteSettingsType = defineType({
             ],
         }),
         defineField({
+            name: "authImage",
+            title: "Sign-in / Auth Image",
+            type: "image",
+            group: "media",
+            description: "Image shown on the side panel of the sign-in (and auth) pages. Leave empty to use the default brand surface.",
+            options: { hotspot: true },
+            fields: [
+                defineField({
+                    name: "alt",
+                    title: "Alt text",
+                    type: "string",
+                    validation: (Rule) =>
+                        Rule.custom((alt, ctx) => {
+                            const parent = ctx.parent as { asset?: unknown } | undefined;
+                            if (parent?.asset && !alt) return "Alt text is required when an image is set";
+                            return true;
+                        }),
+                }),
+            ],
+        }),
+        defineField({
             name: "openGraphImage",
             title: "Default Open Graph Image",
             type: "image",

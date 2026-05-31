@@ -3,16 +3,16 @@
 import Link from "next/link";
 import { Linkedin, Mail, Globe, ArrowRight } from "lucide-react";
 import Logo from "@/components/shared/Logo";
-import DonateButton from "@/components/shared/DonateButton";
 
+// Footer nav carries only wayfinding links. Donate / Store / Join are global
+// header CTAs and appear in the final CTA strip directly above the footer, so
+// they are intentionally NOT repeated here (avoids the "double footer" echo).
 const footerNav = [
     {
         title: "Platform",
         links: [
             { label: "About Us", href: "/about" },
             { label: "Impact", href: "/impact" },
-            { label: "Events", href: "/events" },
-            { label: "Contact", href: "/contact" },
             { label: "Help & Support", href: "/help" },
         ],
     },
@@ -28,10 +28,9 @@ const footerNav = [
     {
         title: "Get Involved",
         links: [
-            { label: "Join Free", href: "/register/mentorship" },
-            { label: "Donate", href: "#donate" },
-            { label: "Shop", href: "/shop" },
             { label: "Become a Partner", href: "/register/partner" },
+            { label: "Events", href: "/events" },
+            { label: "Contact", href: "/contact" },
         ],
     },
 ];
@@ -44,13 +43,13 @@ const socials = [
 
 export default function Footer() {
     return (
-        <footer className="bg-black border-t border-white/5 relative overflow-hidden">
+        <footer className="bg-black border-t border-white/10 relative overflow-hidden">
             {/* Subtle red glow */}
             <div className="absolute right-[-10%] bottom-[-10%] w-[500px] h-[500px] bg-primary opacity-[0.04] blur-[120px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
                 {/* Top section */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-16 py-20 border-b border-white/5">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-16 py-14 border-b border-white/5">
                     {/* Brand */}
                     <div className="md:col-span-4 space-y-8">
                         <Link href="/">
@@ -84,19 +83,12 @@ export default function Footer() {
                             <ul className="space-y-4">
                                 {col.links.map((link) => (
                                     <li key={link.label}>
-                                        {link.label === "Donate" ? (
-                                            <DonateButton className="font-sans text-sm text-white/50 hover:text-white transition-colors text-left">
-                                                Donate
-                                            </DonateButton>
-                                        ) : (
-                                            <Link
-                                                href={link.href}
-                                                {...(link.label === "Shop" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                                className="font-sans text-sm text-white/50 hover:text-white transition-colors"
-                                            >
-                                                {link.label}
-                                            </Link>
-                                        )}
+                                        <Link
+                                            href={link.href}
+                                            className="font-sans text-sm text-white/50 hover:text-white transition-colors"
+                                        >
+                                            {link.label}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -129,7 +121,7 @@ export default function Footer() {
                 <div className="py-8 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-8">
                         <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/20">
-                            © 2024 Jenga365
+                            © {new Date().getFullYear()} Jenga365
                         </span>
                         <div className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />

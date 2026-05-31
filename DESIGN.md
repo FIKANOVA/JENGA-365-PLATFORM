@@ -236,3 +236,59 @@ No springs in landing/dashboard surfaces. Reserve springs for purposeful interac
 - Anthropic — https://anthropic.com
 
 These set the bar. If a screen feels worse than the bar, it isn't shipped.
+
+---
+
+## 15. Dashboard bento patterns (added 2026-05-31)
+
+Premium treatment for data-dense dashboard surfaces. Synthesised from the
+Linear/Vercel/Anthropic bar above — **no font or palette change**: still Inter,
+still the neutral-heavy palette with brand accents.
+
+### Surface primitive
+
+Use `BentoCard` / `MetricTile` from `src/components/dashboard/shared/BentoCard.tsx`
+for dashboard tiles. Do not hand-roll bordered cards.
+
+- **Surface:** `--surface-1` (soft off-white) on a `--background` page — never a heavy/dark border.
+- **Border:** hairline `border-border/70`. **Radius:** `rounded-xl` (tiles), `rounded-2xl` (modals).
+- **Shadow:** `--shadow-sm` at rest; lift to `--shadow` + `-translate-y-0.5` on interactive tiles.
+- **Accent:** optional 2px top rule (`accentColor`) tinted by role/brand/trend — the only "color" on the tile.
+
+### Bento grid
+
+- Lead metric/record is **featured** (spans 2 columns; larger value via `text-display-md`).
+- Remaining tiles are equal cells in a `grid-cols-2 lg:grid-cols-4` (metrics) or
+  `md:grid-cols-2 lg:grid-cols-3` (cards) grid with `auto-rows-fr`.
+- Hierarchy is **weight/scale-led** (Refactoring UI): big `font-semibold tabular-nums`
+  numbers, `text-eyebrow` labels, muted secondary text — not heavier borders.
+
+### Touch targets
+
+All interactive controls (icon buttons, menu items, row actions) are **≥ 44×44px**
+(`h-11 w-11` for icons, `min-h-11` for list rows). Non-interactive content tiles
+need no minimum.
+
+### Role accents
+
+`ROLE_ACCENT` (in `BentoCard.tsx`) maps roles to brand tokens:
+
+| Role | Token |
+|---|---|
+| Mentee | `--brand-green` (#006600) |
+| Mentor | `--brand-black` (#1a1a1a) |
+| Corporate Partner / NGO | `--brand-red` (#bb0000) |
+| Moderator | `--brand-gold-strong` |
+| SuperAdmin | `--foreground` |
+
+### New token — Moderator gold
+
+Added to the §3 palette (light + dark in `globals.css`). The Kenya-flag reference
+is `#FFD700`, but raw gold fails text contrast on white, so:
+
+| Token | Use |
+|---|---|
+| `--brand-gold` | Saturated fill (`#FFD700`) |
+| `--brand-gold-fg` | Text/icon **on** a gold fill (`#1a1a1a`) |
+| `--brand-gold-strong` | Accessible gold for **text/icons on light** surfaces |
+| `--brand-gold-soft` | Soft tint background for gold pills/hovers |

@@ -5,6 +5,7 @@ import { client } from "./client";
 export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   landingHeroImage { asset->{ _id, url }, alt, hotspot, crop },
   aboutHeroImage { asset->{ _id, url }, alt, hotspot, crop },
+  authImage { asset->{ _id, url }, alt, hotspot, crop },
   openGraphImage { asset->{ _id, url }, hotspot, crop },
   aboutOpenGraphImage { asset->{ _id, url }, hotspot, crop },
   landingHero,
