@@ -146,14 +146,14 @@ function NavDropdown({ group, light, onItemClick }: { group: NavGroup; light: bo
                 aria-expanded={open}
                 onClick={() => setOpen((v) => !v)}
                 className={cn(
-                    "inline-flex items-center gap-1.5 px-3 py-2 text-label font-medium uppercase tracking-[0.06em] rounded-md transition-colors",
+                    "inline-flex items-center gap-1 px-3 py-2 text-label font-medium rounded-md transition-colors",
                     light ? "text-white hover:bg-white/10" : "text-foreground hover:bg-surface-2",
                 )}
             >
+                {group.label}
                 <span className={light ? "text-white/60" : "text-foreground-subtle"} aria-hidden>
                     +
                 </span>
-                {group.label}
             </button>
 
             {open && (
@@ -226,7 +226,7 @@ function GlobalCTAs({ light }: { light: boolean }) {
         <>
             <DonateButton
                 className={cn(
-                    "hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label transition-colors",
+                    "hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label font-semibold transition-colors",
                     light ? "hover:bg-white/10" : "hover:bg-surface-2",
                 )}
                 style={{ color: light ? "#FF6B6B" : "var(--brand-red)" }}
@@ -466,12 +466,12 @@ function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; 
         : NAV_GROUPS;
 
     return (
-        <div className="md:hidden border-t border-border/60 bg-background/95 backdrop-blur-xl backdrop-saturate-150 max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <div className="md:hidden border-t border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 max-h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="mx-auto max-w-7xl px-6 py-3 flex flex-col gap-1">
                 {navGroups.map((group) => (
                     <details key={group.label} className="group/section">
                         <summary className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground cursor-pointer list-none">
-                            <span className="font-medium uppercase tracking-[0.06em]">{group.label}</span>
+                            <span className="font-medium">{group.label}</span>
                             <ChevronDown className="h-4 w-4 text-foreground-muted transition-transform group-open/section:rotate-180" aria-hidden />
                         </summary>
                         <ul className="pl-3 pb-2 flex flex-col gap-0.5">

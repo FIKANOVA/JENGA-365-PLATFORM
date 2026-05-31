@@ -49,6 +49,11 @@ export default function Logo({
               ? "text-2xl"
               : "text-xl";
 
+    // Kenya flag bands across "Jenga": black, white, red, white, green. "365" stays green.
+    const KENYA_FLAG = ["#1A1A1A", "#FFFFFF", "#BB0000", "#FFFFFF", "#006600"];
+    // Outline must contrast the background: light hairline on dark surfaces (so the
+    // black band shows), dark hairline on light surfaces (so the white bands show).
+    const strokeColor = tone === "light" ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.5)";
     const mark = (
         <span
             className={cn(
@@ -57,10 +62,14 @@ export default function Logo({
                 toneClass,
                 className,
             )}
-            style={{ letterSpacing: "-0.02em" }}
+            style={{ letterSpacing: "-0.02em", WebkitTextStroke: `0.6px ${strokeColor}`, paintOrder: "stroke fill" }}
         >
-            <span>Jenga</span>
-            <span style={{ color: "var(--brand-green)" }}>365</span>
+            {"Jenga".split("").map((ch, i) => (
+                <span key={i} style={{ color: KENYA_FLAG[i] }}>
+                    {ch}
+                </span>
+            ))}
+            <span style={{ color: "#006600" }}>365</span>
         </span>
     );
 

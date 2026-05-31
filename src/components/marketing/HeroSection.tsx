@@ -158,14 +158,14 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                         initial="hidden"
                         animate="visible"
                         variants={staggerVariants}
-                        className="mt-10 flex flex-col sm:flex-row gap-3"
+                        className="mt-10 flex flex-col md:flex-row gap-3"
                     >
                         {isAuthenticated ? (
                             <Link
                                 href="/dashboard"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg"
+                                className="inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg whitespace-nowrap"
                                 style={{ background: "var(--brand-green)" }}
                             >
                                 Go to dashboard
@@ -175,7 +175,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                             <>
                                 <Link
                                     href={primaryCtaHref}
-                                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg"
+                                    className="inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg whitespace-nowrap"
                                     style={{ background: "var(--brand-green)" }}
                                 >
                                     {primaryCtaLabel}
@@ -185,8 +185,8 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                                     href={secondaryCtaHref}
                                     className={
                                         hasImage
-                                            ? "inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-white/30 text-white backdrop-blur-sm hover:bg-white/10 transition-colors"
-                                            : "inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors"
+                                            ? "inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-white/30 text-white backdrop-blur-sm hover:bg-white/10 transition-colors whitespace-nowrap"
+                                            : "inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors whitespace-nowrap"
                                     }
                                 >
                                     {secondaryCtaLabel}
