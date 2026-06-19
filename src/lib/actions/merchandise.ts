@@ -252,15 +252,20 @@ export async function getStorefrontMerchandise(): Promise<StorefrontMerchandise[
 }
 
 export async function getMerchandiseMap(): Promise<Record<string, { stockCount: number; isActive: boolean }>> {
-    const rows = await db.select({
-        sanityProductId: merchandise.sanityProductId,
-        stockCount: merchandise.stockCount,
-        isActive: merchandise.isActive,
-    }).from(merchandise);
+    try {
+        const rows = await db.select({
+            sanityProductId: merchandise.sanityProductId,
+            stockCount: merchandise.stockCount,
+            isActive: merchandise.isActive,
+        }).from(merchandise);
 
-    return Object.fromEntries(
-        rows
-            .filter(r => r.sanityProductId)
-            .map(r => [r.sanityProductId!, { stockCount: r.stockCount, isActive: r.isActive }])
-    );
+        return Object.fromEntries(
+            rows
+                .filter(r => r.sanityProductId)
+                .map(r => [r.sanityProductId!, { stockCount: r.stockCount, isActive: r.isActive }])
+        );
+    } catch (error) {
+        console.error("Failed to load merchandise map:", error);
+        return {};
+    }
 }
