@@ -284,7 +284,21 @@ export async function flagMentee(input: z.infer<typeof flagMenteeSchema>) {
     }).returning();
 
     if (parsed.severity === "high") {
-        console.log("Notifying SuperAdmin immediately of High Severity flag!");
+        // Fetch all SuperAdmins
+        const superAdmins = await db.query.users.findMany({
+            where: eq(users.role, "SuperAdmin")
+        });
+
+        // Notify all SuperAdmins
+        await Promise.all(
+            superAdmins.map(admin =>
+                createNotification(admin.id, "general", {
+                    title: "High Severity Flag Alert",
+                    body: `A high severity flag (${parsed.flagType}) has been raised for mentee ${parsed.menteeId}.`,
+                    link: `/dashboard/admin/users/${parsed.menteeId}`
+                }).catch(() => {})
+            )
+        );
     }
 
     await db.insert(activityLog).values({
