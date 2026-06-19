@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { mentorshipPairs } from "@/lib/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql, ne } from "drizzle-orm";
 import { headers } from "next/headers";
 import { createNotification } from "@/lib/notifications/service";
 
@@ -60,9 +60,27 @@ export async function acceptMentorRequest(pairId: string) {
     });
     if (!pair) throw new Error("Request not found or already actioned");
 
-    await db.update(mentorshipPairs)
-        .set({ status: "active" })
-        .where(eq(mentorshipPairs.id, pairId));
+    await db.transaction(async (tx) => {
+        // CLAUDE.md §5: Enforce write-time capacity guard
+        const [{ count: activeOtherPairs } = { count: 0 }] = await tx
+            .select({ count: sql<number>`count(*)::int` })
+            .from(mentorshipPairs)
+            .where(
+                and(
+                    eq(mentorshipPairs.mentorId, session.user!.id),
+                    eq(mentorshipPairs.status, "active"),
+                    ne(mentorshipPairs.menteeId, pair.menteeId),
+                ),
+            );
+
+        if (activeOtherPairs >= 2) {
+            throw new Error("MENTOR_CAPACITY_EXCEEDED");
+        }
+
+        await tx.update(mentorshipPairs)
+            .set({ status: "active" })
+            .where(eq(mentorshipPairs.id, pairId));
+    });
 
     // Notify mentee
     createNotification(pair.menteeId, "match_accepted", {
