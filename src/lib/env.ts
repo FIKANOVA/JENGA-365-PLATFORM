@@ -14,6 +14,8 @@ const envSchema = z.object({
     REVALIDATE_SECRET: z.string().min(16),
     // Vercel / R2
     R2_SECRET_ACCESS_KEY: z.string().min(1).optional(),
+    CRON_SECRET: z.string().min(1),
+    KOBO_WEBHOOK_SECRET: z.string().min(1),
 });
 
 const parsed = envSchema.safeParse(process.env);

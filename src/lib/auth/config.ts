@@ -82,7 +82,7 @@ export const auth = betterAuth({
                 // Roles: "Mentee", "Mentor", "CorporatePartner", "Moderator", "SuperAdmin"
                 input: true,
             },
-            // Moderator Scope (stored as JSON array: welfare | meal | commerce | all)
+            // Moderator Scope (stored as JSON array: mentor_applications | corporate | content | all)
             moderationScope: {
                 type: "string",
                 required: false,
