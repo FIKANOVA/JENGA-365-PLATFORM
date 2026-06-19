@@ -1,25 +1,34 @@
+"use client";
+
 import Link from "next/link";
 import { Brain, Leaf, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 /**
  * Dual-Engine section — Engine A (AI-driven mentorship) + Engine B
  * (Environmental Stewardship & Green Technology, corporate-ESG framing).
  *
- * Engine B copy is the verbatim corporate-friendly draft Moseti relayed on
- * 2026-05-22 — Green Technology and measurable climate action.
+ * Transformed into an interactive dark-themed presentation to reduce
+ * boredom and capture attention.
  */
 export default function WhatWeDoSection() {
   return (
-    <section className="bg-background">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32">
-        <div className="max-w-2xl mb-16">
+    <section className="bg-[color:var(--surface-1)] py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl mb-16"
+        >
           <span
             className="text-eyebrow"
             style={{ color: "var(--brand-green)" }}
           >
             The Dual-Engine Model
           </span>
-          <h2 className="mt-3 text-display-md">Two engines. One platform.</h2>
+          <h2 className="mt-3 text-display-md text-foreground">Two engines. One platform.</h2>
           <p
             className="mt-5 text-body-lg"
             style={{ color: "var(--foreground-muted)" }}
@@ -28,7 +37,7 @@ export default function WhatWeDoSection() {
             stewardship. Every athlete on Jenga365 is a mentee and a steward —
             earning their growth through verified climate action.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <EngineCard
@@ -43,6 +52,7 @@ export default function WhatWeDoSection() {
             ]}
             href="/mentors"
             ctaLabel="See the matching algorithm"
+            delay={0.1}
           />
 
           <EngineCard
@@ -58,6 +68,7 @@ export default function WhatWeDoSection() {
             href="/impact"
             ctaLabel="Become a Corporate Partner"
             accent
+            delay={0.2}
           />
         </div>
       </div>
@@ -74,6 +85,7 @@ function EngineCard({
   href,
   ctaLabel,
   accent = false,
+  delay = 0,
 }: {
   eyebrow: string;
   title: string;
@@ -83,64 +95,81 @@ function EngineCard({
   href: string;
   ctaLabel: string;
   accent?: boolean;
+  delay?: number;
 }) {
   return (
-    <div
-      className="rounded-lg border bg-background p-8 md:p-10 transition-shadow hover:shadow-lg"
-      style={{ borderColor: "var(--border)" }}
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, delay }}
+      className="group rounded-2xl border bg-[color:var(--surface-2)] p-8 md:p-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden"
+      style={{ borderColor: accent ? "var(--brand-green-soft)" : "var(--surface-3)" }}
     >
-      <div className="flex items-start gap-4 mb-6">
-        <div
-          className="flex h-11 w-11 items-center justify-center rounded-md flex-shrink-0"
-          style={{
-            background: accent ? "var(--brand-green-soft)" : "var(--surface-2)",
-            color: accent ? "var(--brand-green)" : "var(--foreground)",
-          }}
-        >
-          <Icon className="h-5 w-5" />
-        </div>
-        <div>
-          <span
-            className="text-eyebrow"
+      <div
+        className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{
+          background: accent ? "linear-gradient(to bottom right, rgba(46, 160, 67, 0.05), transparent)" : "linear-gradient(to bottom right, rgba(255,255,255,0.03), transparent)"
+        }}
+      />
+      <div className="relative z-10 flex flex-col h-full">
+        <div className="flex items-start gap-4 mb-6">
+          <div
+            className="flex h-12 w-12 items-center justify-center rounded-xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
             style={{
-              color: accent ? "var(--brand-green)" : "var(--foreground-muted)",
+              background: accent ? "var(--brand-green-soft)" : "var(--surface-3)",
+              color: accent ? "var(--brand-green)" : "var(--foreground)",
             }}
           >
-            {eyebrow}
-          </span>
-          <h3 className="mt-1 text-headline">{title}</h3>
+            <Icon className="h-6 w-6" />
+          </div>
+          <div>
+            <span
+              className="text-eyebrow"
+              style={{
+                color: accent ? "var(--brand-green)" : "var(--foreground-muted)",
+              }}
+            >
+              {eyebrow}
+            </span>
+            <h3 className="mt-1 text-headline text-foreground">{title}</h3>
+          </div>
+        </div>
+
+        <p className="text-body text-foreground-muted">
+          {body}
+        </p>
+
+        <ul className="mt-6 space-y-3 mb-8">
+          {bullets.map((b) => (
+            <li
+              key={b}
+              className="flex items-start gap-3 text-body-sm text-foreground"
+            >
+              <span
+                className="mt-2 h-1.5 w-1.5 rounded-full flex-shrink-0"
+                style={{ background: "var(--brand-green)" }}
+                aria-hidden
+              />
+              {b}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-auto">
+          <Link
+            href={href}
+            className="group/btn inline-flex items-center gap-2 h-11 px-5 rounded-lg text-label font-medium transition-all focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+            style={{
+              background: accent ? "var(--brand-green)" : "var(--foreground)",
+              color: accent ? "white" : "var(--background)"
+            }}
+          >
+            {ctaLabel}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+          </Link>
         </div>
       </div>
-
-      <p className="text-body" style={{ color: "var(--foreground-muted)" }}>
-        {body}
-      </p>
-
-      <ul className="mt-6 space-y-3">
-        {bullets.map((b) => (
-          <li
-            key={b}
-            className="flex items-start gap-3 text-body-sm"
-            style={{ color: "var(--foreground)" }}
-          >
-            <span
-              className="mt-2 h-1 w-1 rounded-full flex-shrink-0"
-              style={{ background: "var(--brand-green)" }}
-              aria-hidden
-            />
-            {b}
-          </li>
-        ))}
-      </ul>
-
-      <Link
-        href={href}
-        className="group mt-8 inline-flex items-center gap-1.5 min-h-11 rounded-md text-label font-semibold underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
-        style={{ color: "var(--brand-green)" }}
-      >
-        {ctaLabel}
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-      </Link>
-    </div>
+    </motion.div>
   );
 }
