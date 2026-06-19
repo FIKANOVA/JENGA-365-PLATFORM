@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { getFundingMapData } from "@/lib/actions/fundingMap";
+import { getFundingMapData, FundingMapFilters, FundingMapData } from "@/lib/actions/fundingMap";
 
 // Fix Leaflet marker icon issue in Next.js
 const DefaultIcon = L.icon({
@@ -16,12 +16,12 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 interface Props {
-    filters: any;
+    filters: FundingMapFilters;
     role: string;
 }
 
 export default function FundingMap({ filters, role }: Props) {
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<FundingMapData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -59,7 +59,7 @@ export default function FundingMap({ filters, role }: Props) {
 
                 <ZoomControl position="topright" />
 
-                {data?.features.map((f: any) => (
+                {data?.features.map((f) => (
                     <Marker
                         key={f.properties.id}
                         position={[f.geometry.coordinates[1], f.geometry.coordinates[0]]}
