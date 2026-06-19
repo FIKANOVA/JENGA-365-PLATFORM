@@ -24,7 +24,10 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
                 await setMerchandiseStockCount(sanityProductId, stockCount, isActive);
                 toast.success("Stock updated");
             } catch (err) {
-                toast.error((err as Error).message === "MERCHANDISE_NOT_FOUND"
+                const errorMessage = err instanceof Error ? err.message : String(err);
+                const isNotFound = errorMessage.includes("MERCHANDISE_NOT_FOUND");
+
+                toast.error(isNotFound
                     ? "Run \"Sync Store Inventory\" first to register this product"
                     : "Failed to update stock");
             }
