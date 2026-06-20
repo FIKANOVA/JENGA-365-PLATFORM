@@ -38,7 +38,7 @@ export async function getFundingMapData(filters: z.infer<typeof filterSchema>) {
     const parsed = filterSchema.parse(filters);
 
     // 4. DB query building
-    let query = db.select({
+    const query = db.select({
         id: projectLocations.id,
         name: projectLocations.name,
         latitude: projectLocations.latitude,
