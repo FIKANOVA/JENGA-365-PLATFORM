@@ -19,7 +19,7 @@ export default function MenteeDetail({ id }: { id: string }) {
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 border-b border-border pb-6">
                 <div className="flex items-center gap-6">
                     <div
-                        className="w-16 h-16 flex items-center justify-center rounded-lg border"
+                        className="w-16 h-16 flex items-center justify-center rounded-md border"
                         style={{
                             background: "var(--brand-green-soft)",
                             borderColor: "var(--brand-green)",
@@ -131,7 +131,7 @@ export default function MenteeDetail({ id }: { id: string }) {
                                 + Log new session
                             </button>
                         </div>
-                        <div className="rounded-lg border border-border bg-background overflow-hidden" style={{ boxShadow: "var(--shadow-sm)" }}>
+                        <div className="rounded-md border border-border bg-background overflow-hidden" style={{ boxShadow: "var(--shadow-sm)" }}>
                             <table className="w-full text-left">
                                 <thead className="border-b border-border" style={{ background: "var(--surface-1)" }}>
                                     <tr>
@@ -162,7 +162,7 @@ export default function MenteeDetail({ id }: { id: string }) {
                     <div className="flex flex-col gap-6">
                         {/* Attendance */}
                         <section
-                            className="rounded-lg border border-border bg-background p-6"
+                            className="rounded-md border border-border bg-background p-6"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <h3 className="text-eyebrow text-foreground-muted mb-2">Attendance rate</h3>
@@ -188,7 +188,7 @@ export default function MenteeDetail({ id }: { id: string }) {
                         </section>
 
                         <section
-                            className="rounded-lg border border-border bg-background p-6"
+                            className="rounded-md border border-border bg-background p-6"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <h3 className="text-eyebrow text-foreground-muted mb-4">Mood journal (7 days)</h3>
@@ -218,7 +218,7 @@ export default function MenteeDetail({ id }: { id: string }) {
 
                     <div className="flex flex-col gap-6">
                         <section
-                            className="rounded-lg border p-6"
+                            className="rounded-md border p-6"
                             style={{
                                 background: "var(--brand-green-soft)",
                                 borderColor: "var(--brand-green)",
@@ -233,7 +233,7 @@ export default function MenteeDetail({ id }: { id: string }) {
                         </section>
 
                         <section
-                            className="rounded-lg border border-border bg-background p-6"
+                            className="rounded-md border border-border bg-background p-6"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <h3 className="text-eyebrow text-foreground-muted mb-4">Flags & alerts</h3>
@@ -264,7 +264,7 @@ function StatCard({
 }) {
     return (
         <div
-            className="rounded-lg border border-border bg-background p-6 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+            className="rounded-md border border-border bg-background p-6 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <p className="text-eyebrow text-foreground-muted mb-4">{label}</p>

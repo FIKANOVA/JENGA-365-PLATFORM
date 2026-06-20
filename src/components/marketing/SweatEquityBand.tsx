@@ -86,13 +86,13 @@ function Card({
 }) {
     return (
         <div
-            className="flex gap-6 rounded-xl border bg-white/5 p-6 backdrop-blur-sm transition-colors hover:bg-white/10"
+            className="flex gap-6 rounded-md border bg-white/5 p-6 backdrop-blur-sm transition-colors hover:bg-white/10"
             style={{
                 borderColor: accent ? "rgba(46, 160, 67, 0.3)" : "rgba(255,255,255,0.1)"
             }}
         >
             <div
-                className="flex h-12 w-12 items-center justify-center rounded-lg flex-shrink-0"
+                className="flex h-12 w-12 items-center justify-center rounded-md flex-shrink-0"
                 style={{
                     background: accent ? "var(--brand-green-soft)" : "rgba(255,255,255,0.05)",
                     color: accent ? "var(--brand-green)" : "rgba(255,255,255,0.8)",

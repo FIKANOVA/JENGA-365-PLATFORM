@@ -262,7 +262,7 @@ export default function ArticleEditor({ initialData, onSave, onSubmit, onUploadC
                         {coverImageUrl ? (
                             <div className="mb-10 space-y-3">
                                 <div
-                                    className="relative w-full rounded-lg overflow-hidden border border-border"
+                                    className="relative w-full rounded-md overflow-hidden border border-border"
                                     style={{ aspectRatio: "16 / 9", background: "var(--surface-1)" }}
                                 >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -310,7 +310,7 @@ export default function ArticleEditor({ initialData, onSave, onSubmit, onUploadC
                                 type="button"
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={uploading}
-                                className="group mb-10 flex flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-border bg-[color:var(--surface-1)] px-8 py-14 transition-colors hover:border-[color:var(--brand-red)] hover:bg-background disabled:opacity-60"
+                                className="group mb-10 flex flex-col items-center justify-center gap-3 rounded-md border-2 border-dashed border-border bg-[color:var(--surface-1)] px-8 py-14 transition-colors hover:border-[color:var(--brand-red)] hover:bg-background disabled:opacity-60"
                             >
                                 {uploading ? (
                                     <Loader2 className="h-8 w-8 text-[var(--foreground-subtle)] animate-spin" />

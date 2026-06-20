@@ -76,22 +76,22 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                             placeholder="Search articles, topics, or authors..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-sm py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:font-mono placeholder:text-[10px] placeholder:uppercase placeholder:tracking-widest focus:outline-none focus:border-primary transition-all font-sans"
+                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-md py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:font-mono placeholder:text-label placeholder:uppercase placeholder:tracking-widest focus:outline-none focus:border-primary transition-all font-sans"
                         />
                     </div>
                 </PageHero>
 
                 {/* Breadcrumb */}
                 <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8">
-                    <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
+                    <Link href="/resources" className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
                         ← Resources
                     </Link>
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                     {/* Filters */}
-                    <div className="flex flex-wrap items-center gap-6 border-b border-[var(--border)] pb-10 mb-16">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">Filter</span>
+                    <div className="flex flex-wrap items-center gap-6 border-b border-border pb-10 mb-16">
+                        <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)]">Filter</span>
                         <TopicFilters activeTopic={activeTopic} onTopicChange={setActiveTopic} />
                     </div>
 
@@ -130,7 +130,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                         </div>
                         <Link
                             href={isAuthenticated ? "/dashboard/articles/new" : "/register"}
-                            className="shrink-0 h-14 px-10 bg-[var(--brand-green)] text-white text-[10px] font-mono uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl flex items-center"
+                            className="shrink-0 h-14 px-10 bg-[var(--brand-green)] text-white text-label font-mono uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl flex items-center"
                         >
                             {isAuthenticated ? "Publish Article" : "Create Free Account"}
                         </Link>
@@ -146,7 +146,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                                 <h3 className="text-display-md text-foreground">No results found</h3>
                                 <button
                                     onClick={() => { setSearchQuery(""); setActiveTopic("All Topics"); }}
-                                    className="px-8 py-3 border border-[var(--border)] text-black font-mono text-[10px] uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                                    className="px-8 py-3 border border-border text-black font-mono text-eyebrow tracking-widest hover:bg-black hover:text-white transition-all"
                                 >
                                     Reset Filters
                                 </button>

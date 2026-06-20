@@ -218,7 +218,7 @@ export default function ModeratorInvitePage() {
                         </div>
 
                         <div
-                            className="rounded-lg border border-border bg-background p-6 space-y-3"
+                            className="rounded-md border border-border bg-background p-6 space-y-3"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div className="flex items-center gap-2">
@@ -257,7 +257,7 @@ export default function ModeratorInvitePage() {
 
                     {/* Right — form */}
                     <section
-                        className="rounded-lg border border-border bg-background p-6 lg:p-8 space-y-6"
+                        className="rounded-md border border-border bg-background p-6 lg:p-8 space-y-6"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         {step === 1 ? (
@@ -359,7 +359,7 @@ export default function ModeratorInvitePage() {
 
                                 <label className="flex gap-3 cursor-pointer items-start">
                                     <span
-                                        className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                                        className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border transition-colors shrink-0 ${
                                             agreed
                                                 ? "border-transparent"
                                                 : "border-border bg-background"

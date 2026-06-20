@@ -67,7 +67,7 @@ export default function MentorshipQueue({ pendingRequests = [] }: MentorshipQueu
                     {pendingRequests.map((req) => (
                         <div
                             key={req.pairId}
-                            className="rounded-lg border border-border bg-background p-5 flex flex-col gap-4 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                            className="rounded-md border border-border bg-background p-5 flex flex-col gap-4 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div className="flex items-start justify-between gap-4">

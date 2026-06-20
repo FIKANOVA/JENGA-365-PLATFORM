@@ -31,7 +31,7 @@ export default function LearningPathwayTracker({ pathway }: LearningPathwayTrack
     if (milestones.length === 0) {
         return (
             <section
-                className="rounded-lg border border-border p-6"
+                className="rounded-md border border-border p-6"
                 style={{ background: "var(--surface-1)" }}
             >
                 <h3 className="text-headline text-foreground mb-4">My learning pathway</h3>
@@ -56,7 +56,7 @@ export default function LearningPathwayTracker({ pathway }: LearningPathwayTrack
 
     return (
         <section
-            className="rounded-lg border border-border p-6"
+            className="rounded-md border border-border p-6"
             style={{ background: "var(--surface-1)" }}
         >
             <div className="flex items-center justify-between mb-6">
@@ -127,7 +127,7 @@ export default function LearningPathwayTracker({ pathway }: LearningPathwayTrack
 
             {nextStep && (
                 <div
-                    className="rounded-lg p-4 flex items-center justify-between border border-border bg-background"
+                    className="rounded-md p-4 flex items-center justify-between border border-border bg-background"
                     style={{ boxShadow: "var(--shadow-sm)" }}
                 >
                     <div className="flex items-center gap-4">

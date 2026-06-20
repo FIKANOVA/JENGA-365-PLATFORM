@@ -55,7 +55,7 @@ export default function StepTwo({
                 onClick={() => onChange('academicStanding', option)}
                 aria-pressed={isSelected}
                 className={`
-                  flex-1 min-w-[100px] px-4 py-4 rounded-xl text-sm font-medium border-2 transition-colors cursor-pointer text-center
+                  flex-1 min-w-[100px] px-4 py-4 rounded-md text-sm font-medium border-2 transition-colors cursor-pointer text-center
                   ${isSelected
                     ? 'bg-[var(--md-primary-container,#d0e8ff)] border-[var(--md-primary)] text-[var(--md-on-surface)]'
                     : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)]'
@@ -115,7 +115,7 @@ export default function StepTwo({
           placeholder="Tell us more about your career aspirations…"
           rows={4}
           maxLength={MAX_FREE_TEXT}
-          className="w-full rounded-xl border-2 border-[var(--md-outline-variant)] bg-transparent px-4 py-3 text-sm text-[var(--md-on-surface)] placeholder:text-[var(--md-on-surface-variant)] focus:border-[var(--md-primary)] focus:outline-none resize-none transition-colors"
+          className="w-full rounded-md border-2 border-[var(--md-outline-variant)] bg-transparent px-4 py-3 text-sm text-[var(--md-on-surface)] placeholder:text-[var(--md-on-surface-variant)] focus:border-[var(--md-primary)] focus:outline-none resize-none transition-colors"
         />
         <p className="text-right text-xs text-[var(--md-on-surface-variant)]">
           {careerFreeText.length} / {MAX_FREE_TEXT}

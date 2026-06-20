@@ -75,7 +75,7 @@ export default function HistoryTimeline({ nodes: propNodes }: HistoryTimelinePro
                                 {/* Content Card */}
                                 <div className={`flex-1 w-full pl-20 md:pl-0 ${i % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
                                     <div
-                                        className="group rounded-lg border border-border bg-background p-8 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)] cursor-default"
+                                        className="group rounded-md border border-border bg-background p-8 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)] cursor-default"
                                         style={{ boxShadow: "var(--shadow-sm)" }}
                                     >
                                         <span className="text-eyebrow block mb-3" style={{ color: "var(--brand-green)" }}>

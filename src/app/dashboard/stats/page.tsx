@@ -40,7 +40,7 @@ export default async function StatsPage() {
                     {statCards.map((card) => (
                         <div
                             key={card.label}
-                            className="rounded-lg border border-border bg-background p-6 space-y-3"
+                            className="rounded-md border border-border bg-background p-6 space-y-3"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <card.Icon className="w-5 h-5" style={{ color: card.color }} />
@@ -54,7 +54,7 @@ export default async function StatsPage() {
 
                 {!stats && (
                     <div
-                        className="py-12 text-center border border-dashed border-border rounded-lg"
+                        className="py-12 text-center border border-dashed border-border rounded-md"
                         style={{ background: "var(--surface-1)" }}
                     >
                         <p className="text-body-sm text-foreground-muted">

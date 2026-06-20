@@ -64,7 +64,7 @@ export default function EmbedResourceCard({
 
     return (
         <div
-            className="group flex flex-col bg-background border rounded-lg transition-all duration-300 hover:-translate-y-1"
+            className="group flex flex-col bg-background border rounded-md transition-all duration-300 hover:-translate-y-1"
             style={{
                 borderColor: isFeatured ? "var(--brand-red)" : "var(--border)",
                 boxShadow: "var(--shadow-sm)",

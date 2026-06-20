@@ -36,13 +36,13 @@ export default function NDAManager({ versions: initialVersions }: NDAManagerProp
 
                 {/* Stats Row */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-                    <div className="rounded-lg border border-border bg-background p-6" style={{ boxShadow: "var(--shadow-sm)" }}>
+                    <div className="rounded-md border border-border bg-background p-6" style={{ boxShadow: "var(--shadow-sm)" }}>
                         <p className="text-eyebrow text-foreground-muted mb-2">Active version</p>
                         <p className="text-display-sm" style={{ color: "var(--brand-green)" }}>
                             v{activeVersion?.version}
                         </p>
                     </div>
-                    <div className="rounded-lg border border-border bg-background p-6" style={{ boxShadow: "var(--shadow-sm)" }}>
+                    <div className="rounded-md border border-border bg-background p-6" style={{ boxShadow: "var(--shadow-sm)" }}>
                         <p className="text-eyebrow text-foreground-muted mb-2">Signed</p>
                         <p className="text-display-sm text-foreground">{activeVersion?.signedCount.toLocaleString()}</p>
                         <p className="text-body-sm text-foreground-muted mt-1">
@@ -50,7 +50,7 @@ export default function NDAManager({ versions: initialVersions }: NDAManagerProp
                         </p>
                     </div>
                     <div
-                        className="rounded-lg border bg-background p-6 border-l-4"
+                        className="rounded-md border bg-background p-6 border-l-4"
                         style={{ boxShadow: "var(--shadow-sm)", borderLeftColor: "var(--brand-red)" }}
                     >
                         <p className="text-eyebrow text-foreground-muted mb-2">Unsigned</p>
@@ -66,7 +66,7 @@ export default function NDAManager({ versions: initialVersions }: NDAManagerProp
                         Upload new version
                     </h2>
                     <div
-                        className="rounded-lg border-2 border-dashed border-border bg-background p-8 text-center hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors cursor-pointer"
+                        className="rounded-md border-2 border-dashed border-border bg-background p-8 text-center hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors cursor-pointer"
                         style={{ background: "var(--surface-1)" }}
                     >
                         <Upload size={32} className="mx-auto text-foreground-subtle mb-3" />
@@ -89,7 +89,7 @@ export default function NDAManager({ versions: initialVersions }: NDAManagerProp
                             return (
                                 <div
                                     key={v.id}
-                                    className="flex items-center justify-between p-5 rounded-lg border bg-background transition-colors"
+                                    className="flex items-center justify-between p-5 rounded-md border bg-background transition-colors"
                                     style={{
                                         borderColor: isActive ? "var(--brand-green)" : "var(--border)",
                                         boxShadow: "var(--shadow-sm)",

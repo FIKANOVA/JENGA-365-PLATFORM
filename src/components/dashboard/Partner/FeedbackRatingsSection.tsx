@@ -28,7 +28,7 @@ export default function FeedbackRatingsSection({ menteeId }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Latest Feedback */}
                 <div
-                    className="rounded-lg border border-l-4 border-border bg-background p-8 relative overflow-hidden"
+                    className="rounded-md border border-l-4 border-border bg-background p-8 relative overflow-hidden"
                     style={{ borderLeftColor: "var(--brand-green)", boxShadow: "var(--shadow-sm)" }}
                 >
                     <div className="flex mb-6 gap-0.5" style={{ color: "var(--brand-green)" }}>

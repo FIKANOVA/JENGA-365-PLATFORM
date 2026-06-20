@@ -34,7 +34,7 @@ export function Badge({ tone, children }: { tone: "success" | "warning"; childre
               };
     return (
         <span
-            className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium"
+            className="inline-flex items-center rounded-full px-2.5 py-0.5 text-label font-medium"
             style={palette}
         >
             {children}
@@ -55,7 +55,7 @@ export function RoleCard({
 }: RoleCardProps) {
     return (
         <div
-            className="group flex flex-col rounded-lg border border-border bg-background p-6 lg:p-8 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
+            className="group flex flex-col rounded-md border border-border bg-background p-6 lg:p-8 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <div className="flex items-start justify-between">

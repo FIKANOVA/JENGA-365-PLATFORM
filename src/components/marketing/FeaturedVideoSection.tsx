@@ -50,7 +50,7 @@ export default function FeaturedVideoSection({ video, heading }: FeaturedVideoSe
                 </div>
 
                 <div
-                    className="relative rounded-lg overflow-hidden border border-border"
+                    className="relative rounded-md overflow-hidden border border-border"
                     style={{ aspectRatio: "16 / 9", background: "var(--surface-1)", boxShadow: "var(--shadow-sm)" }}
                 >
                     {parsed.isFile ? (
