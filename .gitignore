@@ -81,3 +81,6 @@ docs/SANITY_CMS_STATE.md
 docs/PROJECT_STATE_AND_GAPS.md
 docs/USER_TEST_GUIDE.md
 docs/pdf/
+site-frontend/
+site-backend/
+nginx/
