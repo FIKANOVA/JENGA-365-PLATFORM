@@ -5,11 +5,22 @@ import AdminMatchingDashboard from "../shared/AdminMatchingDashboard";
 import { Settings2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+export interface MentorshipPairData {
+    matchScore?: string | number | null;
+    mentor?: {
+        id: string;
+        name: string;
+        expertise?: string[];
+        sessionsTogether?: number;
+    } | null;
+}
+
 interface Props {
-    pair: any;
+    pair: MentorshipPairData;
     menteeId: string;
     menteeName: string;
 }
+
 
 export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props) {
     const [isMatching, setIsMatching] = useState(false);
