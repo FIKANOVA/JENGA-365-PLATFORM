@@ -36,7 +36,7 @@ interface HistoryTimelineProps {
 export default function HistoryTimeline({ nodes: propNodes }: HistoryTimelineProps = {}) {
     const nodes = propNodes && propNodes.length > 0 ? propNodes : DEFAULT_NODES;
     return (
-        <section className="py-24 md:py-32 bg-accent relative overflow-hidden">
+        <section className="py-12 md:py-24 bg-accent relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-20 text-center space-y-4">
                     <span className="text-eyebrow block" style={{ color: "var(--brand-green)" }}>

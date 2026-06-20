@@ -125,7 +125,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                 </PageHero>
 
                 {/* ── Grid Section ── */}
-                <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-24">
                     <div className="space-y-16">
                         {/* Category Selection */}
                         <div className="flex flex-col gap-6">
@@ -227,7 +227,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center py-32 text-center space-y-8">
+                                <div className="flex flex-col items-center justify-center py-16 md:py-32 text-center space-y-8">
                                     <PackageX className="h-20 w-20 text-[var(--border)]" />
                                     <div className="space-y-3">
                                         <h3 className="text-display-md text-foreground">Inventory empty</h3>
@@ -262,7 +262,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
 
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             {cartItems.length === 0 ? (
-                                <div className="text-center text-[var(--foreground-subtle)] flex flex-col items-center py-20">
+                                <div className="text-center text-[var(--foreground-subtle)] flex flex-col items-center py-12 md:py-20">
                                     <ShoppingBag className="h-12 w-12 mb-4" />
                                     <p>Your cart is empty.</p>
                                 </div>

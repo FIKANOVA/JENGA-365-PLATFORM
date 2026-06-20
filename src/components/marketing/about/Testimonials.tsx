@@ -17,7 +17,7 @@ const testimonials = [
 
 export default function Testimonials() {
     return (
-        <section className="py-32 bg-accent relative overflow-hidden">
+        <section className="py-16 md:py-24 bg-accent relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-16">
                     <div className="space-y-6 max-w-2xl">

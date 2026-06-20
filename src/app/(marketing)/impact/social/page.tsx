@@ -16,7 +16,7 @@ export default async function ImpactSocialPage() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <main className="flex-1 py-20 container mx-auto px-4">
+            <main className="flex-1 py-12 md:py-20 container mx-auto px-4">
                 <div className="max-w-4xl mx-auto text-center mb-16 space-y-4">
                     <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                         Measurable change

@@ -8,17 +8,23 @@ export const metadata: Metadata = {
     description: "Impact SaaS scaling mentorship, education, and social impact through AI.",
 };
 
-export default function MarketingLayout({
+import { fetchPartners } from "@/lib/sanity/queries";
+import PartnerCarousel from "@/components/marketing/about/PartnerCarousel";
+
+export default async function MarketingLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const partners = await fetchPartners().catch(() => []);
+
     return (
         <div className="flex flex-col min-h-screen">
             <HeaderWrapper />
             <main className="flex-1">
                 {children}
             </main>
+            <PartnerCarousel partners={partners} />
             <Footer />
         </div>
     );

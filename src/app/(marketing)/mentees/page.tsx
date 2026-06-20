@@ -66,7 +66,7 @@ export default async function MenteesPage() {
                 </div>
             </PageHero>
 
-            <section className="py-20 lg:py-24 border-b border-border">
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>The programme</p>
@@ -88,7 +88,7 @@ export default async function MenteesPage() {
                 </div>
             </section>
 
-            <section className="py-20 lg:py-24 border-b border-border" style={{ background: "var(--surface-1)" }}>
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border" style={{ background: "var(--surface-1)" }}>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>What you get</p>

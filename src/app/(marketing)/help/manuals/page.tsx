@@ -29,7 +29,7 @@ export default function PublicManualsPage() {
     };
 
     return (
-        <main className="min-h-screen pt-32 pb-24 bg-background">
+        <main className="min-h-screen pt-16 md:pt-32 pb-12 md:pb-24 bg-background">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
                 <div className="text-center mb-16 space-y-4">
                     <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">

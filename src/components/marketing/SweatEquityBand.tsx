@@ -11,7 +11,7 @@ export default function SweatEquityBand() {
     return (
         <section
             id="sweat-equity"
-            className="relative overflow-hidden py-24 md:py-32"
+            className="relative overflow-hidden py-12 md:py-24"
             style={{ background: "var(--brand-black)" }}
         >
             <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />

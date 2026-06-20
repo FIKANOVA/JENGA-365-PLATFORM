@@ -114,7 +114,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 </section>
 
                 {/* ── Main Content Grid ── */}
-                <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-20">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                         {/* Reading Area */}
                         <div className="lg:col-span-8">
@@ -146,6 +146,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 {/* ── Guest Footer CTA ── */}
                 {!isAuthenticated && (
                     <section className="bg-[var(--surface-1)] border-t border-border py-32 mt-20">
+                    <section className="bg-[var(--surface-1)] border-t border-[var(--border)] py-16 md:py-32 mt-20">
                         <div className="max-w-4xl mx-auto px-6 flex flex-col items-center text-center space-y-10">
                             <span className="font-mono text-eyebrow tracking-[0.4em] text-[var(--brand-green)]">Final Word</span>
                             <h2 className="text-display-xl text-foreground leading-tight">

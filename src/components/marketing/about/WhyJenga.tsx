@@ -41,7 +41,7 @@ export default function WhyJenga() {
     const [openId, setOpenId] = useState<string | null>("holistic");
 
     return (
-        <section className="py-24 bg-white border-t border-[#E8E4DC]">
+        <section className="py-12 md:py-24 bg-white border-t border-[#E8E4DC]">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-14 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
                     <div>

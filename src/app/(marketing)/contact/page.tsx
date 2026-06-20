@@ -86,7 +86,7 @@ export default function ContactPage() {
                     description="Have questions about our mentorship programs, corporate partnerships, or rugby development initiatives? We're here to help you build the future."
                 />
 
-                <section className="py-20 lg:py-24">
+                <section className="py-12 md:py-20 lg:py-12 md:py-24">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
                             {/* Left: contact info */}
@@ -222,7 +222,7 @@ export default function ContactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24 border-y border-border" style={{ background: "var(--surface-1)" }}>
+                <section className="py-12 md:py-20 lg:py-12 md:py-24 border-y border-border" style={{ background: "var(--surface-1)" }}>
                     <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-8">
                         <div className="space-y-2">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Our location</p>
@@ -243,7 +243,7 @@ export default function ContactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24">
+                <section className="py-12 md:py-20 lg:py-12 md:py-24">
                     <div className="mx-auto max-w-3xl px-6 lg:px-8">
                         <div className="text-center space-y-3 mb-10">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Common questions</p>

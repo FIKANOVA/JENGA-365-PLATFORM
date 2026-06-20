@@ -20,7 +20,7 @@ interface LeadershipGridProps {
 export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
     if (!team || team.length === 0) {
         return (
-            <section className="py-40 bg-[var(--surface-1)]">
+            <section className="py-16 md:py-32 bg-[var(--surface-1)]">
                 <div className="max-w-7xl mx-auto px-6 md:px-12">
                     <div className="mb-12 space-y-4">
                         <span className="font-mono text-eyebrow tracking-[0.6em] text-[var(--brand-green)] block font-bold">
@@ -39,7 +39,7 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
     }
 
     return (
-        <section className="py-40 bg-[var(--surface-1)]">
+        <section className="py-16 md:py-32 bg-[var(--surface-1)]">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-24 space-y-4">
                     <span className="font-mono text-eyebrow tracking-[0.6em] text-[var(--brand-green)] block font-bold">
