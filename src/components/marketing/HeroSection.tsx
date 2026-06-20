@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
 import { urlFor } from "@/lib/sanity/client";
-import { motion, Variants } from "framer-motion";
 
 interface SanityImage {
     asset?: { _id?: string; url?: string };
@@ -41,8 +40,6 @@ const DEFAULT_COPY: Required<HeroCopy> = {
  * Landing hero — Total Athlete + Dual-Engine narrative.
  * Copy is sourced from siteSettings.landingHero in Sanity; in-code DEFAULT_COPY
  * is the fallback when a field is empty.
- *
- * Enhanced with Framer Motion for better attention capture.
  */
 export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     const { data: session } = useSession();
@@ -61,36 +58,23 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
         : null;
     const hasImage = !!heroUrl;
 
+    // With a photo behind the hero we show it fully and darken it for legibility,
+    // flipping the copy to light. Without a photo we keep the light radial/topo design.
     const headingColor = hasImage ? "#ffffff" : "var(--foreground)";
     const mutedColor = hasImage ? "rgba(255,255,255,0.88)" : "var(--foreground-muted)";
     const subtleColor = hasImage ? "rgba(255,255,255,0.72)" : "var(--foreground-subtle)";
-
-    const staggerVariants: Variants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: (i: number) => ({
-            opacity: 1,
-            y: 0,
-            transition: {
-                delay: i * 0.1,
-                duration: 0.8,
-                ease: "easeOut" as const,
-            },
-        }),
-    };
 
     return (
         <section className="relative overflow-hidden bg-background">
             {hasImage ? (
                 <>
-                    <motion.img
-                        initial={{ scale: 1.05 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
+                    <img
                         src={heroUrl!}
                         alt=""
                         aria-hidden
                         className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                     />
+                    {/* Darkening scrim — heavier on the text (left) side for contrast. */}
                     <div
                         className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/90 via-black/80 to-black/50"
                         aria-hidden
@@ -110,11 +94,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
 
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-16 md:py-24 lg:py-32">
                 <div className="max-w-3xl">
-                    <motion.div
-                        custom={0}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
+                    <div
                         className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm"
                         style={{
                             background: hasImage ? "rgba(255,255,255,0.12)" : "var(--surface-1)",
@@ -125,44 +105,26 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                         <span className="text-eyebrow" style={{ color: mutedColor }}>
                             {eyebrow}
                         </span>
-                    </motion.div>
+                    </div>
 
                     <h1 className="text-display-md md:text-display-xl whitespace-pre-line" style={{ color: headingColor }}>
-                    <motion.h1
-                        custom={1}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="text-display-lg md:text-display-xl whitespace-pre-line"
-                        style={{ color: headingColor }}
-                    >
                         {heading}
-                    </motion.h1>
+                    </h1>
 
-                    <motion.p
-                        custom={2}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
+                    <p
                         className="mt-6 text-body-lg max-w-2xl"
                         style={{ color: mutedColor }}
                     >
                         {description}
-                    </motion.p>
+                    </p>
 
-                    <motion.div
-                        custom={3}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="mt-10 flex flex-col sm:flex-row gap-3"
-                    >
+                    <div className="mt-10 flex flex-col sm:flex-row gap-3">
                         {isAuthenticated ? (
                             <Link
                                 href="/dashboard"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg"
+                                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
                                 style={{ background: "var(--brand-green)" }}
                             >
                                 Go to dashboard
@@ -172,7 +134,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                             <>
                                 <Link
                                     href={primaryCtaHref}
-                                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg"
+                                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
                                     style={{ background: "var(--brand-green)" }}
                                 >
                                     {primaryCtaLabel}
@@ -190,26 +152,22 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                                 </Link>
                             </>
                         )}
-                    </motion.div>
+                    </div>
 
-                    <motion.p
-                        custom={4}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
+                    <p
                         className="mt-6 text-body-sm"
                         style={{ color: subtleColor }}
                     >
                         Mentorship is earned — not free. Read the{" "}
                         <Link
                             href="#sweat-equity"
-                            className="underline underline-offset-4 transition-colors hover:text-[color:var(--brand-green)]"
+                            className="underline underline-offset-4"
                             style={{ color: headingColor }}
                         >
                             Sweat Equity protocol
                         </Link>
                         .
-                    </motion.p>
+                    </p>
                 </div>
             </div>
         </section>
