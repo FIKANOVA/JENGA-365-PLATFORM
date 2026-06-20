@@ -4,6 +4,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { treeSurvivalChecks, treeSurvivalAudits, giveBackTracking, treePlantingEvents } from "@/lib/db/schema";
 import { checkAndUnlockMilestones } from "@/lib/actions/corporateUnlock";
+import crypto from "crypto";
 
 // KoBo serializes _id as an integer in REST Service payloads. Accept either
 // form and normalize to string so it slots into the text() column.
@@ -54,7 +55,16 @@ const KoboPayloadSchema = z.discriminatedUnion("form_type", [
 
 export async function POST(request: NextRequest) {
     const token = request.headers.get("x-kobo-token");
-    if (!token || token !== process.env.KOBO_WEBHOOK_SECRET) {
+    const secret = process.env.KOBO_WEBHOOK_SECRET || "";
+
+    if (!token) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const tokenBuf = Buffer.from(token);
+    const secretBuf = Buffer.from(secret);
+
+    if (tokenBuf.length !== secretBuf.length || !crypto.timingSafeEqual(tokenBuf, secretBuf)) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
