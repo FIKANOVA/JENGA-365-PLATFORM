@@ -70,16 +70,6 @@ describe('updateUserProfileAsset', () => {
 
   afterEach(() => {
     vi.useRealTimers()
-import { triggerAiProfileSynthesis } from '@/lib/actions/matching'
-import { auth } from '@/lib/auth/config'
-import { synthesizeUserProfile } from '@/lib/ai/profileSynthesizer'
-
-describe('triggerAiProfileSynthesis', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-
-    // Silence console.error for expected error tests
-    vi.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   it('throws UNAUTHORIZED when session is null', async () => {
@@ -132,6 +122,20 @@ describe('triggerAiProfileSynthesis', () => {
     // Verify synthesizeUserProfile is NOT called in this function
     expect(synthesizeUserProfile).not.toHaveBeenCalled()
   })
+})
+
+import { triggerAiProfileSynthesis } from '@/lib/actions/matching'
+
+describe('triggerAiProfileSynthesis', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+
+    // Silence console.error for expected error tests
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  it('throws UNAUTHORIZED when session is null', async () => {
+    vi.mocked(auth.api.getSession).mockResolvedValueOnce(null as any)
 
     await expect(triggerAiProfileSynthesis()).rejects.toThrow('UNAUTHORIZED')
   })
