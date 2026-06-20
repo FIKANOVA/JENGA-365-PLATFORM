@@ -293,7 +293,7 @@ export const voicesQuery = groq`*[_type == "voices"] | order(date desc) {
   type,
   description,
   host,
-  xUrl,
+  url,
   date,
   duration,
   listeners,
