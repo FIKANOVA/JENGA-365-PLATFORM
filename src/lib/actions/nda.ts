@@ -94,27 +94,27 @@ export async function getNDADocument(role: string, _version?: string) {
     const documents: Record<string, { version: string, hash: string, content: string }> = {
         Mentee: {
             version: "2025.06.1",
-            hash: "sha256-mentee-v2025-06-1-placeholder-hash",
+            hash: "afdc732bd317d59820049ccccd833038a363c021ce35b985fcfcfa54d46de754",
             content: "As a Mentee, you agree to protect the privacy of your Mentors and fellow Mentees. You will not share proprietary materials provided during sessions."
         },
         Mentor: {
             version: "2025.06.1",
-            hash: "sha256-mentor-v2025-06-1-placeholder-hash",
+            hash: "2148b077b114672138c22ded085f972c5198b7fedc3128f2589f238f57a22988",
             content: "As a Mentor, you are handle sensitive developmental data and mentee identities. You must maintain absolute confidentiality regarding all Mentee stories and progress reports."
         },
         CorporatePartner: {
             version: "2025.06.1",
-            hash: "sha256-corporate-v2025-06-1-placeholder-hash",
+            hash: "91de206bb3747cf6664669a0e7e8459cc723985a6bc52272d2ea8d15642f8e2d",
             content: "As a Corporate Partner, you have access to aggregated impact data. You agree not to disclose individual mentee data or circumvent the platform's social impact metrics."
         },
         NGO: {
             version: "2025.06.1",
-            hash: "sha256-ngo-v2025-06-1-placeholder-hash",
+            hash: "241025eb0da3eab3f8f416b370c749222b59bc594b2fbe80f571d92ca920e727",
             content: "As an NGO Partner, you have access to aggregated impact data and field collaboration tools. You agree not to disclose individual mentee data or circumvent the platform's social impact metrics."
         },
         Moderator: {
             version: "2025.06.1",
-            hash: "sha256-moderator-v2025-06-1-placeholder-hash",
+            hash: "5d993e7646468b440ed9f4ed1408b34963bff3ebb1fc978e7ded013dd65d0b33",
             content: "As a Moderator, you have elevated access to review content and activities. You must uphold the highest standards of neutrality and confidentiality regarding all user data."
         }
     };

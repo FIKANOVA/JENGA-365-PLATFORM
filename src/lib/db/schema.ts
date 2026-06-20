@@ -66,6 +66,7 @@ export const badgeTypeEnum = pgEnum("badge_type", [
     "Supporter",
     "Verified",
     "TopMentor",
+    "Graduate",
 ]);
 
 export const orderStatusEnum = pgEnum("order_status", [
@@ -452,7 +453,6 @@ export const impactReports = pgTable("impact_reports", {
     reportPeriod: varchar("report_period", { length: 50 }).notNull(),
     totalMentorshipHours: integer("total_mentorship_hours").default(0),
     totalDonations: decimal("total_donations", { precision: 20, scale: 2 }).default("0"),
-    treesPlanted: integer("trees_planted").default(0),
     clinicsHeld: integer("clinics_held").default(0),
     youthEngaged: integer("youth_engaged").default(0),
     generatedAt: timestamp("generated_at").defaultNow().notNull(),
@@ -1023,4 +1023,17 @@ export const vPublicImpactAggregate = pgView("v_public_impact_aggregate", {
     youthEngagedActive: integer("youth_engaged_active"),
     activeCorporatePartners: integer("active_corporate_partners"),
     activeNgoPartners: integer("active_ngo_partners"),
+}).existing();
+
+// Per-partner Looker Studio source. Creates a function that generates a view for a specific partner.
+// Since Drizzle pgView doesn't easily parameterize, we use a raw SQL definition in migration or pgView.existing()
+// Note: as per Phase 2.5 plan: v_partner_impact(<partner_id>)
+// Since it's a parameterized view, we can define it as a table function or just document it.
+export const vPartnerImpactTemplate = pgView("v_partner_impact_template", {
+    partnerId: uuid("partner_id"),
+    treesPlantedTotal: integer("trees_planted_total"),
+    treesAliveLatestAudit: integer("trees_alive_latest_audit"),
+    survivalRatePct: decimal("survival_rate_pct"),
+    mentorshipHoursTotal: integer("mentorship_hours_total"),
+    youthEngagedActive: integer("youth_engaged_active"),
 }).existing();

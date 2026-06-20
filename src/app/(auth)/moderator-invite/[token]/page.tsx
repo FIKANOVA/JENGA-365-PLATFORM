@@ -120,7 +120,7 @@ export default function ModeratorInvitePage() {
                 ndaVersion: "MOD-2025-V1",
                 role: "Moderator",
                 additionalDeclarations: [true],
-                documentHash: "sha256-moderator-v2025-v1-placeholder",
+                documentHash: "5d993e7646468b440ed9f4ed1408b34963bff3ebb1fc978e7ded013dd65d0b33",
             });
 
             await finishAdminInvite(token);

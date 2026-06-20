@@ -60,7 +60,7 @@ export async function getFundingMapData(filters: FundingMapFilters): Promise<Fun
     const parsed = filterSchema.parse(filters);
 
     // 4. DB query building
-    let query = db.select({
+    const query = db.select({
         id: projectLocations.id,
         name: projectLocations.name,
         latitude: projectLocations.latitude,

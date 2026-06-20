@@ -28,6 +28,7 @@ export async function getGlobalImpactStats(): Promise<GlobalImpactStats | null> 
             .where(and(eq(users.role, "Mentor"), eq(users.isApproved, true), eq(users.status, "active")));
 
         if (!row) return null;
+        if (!row) throw new Error("No data");
         return {
             treesPlantedTotal: Number(row.treesPlantedTotal ?? 0),
             treesAliveLatestAudit: Number(row.treesAliveLatestAudit ?? 0),

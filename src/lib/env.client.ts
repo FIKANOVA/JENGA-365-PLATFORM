@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 const clientEnvSchema = z.object({
-    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1),
-    NEXT_PUBLIC_SANITY_DATASET: z.string().min(1),
+    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1).default("dummy"),
+    NEXT_PUBLIC_SANITY_DATASET: z.string().min(1).default("dummy"),
     NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY: z.string().startsWith("pk_"),
-    NEXT_PUBLIC_MAPBOX_TOKEN: z.string().min(1).optional(),
+    NEXT_PUBLIC_MAPBOX_TOKEN: z.string().min(1).default("dummy").optional(),
     NEXT_PUBLIC_CDN_URL: z.string().url().optional(),
 });
 

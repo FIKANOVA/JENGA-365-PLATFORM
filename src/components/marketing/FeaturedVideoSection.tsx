@@ -54,7 +54,7 @@ export default function FeaturedVideoSection({ video, heading }: FeaturedVideoSe
                     style={{ aspectRatio: "16 / 9", background: "var(--surface-1)", boxShadow: "var(--shadow-sm)" }}
                 >
                     {parsed.isFile ? (
-                        /* eslint-disable-next-line jsx-a11y/media-has-caption */
+
                         <video
                             src={parsed.embed}
                             controls

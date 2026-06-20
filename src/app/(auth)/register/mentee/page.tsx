@@ -8,7 +8,7 @@ import { ArrowRight, ArrowLeft, Check, ShieldCheck } from "lucide-react";
 
 import { signUp } from "@/lib/auth/client";
 import { signNDA } from "@/lib/actions/nda";
-import { setUserRole } from "@/lib/actions/auth";
+import { setUserRoleAndApprove } from "@/lib/actions/auth";
 import { sendMenteeRegistrationEmail } from "@/lib/actions/registration-emails";
 
 import Logo from "@/components/shared/Logo";
@@ -65,7 +65,7 @@ export default function MenteeRegisterPage() {
             }
 
             if (result?.data?.user?.id) {
-                await setUserRole(result.data.user.id, "Mentee");
+                await setUserRoleAndApprove(result.data.user.id, "Mentee");
             }
 
             const ndaResult = await signNDA({
