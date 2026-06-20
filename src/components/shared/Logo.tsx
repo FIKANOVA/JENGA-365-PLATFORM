@@ -55,6 +55,28 @@ export default function Logo({
                 src="/assets/logos/jenga365-symbol-transparent.png"
                 alt=""
                 className={cn("w-auto object-contain", sizeClass)}
+        <svg
+            viewBox="0 0 300 96"
+            className={cn("w-auto", sizeClass, toneClass, className)}
+            fill="none"
+            role="img"
+            aria-label="Jenga365"
+        >
+            <path
+                d="M40 28 A 150 85 0 0 1 252 22"
+                stroke="currentColor"
+                strokeWidth={3}
+                strokeLinecap="round"
+                fill="none"
+                opacity={0.9}
+            />
+            <path
+                d="M260 68 A 150 85 0 0 1 48 74"
+                stroke="currentColor"
+                strokeWidth={3}
+                strokeLinecap="round"
+                fill="none"
+                opacity={0.9}
             />
             <span
                 className={cn("font-bold ", toneClass)}

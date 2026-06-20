@@ -2,31 +2,35 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Mic, AudioLines, MessageSquare, ExternalLink, AtSign } from "lucide-react";
+import { Mic, AudioLines, MessageSquare, ExternalLink, AtSign, Share2, MessageCircle } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 
-type VoiceType = "SPACES" | "THREADS";
+type VoiceType = "SPACES" | "THREADS" | "SOCIALS" | "ARTICLE_COMMENTS";
 
 function TabIcon({ id, className }: { id: VoiceType | "ALL"; className?: string }) {
     if (id === "SPACES") return <AudioLines className={className} />;
     if (id === "THREADS") return <MessageSquare className={className} />;
+    if (id === "SOCIALS") return <Share2 className={className} />;
+    if (id === "ARTICLE_COMMENTS") return <MessageCircle className={className} />;
     return <Mic className={className} />;
 }
 
 const FALLBACK_VOICES = [
-    { id: "vc1", type: "SPACES" as VoiceType, title: "Building the Total Athlete: A Jenga365 X-Space", description: "Coaches, mentors, and athletes joined live to discuss what holistic athlete development really looks like in East Africa.", host: "@jenga365", date: "Mar 14, 2026", duration: "58 min", listeners: "1.2K", recorded: true, xUrl: "https://x.com/jenga365" },
-    { id: "vc2", type: "THREADS" as VoiceType, title: "Why AI Mentor Matching Changes Everything", description: "A 12-post X-Thread breaking down how Jenga365 uses vector embeddings to match mentors and mentees with 94% satisfaction.", host: "@jenga365", date: "Mar 08, 2026", posts: 12, impressions: "48K", recorded: false, xUrl: "https://x.com/jenga365" },
-    { id: "vc3", type: "SPACES" as VoiceType, title: "Corporate Partnerships & CSR in African Sport", description: "A panel discussion on how companies can create trackable, ethical CSR impact through sport and mentorship.", host: "@jenga365", date: "Feb 25, 2026", duration: "72 min", listeners: "890", recorded: true, xUrl: "https://x.com/jenga365" },
-    { id: "vc4", type: "THREADS" as VoiceType, title: "The Green Game: Rugby & Environmental Stewardship", description: "A curated thread on how rugby clubs across Kenya are taking sustainability pledges and what that means for community impact.", host: "@jenga365", date: "Feb 18, 2026", posts: 8, impressions: "31K", recorded: false, xUrl: "https://x.com/jenga365" },
-    { id: "vc5", type: "SPACES" as VoiceType, title: "Financial Literacy for Athletes: Live Q&A", description: "An open X-Space where athletes and young professionals asked questions about saving, investment, and financial planning.", host: "@jenga365", date: "Feb 06, 2026", duration: "45 min", listeners: "2.1K", recorded: true, xUrl: "https://x.com/jenga365" },
-    { id: "vc6", type: "THREADS" as VoiceType, title: "What Makes a Great Mentor? 10 Traits", description: "The Jenga365 team distilled feedback from 500+ mentees into a definitive thread on what separates good mentors from great ones.", host: "@jenga365", date: "Jan 30, 2026", posts: 10, impressions: "62K", recorded: false, xUrl: "https://x.com/jenga365" },
+    { id: "vc1", type: "SPACES" as VoiceType, title: "Building the Total Athlete: A Jenga365 X-Space", description: "Coaches, mentors, and athletes joined live to discuss what holistic athlete development really looks like in East Africa.", host: "@jenga365", date: "Mar 14, 2026", duration: "58 min", listeners: "1.2K", recorded: true, url: "https://x.com/jenga365" },
+    { id: "vc2", type: "THREADS" as VoiceType, title: "Why AI Mentor Matching Changes Everything", description: "A 12-post X-Thread breaking down how Jenga365 uses vector embeddings to match mentors and mentees with 94% satisfaction.", host: "@jenga365", date: "Mar 08, 2026", posts: 12, impressions: "48K", recorded: false, url: "https://x.com/jenga365" },
+    { id: "vc3", type: "SPACES" as VoiceType, title: "Corporate Partnerships & CSR in African Sport", description: "A panel discussion on how companies can create trackable, ethical CSR impact through sport and mentorship.", host: "@jenga365", date: "Feb 25, 2026", duration: "72 min", listeners: "890", recorded: true, url: "https://x.com/jenga365" },
+    { id: "vc4", type: "THREADS" as VoiceType, title: "The Green Game: Rugby & Environmental Stewardship", description: "A curated thread on how rugby clubs across Kenya are taking sustainability pledges and what that means for community impact.", host: "@jenga365", date: "Feb 18, 2026", posts: 8, impressions: "31K", recorded: false, url: "https://x.com/jenga365" },
+    { id: "vc5", type: "SPACES" as VoiceType, title: "Financial Literacy for Athletes: Live Q&A", description: "An open X-Space where athletes and young professionals asked questions about saving, investment, and financial planning.", host: "@jenga365", date: "Feb 06, 2026", duration: "45 min", listeners: "2.1K", recorded: true, url: "https://x.com/jenga365" },
+    { id: "vc6", type: "THREADS" as VoiceType, title: "What Makes a Great Mentor? 10 Traits", description: "The Jenga365 team distilled feedback from 500+ mentees into a definitive thread on what separates good mentors from great ones.", host: "@jenga365", date: "Jan 30, 2026", posts: 10, impressions: "62K", recorded: false, url: "https://x.com/jenga365" },
 ];
 
 const TABS: { id: VoiceType | "ALL"; label: string }[] = [
     { id: "ALL", label: "All Voices" },
     { id: "SPACES", label: "X-Spaces" },
     { id: "THREADS", label: "X-Threads" },
+    { id: "SOCIALS", label: "Socials" },
+    { id: "ARTICLE_COMMENTS", label: "Article Comments" },
 ];
 
 interface VoicesPageClientProps {
@@ -46,7 +50,7 @@ function normalizeVoice(v: any) {
         recorded: v.recorded ?? false,
         posts: v.posts,
         impressions: v.impressions,
-        xUrl: v.xUrl ?? "https://x.com/jenga365",
+        url: v.url ?? v.xUrl ?? "https://x.com/jenga365",
     };
 }
 
@@ -107,6 +111,10 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                                 }`}>
                                     {voice.type === "SPACES" ? (
                                         <AudioLines className="h-5 w-5 text-[var(--brand-green)]" />
+                                    ) : voice.type === "SOCIALS" ? (
+                                        <Share2 className="h-5 w-5 text-black" />
+                                    ) : voice.type === "ARTICLE_COMMENTS" ? (
+                                        <MessageCircle className="h-5 w-5 text-black" />
                                     ) : (
                                         <MessageSquare className="h-5 w-5 text-black" />
                                     )}
@@ -117,7 +125,7 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                                         <span className={`text-eyebrow font-bold ${
                                             voice.type === "SPACES" ? "text-[var(--brand-green)]" : "text-black"
                                         }`}>
-                                            {voice.type === "SPACES" ? "X-Space" : "X-Thread"}
+                                            {voice.type === "SPACES" ? "X-Space" : voice.type === "THREADS" ? "X-Thread" : voice.type === "SOCIALS" ? "Social" : "Article Comment"}
                                         </span>
                                         {voice.type === "SPACES" && voice.recorded && (
                                             <span className="text-eyebrow text-white bg-[var(--brand-green)] px-2 py-0.5">
@@ -155,11 +163,13 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
                             <Link
                                 href={voice.xUrl}
                                 className="shrink-0 flex items-center gap-2 px-6 py-3 border border-black text-black text-eyebrow font-bold hover:bg-black hover:text-white transition-all duration-200"
+                                href={voice.url}
+                                className="shrink-0 flex items-center gap-2 px-6 py-3 border border-black text-black font-mono text-eyebrow tracking-widest font-bold hover:bg-black hover:text-white transition-all duration-200"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 <ExternalLink className="h-4 w-4" />
-                                {voice.type === "SPACES" ? (voice.recorded ? "Listen" : "Join Space") : "Read Thread"}
+                                {voice.type === "SPACES" ? (voice.recorded ? "Listen" : "Join Space") : voice.type === "THREADS" ? "Read Thread" : "View Source"}
                             </Link>
                         </div>
                     ))}
