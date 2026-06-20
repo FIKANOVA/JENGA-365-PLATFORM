@@ -15,7 +15,8 @@
     "db:studio": "dotenv -e .env -- drizzle-kit studio",
     "partner:looker": "dotenv -e .env -- tsx scripts/setup-partner-looker.ts",
     "kobo:forms": "node scripts/kobo-forms/generate.js",
-    "seed:partners": "dotenv -e .env -- tsx scripts/seed/seed-partners.ts"
+    "seed:partners": "dotenv -e .env -- tsx scripts/seed/seed-partners.ts",
+    "migrate:wordpress": "dotenv -e .env -- tsx scripts/seed/migrate-wordpress.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.42",
@@ -27,6 +28,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.0.2",
     "@paystack/inline-js": "^2.22.2",
+    "@portabletext/block-tools": "^5.1.7",
     "@portabletext/react": "^6.0.3",
     "@sanity/vision": "^5.13.0",
     "@stripe/stripe-js": "^8.9.0",
@@ -39,6 +41,7 @@
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.45.1",
     "eslint-visitor-keys": "^3.4.3",
+    "fast-xml-parser": "^5.9.3",
     "framer-motion": "^12.40.0",
     "groq": "^5.13.0",
     "jspdf": "^4.2.1",
