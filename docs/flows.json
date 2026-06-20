@@ -12,7 +12,7 @@
       "auth": "Better Auth (sessions, 2FA, admin plugin)",
       "fieldData": "EU KoBoToolbox Server (GDPR) -> webhook ingestion",
       "payments": "Paystack (KES) for donations + store orders",
-      "reporting": "Looker Studio (free) over Drizzle pgViews; no in-app reporting UI",
+      "reporting": "Data Studio (free) over Drizzle pgViews; no in-app reporting UI",
       "cache_rateLimit": "Postgres-backed (rate_limit_buckets); NO Redis/Upstash"
     }
   },
@@ -482,21 +482,21 @@
     },
     {
       "id": "partner-reporting",
-      "name": "Corporate partner reporting (Looker Studio)",
+      "name": "Corporate partner reporting (Data Studio)",
       "category": "reporting",
       "trigger": "Corporate partner views their ESG dashboard",
       "entryPoint": "/dashboard/partner",
       "steps": [
         { "n": 1, "action": "getCsrStats(partnerId) computes mentees sponsored, active mentorships, donations, projects", "file": "src/lib/actions/csr.ts" },
-        { "n": 2, "action": "LookerEmbed renders iframe from corporate_partners.lookerReportId; share link from lookerShareUrl", "file": "src/components/dashboard/Partner/LookerEmbed.tsx" }
+        { "n": 2, "action": "DataStudioEmbed renders iframe from corporate_partners.dataStudioReportId; share link from dataStudioShareUrl", "file": "src/components/dashboard/Partner/DataStudioEmbed.tsx" }
       ],
       "dbEffects": ["READ users, mentorship_pairs, donations, project_locations"],
-      "endState": "Sponsor sees CSR stat cards + embedded Looker dashboard + forwardable share link.",
+      "endState": "Sponsor sees CSR stat cards + embedded Data Studio dashboard + forwardable share link.",
       "rules": [
-        "No in-app custom reporting UI; Looker Studio is canonical (CLAUDE.md §10.5, §11)",
+        "No in-app custom reporting UI; Data Studio is canonical (CLAUDE.md §10.5, §11)",
         "Per-partner isolation via hardcoded data-source filter OR per-partner pgView"
       ],
-      "keyFiles": ["src/app/dashboard/partner/page.tsx", "src/components/dashboard/Partner/LookerEmbed.tsx", "src/lib/actions/csr.ts"]
+      "keyFiles": ["src/app/dashboard/partner/page.tsx", "src/components/dashboard/Partner/DataStudioEmbed.tsx", "src/lib/actions/csr.ts"]
     },
     {
       "id": "dashboard-routing",
