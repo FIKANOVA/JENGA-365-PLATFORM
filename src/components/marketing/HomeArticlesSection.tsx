@@ -53,13 +53,13 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
     return (
         <section className="bg-background">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 md:py-24">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                             Jenga Journal
                         </span>
-                        <h2 className="mt-3 text-display-md">Insights from the field.</h2>
+                        <h2 className="mt-3 text-display-sm md:text-display-md">Insights from the field.</h2>
                         <p className="mt-4 text-body-lg" style={{ color: "var(--foreground-muted)" }}>
                             Quarterly digital impact zines, mentor stories, and corporate ESG case studies.
                         </p>
