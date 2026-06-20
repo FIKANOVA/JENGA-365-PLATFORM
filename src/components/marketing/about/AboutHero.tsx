@@ -64,7 +64,7 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
                     />
                 </>
             )}
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32">
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-12 md:pt-20 pb-12 md:pb-24 lg:pt-32 lg:pb-32">
                 <div className="max-w-3xl space-y-8">
                     <motion.p
                         custom={0}

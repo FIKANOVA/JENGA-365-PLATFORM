@@ -8,12 +8,10 @@ import ChoosePathSection from "@/components/marketing/ChoosePathSection";
 import EventsSection from "@/components/marketing/EventsSection";
 import HomeArticlesSection from "@/components/marketing/HomeArticlesSection";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
-import PartnerCarousel from "@/components/marketing/about/PartnerCarousel";
 
 import {
     fetchEvents,
     fetchArticles,
-    fetchPartners,
     fetchSiteSettings,
 } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/client";
@@ -39,12 +37,11 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function HomePage() {
-    const [dbStats, events, articles, partners, settings] = await Promise.all([
-        getGlobalImpactStats().catch(() => null),
-        fetchEvents().catch(() => []),
+    const [dbStats, events, articles, settings] = await Promise.all([
+        getGlobalImpactStats(),
+        fetchEvents(),
         fetchArticles().catch(() => []),
-        fetchPartners().catch(() => []),
-        fetchSiteSettings().catch(() => null),
+        fetchSiteSettings(),
     ]);
 
     const tickerStats = dbStats
@@ -69,11 +66,10 @@ export default async function HomePage() {
                 heading={settings?.featuredVideoHeading ?? null}
             />
             <ImpactTicker stats={tickerStats} />
-            <WhatWeDoSection copy={settings?.whatWeDo ?? null} />
-            <ChoosePathSection copy={settings?.choosePath ?? null} />
-            <SweatEquityBand copy={settings?.sweatEquity ?? null} />
+            <WhatWeDoSection />
+            <ChoosePathSection />
+            <SweatEquityBand />
             <EventsSection events={events} />
-            <PartnerCarousel partners={partners} />
             <HomeArticlesSection articles={articles} />
             <FinalCTAStrip />
         </div>

@@ -42,7 +42,7 @@ export default async function HelpDetailPage({ params }: { params: Promise<{ slu
 
     return (
         <main className="bg-background min-h-screen">
-            <div className="mx-auto max-w-3xl px-6 lg:px-8 py-12 lg:py-20">
+            <div className="mx-auto max-w-3xl px-6 lg:px-8 py-12 lg:py-12 md:py-20">
                 <Link
                     href="/help"
                     className="inline-flex items-center gap-1.5 text-label text-foreground-muted hover:text-foreground transition-colors mb-8"

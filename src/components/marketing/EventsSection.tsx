@@ -58,13 +58,13 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
 
     return (
         <section className="bg-background" style={{ background: "var(--surface-1)" }}>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 md:py-24">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 md:py-32">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                             Upcoming Events
                         </span>
-                        <h2 className="mt-3 text-display-sm md:text-display-md">Join the community in person.</h2>
+                        <h2 className="mt-3 text-display-md">Join the community in person.</h2>
                     </div>
                     <NextLink
                         href="/events"
@@ -76,7 +76,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                     </NextLink>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 pb-6 md:pb-0 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     {displayEvents.map((event) => {
                         const dateObj = new Date(event.date);
                         const day = format(dateObj, "dd");
@@ -84,7 +84,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                         return (
                             <article
                                 key={event._id}
-                                className="group flex flex-col rounded-lg border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
+                                className="group flex flex-col rounded-lg border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg min-w-[85vw] md:min-w-0 snap-center shrink-0"
                             >
                                 <div className="relative h-44 overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {event.image ? (

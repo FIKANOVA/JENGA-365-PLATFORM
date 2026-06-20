@@ -18,12 +18,12 @@ export default function AboutCTAStrip() {
         <section className="relative overflow-hidden" style={{ background: "var(--brand-black)" }}>
             <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-16 md:py-24 text-center">
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 text-center">
                 <div className="mx-auto max-w-3xl">
                     <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                         Build with us
                     </span>
-                    <h2 className="mt-4 text-display-sm md:text-display-md md:text-display-lg" style={{ color: "#FFFFFF" }}>
+                    <h2 className="mt-4 text-display-md md:text-display-lg" style={{ color: "#FFFFFF" }}>
                         Ready to build the future?
                     </h2>
                     <p

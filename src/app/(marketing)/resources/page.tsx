@@ -60,7 +60,7 @@ export default function ResourcesHubPage() {
                 description="Articles, downloads, video sessions, and community voices — everything you need to grow, in one place."
             />
 
-            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-20 lg:py-24">
+            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-20 lg:py-12 md:py-24">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
                     {SECTIONS.map(({ label, href, Icon, color, colorSoft, heading, body, cta }) => (
                         <Link

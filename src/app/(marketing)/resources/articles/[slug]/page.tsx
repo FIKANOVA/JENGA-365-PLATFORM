@@ -130,7 +130,7 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
                 </div>
 
                 {!isAuthenticated && (
-                    <section className="bg-accent border-t border-border py-24 mt-12">
+                    <section className="bg-accent border-t border-border py-12 md:py-24 mt-12">
                         <div className="max-w-4xl mx-auto px-6 flex flex-col items-center text-center space-y-6">
                             <h2 className="text-display-lg text-foreground">
                                 Ready to go <span style={{ color: "var(--brand-green)" }}>deeper?</span>

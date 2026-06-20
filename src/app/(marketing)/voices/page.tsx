@@ -10,7 +10,7 @@ export const metadata = {
 export default function VoicesPage() {
     return (
         <div className="flex flex-col" style={{ background: "var(--surface-1)" }}>
-            <section className="border-b border-border pt-32 pb-24" style={{ background: "var(--surface-1)" }}>
+            <section className="border-b border-border pt-16 md:pt-32 pb-12 md:pb-24" style={{ background: "var(--surface-1)" }}>
                 <div className="max-w-7xl mx-auto px-6 md:px-12">
                     <div className="max-w-3xl space-y-6">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
@@ -33,7 +33,7 @@ export default function VoicesPage() {
                 </div>
             </section>
 
-            <section className="py-24">
+            <section className="py-12 md:py-24">
                 <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
                     <Mic className="h-16 w-16 text-foreground-subtle mx-auto mb-6" />
                     <h2 className="text-display-md text-foreground mb-3">Stories coming soon</h2>
