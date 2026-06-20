@@ -14,9 +14,9 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const article = await fetchArticleBySlug(slug).catch(() => null);
-    if (!article) return { title: "Article — Jenga365" };
+    if (!article) return { title: "Article | Jenga365" };
     return {
-        title: `${article.title} — Jenga365`,
+        title: `${article.title} | Jenga365`,
         description: article.excerpt,
     };
 }
@@ -63,7 +63,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
     const authorName = article.author?.name ?? "Jenga365 Team";
     const authorRole = article.author?.role ?? "STAFF";
-    const authorBio = article.author?.bio ?? `${authorName} — ${authorRole} at Jenga365`;
+    const authorBio = article.author?.bio ?? `${authorName}, ${authorRole} at Jenga365`;
     const heroImage = article.mainImage?.asset?.url ?? article.image ?? "";
     const readTime = article.readTime ? `${article.readTime} min read` : "5 min read";
     const publishedDate = article.publishedAt ? formatDate(article.publishedAt) : "";
@@ -98,7 +98,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                                     {article.category ?? "Insight"}
                                 </span>
                                 <span className="text-white/60 text-[10px] font-mono tracking-[0.3em] uppercase">
-                                    — {readTime}
+                                    {readTime}
                                 </span>
                             </div>
                             <h1 className="text-white text-display-xl leading-tight">

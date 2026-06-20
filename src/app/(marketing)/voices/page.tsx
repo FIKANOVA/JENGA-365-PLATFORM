@@ -20,7 +20,7 @@ export default function VoicesPage() {
                             Community voices.
                         </h1>
                         <p className="text-body-lg text-foreground-muted leading-relaxed max-w-2xl">
-                            Hear from the mentors, mentees, and partners who are shaping the Jenga365 story — one conversation at a time.
+                            Hear from the mentors, mentees, and partners who are shaping the Jenga365 story, one conversation at a time.
                         </p>
                         <Link
                             href="/articles"

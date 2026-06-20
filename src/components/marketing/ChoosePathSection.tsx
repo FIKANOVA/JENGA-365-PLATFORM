@@ -8,8 +8,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 /**
- * Choose Your Path — symbiotic value exchange across the four stakeholders.
+ * Choose Your Path, symbiotic value exchange across the four stakeholders.
  * Refactored into an interactive tabbed interface to reduce vertical scrolling.
+ * Auth-aware: authenticated users never see "Sign Up / Join" CTAs.
+ *
+ * Mentees ──── Total Athlete + Sweat Equity (1 give-back per quarter)
+ * Mentors ──── Power Hour (1 hour/month, admin handled by Jenga365)
+ * Corporate ── Corporate Unlock (funds released on verified ESG milestones)
+ * NGOs ─────── Resource Exchange (hardware + expertise ↔ volunteer workforce)
  */
 export default function ChoosePathSection() {
     const { data: session } = useSession();
@@ -25,9 +31,9 @@ export default function ChoosePathSection() {
             name: "Mentee",
             tagline: "Athletes & young professionals",
             description:
-                "AI-matched mentorship, structured career pathways, and resilience coaching. You earn it through quarterly Sweat Equity — one verified give-back activity per quarter.",
+                "AI-matched mentorship, structured career pathways, and resilience coaching. You earn it through quarterly Sweat Equity, one verified give-back activity per quarter.",
             highlights: [
-                "Total Athlete philosophy — body, mind, community",
+                "Total Athlete philosophy, body, mind, community",
                 "AI-matched 1:2 mentorship with a vetted mentor",
                 "Quarterly resilience assessments with delta tracking",
                 "One Sweat Equity activity per quarter",
@@ -44,10 +50,10 @@ export default function ChoosePathSection() {
             name: "Mentor",
             tagline: "Experienced professionals",
             description:
-                "Plug-and-play philanthropy. Commit one Power Hour a month — we handle the matching, scheduling, and admin. Capped at two mentees so your attention isn't diluted.",
+                "Plug-and-play philanthropy. Commit one Power Hour a month, we handle the matching, scheduling, and admin. Capped at two mentees so your attention isn't diluted.",
             highlights: [
-                "Power Hour protocol — one hour per month",
-                "All logistics handled — matching, scheduling, follow-ups",
+                "Power Hour protocol, one hour per month",
+                "All logistics handled, matching, scheduling, follow-ups",
                 "Never more than two active mentees at once",
                 "Vetted strategic network access",
             ],
@@ -63,10 +69,10 @@ export default function ChoosePathSection() {
             name: "Corporate Partner",
             tagline: "Brands & businesses",
             description:
-                "Invest in people. Measure the return. The Corporate Unlock Challenge releases your funds only when verified ESG milestones are hit — like 500 trees surviving the latest audit.",
+                "Invest in people. Measure the return. The Corporate Unlock Challenge releases your funds only when verified ESG milestones are hit, like 500 trees surviving the latest audit.",
             highlights: [
                 "Milestone-tied funding (release on verified ESG audit)",
-                "Looker Studio dashboards — quarterly M&E reports",
+                "Looker Studio dashboards, quarterly M&E reports",
                 "GPS-anchored tree-survival evidence",
                 "Aggregated trees-alive + youth-engaged metrics",
             ],
@@ -82,12 +88,12 @@ export default function ChoosePathSection() {
             name: "NGO / CBO",
             tagline: "Resource exchange partners",
             description:
-                "You bring the hardware — seedlings, books, expertise. We bring a disciplined, organized volunteer workforce of athletes. A Resource Exchange MOU formalises the swap.",
+                "You bring the hardware, seedlings, books, expertise. We bring a disciplined, organized volunteer workforce of athletes. A Resource Exchange MOU formalises the swap.",
             highlights: [
-                "Resource Exchange MOU — no payment flow required",
+                "Resource Exchange MOU, no payment flow required",
                 "Volunteer workforce of vetted athlete-mentees",
                 "Co-branded community impact tracking",
-                "Lightweight onboarding — no Unlock Challenge",
+                "Lightweight onboarding, no Unlock Challenge",
             ],
             color: "var(--brand-green)",
             colorSoft: "var(--brand-green-soft)",
@@ -109,11 +115,11 @@ export default function ChoosePathSection() {
                                 Choose your path
                             </p>
                             <h2 className="mt-3 text-display-md text-foreground">
-                                Four stakeholders.<br />One ecosystem.
+                                Four stakeholders. One ecosystem.
                             </h2>
                             <p className="mt-5 text-body-lg text-foreground-muted mb-8">
                                 Jenga365 only works because each role earns its place. Pick the
-                                contribution that matches you — every path is reciprocal and measurable.
+                                contribution that matches you, every path is reciprocal and measurable.
                             </p>
 
                             <div className="flex flex-col gap-2">

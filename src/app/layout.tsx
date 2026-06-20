@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jenga365 — Total Athlete. 365 Days a Year.",
+  title: "Jenga365: Total Athlete. 365 Days a Year.",
   description:
     "Kenya's AI-native mentorship and environmental stewardship platform. Building the Total Athlete through structured mentorship (Engine A) and measurable climate action (Engine B).",
 };

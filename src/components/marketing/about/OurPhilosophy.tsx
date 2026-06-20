@@ -40,7 +40,7 @@ export default async function OurPhilosophy() {
                         <p className="text-body-lg text-foreground-muted max-w-xl">
                             Jenga365 was born from the realisation that athletic talent alone
                             isn&apos;t enough to break cycles of poverty. We focus on the holistic
-                            ecosystem surrounding the player — connecting mentors, unlocking
+                            ecosystem surrounding the player, connecting mentors, unlocking
                             financial literacy, and stewarding the environments our athletes call
                             home.
                         </p>
@@ -65,7 +65,7 @@ export default async function OurPhilosophy() {
                         />
                         <PhilosophyCard
                             heading="The approach"
-                            body="We integrate world-class coaching with mandatory mentorship and digital literacy programmes — ensuring every participant has a future, with or without a professional contract."
+                            body="We integrate world-class coaching with mandatory mentorship and digital literacy programmes, ensuring every participant has a future, with or without a professional contract."
                             ctaLabel="Meet our mentors"
                             ctaHref="/mentors"
                         />

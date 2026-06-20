@@ -2,6 +2,7 @@ import { readFileSync } from "fs";
 import { XMLParser } from "fast-xml-parser";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
+import { eq } from "drizzle-orm";
 import * as schema from "../../src/lib/db/schema";
 import { JSDOM } from "jsdom";
 import { htmlToBlocks } from "@portabletext/block-tools";
@@ -128,6 +129,9 @@ async function run() {
         // Create article record
         try {
             const [article] = await db.insert(schema.articles).values({
+        let article;
+        try {
+            const [newArticle] = await db.insert(schema.articles).values({
                 title,
                 slug,
                 excerpt: excerpt,
@@ -143,6 +147,26 @@ async function run() {
             console.log(`✓ Inserted into Neon: ${article.id}`);
 
             // Publish article to sanity
+            article = newArticle;
+            console.log(`✓ Inserted into Neon: ${article.id}`);
+        } catch (err: any) {
+            const isDuplicate = err.code === '23505' || 
+                                err.cause?.code === '23505' || 
+                                err.message?.includes('unique constraint') || 
+                                err.cause?.message?.includes('unique constraint');
+            if (isDuplicate) {
+                console.log(`⚠️ Post already exists in Neon: ${title} - fetching to sync to Sanity...`);
+                const existing = await db.select().from(schema.articles).where(eq(schema.articles.slug, slug)).limit(1);
+                if (existing.length > 0) {
+                    article = existing[0];
+                }
+            } else {
+                console.error(`❌ Error migrating post "${title}":`, err);
+            }
+        }
+
+        // Publish article to sanity
+        if (article) {
             try {
                 if (!process.env.SANITY_API_TOKEN) {
                     console.log(`⚠️ SANITY_API_TOKEN not set, skipping sanity sync for ${article.id}`);
