@@ -41,11 +41,10 @@ export default function SweatEquityBand() {
                         <div className="mt-10">
                             <Link
                                 href="/register/mentorship"
-                                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+                                className="inline-flex items-center justify-center h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 hover:shadow-lg"
                                 style={{ background: "var(--brand-green)" }}
                             >
-                                I accept — apply for mentorship
-                                <ArrowRight className="h-4 w-4" />
+                                Accept and apply
                             </Link>
                         </div>
                     </div>

@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 
 export const metadata = {
     title: "Mentors | Jenga365",
-    description: "Meet the seasoned professionals who give back through Jenga365 — guiding the next generation of athletes, leaders, and entrepreneurs.",
+    description: "Meet the seasoned professionals who give back through Jenga365, guiding the next generation of athletes, leaders, and entrepreneurs.",
 };
 
 function fmt(n: number | undefined | null): string {

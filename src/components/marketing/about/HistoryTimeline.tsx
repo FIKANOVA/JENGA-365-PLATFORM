@@ -19,7 +19,7 @@ const DEFAULT_NODES: TimelineNode[] = [
     },
     {
         title: "Community Expansion",
-        date: "Year 2025–2026",
+        date: "Year 2025-2026",
         content: "Launch of the Jenga365 mobile ecosystem, onboarding the first 500 regional mentees across Nairobi, Mombasa, and Kisumu hubs.",
     },
     {

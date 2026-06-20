@@ -19,7 +19,7 @@ interface JenEvent {
 const FALLBACK_EVENTS: JenEvent[] = [
     {
         _id: "e1",
-        title: "Total Athlete Summit — Nairobi 2026",
+        title: "Total Athlete Summit, Nairobi 2026",
         type: "Conference",
         date: new Date(Date.now() + 14 * 86400000).toISOString(),
         location: "KICC, Nairobi",

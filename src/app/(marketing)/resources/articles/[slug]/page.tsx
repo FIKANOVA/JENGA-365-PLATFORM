@@ -16,10 +16,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const article = await fetchArticleBySlug(slug).catch(() => null);
     if (!article) {
         const mock = ARTICLES.find((a) => a.id === slug || (a as any).slug === slug);
-        return { title: mock ? `${mock.title} — Jenga365` : "Article — Jenga365" };
+        return { title: mock ? `${mock.title} | Jenga365` : "Article | Jenga365" };
     }
     return {
-        title: `${article.title} — Jenga365`,
+        title: `${article.title} | Jenga365`,
         description: article.excerpt,
     };
 }
@@ -115,7 +115,7 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                         <div className="lg:col-span-8">
                             <ArticleContent
-                                author={{ name: authorName, role: authorRole, avatar: article.author?.image?.asset?.url ?? "", bio: `${authorName} — ${authorRole}` }}
+                                author={{ name: authorName, role: authorRole, avatar: article.author?.image?.asset?.url ?? "", bio: `${authorName}, ${authorRole}` }}
                                 content={article.body}
                                 publishedAt={publishedDate}
                             />

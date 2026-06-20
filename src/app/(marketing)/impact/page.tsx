@@ -7,7 +7,7 @@ import { fetchSiteSettings } from "@/lib/sanity/queries";
 import DonateButton from "@/components/shared/DonateButton";
 
 export const metadata = {
-    title: "Impact | Jenga365 — Measurable Change Through Mentorship",
+    title: "Impact | Jenga365: Measurable Change Through Mentorship",
     description: "Explore the social and environmental impact of the Jenga365 platform. From mentorship hours to career placements, see our data-driven results.",
 };
 
@@ -25,19 +25,19 @@ interface EnvStat {
 
 const DEFAULT_IMPACT_STORIES: ImpactStory[] = [
     {
-        quote: "Jenga365 didn't just match me with a mentor — it matched me with a future. I went from uncertainty to leading a tech team in 18 months.",
+        quote: "Jenga365 didn't just match me with a mentor, it matched me with a future. I went from uncertainty to leading a tech team in 18 months.",
         name: "Grace Wanjiku",
-        role: "Mentee — Software Engineer",
+        role: "Mentee, Software Engineer",
     },
     {
         quote: "The corporate partnership framework allowed our CSR budget to create measurable, trackable impact for the first time.",
         name: "James Karanja",
-        role: "Corporate Partner — Safaricom",
+        role: "Corporate Partner, Safaricom",
     },
     {
         quote: "Through Jenga365's rugby programs, I learned discipline that translated directly to my professional career in finance.",
         name: "Brian Otieno",
-        role: "Mentee — Financial Analyst",
+        role: "Mentee, Financial Analyst",
     },
 ];
 

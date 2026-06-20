@@ -13,7 +13,9 @@ import {
     fetchEvents,
     fetchArticles,
     fetchSiteSettings,
+    fetchPartners,
 } from "@/lib/sanity/queries";
+import PartnerCarousel from "@/components/marketing/about/PartnerCarousel";
 import { urlFor } from "@/lib/sanity/client";
 
 export async function generateMetadata() {
@@ -23,10 +25,10 @@ export async function generateMetadata() {
         : undefined;
 
     return {
-        title: "Jenga365 — Building Growth. Connecting Futures.",
+        title: "Jenga365: Building Growth. Connecting Futures.",
         description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
         openGraph: {
-            title: "Jenga365 — Building Growth. Connecting Futures.",
+            title: "Jenga365: Building Growth. Connecting Futures.",
             description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
             ...(ogUrl ? { images: [{ url: ogUrl }] } : {}),
         },
@@ -37,11 +39,12 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function HomePage() {
-    const [dbStats, events, articles, settings] = await Promise.all([
+    const [dbStats, events, articles, settings, partners] = await Promise.all([
         getGlobalImpactStats(),
         fetchEvents(),
         fetchArticles().catch(() => []),
         fetchSiteSettings(),
+        fetchPartners().catch(() => []),
     ]);
 
     const tickerStats = dbStats
@@ -61,12 +64,13 @@ export default async function HomePage() {
                 heroImage={settings?.landingHeroImage ?? null}
                 copy={settings?.landingHero ?? null}
             />
+            <PartnerCarousel partners={partners} />
+            <ImpactTicker stats={tickerStats} />
+            <WhatWeDoSection />
             <FeaturedVideoSection
                 video={settings?.featuredVideo ?? null}
                 heading={settings?.featuredVideoHeading ?? null}
             />
-            <ImpactTicker stats={tickerStats} />
-            <WhatWeDoSection />
             <ChoosePathSection />
             <SweatEquityBand />
             <EventsSection events={events} />

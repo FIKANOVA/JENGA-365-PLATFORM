@@ -12,8 +12,8 @@ const FALLBACK_DOWNLOADS = [
     { id: "d2", title: "12-Week Mentorship Pathway Template", description: "Structured session planner for mentor-mentee pairs to track milestones over a 12-week programme.", format: "PDF", size: "840 KB", category: "Mentorship", locked: false, fileUrl: null },
     { id: "d3", title: "Corporate CSR Impact Report Template", description: "A plug-and-play reporting framework for corporate partners to track and present their social impact.", format: "DOCX", size: "2.1 MB", category: "Corporate", locked: true, fileUrl: null },
     { id: "d4", title: "Financial Literacy Starter Pack", description: "Budgeting worksheets, savings trackers, and investment primers designed for young athletes.", format: "PDF", size: "3.4 MB", category: "Finance", locked: false, fileUrl: null },
-    { id: "d5", title: "Green Game Environmental Pledge Kit", description: "Resources for rugby clubs committing to The Green Game initiative — sustainability checklists and pledge cards.", format: "ZIP", size: "5.8 MB", category: "Environment", locked: false, fileUrl: null },
-    { id: "d6", title: "AI Profile & Matching Engine — Technical Brief", description: "An overview of how Jenga365's vector-based matching works, for corporate and institutional partners.", format: "PDF", size: "980 KB", category: "Technology", locked: true, fileUrl: null },
+    { id: "d5", title: "Green Game Environmental Pledge Kit", description: "Resources for rugby clubs committing to The Green Game initiative, sustainability checklists and pledge cards.", format: "ZIP", size: "5.8 MB", category: "Environment", locked: false, fileUrl: null },
+    { id: "d6", title: "AI Profile & Matching Engine: Technical Brief", description: "An overview of how Jenga365's vector-based matching works, for corporate and institutional partners.", format: "PDF", size: "980 KB", category: "Technology", locked: true, fileUrl: null },
 ];
 
 function FormatIcon({ format, className }: { format: string; className?: string }) {
@@ -56,7 +56,7 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
             <PageHero
                 eyebrow="Downloads"
                 heading={<>Guides, Playbooks <span className="italic text-primary">&amp; Templates.</span></>}
-                description="Downloadable tools built by the Jenga365 team — PDFs, checklists, and strategic frameworks ready to use."
+                description="Downloadable tools built by the Jenga365 team, PDFs, checklists, and strategic frameworks ready to use."
                 bgImage="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1920&auto=format&fit=crop"
                 bgFallback="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1920&auto=format&fit=crop"
                 minHeight="min-h-[45vh]"
