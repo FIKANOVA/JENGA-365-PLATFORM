@@ -15,7 +15,7 @@ Final say is split by domain. There is no single "founder lock" — authority de
 | **Business logic** | **Bruce Nondies (Founder)** |
 
 - **Moseti owns** (his call, may override anything below in these areas — including this document's design guidance and all of `DESIGN.md`): the design system (typography, palette, tokens, components, layout, motion, `DESIGN.md` in full), frontend/UI behaviour (§6, §9 UI/UX, §12), code architecture, refactors, tooling, and dev workflow.
-- **Bruce owns** (still locked; do not change without his directive, relayed by Moseti): business logic — AI matching algorithm & weights (§4), mentor 1:2 capacity protocol (§5), RBAC roles & approval flows (§3), the two-database architecture & schema/data rules (§1, §2, §10.1–§10.5), KoBo ingestion contract (§2), race-safe inventory (§8), Looker reporting model (§11), cron security (§7), and any GPS/GDPR/ESG-compliance behaviour.
+- **Bruce owns** (still locked; do not change without his directive, relayed by Moseti): business logic — AI matching algorithm & weights (§4), mentor 1:2 capacity protocol (§5), RBAC roles & approval flows (§3), the two-database architecture & schema/data rules (§1, §2, §10.1–§10.5), KoBo ingestion contract (§2), race-safe inventory (§8), Data Studio reporting model (§11), cron security (§7), and any GPS/GDPR/ESG-compliance behaviour.
 
 **Boundary rule:** when a code change *encodes a business rule* (e.g. editing matching weights, RBAC scopes, survival-counting SQL, inventory decrement), it is **business logic → Bruce's domain**, even though it's "dev work." Pure presentation/implementation is Moseti's. When genuinely ambiguous, ask Moseti and note the founder-domain risk.
 
@@ -29,7 +29,7 @@ The agent still gives honest engineering counsel before executing a decision (e.
   - **Neon Serverless PostgreSQL** — relational data, Better Auth sessions, `pgvector` AI embeddings.
   - **Sanity Headless CMS** — unstructured editorial content (articles, resources, merchandise content).
 - **Field data ingestion:** **EU KoBoToolbox Server** (GDPR-compliant) is the external staging ground for mobile field data, photos, and GPS coordinates.
-- **Reporting:** All ESG reporting is offloaded to **Looker Studio** (the free product — **not** the enterprise "Looker" platform) querying Drizzle `pgView` live SQL views in Neon via Looker Studio's native Postgres connector. Do **not** build custom in-app reporting UI. See §10 for the partner-isolation + embedding rules.
+- **Reporting:** All ESG reporting is offloaded to **Data Studio** (the free product — **not** the enterprise "Looker" platform) querying Drizzle `pgView` live SQL views in Neon via Data Studio's native Postgres connector. Do **not** build custom in-app reporting UI. See §10 for the partner-isolation + embedding rules.
 - **Deprecated tooling:** Do **not** introduce Upstash or Redis for caching/sessions/rate-limiting. Rate limiting is Postgres-backed via `rate_limit_buckets`.
 
 ## 2. Database Schema Rules
@@ -171,18 +171,18 @@ All work tracks are active for beta. Marketing, dashboards, auth, and backend ar
 
 3. **Cron Security Guardrails:** Any restored cron jobs must include the `CRON_SECRET` `Authorization: Bearer …` guard **before committing**. They must bypass standard middleware authentication (the `/api/*` matcher exclusion already handles this).
 
-4. **Tree Planting Data Structure:** In Phase 2.3, create the `tree_planting_events` table. The legacy `treesPlanted` integer tracking becomes a **derived value calculated via a Drizzle `pgView`** — not a denormalized static integer. The same `pgView` is the canonical source for Looker Studio dashboards, so denormalization would risk drift.
+4. **Tree Planting Data Structure:** In Phase 2.3, create the `tree_planting_events` table. The legacy `treesPlanted` integer tracking becomes a **derived value calculated via a Drizzle `pgView`** — not a denormalized static integer. The same `pgView` is the canonical source for Data Studio dashboards, so denormalization would risk drift.
 
-5. **Partner Reporting:** Do **NOT** restore or build any in-app partner reporting pages. Looker Studio (see §11) remains the canonical, sole source for Corporate Partner ESG reporting.
+5. **Partner Reporting:** Do **NOT** restore or build any in-app partner reporting pages. Data Studio (see §11) remains the canonical, sole source for Corporate Partner ESG reporting.
 
 6. **Article publish gate:** Distinct `PUBLISH_ARTICLE` capability mapping to `["content", "all"]`, separate from `APPROVE_ARTICLE` (which gates the moderator review-queue route). The server action that flips `articles.status → 'published'` and stamps `publishedAt` must call `requireCapability("PUBLISH_ARTICLE")`. Sanity Studio publishes must route through this server action — Sanity Studio role basePath should be authors-only; the gate fires inside Next.js, not inside Sanity.
 
-## 11. Looker Studio — connection, partner isolation, embedding
+## 11. Data Studio — connection, partner isolation, embedding
 
-- **Connector:** Looker Studio's native PostgreSQL connector → Neon. Point it at clean **Drizzle `pgView`s**, never raw tables. The `v_resilience_delta` view already exists; `v_tree_survival_time_series` exists; add views for new metrics as needed.
+- **Connector:** Data Studio's native PostgreSQL connector → Neon. Point it at clean **Drizzle `pgView`s**, never raw tables. The `v_resilience_delta` view already exists; `v_tree_survival_time_series` exists; add views for new metrics as needed.
 - **Per-partner isolation (free-tier compatible — no row-level security):** two acceptable patterns. Pick per dashboard:
   - **Hardcoded data-source filter** — apply `corporate_partner_id = X` directly on the dashboard's data source.
   - **Per-partner SQL view** — create a distinct `pgView` per partner (e.g. `v_partner_<id>_impact`) and point only that dashboard at it.
-- **In-app embedding:** drop the Looker Studio iframe embed code into the corporate-partner dashboard page (under `src/app/dashboard/partner/`) so sponsors view their data without leaving Jenga365.
-- **Shareable links:** every embedded dashboard also has a Looker Studio shareable link (login-free). Surface this link in the partner dashboard alongside the iframe so sponsors can forward ESG reports to their board / sustainability team.
-- **Public site:** same iframe approach for `(marketing)/impact/social` or `/about` — point a single broad, unfiltered Looker Studio dashboard at aggregate `pgView`s for total trees-planted / youth-served. *(Restoration of these public marketing pages is still gated by Bruce's UI freeze.)*
+- **In-app embedding:** drop the Data Studio iframe embed code into the corporate-partner dashboard page (under `src/app/dashboard/partner/`) so sponsors view their data without leaving Jenga365.
+- **Shareable links:** every embedded dashboard also has a Data Studio shareable link (login-free). Surface this link in the partner dashboard alongside the iframe so sponsors can forward ESG reports to their board / sustainability team.
+- **Public site:** same iframe approach for `(marketing)/impact/social` or `/about` — point a single broad, unfiltered Data Studio dashboard at aggregate `pgView`s for total trees-planted / youth-served. *(Restoration of these public marketing pages is still gated by Bruce's UI freeze.)*

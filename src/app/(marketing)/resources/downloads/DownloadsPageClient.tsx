@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FileText, FolderArchive, Lock, Download } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
+import { useSession } from "@/lib/auth/client";
 
 const FALLBACK_DOWNLOADS = [
     { id: "d1", title: "Mentor Readiness Checklist", description: "A practical self-assessment for professionals considering joining Jenga365 as a mentor.", format: "PDF", size: "1.2 MB", category: "Mentorship", locked: false, fileUrl: null },
@@ -39,6 +40,9 @@ function normalizeDownload(d: any) {
 }
 
 export default function DownloadsPageClient({ initialDownloads }: DownloadsPageClientProps) {
+    const { data: session } = useSession();
+    const isAuthenticated = !!session?.user;
+
     const rawDownloads = initialDownloads.length > 0 ? initialDownloads.map(normalizeDownload) : FALLBACK_DOWNLOADS;
     const allCategories = ["All", ...Array.from(new Set(rawDownloads.map((d) => d.category).filter(Boolean)))];
     const [activeCategory, setActiveCategory] = useState("All");
@@ -109,7 +113,7 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                             </div>
 
                             {/* CTA */}
-                            {item.locked ? (
+                            {item.locked && !isAuthenticated ? (
                                 <Link
                                     href="/register/mentorship"
                                     className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--foreground-subtle)] hover:text-black transition-colors"

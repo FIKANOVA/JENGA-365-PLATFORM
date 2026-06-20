@@ -27,6 +27,11 @@ vi.mock('drizzle-orm', () => ({
   sql: vi.fn((s) => ({ sql: s })),
 }))
 
+vi.mock('@/lib/sanity/client', () => ({
+  client: {},
+  imageBuilder: {}
+}))
+
 import { decrementStock } from '@/lib/actions/merchandise'
 
 beforeEach(() => {

@@ -48,7 +48,7 @@ export default async function ModeratorInventoryPage() {
                     </div>
                 ) : (
                     products.map((product: any) => {
-                        const dbRecord = stockMap[product._id];
+                        const dbRecord = stockMap?.[product._id];
                         const initialStock = dbRecord?.stockCount ?? 0;
                         const initialActive = dbRecord?.isActive ?? true;
 

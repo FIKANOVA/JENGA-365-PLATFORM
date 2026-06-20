@@ -3,22 +3,22 @@
 import { useState } from "react";
 import { Copy, ExternalLink, BarChart3, Check } from "lucide-react";
 
-interface LookerEmbedProps {
+interface DataStudioEmbedProps {
     reportId: string | null;
     shareUrl: string | null;
     partnerName: string;
 }
 
 /**
- * CLAUDE.md §11 partner dashboard surface: embedded Looker Studio report +
+ * CLAUDE.md §11 partner dashboard surface: embedded Data Studio report +
  * login-free shareable link. Renders a placeholder when the partner has no
  * report configured so the operator can see exactly what's missing.
  */
-export default function LookerEmbed({
+export default function DataStudioEmbed({
     reportId,
     shareUrl,
     partnerName,
-}: LookerEmbedProps) {
+}: DataStudioEmbedProps) {
     const [copied, setCopied] = useState(false);
 
     if (!reportId && !shareUrl) {
@@ -36,7 +36,7 @@ export default function LookerEmbed({
                     </span>
                     <div className="space-y-1.5">
                         <h2 className="text-headline text-foreground">
-                            Looker Studio dashboard
+                            Data Studio dashboard
                         </h2>
                         <p className="text-body-sm text-foreground-muted">
                             No dashboard is linked to your account yet. Once the Jenga365
