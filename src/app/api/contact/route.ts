@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { resend, DEFAULT_FROM } from "@/lib/email/resend";
+import { escapeHtml } from "@/lib/utils";
 
 const CONTACT_RECIPIENT = process.env.CONTACT_EMAIL ?? "hello@jenga365.org";
 
@@ -17,6 +18,11 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+        const safeName = escapeHtml(name);
+        const safeEmail = escapeHtml(email);
+        const safeSubject = escapeHtml(subject ?? "General Inquiry");
+        const safeMessage = escapeHtml(message);
+
         await resend.emails.send({
             from: DEFAULT_FROM,
             to: CONTACT_RECIPIENT,
@@ -30,20 +36,20 @@ export async function POST(req: NextRequest) {
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr>
                             <td style="padding: 8px 0; font-weight: bold; color: #555; width: 120px;">Name</td>
-                            <td style="padding: 8px 0;">${name}</td>
+                            <td style="padding: 8px 0;">${safeName}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px 0; font-weight: bold; color: #555;">Email</td>
-                            <td style="padding: 8px 0;"><a href="mailto:${email}">${email}</a></td>
+                            <td style="padding: 8px 0;"><a href="mailto:${safeEmail}">${safeEmail}</a></td>
                         </tr>
                         <tr>
                             <td style="padding: 8px 0; font-weight: bold; color: #555;">Subject</td>
-                            <td style="padding: 8px 0;">${subject ?? "General Inquiry"}</td>
+                            <td style="padding: 8px 0;">${safeSubject}</td>
                         </tr>
                     </table>
                     <div style="margin-top: 16px;">
                         <p style="font-weight: bold; color: #555; margin-bottom: 8px;">Message</p>
-                        <p style="background: #f5f5f5; padding: 16px; border-left: 3px solid #2D6A4F; white-space: pre-wrap;">${message}</p>
+                        <p style="background: #f5f5f5; padding: 16px; border-left: 3px solid #2D6A4F; white-space: pre-wrap;">${safeMessage}</p>
                     </div>
                 </div>
             `,
