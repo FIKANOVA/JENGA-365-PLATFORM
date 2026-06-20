@@ -20,7 +20,6 @@
     "kobo:forms": "node scripts/kobo-forms/generate.js",
     "seed:partners": "dotenv -e .env -- tsx scripts/seed/seed-partners.ts",
     "migrate:wordpress": "dotenv -e .env -- tsx scripts/seed/migrate-wordpress.ts"
-    "kobo:forms": "node scripts/kobo-forms/generate.js"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.42",
