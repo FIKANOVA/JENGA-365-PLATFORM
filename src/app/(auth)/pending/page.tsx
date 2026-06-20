@@ -35,7 +35,7 @@ export default function PendingApprovalPage() {
                     </div>
 
                     <div
-                        className="inline-flex items-start gap-4 rounded-lg border border-border bg-background p-6 text-left"
+                        className="inline-flex items-start gap-4 rounded-md border border-border bg-background p-6 text-left"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <span

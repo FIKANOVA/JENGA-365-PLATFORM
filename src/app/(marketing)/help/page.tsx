@@ -107,7 +107,7 @@ export default async function HelpPage() {
                                 <Link
                                     key={m._id}
                                     href={`/help/${m.slug}`}
-                                    className="rounded-lg border border-border bg-background p-6 lg:p-8 flex flex-col group hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                                    className="rounded-md border border-border bg-background p-6 lg:p-8 flex flex-col group hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex items-start justify-between">
@@ -119,7 +119,7 @@ export default async function HelpPage() {
                                         </span>
                                         {badge && (
                                             <span
-                                                className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium"
+                                                className="inline-flex items-center rounded-full px-2.5 py-0.5 text-label font-medium"
                                                 style={
                                                     badge.tone === "brand"
                                                         ? {
@@ -179,7 +179,7 @@ export default async function HelpPage() {
                                 <Link
                                     key={topic._id}
                                     href={`/help/${topic.slug}`}
-                                    className="block rounded-lg border border-border bg-background p-5 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors group"
+                                    className="block rounded-md border border-border bg-background p-5 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors group"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <h4 className="text-title text-foreground group-hover:text-foreground">
@@ -200,7 +200,7 @@ export default async function HelpPage() {
             {/* Support CTA */}
             <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-24">
                 <div
-                    className="rounded-lg border border-border p-10 lg:p-14 text-center"
+                    className="rounded-md border border-border p-10 lg:p-14 text-center"
                     style={{ background: "var(--foreground)" }}
                 >
                     <div className="max-w-2xl mx-auto space-y-5">

@@ -292,7 +292,7 @@ function UserActionMenu({
       </button>
       {open && (
         <div
-          className="absolute right-0 top-12 z-20 bg-background border border-border/70 rounded-lg w-48 p-1 text-body-sm"
+          className="absolute right-0 top-12 z-20 bg-background border border-border/70 rounded-md w-48 p-1 text-body-sm"
           style={{ boxShadow: "var(--shadow-lg)" }}
         >
           <button
@@ -368,7 +368,7 @@ function InviteModeratorModal({
         onClick={handleClose}
       />
       <div
-        className="relative bg-background border border-border/70 rounded-2xl w-full max-w-md p-8 space-y-6"
+        className="relative bg-background border border-border/70 rounded-md w-full max-w-md p-8 space-y-6"
         style={{ boxShadow: "var(--shadow-lg)" }}
       >
         <div className="flex items-center justify-between">

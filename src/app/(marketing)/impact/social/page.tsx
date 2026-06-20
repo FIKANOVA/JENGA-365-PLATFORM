@@ -81,7 +81,7 @@ export default async function ImpactSocialPage() {
 function ImpactCard({ title, value, sub }: { title: string; value: string; sub: string }) {
     return (
         <div
-            className="rounded-lg border border-border bg-background p-10 text-center"
+            className="rounded-md border border-border bg-background p-10 text-center"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <h3 className="text-eyebrow text-foreground-muted mb-4">{title}</h3>

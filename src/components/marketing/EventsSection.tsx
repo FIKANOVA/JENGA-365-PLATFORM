@@ -84,7 +84,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                         return (
                             <article
                                 key={event._id}
-                                className="group flex flex-col rounded-lg border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
+                                className="group flex flex-col rounded-md border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
                             >
                                 <div className="relative h-44 overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {event.image ? (

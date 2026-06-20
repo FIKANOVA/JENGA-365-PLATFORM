@@ -11,7 +11,7 @@ export default function FlagsAlertsCard({ menteeId }: Props) {
 
     return (
         <section
-            className="rounded-lg border border-border bg-background p-6 animate-fade-up"
+            className="rounded-md border border-border bg-background p-6 animate-fade-up"
             style={{ animationDelay: "100ms", boxShadow: "var(--shadow-sm)" }}
         >
             <span className="text-eyebrow text-foreground-muted mb-6 block">Flags & alerts</span>

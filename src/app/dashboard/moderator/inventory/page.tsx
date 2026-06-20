@@ -38,7 +38,7 @@ export default async function ModeratorInventoryPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {products.length === 0 ? (
                     <div
-                        className="col-span-full py-12 text-center rounded-lg border border-border bg-background"
+                        className="col-span-full py-12 text-center rounded-md border border-border bg-background"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <p className="text-body-sm text-foreground-muted">No products found in inventory.</p>
@@ -55,7 +55,7 @@ export default async function ModeratorInventoryPage() {
                         return (
                             <Card
                                 key={product._id}
-                                className="overflow-hidden bg-background border border-border rounded-lg flex flex-col"
+                                className="overflow-hidden bg-background border border-border rounded-md flex flex-col"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <CardHeader className="p-0 h-48 relative overflow-hidden" style={{ background: "var(--surface-1)" }}>

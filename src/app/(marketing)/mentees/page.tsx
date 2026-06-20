@@ -76,7 +76,7 @@ export default async function MenteesPage() {
                         {PROGRAMME_STEPS.map((s) => (
                             <div
                                 key={s.step}
-                                className="rounded-lg border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-1)]"
+                                className="rounded-md border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-1)]"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <span className="text-display-sm" style={{ color: "var(--brand-green)" }}>{s.step}</span>
@@ -98,7 +98,7 @@ export default async function MenteesPage() {
                         {MENTEE_BENEFITS.map(({ Icon, title, body }) => (
                             <div
                                 key={title}
-                                className="rounded-lg border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-2)]"
+                                className="rounded-md border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-2)]"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <Icon className="h-5 w-5" style={{ color: "var(--brand-green)" }} />

@@ -45,7 +45,7 @@ export default function WhyJenga() {
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-14 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
                     <div>
-                        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--brand-green)] font-bold block mb-3">
+                        <span className="font-mono text-eyebrow tracking-[0.25em] text-[var(--brand-green)] font-bold block mb-3">
                             Our Differentiators
                         </span>
                         <h2 className="text-display-lg text-foreground">
@@ -67,7 +67,7 @@ export default function WhyJenga() {
                                     className="w-full flex items-center justify-between px-8 py-5 text-left group hover:bg-[#F9F7F4] transition-colors"
                                 >
                                     <div className="flex items-center gap-5">
-                                        <span className="font-mono text-[9px] uppercase tracking-widest text-[#999]">
+                                        <span className="font-mono text-eyebrow tracking-widest text-[#999]">
                                             {String(i + 1).padStart(2, "0")}
                                         </span>
                                         <span className="text-headline text-foreground group-hover:text-[var(--brand-green)] transition-colors">

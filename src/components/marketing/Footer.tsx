@@ -77,7 +77,7 @@ export default function Footer() {
                     {/* Nav columns */}
                     {footerNav.map((col) => (
                         <div key={col.title} className="md:col-span-2 space-y-6">
-                            <h4 className="font-mono text-[9px] uppercase tracking-[0.35em] text-white/25 font-bold">
+                            <h4 className="font-mono text-eyebrow tracking-[0.35em] text-white/25 font-bold">
                                 {col.title}
                             </h4>
                             <ul className="space-y-4">
@@ -97,7 +97,7 @@ export default function Footer() {
 
                     {/* Newsletter */}
                     <div className="md:col-span-2 space-y-6">
-                        <h4 className="font-mono text-[9px] uppercase tracking-[0.35em] text-white/25 font-bold">
+                        <h4 className="font-mono text-eyebrow tracking-[0.35em] text-white/25 font-bold">
                             Jenga Journal
                         </h4>
                         <p className="font-sans text-sm text-white/40 leading-relaxed">
@@ -109,7 +109,7 @@ export default function Footer() {
                                 placeholder="Your email"
                                 className="w-full bg-transparent border-b border-white/10 pb-3 text-sm font-sans text-white placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors"
                             />
-                            <button className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.3em] text-white/50 hover:text-white transition-colors font-bold group">
+                            <button className="flex items-center gap-2 font-mono text-eyebrow tracking-[0.3em] text-white/50 hover:text-white transition-colors font-bold group">
                                 Subscribe
                                 <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
                             </button>
@@ -120,19 +120,19 @@ export default function Footer() {
                 {/* Bottom bar */}
                 <div className="py-8 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-8">
-                        <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/20">
+                        <span className="font-mono text-eyebrow tracking-[0.4em] text-white/20">
                             © {new Date().getFullYear()} Jenga365
                         </span>
                         <div className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/30">Live</span>
+                            <span className="font-mono text-eyebrow tracking-[0.3em] text-white/30">Live</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-8">
-                        <Link href="/privacy" className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/20 hover:text-white/60 transition-colors">
+                        <Link href="/privacy" className="font-mono text-eyebrow tracking-[0.3em] text-white/20 hover:text-white/60 transition-colors">
                             Privacy
                         </Link>
-                        <Link href="/terms" className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/20 hover:text-white/60 transition-colors">
+                        <Link href="/terms" className="font-mono text-eyebrow tracking-[0.3em] text-white/20 hover:text-white/60 transition-colors">
                             Terms
                         </Link>
                         <span className="font-sans text-[11px] text-white/15 italic">Nairobi, Kenya</span>

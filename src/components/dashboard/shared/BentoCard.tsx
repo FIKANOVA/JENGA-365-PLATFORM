@@ -28,7 +28,7 @@ export function BentoCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border/70 bg-[color:var(--surface-1)] shadow-[var(--shadow-sm)]",
+        "relative overflow-hidden rounded-md border border-border/70 bg-[color:var(--surface-1)] shadow-[var(--shadow-sm)]",
         interactive &&
           "transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-[var(--shadow)]",
         entrance &&

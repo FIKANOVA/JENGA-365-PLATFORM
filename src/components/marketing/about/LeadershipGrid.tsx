@@ -23,7 +23,7 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
             <section className="py-40 bg-[var(--surface-1)]">
                 <div className="max-w-7xl mx-auto px-6 md:px-12">
                     <div className="mb-12 space-y-4">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.6em] text-[var(--brand-green)] block font-bold">
+                        <span className="font-mono text-eyebrow tracking-[0.6em] text-[var(--brand-green)] block font-bold">
                             The People
                         </span>
                         <h2 className="font-serif font-bold text-5xl md:text-6xl text-black uppercase tracking-tighter">
@@ -42,7 +42,7 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
         <section className="py-40 bg-[var(--surface-1)]">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-24 space-y-4">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.6em] text-[var(--brand-green)] block font-bold">
+                    <span className="font-mono text-eyebrow tracking-[0.6em] text-[var(--brand-green)] block font-bold">
                         The People
                     </span>
                     <h2 className="font-serif font-bold text-5xl md:text-6xl text-black uppercase tracking-tighter">
@@ -79,7 +79,7 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
                                         {member.name}
                                     </h3>
                                     <div className="h-px w-12 bg-[var(--brand-green)] group-hover:bg-[var(--brand-red)] transition-colors duration-500 mb-4" />
-                                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold block">
+                                    <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--brand-green)] font-bold block">
                                         {member.role}
                                     </span>
                                 </div>

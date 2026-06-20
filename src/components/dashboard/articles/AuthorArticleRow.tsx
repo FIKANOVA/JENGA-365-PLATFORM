@@ -54,10 +54,10 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
             <div className="flex flex-col md:flex-row justify-between items-start gap-6">
                 <div className="flex flex-col gap-3 flex-1">
                     <div className="flex items-center gap-3">
-                        <span className="text-[9px] font-mono tracking-wider font-bold uppercase px-2 py-1 bg-[#F5F5F5] dark:bg-slate-800 rounded text-[#4A4A4A] dark:text-slate-300">
+                        <span className="text-label font-mono tracking-wider font-bold uppercase px-2 py-1 bg-[#F5F5F5] dark:bg-slate-800 rounded text-[#4A4A4A] dark:text-slate-300">
                             {category}
                         </span>
-                        <span className="text-[10px] font-mono text-[#8A8A8A]">{date}</span>
+                        <span className="text-label font-mono text-[#8A8A8A]">{date}</span>
                     </div>
                     <h3 className="text-headline leading-tight text-foreground group-hover:text-[var(--brand-red)] transition-colors">
                         {title}
@@ -82,7 +82,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                                 type="button"
                                 onClick={() => setShowFeedback(true)}
                                 disabled={!feedback}
-                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-white dark:bg-slate-800 border border-[#BB0000] text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-white dark:bg-slate-800 border border-[#BB0000] text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-label font-mono font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 REVIEW FEEDBACK
                             </button>
@@ -90,12 +90,12 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                                 type="button"
                                 onClick={handleDelete}
                                 disabled={pending}
-                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 border border-red-200 text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors disabled:opacity-50"
+                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 border border-red-200 text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-label font-mono font-bold transition-colors disabled:opacity-50"
                             >
                                 {pending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "DELETE"}
                             </button>
                             <Link href={`/dashboard/articles/${id}/edit`}>
-                                <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-[#BB0000] hover:bg-[#8B0000] text-white text-[10px] font-mono font-bold transition-colors shadow-lg">
+                                <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-[#BB0000] hover:bg-[#8B0000] text-white text-label font-mono font-bold transition-colors shadow-lg">
                                     EDIT
                                 </button>
                             </Link>
@@ -106,12 +106,12 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                                 type="button"
                                 onClick={handleDelete}
                                 disabled={pending}
-                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 border border-red-200 text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-[10px] font-mono font-bold transition-colors disabled:opacity-50"
+                                className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 border border-red-200 text-[#BB0000] hover:bg-[#FFF0F0] dark:hover:bg-red-900/20 text-label font-mono font-bold transition-colors disabled:opacity-50"
                             >
                                 {pending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "DELETE"}
                             </button>
                             <Link href={`/dashboard/articles/${id}/edit`}>
-                                <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-[#BB0000] hover:bg-[#8B0000] text-white text-[10px] font-mono font-bold transition-colors shadow-lg">
+                                <button className="flex min-w-[90px] items-center justify-center rounded h-9 px-4 bg-[#BB0000] hover:bg-[#8B0000] text-white text-label font-mono font-bold transition-colors shadow-lg">
                                     EDIT
                                 </button>
                             </Link>
@@ -126,7 +126,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                     {status === "DRAFT"
                         ? <CircleDot className="h-4 w-4 text-[#BB0000]" />
                         : <CheckCircle2 className="h-4 w-4 text-green-600" />}
-                    <span className={`text-[10px] font-mono tracking-widest uppercase ${status === "DRAFT" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"}`}>Draft</span>
+                    <span className={`text-label font-mono tracking-widest uppercase ${status === "DRAFT" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"}`}>Draft</span>
                 </div>
                 <div className={`w-10 h-[1px] ${status === "DRAFT" ? "bg-[#E8E4DC] border-dashed border-t" : "bg-green-600"}`} />
 
@@ -135,7 +135,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                         status === "IN_REVIEW" ? <CircleDot className="h-4 w-4 text-[var(--brand-green)]" /> :
                         status === "PUBLISHED" ? <CheckCircle2 className="h-4 w-4 text-green-600" /> :
                         <Circle className="h-4 w-4 text-[#D0CBC0]" />}
-                    <span className={`text-[10px] font-mono tracking-widest uppercase ${isRejected ? "text-[#BB0000] font-bold" :
+                    <span className={`text-label font-mono tracking-widest uppercase ${isRejected ? "text-[#BB0000] font-bold" :
                             status === "IN_REVIEW" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"
                         }`}>
                         {isRejected ? "Rejected" : "In Review"}
@@ -145,7 +145,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
 
                 <div className="flex items-center gap-2">
                     {status === "PUBLISHED" ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <Circle className="h-4 w-4 text-[#D0CBC0]" />}
-                    <span className={`text-[10px] font-mono tracking-widest uppercase ${status === "PUBLISHED" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"}`}>Published</span>
+                    <span className={`text-label font-mono tracking-widest uppercase ${status === "PUBLISHED" ? "text-[#1A1A1A] font-bold" : "text-[#8A8A8A]"}`}>Published</span>
                 </div>
             </div>
 
@@ -157,7 +157,7 @@ export default function AuthorArticleRow({ id, title, category, date, status, fe
                     onClick={() => setShowFeedback(false)}
                 >
                     <div
-                        className="max-w-lg w-full rounded-lg border border-border bg-background p-6 space-y-4"
+                        className="max-w-lg w-full rounded-md border border-border bg-background p-6 space-y-4"
                         style={{ boxShadow: "var(--shadow-md, var(--shadow-sm))" }}
                         onClick={(e) => e.stopPropagation()}
                     >

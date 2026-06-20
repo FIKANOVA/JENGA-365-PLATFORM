@@ -107,7 +107,7 @@ export default function NgoMouForm({ partnerCorporateId, orgName }: NgoMouFormPr
 
             {/* Exchange Model Summary */}
             <div
-                className="rounded-lg border p-8 space-y-4"
+                className="rounded-md border p-8 space-y-4"
                 style={{ background: "#0a0a0a", borderColor: "#0a0a0a", color: "#ffffff" }}
             >
                 <p className="text-eyebrow" style={{ color: "rgba(255,255,255,0.6)" }}>

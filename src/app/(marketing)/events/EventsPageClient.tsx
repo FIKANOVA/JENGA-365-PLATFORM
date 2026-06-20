@@ -49,7 +49,7 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                             placeholder="Search events, topics, or dates..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-sm py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:font-mono placeholder:text-[10px] placeholder:uppercase placeholder:tracking-widest focus:outline-none focus:border-primary transition-all font-sans"
+                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-md py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:font-mono placeholder:text-label placeholder:uppercase placeholder:tracking-widest focus:outline-none focus:border-primary transition-all font-sans"
                         />
                     </div>
                 </PageHero>
@@ -59,13 +59,13 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                     <div className="space-y-16">
                         {/* Type Selection */}
                         <div className="flex flex-col gap-6">
-                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)] font-bold">Event Type</span>
-                            <div className="flex border-b border-[var(--border)] overflow-x-auto hide-scrollbar">
+                            <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)] font-bold">Event Type</span>
+                            <div className="flex border-b border-border overflow-x-auto hide-scrollbar">
                                 {EVENT_TYPES.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
-                                        className={`px-8 py-5 text-[10px] font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${activeCategory === cat
+                                        className={`px-8 py-5 text-label font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${activeCategory === cat
                                             ? "text-[var(--brand-green)]"
                                             : "text-[var(--foreground-subtle)] hover:text-black"
                                             }`}
@@ -91,7 +91,7 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                                     </div>
                                     <button
                                         onClick={() => { setActiveCategory("ALL"); setSearchQuery(""); }}
-                                        className="px-10 py-4 border border-[var(--border)] text-black font-mono text-[10px] uppercase tracking-widest hover:bg-black hover:text-white transition-all rounded-sm shadow-xl"
+                                        className="px-10 py-4 border border-border text-black font-mono text-eyebrow tracking-widest hover:bg-black hover:text-white transition-all rounded-md shadow-xl"
                                     >
                                         RESET FILTERS
                                     </button>

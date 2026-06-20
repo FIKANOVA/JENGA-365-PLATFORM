@@ -247,7 +247,14 @@
    ─────────────────────────────────────────────────────────────────────────── */
 @layer utilities {
   .text-display-xl {
-    font-size: 4.5rem;
+    font-size: 3rem;
+    @media (min-width: 768px) {
+    }
+    font-size: 3rem;
+    @media (min-width: 768px) {
+
+    }
+
     line-height: 1.05;
     font-weight: 700;
     letter-spacing: -0.025em;
