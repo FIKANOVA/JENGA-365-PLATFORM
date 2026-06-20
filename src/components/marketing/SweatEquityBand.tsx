@@ -177,6 +177,9 @@ function Card({
         >
             <div
                 className="flex h-9 w-9 items-center justify-center rounded-md mb-4"
+        >
+            <div
+                className="flex h-9 w-9 items-center justify-center rounded-md mb-4"
             className="flex gap-6 rounded-md border bg-white/5 p-6 backdrop-blur-sm transition-colors hover:bg-white/10"
             style={{
                 borderColor: accent ? "rgba(46, 160, 67, 0.3)" : "rgba(255,255,255,0.1)"

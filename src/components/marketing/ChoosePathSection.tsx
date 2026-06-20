@@ -315,6 +315,13 @@ export default function ChoosePathSection() {
                                     </p>
                                     <h3 className="mt-0.5 text-headline text-foreground">{name}</h3>
                                     <p className="text-body-sm text-foreground-muted">{tagline}</p>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-eyebrow" style={{ color }}>
+                                        {tag}
+                                    </p>
+                                    <h3 className="mt-0.5 text-headline text-foreground">{name}</h3>
+                                    <p className="text-body-sm text-foreground-muted">{tagline}</p>
                                     className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-10 pointer-events-none transform translate-x-1/3 -translate-y-1/3"
                                     style={{ background: activeData.color }}
                                 />

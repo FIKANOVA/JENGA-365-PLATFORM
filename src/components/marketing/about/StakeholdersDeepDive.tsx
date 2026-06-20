@@ -70,6 +70,10 @@ const STAKEHOLDERS: Stakeholder[] = [
         name: "Corporate Partners",
         principle: "Invest in people. Measure the return.",
         paragraph:
+            "Corporate Partners fund the engine — but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Looker Studio dashboard you can forward straight to your board.",
+        rules: [
+            { label: "Milestone-tied",  detail: "Funds release only on verified ESG audits (e.g. 500 trees alive)." },
+            { label: "GPS evidence",    detail: "Tree-survival checks at 6 / 12 / 24 months — geo-tagged, KoBo-piped." },
             "Corporate Partners fund the engine, but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Looker Studio dashboard you can forward straight to your board.",
         rules: [
             { label: "Milestone-tied",  detail: "Funds release only on verified ESG audits (e.g. 500 trees alive)." },

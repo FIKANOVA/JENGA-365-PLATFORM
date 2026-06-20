@@ -36,6 +36,8 @@ export async function setPartnerLooker(
     const reportId = lookerReportId.trim() || null;
     const shareUrl = lookerShareUrl.trim() || null;
 
+    // Validate up front so the operator gets a clear message instead of a raw DB
+    // CHECK-constraint error (corporate_partners_looker_share_url_format, migration 0009).
     if (shareUrl && !shareUrl.startsWith("https://lookerstudio.google.com/")) {
         return { error: "Share URL must start with https://lookerstudio.google.com/" };
     }
