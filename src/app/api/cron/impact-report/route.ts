@@ -14,16 +14,13 @@ export async function GET(req: Request) {
 
     try {
         // BUG-02 FIX: Two separate queries — donations and sessionsLog are unrelated tables
-        const [donationStats] = await db
-            .select({ totalAmount: sum(donations.amount) })
-            .from(donations);
-
-        const [sessionStats] = await db
-            .select({
+        const [[donationStats], [sessionStats]] = await Promise.all([
+            db.select({ totalAmount: sum(donations.amount) }).from(donations),
+            db.select({
                 totalHours: sum(sessionsLog.durationMinutes),
                 youthCount: count(sessionsLog.id),
-            })
-            .from(sessionsLog);
+            }).from(sessionsLog),
+        ]);
 
         await db.insert(impactReports).values({
             reportPeriod: new Date().toLocaleString("default", { month: "long", year: "numeric" }),
