@@ -66,7 +66,7 @@ export default function ChoosePathSection() {
                 "Invest in people. Measure the return. The Corporate Unlock Challenge releases your funds only when verified ESG milestones are hit — like 500 trees surviving the latest audit.",
             highlights: [
                 "Milestone-tied funding (release on verified ESG audit)",
-                "Looker Studio dashboards — quarterly M&E reports",
+                "Data Studio dashboards — quarterly M&E reports",
                 "GPS-anchored tree-survival evidence",
                 "Aggregated trees-alive + youth-engaged metrics",
             ],

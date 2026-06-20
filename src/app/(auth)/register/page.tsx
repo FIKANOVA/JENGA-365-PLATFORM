@@ -28,7 +28,7 @@ const PATHWAYS: Pathway[] = [
         title: "Become a Partner",
         blurb:
             "Corporates and NGOs fund or amplify field programmes with GPS-anchored evidence and quarterly ESG reporting.",
-        options: ["Corporate — CSR + Looker Studio", "NGO — programme collaboration"],
+        options: ["Corporate — CSR + Data Studio", "NGO — programme collaboration"],
         href: "/register/partner",
         cta: "Continue to partnership",
         background: "var(--brand-black)",

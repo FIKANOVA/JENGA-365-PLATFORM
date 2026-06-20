@@ -15,6 +15,13 @@
       "when": 1775964135793,
       "tag": "0001_lovely_zarda",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781916501015,
+      "tag": "0020_rename_looker_studio_to_data_studio",
+      "breakpoints": true
     }
   ]
 }

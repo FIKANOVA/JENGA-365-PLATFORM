@@ -52,11 +52,11 @@ const STAKEHOLDERS = [
         name: "Corporate Partners",
         principle: "Invest in people. Measure the return.",
         paragraph:
-            "Corporate Partners fund the engine — but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Looker Studio dashboard you can forward straight to your board.",
+            "Corporate Partners fund the engine — but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Data Studio dashboard you can forward straight to your board.",
         rules: [
             { label: "Milestone-tied",  detail: "Funds release only on verified ESG audits (e.g. 500 trees alive)." },
             { label: "GPS evidence",    detail: "Tree-survival checks at 6 / 12 / 24 months — geo-tagged, KoBo-piped." },
-            { label: "Looker reporting", detail: "Per-partner Looker Studio dashboards + shareable links for the board." },
+            { label: "Data Studio reporting", detail: "Per-partner Data Studio dashboards + shareable links for the board." },
             { label: "Quarterly M&E",   detail: "Aggregate impact rolled up to your sustainability report each quarter." },
         ],
         color: "var(--brand-black)",

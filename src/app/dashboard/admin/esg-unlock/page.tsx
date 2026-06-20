@@ -5,11 +5,11 @@ import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { corporateUnlockMilestones, corporatePartners, users } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
-import EsgUnlockPanel, { type MilestoneRow, type PartnerLookerRow } from "@/components/dashboard/Admin/EsgUnlockPanel";
+import EsgUnlockPanel, { type MilestoneRow, type PartnerDataStudioRow } from "@/components/dashboard/Admin/EsgUnlockPanel";
 
 export const metadata: Metadata = {
     title: "ESG Unlock | Jenga365",
-    description: "Manually unlock corporate ESG milestones and configure Looker dashboards.",
+    description: "Manually unlock corporate ESG milestones and configure Data Studio dashboards.",
 };
 
 export default async function EsgUnlockPage() {
@@ -35,8 +35,8 @@ export default async function EsgUnlockPage() {
             .select({
                 id: corporatePartners.id,
                 orgName: corporatePartners.orgName,
-                lookerReportId: corporatePartners.lookerReportId,
-                lookerShareUrl: corporatePartners.lookerShareUrl,
+                dataStudioReportId: corporatePartners.dataStudioReportId,
+                dataStudioShareUrl: corporatePartners.dataStudioShareUrl,
             })
             .from(corporatePartners)
             .orderBy(corporatePartners.orgName)
@@ -52,11 +52,11 @@ export default async function EsgUnlockPage() {
         partnerName: m.partnerName ?? "—",
     }));
 
-    const partners: PartnerLookerRow[] = partnerRows.map((p) => ({
+    const partners: PartnerDataStudioRow[] = partnerRows.map((p) => ({
         id: p.id,
         orgName: p.orgName,
-        lookerReportId: p.lookerReportId ?? "",
-        lookerShareUrl: p.lookerShareUrl ?? "",
+        dataStudioReportId: p.dataStudioReportId ?? "",
+        dataStudioShareUrl: p.dataStudioShareUrl ?? "",
     }));
 
     return (
