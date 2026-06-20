@@ -30,7 +30,6 @@ export async function GET(req: Request) {
             totalDonations: donationStats.totalAmount || "0",
             totalMentorshipHours: Number(sessionStats.totalHours) || 0,
             youthEngaged: Number(sessionStats.youthCount) || 0,
-            treesPlanted: 0,
             clinicsHeld: 0,
         });
 

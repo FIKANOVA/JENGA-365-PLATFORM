@@ -239,8 +239,16 @@ export async function updateMilestoneStatus(input: z.infer<typeof milestoneStatu
             .set({ status: "completed" })
             .where(eq(mentorshipPairs.id, parsed.pairId));
 
-        // Trigger: award certificate badge (placeholder)
-        console.log("Awarding certificate badge...");
+        // Award certificate badge
+        const pair = await db.query.mentorshipPairs.findFirst({
+            where: eq(mentorshipPairs.id, parsed.pairId)
+        });
+        if (pair) {
+            await db.insert(userBadges).values({
+                userId: pair.menteeId,
+                badgeType: "Graduate"
+            });
+        }
     }
 
     await db.insert(activityLog).values({

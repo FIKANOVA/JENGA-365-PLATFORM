@@ -122,7 +122,7 @@ export default function AdminSetupPage() {
                 ndaVersion: "ADMIN-2025-V1",
                 role: "SuperAdmin",
                 additionalDeclarations: [true],
-                documentHash: "admin-hash-placeholder",
+                documentHash: "f4b8a0f249c98c013ace7ef4f0da3a5050cfb2a3900b7866dce9aff2c0e7f3ac",
             });
             if (res.success) {
                 toast.success("SuperAdmin setup complete");
