@@ -21,7 +21,7 @@ export default function PartnerChooserPage() {
                     benefits={[
                         "CSR impact integration",
                         "Talent pipeline visibility",
-                        "Quarterly Data Studio reports",
+                        "Quarterly Looker Studio reports",
                         "Aggregated trees-alive metrics",
                     ]}
                     badge={{ label: "Approval required", tone: "warning" }}
@@ -54,7 +54,7 @@ export default function PartnerChooserPage() {
                 <span className="font-medium text-foreground">Corporate Unlock Challenge:</span>{" "}
                 Disbursements tie to verified ESG milestones. Funds release only when
                 trees-alive audits and mentorship-hour targets are met — every metric lives
-                in a Data Studio dashboard.
+                in a Looker Studio dashboard.
             </div>
         </RegisterShell>
     );

@@ -1,21 +1,21 @@
 /**
- * One-shot operator tool: provision a Corporate Partner's Data Studio surface.
+ * One-shot operator tool: provision a Corporate Partner's Looker Studio surface.
  *
  * What this does, per CLAUDE.md §11 and IMPLEMENTATION_PLAN.md Phase 2.5:
  *
  *   1. Calls create_partner_impact_view(<partner_uuid>) → emits a per-partner
  *      pgView named v_partner_<short>_impact (defined in migration 0008).
- *   2. Stamps the partner row's data_studio_report_id + data_studio_share_url columns
- *      so the partner dashboard's DataStudioEmbed component picks it up.
+ *   2. Stamps the partner row's looker_report_id + looker_share_url columns
+ *      so the partner dashboard's LookerEmbed component picks it up.
  *
  * Usage:
- *   npx dotenv -e .env -- npx tsx scripts/setup-partner-data-studio.ts \
+ *   npx dotenv -e .env -- npx tsx scripts/setup-partner-looker.ts \
  *     --partner=<uuid> \
- *     --report-id=<data_studio_report_id> \
+ *     --report-id=<looker_report_id> \
  *     --share-url=<https://lookerstudio.google.com/...>
  *
  * The share URL must start with https://lookerstudio.google.com/ — enforced by
- * the corporate_partners_data_studio_share_url_format CHECK constraint (0009).
+ * the corporate_partners_looker_share_url_format CHECK constraint (0009).
  */
 import https from "node:https";
 
@@ -70,7 +70,7 @@ import { neon } from "@neondatabase/serverless";
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
     throw new Error(
-        "DATABASE_URL not set — run with: npx dotenv -e .env -- npx tsx scripts/setup-partner-data-studio.ts ...",
+        "DATABASE_URL not set — run with: npx dotenv -e .env -- npx tsx scripts/setup-partner-looker.ts ...",
     );
 }
 
@@ -87,9 +87,9 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 
 function usage(): never {
     console.error(
-        "Usage: npx dotenv -e .env -- npx tsx scripts/setup-partner-data-studio.ts \\\n" +
+        "Usage: npx dotenv -e .env -- npx tsx scripts/setup-partner-looker.ts \\\n" +
             "  --partner=<uuid> \\\n" +
-            "  --report-id=<data_studio_report_id> \\\n" +
+            "  --report-id=<looker_report_id> \\\n" +
             "  --share-url=<https://lookerstudio.google.com/...>",
     );
     process.exit(1);
@@ -143,15 +143,15 @@ async function run() {
 
     // 3. Stamp the looker columns.
     await sql.query(
-        "UPDATE corporate_partners SET data_studio_report_id = $1, data_studio_share_url = $2 WHERE id = $3",
+        "UPDATE corporate_partners SET looker_report_id = $1, looker_share_url = $2 WHERE id = $3",
         [reportId, shareUrl, partnerId],
     );
-    console.log(`✓ Updated corporate_partners.data_studio_report_id + data_studio_share_url`);
+    console.log(`✓ Updated corporate_partners.looker_report_id + looker_share_url`);
 
-    console.log("\nNext: visit the partner dashboard. The DataStudioEmbed component");
+    console.log("\nNext: visit the partner dashboard. The LookerEmbed component");
     console.log(`will render the iframe + share-link button immediately.\n`);
     console.log(`Pointed at view:   ${viewName}`);
-    console.log(`Data Studio report id:  ${reportId}`);
+    console.log(`Looker report id:  ${reportId}`);
     console.log(`Looker share URL:  ${shareUrl}`);
 }
 

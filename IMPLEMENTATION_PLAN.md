@@ -98,7 +98,7 @@ git checkout HEAD -- \
 
 - `mentor/power-hour/page.tsx` is required by Phase 1.2 (Power Hour cron evaluates `mentorCommitmentTracker` rows that this page writes).
 - NGO + Partner MOU pages are required for Engine B partner workflow (Audit §2).
-- Partner report pages (`partner/report/*`, `partner/reports/new/`) are **deferred** — they are reporting UI, and per CLAUDE.md §1 reporting is offloaded to Data Studio.
+- Partner report pages (`partner/report/*`, `partner/reports/new/`) are **deferred** — they are reporting UI, and per CLAUDE.md §1 reporting is offloaded to Looker Studio.
 
 ### 1.6 Optional dev-time restore
 
@@ -229,7 +229,7 @@ export const vProjectLocationPlantings = pgView("v_project_location_plantings").
 );
 ```
 
-Then drop `project_locations.treesPlanted` and migrate any reader to JOIN against the view. This view is also the canonical source for Data Studio dashboards (CLAUDE.md §11), so denormalizing would risk drift.
+Then drop `project_locations.treesPlanted` and migrate any reader to JOIN against the view. This view is also the canonical source for Looker Studio dashboards (CLAUDE.md §11), so denormalizing would risk drift.
 
 ### 2.4 Atomic merchandise decrement — audit and harden
 
@@ -248,15 +248,15 @@ RETURNING *;
 
 Empty RETURNING → out of stock → fail purchase. Add a unit test exercising concurrent decrements (`Promise.all([decrement, decrement])` against the same row).
 
-### 2.5 Data Studio reporting views
+### 2.5 Looker Studio reporting views
 
-Create / verify the Drizzle `pgView`s that Data Studio will read from, in priority order:
+Create / verify the Drizzle `pgView`s that Looker Studio will read from, in priority order:
 
 1. `v_project_location_plantings` (created in Phase 2.3) — total trees planted per location.
 2. `v_partner_impact(<partner_id>)` — per Corporate Partner: total trees planted, total trees-alive-at-latest-audit (using `DISTINCT ON` per CLAUDE.md §2), total mentorship hours, youth engaged. One view per partner per CLAUDE.md §11 partner-isolation pattern.
 3. `v_public_impact_aggregate` — unfiltered totals for the public site / aggregate dashboard.
 
-No in-app pages are built for these — Data Studio dashboards consume the views directly and are embedded in `src/app/dashboard/partner/` via iframe + shareable link surfacing (when UI freeze lifts).
+No in-app pages are built for these — Looker Studio dashboards consume the views directly and are embedded in `src/app/dashboard/partner/` via iframe + shareable link surfacing (when UI freeze lifts).
 
 ### 2.6 Article publishing gate (`content` scope only)
 
@@ -292,8 +292,8 @@ Wrap the publish action with `await requireCapability("PUBLISH_ARTICLE")`. Add `
 - Mentor write-time capacity guard (2 active pairs max) at `mentorshipPairs` insert.
 - Marketing pages: `(marketing)/articles/[slug]`, `(marketing)/help/manuals`, `(marketing)/impact/social`, `(marketing)/resources/{articles,downloads,video,voices}`.
 - Per-role Sanity Studio embeds: `dashboard/{admin,mentee,mentor,moderator,ngo,partner}/studio/`.
-- Partner report pages (`dashboard/partner/report/*`, `dashboard/partner/reports/new`) — Data Studio is canonical per CLAUDE.md §1/§10.5/§11. Confirmed DO-NOT-RESTORE.
-- Partner-dashboard Data Studio iframe + shareable-link surfacing (CLAUDE.md §11) — backend views (Phase 2.5) can ship now; the iframe wrapper waits for UI freeze to lift.
+- Partner report pages (`dashboard/partner/report/*`, `dashboard/partner/reports/new`) — Looker Studio is canonical per CLAUDE.md §1/§10.5/§11. Confirmed DO-NOT-RESTORE.
+- Partner-dashboard Looker iframe + shareable-link surfacing (CLAUDE.md §11) — backend views (Phase 2.5) can ship now; the iframe wrapper waits for UI freeze to lift.
 - UI rectifications: logo → SVG; remove caution/stop-sign background; impact-ticker authentic baseline; Sweat-Equity landing-page messaging; expanded Engine B marketing copy.
 
 ---
@@ -319,5 +319,5 @@ Wrap the publish action with `await requireCapability("PUBLISH_ARTICLE")`. Add `
 5. **Phase 1.3** (paystack) + **Phase 1.4 / 1.5** (admin + role dashboards).
 6. **Phase 2.1** (matching weights to founder lock).
 7. **Phase 2.2** (RBAC scope rename) and **Phase 2.3** (`tree_planting_events` + derived view) — independent, can land in either order.
-8. **Phase 2.4** (atomic decrement), **Phase 2.5** (Data Studio views), and **Phase 2.6** (article publish gate).
+8. **Phase 2.4** (atomic decrement), **Phase 2.5** (Looker Studio views), and **Phase 2.6** (article publish gate).
 9. **Phase 3 step 5** (manual smoke) — gate before staging deploy.
