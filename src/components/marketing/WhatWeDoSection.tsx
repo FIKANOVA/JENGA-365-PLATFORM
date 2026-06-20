@@ -284,7 +284,7 @@ function EngineCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, delay }}
-      className="group rounded-2xl border bg-[color:var(--surface-2)] p-8 md:p-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden"
+      className="group rounded-md border bg-[color:var(--surface-2)] p-8 md:p-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden"
       style={{ borderColor: accent ? "var(--brand-green-soft)" : "var(--surface-3)" }}
     >
       <div
@@ -296,7 +296,7 @@ function EngineCard({
       <div className="relative z-10 flex flex-col h-full">
         <div className="flex items-start gap-4 mb-6">
           <div
-            className="flex h-12 w-12 items-center justify-center rounded-xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+            className="flex h-12 w-12 items-center justify-center rounded-md flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
             style={{
               background: accent ? "var(--brand-green-soft)" : "var(--surface-3)",
               color: accent ? "var(--brand-green)" : "var(--foreground)",
@@ -340,7 +340,7 @@ function EngineCard({
         <div className="mt-auto">
           <Link
             href={href}
-            className="group/btn inline-flex items-center gap-2 h-11 px-5 rounded-lg text-label font-medium transition-all focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+            className="group/btn inline-flex items-center gap-2 h-11 px-5 rounded-md text-label font-medium transition-all focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
             style={{
               background: accent ? "var(--brand-green)" : "var(--foreground)",
               color: accent ? "white" : "var(--background)"

@@ -53,7 +53,7 @@ export default async function HelpDetailPage({ params }: { params: Promise<{ slu
                 <header className="space-y-3 border-b border-border pb-8 mb-8">
                     {manual.badge?.label && (
                         <span
-                            className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium"
+                            className="inline-flex items-center rounded-full px-2.5 py-0.5 text-label font-medium"
                             style={
                                 manual.badge.tone === "brand"
                                     ? {

@@ -257,7 +257,7 @@ export default function ChoosePathSection() {
                                         key={path.id}
                                         onClick={() => setActiveTab(path.id)}
                                         className={cn(
-                                            "flex items-center justify-between p-4 rounded-xl text-left transition-all duration-200 border",
+                                            "flex items-center justify-between p-4 rounded-md text-left transition-all duration-200 border",
                                             activeTab === path.id
                                                 ? "bg-[color:var(--surface-2)] shadow-sm border-transparent"
                                                 : "bg-transparent border-transparent hover:bg-[color:var(--surface-1)] hover:border-border"
@@ -266,7 +266,7 @@ export default function ChoosePathSection() {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div
-                                                className="inline-flex h-10 w-10 items-center justify-center rounded-lg shrink-0 transition-colors"
+                                                className="inline-flex h-10 w-10 items-center justify-center rounded-md shrink-0 transition-colors"
                                                 style={{
                                                     background: activeTab === path.id ? path.color : "var(--surface-2)",
                                                     color: activeTab === path.id ? "white" : "var(--foreground-muted)"
@@ -301,7 +301,7 @@ export default function ChoosePathSection() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                                 transition={{ duration: 0.3 }}
-                                className="w-full rounded-2xl border border-border bg-[color:var(--surface-1)] p-8 md:p-12 shadow-lg relative overflow-hidden"
+                                className="w-full rounded-md border border-border bg-[color:var(--surface-1)] p-8 md:p-12 shadow-lg relative overflow-hidden"
                             >
                                 <div
                                     className="inline-flex h-10 w-10 items-center justify-center rounded-md shrink-0"
@@ -315,6 +315,69 @@ export default function ChoosePathSection() {
                                     </p>
                                     <h3 className="mt-0.5 text-headline text-foreground">{name}</h3>
                                     <p className="text-body-sm text-foreground-muted">{tagline}</p>
+                                    className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-10 pointer-events-none transform translate-x-1/3 -translate-y-1/3"
+                                    style={{ background: activeData.color }}
+                                />
+
+                                <header className="flex items-start gap-4 relative z-10">
+                                    <div className="flex-1">
+                                        <p className="text-eyebrow" style={{ color: activeData.color }}>
+                                            {activeData.tag}
+                                        </p>
+                                        <h3 className="mt-2 text-display-sm text-foreground">{activeData.name}</h3>
+                                        <p className="text-body-lg text-foreground-muted mt-2">{activeData.tagline}</p>
+                                    </div>
+                                </header>
+
+                                <p className="mt-8 text-body-lg text-foreground relative z-10 leading-relaxed max-w-2xl">
+                                    {activeData.description}
+                                </p>
+
+                                <div className="mt-10 bg-background rounded-md p-6 border border-border relative z-10">
+                                    <h4 className="text-label text-foreground-muted mb-4 uppercase tracking-wider">The Exchange</h4>
+                                    <ul className="space-y-4">
+                                        {activeData.highlights.map((line) => (
+                                            <li key={line} className="flex items-start gap-3 text-body text-foreground">
+                                                <div
+                                                    className="mt-1 h-5 w-5 rounded-full shrink-0 flex items-center justify-center"
+                                                    style={{ background: activeData.colorSoft }}
+                                                >
+                                                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: activeData.color }} />
+                                                </div>
+                                                {line}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                <div className="mt-10 flex flex-wrap items-center gap-4 relative z-10">
+                                    {isAuthenticated ? (
+                                        <Link
+                                            href={dashboardHref}
+                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-md px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
+                                            style={{ background: activeData.color }}
+                                        >
+                                            Open dashboard
+                                            <ArrowRight className="h-4 w-4" />
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            href={activeData.registerHref}
+                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-md px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
+                                            style={{ background: activeData.color }}
+                                        >
+                                            {activeData.joinCta}
+                                            <ArrowRight className="h-4 w-4" />
+                                        </Link>
+                                    )}
+                                    {!isAuthenticated && (
+                                        <Link
+                                            href="/about"
+                                            className="inline-flex h-12 items-center justify-center px-6 rounded-md font-medium text-foreground bg-[color:var(--surface-2)] hover:bg-[color:var(--surface-3)] transition-colors"
+                                        >
+                                            Learn more
+                                        </Link>
+                                    )}
                                 </div>
                             </header>
 

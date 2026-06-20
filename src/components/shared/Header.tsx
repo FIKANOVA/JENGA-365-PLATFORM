@@ -159,6 +159,7 @@ function NavDropdown({ group, light, onItemClick }: { group: NavGroup; light: bo
             {open && (
                 <div
                     role="menu"
+                    className="absolute left-0 mt-2 w-72 rounded-md border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
                     className="absolute left-0 mt-2 w-72 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
                 >
                     <ul className="py-2">
@@ -342,6 +343,7 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
             {open && (
                 <div
                     role="menu"
+                    className="absolute right-0 mt-2 w-64 rounded-md border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
                     className="absolute right-0 mt-2 w-64 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
                 >
                     <div className="px-4 py-3 border-b border-border/60 bg-surface-1/60">

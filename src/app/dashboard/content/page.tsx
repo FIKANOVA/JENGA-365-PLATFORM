@@ -96,7 +96,7 @@ export default async function ContentPage() {
 
                 {cards.length === 0 ? (
                     <div
-                        className="rounded-lg border border-dashed border-border p-10 text-center"
+                        className="rounded-md border border-dashed border-border p-10 text-center"
                         style={{ background: "var(--surface-1)" }}
                     >
                         <p className="text-body-sm text-foreground-muted">
@@ -114,7 +114,7 @@ export default async function ContentPage() {
                                     href={linkHref}
                                     target={opensNewTab ? "_blank" : undefined}
                                     rel={opensNewTab ? "noopener noreferrer" : undefined}
-                                    className="group rounded-lg border border-border bg-background p-5 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)] flex flex-col gap-4 min-h-[140px]"
+                                    className="group rounded-md border border-border bg-background p-5 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)] flex flex-col gap-4 min-h-[140px]"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex items-center justify-between">
@@ -140,7 +140,7 @@ export default async function ContentPage() {
 
                 {showStudioCta && (
                     <div
-                        className="rounded-lg border border-border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        className="rounded-md border border-border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                         style={{ background: "var(--surface-1)" }}
                     >
                         <div>

@@ -143,7 +143,7 @@ export default async function ImpactPage() {
                             {IMPACT_STATS.map(({ value, label, Icon }) => (
                                 <div
                                     key={label}
-                                    className="rounded-lg border border-border bg-background p-6 transition-colors hover:bg-[color:var(--surface-1)]"
+                                    className="rounded-md border border-border bg-background p-6 transition-colors hover:bg-[color:var(--surface-1)]"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex items-start justify-between mb-4">
@@ -168,7 +168,7 @@ export default async function ImpactPage() {
                             {stories.map((story) => (
                                 <div
                                     key={story.name}
-                                    className="rounded-lg border p-6 space-y-5"
+                                    className="rounded-md border p-6 space-y-5"
                                     style={{ borderColor: "rgba(255,255,255,0.10)" }}
                                 >
                                     <div className="h-px w-12" style={{ background: "var(--brand-green)" }} />
@@ -210,7 +210,7 @@ export default async function ImpactPage() {
                                 {ENVIRONMENTAL_STATS.map((stat) => (
                                     <div
                                         key={stat.label}
-                                        className="rounded-lg border border-border bg-background p-5 flex items-start gap-6"
+                                        className="rounded-md border border-border bg-background p-5 flex items-start gap-6"
                                         style={{ boxShadow: "var(--shadow-sm)" }}
                                     >
                                         <span className="text-display-sm min-w-[80px]" style={{ color: "var(--brand-green)" }}>

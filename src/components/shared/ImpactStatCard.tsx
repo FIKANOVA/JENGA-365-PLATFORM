@@ -8,7 +8,7 @@ export default function ImpactStatCard({ label, value, trend }: { label: string,
             </CardHeader>
             <CardContent className="p-4 pt-0">
                 <div className="text-3xl font-bold font-outfit">{value}</div>
-                {trend && <p className="text-[10px] text-primary mt-1 font-medium">{trend}</p>}
+                {trend && <p className="text-label text-primary mt-1 font-medium">{trend}</p>}
             </CardContent>
         </Card>
     );

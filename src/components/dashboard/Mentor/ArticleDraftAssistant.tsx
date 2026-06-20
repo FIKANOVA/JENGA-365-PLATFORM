@@ -16,7 +16,7 @@ export default function ArticleDraftAssistant() {
                     I've prepared a draft outline based on your expertise in <strong>Full-Stack Architecture</strong>.
                     Would you like me to expand on the "Serverless Performance" section?
                 </p>
-                <div className="p-4 bg-background border rounded-lg h-32 overflow-y-auto text-sm font-mono opacity-80">
+                <div className="p-4 bg-background border rounded-md h-32 overflow-y-auto text-sm font-mono opacity-80">
                     1. Introduction to Serverless Scaling\n2. Memory vs Cold-start Optimization\n3. Edge Compute Strategies for SaaS\n...
                 </div>
                 <div className="flex space-x-2">

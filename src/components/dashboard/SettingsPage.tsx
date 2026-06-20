@@ -168,7 +168,7 @@ export default function SettingsPage({
                 </div>
 
                 {/* ── Profile ──────────────────────────────────────────────── */}
-                <section className="border border-border/50 rounded-lg bg-card p-6 shadow-sm space-y-6">
+                <section className="border border-border/50 rounded-md bg-card p-6 shadow-sm space-y-6">
                     <div className="flex items-center gap-3 mb-2">
                         <User className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
                         <h2 className="text-headline text-foreground">Profile</h2>
@@ -226,7 +226,7 @@ export default function SettingsPage({
                 </section>
 
                 {/* ── 2FA ──────────────────────────────────────────────────── */}
-                <section className="border border-border/50 rounded-lg bg-card p-6 shadow-sm space-y-4">
+                <section className="border border-border/50 rounded-md bg-card p-6 shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <Shield className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
@@ -444,7 +444,7 @@ export default function SettingsPage({
                 </section>
 
                 {/* ── Author profile (bio + role) ───────────────────────────── */}
-                <section className="border border-border/50 rounded-lg bg-card p-6 shadow-sm">
+                <section className="border border-border/50 rounded-md bg-card p-6 shadow-sm">
                     <div className="flex items-center justify-between gap-4 flex-wrap">
                         <div className="flex items-center gap-3">
                             <PenSquare className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
@@ -467,7 +467,7 @@ export default function SettingsPage({
                 </section>
 
                 {/* ── GDPR Data Export ─────────────────────────────────────── */}
-                <section className="border border-border/50 rounded-lg bg-card p-6 shadow-sm">
+                <section className="border border-border/50 rounded-md bg-card p-6 shadow-sm">
                     <div className="flex items-center gap-3 mb-4">
                         <Download className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
                         <h2 className="text-headline text-foreground">Data export (GDPR)</h2>

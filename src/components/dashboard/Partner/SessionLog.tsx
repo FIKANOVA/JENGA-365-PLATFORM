@@ -16,7 +16,7 @@ export default function SessionLog({ sessions, menteeId }: Props) {
 
     return (
         <section
-            className="rounded-lg border border-border bg-background p-8"
+            className="rounded-md border border-border bg-background p-8"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <div className="flex justify-between items-center mb-6">

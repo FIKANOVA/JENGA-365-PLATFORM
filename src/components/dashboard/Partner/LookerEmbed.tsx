@@ -24,7 +24,7 @@ export default function LookerEmbed({
     if (!reportId && !shareUrl) {
         return (
             <section
-                className="rounded-lg border border-border bg-background p-6 lg:p-8"
+                className="rounded-md border border-border bg-background p-6 lg:p-8"
                 style={{ boxShadow: "var(--shadow-sm)" }}
             >
                 <div className="flex items-start gap-4">
@@ -66,7 +66,7 @@ export default function LookerEmbed({
 
     return (
         <section
-            className="rounded-lg border border-border bg-background overflow-hidden"
+            className="rounded-md border border-border bg-background overflow-hidden"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-6 lg:p-8 border-b border-border">

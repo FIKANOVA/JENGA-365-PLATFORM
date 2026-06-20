@@ -31,7 +31,7 @@ export default function ResourceCard(props: ResourceCardProps) {
 
     return (
         <div
-            className="group flex flex-col bg-white border border-[var(--border)] transition-all duration-500 hover:border-black hover:shadow-2xl relative h-full rounded-sm overflow-hidden"
+            className="group flex flex-col bg-white border border-border transition-all duration-500 hover:border-foreground hover:shadow-2xl relative h-full rounded-md overflow-hidden"
         >
             {/* ── Top Visual Area ── */}
             <div className="relative aspect-[16/10] bg-[var(--surface-1)] overflow-hidden">
@@ -49,7 +49,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                                 <Play className="h-7 w-7 text-white fill-white" />
                             </div>
                         </div>
-                        <div className="absolute bottom-5 right-5 px-3 py-1 bg-black text-white font-mono text-[9px] uppercase tracking-widest rounded-sm">
+                        <div className="absolute bottom-5 right-5 px-3 py-1 bg-black text-white font-mono text-eyebrow tracking-widest rounded-md">
                             {duration}
                         </div>
                     </>
@@ -59,10 +59,10 @@ export default function ResourceCard(props: ResourceCardProps) {
                     <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-[var(--surface-1)] group-hover:bg-white transition-colors duration-500">
                         <FileText className="h-16 w-16 text-black/10 group-hover:text-[var(--brand-green)]/20 transition-colors duration-500" strokeWidth={1.2} />
                         <div className="flex flex-col items-center gap-1">
-                            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--foreground-subtle)] font-bold">
+                            <span className="font-mono text-eyebrow tracking-[0.2em] text-[var(--foreground-subtle)] font-bold">
                                 {format?.toUpperCase()} FORMAT
                             </span>
-                            <span className="font-mono text-[8px] uppercase tracking-widest text-black/30">
+                            <span className="font-mono text-eyebrow tracking-widest text-black/30">
                                 {size}
                             </span>
                         </div>
@@ -86,7 +86,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                 {/* Pathway Badge */}
                 {(category || role) && (
                     <div className="absolute top-6 left-6 z-10">
-                        <span className="px-3 py-1 bg-white text-black font-mono text-[9px] uppercase tracking-[0.2em] font-bold shadow-xl rounded-sm border border-[var(--border)]">
+                        <span className="px-3 py-1 bg-white text-black font-mono text-eyebrow tracking-[0.2em] font-bold shadow-xl rounded-md border border-border">
                             {category || role}
                         </span>
                     </div>
@@ -103,7 +103,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                             <p className="text-[var(--foreground-subtle)] text-[11px] leading-relaxed max-w-[200px] mx-auto">Requires verified Jenga365 account to download strategic assets.</p>
                         </div>
                         <Link href="/register/mentorship" className="w-full">
-                            <button className="w-full bg-[var(--brand-green)] text-white py-4 px-6 font-mono text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all rounded-sm shadow-2xl">
+                            <button className="w-full bg-[var(--brand-green)] text-white py-4 px-6 font-mono text-eyebrow tracking-widest hover:bg-white hover:text-black transition-all rounded-md shadow-2xl">
                                 REGISTER TO UNLOCK
                             </button>
                         </Link>
@@ -116,12 +116,12 @@ export default function ResourceCard(props: ResourceCardProps) {
                 <div className="space-y-4 flex-1">
                     <div className="flex items-center gap-3">
                         <span
-                            className={`font-mono text-[9px] font-bold uppercase tracking-[0.3em] ${type === "VIDEO" ? "text-blue-700" : type === "DOWNLOAD" ? "text-[var(--brand-green)]" : "text-[var(--brand-green)]"}`}
+                            className={`font-mono text-label font-bold uppercase tracking-[0.3em] ${type === "VIDEO" ? "text-blue-700" : type === "DOWNLOAD" ? "text-[var(--brand-green)]" : "text-[var(--brand-green)]"}`}
                         >
                             {type}
                         </span>
                         <span className="w-4 h-px bg-[var(--border)]"></span>
-                        <span className="font-mono text-[9px] text-[var(--foreground-subtle)] uppercase tracking-widest font-bold">
+                        <span className="font-mono text-label text-[var(--foreground-subtle)] uppercase tracking-widest font-bold">
                             {date}
                         </span>
                     </div>
@@ -131,27 +131,27 @@ export default function ResourceCard(props: ResourceCardProps) {
                     </h3>
                 </div>
 
-                <div className="pt-8 border-t border-[var(--border)]">
+                <div className="pt-8 border-t border-border">
                     {author ? (
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-sm bg-[var(--surface-1)] border border-[var(--border)] flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-md bg-[var(--surface-1)] border border-border flex items-center justify-center">
                                     <User className="h-4 w-4 text-[var(--foreground-subtle)]" />
                                 </div>
                                 <p className="text-body-sm font-medium text-foreground">
                                     {author}
                                 </p>
                             </div>
-                            <div className="w-6 h-6 bg-black rounded-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
+                            <div className="w-6 h-6 bg-black rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
                                 <ArrowRight className="h-3.5 w-3.5 text-white" />
                             </div>
                         </div>
                     ) : (
                         <div className="flex items-center justify-between">
-                             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-black font-bold">
+                             <span className="font-mono text-eyebrow tracking-[0.2em] text-black font-bold">
                                 {isEffectivelyLocked ? "RESTRICTED" : (type === "DOWNLOAD" ? "READY FOR DOWNLOAD" : "VIEW RESOURCE")}
                              </span>
-                             <div className={`w-8 h-8 flex items-center justify-center rounded-sm transition-all duration-500 ${isEffectivelyLocked ? 'bg-[var(--border)] text-white' : 'bg-[var(--brand-green)] text-white group-hover:scale-110 shadow-xl'}`}>
+                             <div className={`w-8 h-8 flex items-center justify-center rounded-md transition-all duration-500 ${isEffectivelyLocked ? 'bg-[var(--border)] text-white' : 'bg-[var(--brand-green)] text-white group-hover:scale-110 shadow-xl'}`}>
                                 {isEffectivelyLocked ? <Lock className="h-4 w-4" /> : (type === 'DOWNLOAD' ? <Download className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />)}
                              </div>
                         </div>

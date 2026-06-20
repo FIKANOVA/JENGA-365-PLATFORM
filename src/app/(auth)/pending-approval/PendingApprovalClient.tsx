@@ -78,7 +78,7 @@ export default function PendingApprovalClient({ role }: { role: string }) {
 
                     {/* Profile completeness */}
                     <div
-                        className="rounded-lg border border-border bg-background p-6 lg:p-8 text-left flex items-center justify-between gap-6"
+                        className="rounded-md border border-border bg-background p-6 lg:p-8 text-left flex items-center justify-between gap-6"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <div className="space-y-2 max-w-[60%]">
@@ -137,7 +137,7 @@ export default function PendingApprovalClient({ role }: { role: string }) {
 
                     {/* Checklist */}
                     <div
-                        className="rounded-lg border border-border bg-background p-6 lg:p-8 text-left space-y-5"
+                        className="rounded-md border border-border bg-background p-6 lg:p-8 text-left space-y-5"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         {STATUS_ITEMS.map((item) => (

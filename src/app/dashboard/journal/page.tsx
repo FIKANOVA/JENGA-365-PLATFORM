@@ -27,7 +27,7 @@ export default async function JournalPage() {
 
                 {entries.length === 0 ? (
                     <div
-                        className="py-16 text-center border border-dashed border-border rounded-lg"
+                        className="py-16 text-center border border-dashed border-border rounded-md"
                         style={{ background: "var(--surface-1)" }}
                     >
                         <Smile className="w-12 h-12 mx-auto text-foreground-subtle mb-4" />
@@ -41,7 +41,7 @@ export default async function JournalPage() {
                         {entries.map((entry: any) => (
                             <div
                                 key={entry.id}
-                                className="rounded-lg border border-border bg-background p-6 space-y-3 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                                className="rounded-md border border-border bg-background p-6 space-y-3 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <div className="flex items-center justify-between">

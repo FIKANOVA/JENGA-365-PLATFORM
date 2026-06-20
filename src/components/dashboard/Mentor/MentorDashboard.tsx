@@ -74,7 +74,7 @@ export default function MentorDashboard({
 
       {/* AI insight */}
       <section
-        className="rounded-lg border border-border p-5 flex gap-4 items-start"
+        className="rounded-md border border-border p-5 flex gap-4 items-start"
         style={{ background: "var(--brand-green-soft)" }}
       >
         <span
