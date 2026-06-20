@@ -13,7 +13,7 @@ export default defineConfig({
       // Component tests require a DOM environment
       ['src/__tests__/intake/components.test.tsx', 'happy-dom'],
     ],
-    setupFiles: [],
+    setupFiles: ["vitest.setup.ts"],
   },
   resolve: {
     alias: {

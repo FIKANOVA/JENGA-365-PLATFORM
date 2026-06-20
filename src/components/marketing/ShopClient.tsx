@@ -324,6 +324,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
             <button
                 onClick={() => setIsCartOpen(true)}
                 className="fixed bottom-8 right-8 size-16 bg-black text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-[var(--brand-green)] hover:scale-110 transition-all z-40 group"
+                aria-label="Open cart"
             >
                 <div className="relative">
                     <ShoppingCart className="h-5 w-5 group-hover:animate-bounce" />

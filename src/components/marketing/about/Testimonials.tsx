@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-const testimonials = [
+const FALLBACK_TESTIMONIALS = [
     {
         quote: "Jenga365 didn't just give me a place to play; they gave me a roadmap for my entire future.",
         name: "David Omondi",
@@ -15,7 +15,19 @@ const testimonials = [
     },
 ];
 
-export default function Testimonials() {
+interface TestimonialsProps {
+    readonly voices?: any[];
+}
+
+export default function Testimonials({ voices }: TestimonialsProps) {
+    const displayVoices = voices && voices.filter((v: any) => v.type === "SOCIALS" || v.type === "ARTICLE_COMMENTS").length > 0
+        ? voices.filter((v: any) => v.type === "SOCIALS" || v.type === "ARTICLE_COMMENTS").map((v: any) => ({
+            quote: v.description,
+            name: v.host,
+            role: v.type === "SOCIALS" ? "Socials" : "Article Comment",
+        }))
+        : FALLBACK_TESTIMONIALS;
+
     return (
         <section className="py-16 md:py-24 bg-accent relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -34,7 +46,7 @@ export default function Testimonials() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {testimonials.map((t, idx) => (
+                    {displayVoices.map((t, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 30 }}

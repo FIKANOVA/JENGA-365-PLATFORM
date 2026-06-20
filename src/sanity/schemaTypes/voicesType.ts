@@ -19,6 +19,8 @@ export const voicesType = defineType({
                 list: [
                     { title: "X-Space", value: "SPACES" },
                     { title: "X-Thread", value: "THREADS" },
+                    { title: "Social", value: "SOCIALS" },
+                    { title: "Article Comment", value: "ARTICLE_COMMENTS" },
                 ],
                 layout: "radio",
             },
@@ -37,8 +39,8 @@ export const voicesType = defineType({
             description: "E.g., @jenga365",
         }),
         defineField({
-            name: "xUrl",
-            title: "X (Twitter) URL",
+            name: "url",
+            title: "URL (X, LinkedIn, Article)",
             type: "url",
         }),
         defineField({
