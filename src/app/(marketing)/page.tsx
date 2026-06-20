@@ -13,7 +13,9 @@ import {
     fetchEvents,
     fetchArticles,
     fetchSiteSettings,
+    fetchPartners,
 } from "@/lib/sanity/queries";
+import PartnerCarousel from "@/components/marketing/about/PartnerCarousel";
 import { urlFor } from "@/lib/sanity/client";
 
 export async function generateMetadata() {
@@ -37,11 +39,12 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function HomePage() {
-    const [dbStats, events, articles, settings] = await Promise.all([
+    const [dbStats, events, articles, settings, partners] = await Promise.all([
         getGlobalImpactStats(),
         fetchEvents(),
         fetchArticles().catch(() => []),
         fetchSiteSettings(),
+        fetchPartners().catch(() => []),
     ]);
 
     const tickerStats = dbStats

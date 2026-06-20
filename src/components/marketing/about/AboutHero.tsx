@@ -21,9 +21,12 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
     const isAuthenticated = !!session?.user;
 
     const heroUrl = heroImage?.asset?.url
-        ? urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
+        ? heroImage.asset.url.match(/\.(mp4|webm|mov)(\?.*)?$/i)
+            ? heroImage.asset.url // Don't use urlFor on video
+            : urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
         : null;
     const hasImage = !!heroUrl;
+    const isVideo = hasImage && !!heroUrl?.match(/\.(mp4|webm|mov)(\?.*)?$/i);
 
     const headingColor = hasImage ? "#ffffff" : "var(--foreground)";
     const mutedColor = hasImage ? "rgba(255,255,255,0.88)" : "var(--foreground-muted)";
@@ -45,21 +48,32 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
         <section className="relative overflow-hidden bg-hero-radial bg-topo border-b border-border">
             {hasImage && (
                 <>
-                    <motion.img
-                        initial={{ scale: 1.05 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
-                        src={heroUrl!}
-                        alt=""
+                    {isVideo ? (
+                        <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            src={heroUrl!}
+                        />
+                    ) : (
+                        <motion.img
+                            initial={{ scale: 1.05 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            src={heroUrl!}
+                            alt=""
+                            aria-hidden
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                        />
+                    )}
+                    <div
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/60 via-black/40 to-black/20"
                         aria-hidden
-                        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                     />
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/60 to-black/35"
-                        aria-hidden
-                    />
-                    <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 to-transparent"
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent"
                         aria-hidden
                     />
                 </>
