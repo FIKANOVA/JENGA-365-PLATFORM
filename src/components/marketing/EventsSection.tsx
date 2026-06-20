@@ -59,13 +59,12 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
     return (
         <section className="bg-background" style={{ background: "var(--surface-1)" }}>
             <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 md:py-32">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 md:py-24">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                             Upcoming Events
                         </span>
-                        <h2 className="mt-3 text-display-sm md:text-display-md">Join the community in person.</h2>
+                        <h2 className="mt-3 text-display-md">Join the community in person.</h2>
                     </div>
                     <NextLink
                         href="/events"

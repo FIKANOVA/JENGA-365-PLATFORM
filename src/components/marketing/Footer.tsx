@@ -56,9 +56,6 @@ export default function Footer() {
                             <Logo variant="white" theme="dark" height={40} />
                         </Link>
                         <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs hidden md:block">
-                    <div className="md:col-span-4 space-y-8">
-                        <Logo variant="white" theme="dark" height={40} />
-                        <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs">
                             Kenya&apos;s dual-engine AI platform — building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
                         </p>
                         <div className="flex items-center gap-3">
