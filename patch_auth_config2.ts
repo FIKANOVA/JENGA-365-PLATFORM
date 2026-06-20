@@ -1,11 +1,15 @@
 import fs from 'fs';
-
 let content = fs.readFileSync('src/lib/auth/config.ts', 'utf8');
 
 content = content.replace(
-`        sendPasswordReset: async ({ user, url }) => {`,
-`        sendPasswordReset: async ({ user, url }: { user: any, url: string }) => {`
+`    emailAndPassword: {
+        enabled: true,
+        requireEmailVerification: false,`,
+`    emailAndPassword: {
+        enabled: true,
+        requireEmailVerification: false,
+        minPasswordLength: 4,`
 );
 
 fs.writeFileSync('src/lib/auth/config.ts', content);
-console.log('Fixed src/lib/auth/config.ts');
+console.log('Fixed auth config');

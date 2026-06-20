@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 96" fill="none" role="img" aria-label="Jenga365">
   <!-- Orbit arcs (neutral, inherit currentColor) -->
-  <path d="M40 28 A 150 62 0 0 1 252 22" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
-  <path d="M260 68 A 150 62 0 0 1 48 74" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <path d="M40 28 A 150 85 0 0 1 252 22" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <path d="M260 68 A 150 85 0 0 1 48 74" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
   <!-- Orbit dots -->
   <circle cx="40" cy="28" r="7" fill="#E5342A"/>
   <circle cx="260" cy="68" r="7" fill="#16A34A"/>

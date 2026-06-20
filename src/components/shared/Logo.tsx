@@ -61,7 +61,7 @@ export default function Logo({
             aria-label="Jenga365"
         >
             <path
-                d="M40 28 A 150 62 0 0 1 252 22"
+                d="M40 28 A 150 85 0 0 1 252 22"
                 stroke="currentColor"
                 strokeWidth={3}
                 strokeLinecap="round"
@@ -69,7 +69,7 @@ export default function Logo({
                 opacity={0.9}
             />
             <path
-                d="M260 68 A 150 62 0 0 1 48 74"
+                d="M260 68 A 150 85 0 0 1 48 74"
                 stroke="currentColor"
                 strokeWidth={3}
                 strokeLinecap="round"

@@ -125,7 +125,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
             )}
 
             <div
-                className={`relative mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pt-40 pb-24 md:pt-48 md:pb-32 lg:pt-56 lg:pb-40" : "py-24 md:py-32 lg:py-40"}`}
+                className={`relative mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pt-24 pb-16 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32" : "py-24 md:py-32 lg:py-40"}`}
             >
                 <div className="max-w-3xl">
                     <motion.div
