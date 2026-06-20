@@ -86,7 +86,7 @@ function MinimalHeader() {
         <header className="w-full border-b border-border bg-background">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-center">
-                    <Logo size="md" />
+                    <Logo type="image" size="md" />
                 </div>
             </div>
         </header>
@@ -244,7 +244,7 @@ function PublicHeader({ scrolled, mobileOpen, setMobileOpen }: { scrolled: boole
             scrolled={scrolled}
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={false} onClose={() => setMobileOpen(false)} /> : null}
         >
-            <Logo size="md" />
+            <Logo type="image" size="md" />
             <PrimaryNav isAuthenticated={false} />
 
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -401,7 +401,7 @@ function AuthenticatedHeader({
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} onClose={() => setMobileOpen(false)} /> : null}
         >
             <div className="flex items-center gap-4">
-                <Logo size="md" />
+                <Logo type="image" size="md" />
                 <RoleBadge role={user.role ?? null} className="hidden lg:inline-flex" />
             </div>
             <PrimaryNav isAuthenticated={true} />
@@ -549,7 +549,7 @@ export default function Header() {
     if (isPending) {
         return (
             <Shell scrolled={scrolled}>
-                <Logo size="md" />
+                <Logo type="image" size="md" />
                 <div className="h-9 w-24 rounded-md bg-surface-2 animate-pulse" aria-hidden />
             </Shell>
         );
