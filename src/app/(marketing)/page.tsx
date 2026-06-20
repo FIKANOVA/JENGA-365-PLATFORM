@@ -42,6 +42,12 @@ export default async function HomePage() {
         fetchEvents(),
         fetchArticles().catch(() => []),
         fetchSiteSettings(),
+    const [dbStats, events, articles, partners, settings] = await Promise.all([
+        getGlobalImpactStats().catch(() => null),
+        fetchEvents().catch(() => []),
+        fetchArticles().catch(() => []),
+        fetchPartners().catch(() => []),
+        fetchSiteSettings().catch(() => null),
     ]);
 
     const tickerStats = dbStats
@@ -66,9 +72,9 @@ export default async function HomePage() {
                 heading={settings?.featuredVideoHeading ?? null}
             />
             <ImpactTicker stats={tickerStats} />
-            <WhatWeDoSection />
-            <ChoosePathSection />
-            <SweatEquityBand />
+            <WhatWeDoSection copy={settings?.whatWeDo ?? null} />
+            <ChoosePathSection copy={settings?.choosePath ?? null} />
+            <SweatEquityBand copy={settings?.sweatEquity ?? null} />
             <EventsSection events={events} />
             <HomeArticlesSection articles={articles} />
             <FinalCTAStrip />

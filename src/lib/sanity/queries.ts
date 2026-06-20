@@ -21,7 +21,10 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   impactTestimonials[]{ quote, name, role },
   environmentalStats[]{ value, label, description },
   historyTimeline[]{ title, date, content },
-  faqItems[]{ question, answer }
+  faqItems[]{ question, answer },
+  whatWeDo,
+  choosePath,
+  sweatEquity
 }`;
 
 export async function fetchSiteSettings() {

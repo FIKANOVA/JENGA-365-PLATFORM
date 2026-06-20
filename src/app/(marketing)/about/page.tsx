@@ -30,6 +30,8 @@ export async function generateMetadata() {
 
 export default async function AboutPage() {
     const [settings, team] = await Promise.all([
+    const [partners, settings, team] = await Promise.all([
+        fetchPartners().catch(() => []),
         fetchSiteSettings(),
         fetchTeamOfficials(),
     ]);
