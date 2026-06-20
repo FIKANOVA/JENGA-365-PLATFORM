@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-const testimonials = [
+const defaultTestimonials = [
     {
         quote: "Jenga365 didn't just give me a place to play; they gave me a roadmap for my entire future.",
         name: "David Omondi",
@@ -15,7 +15,17 @@ const testimonials = [
     },
 ];
 
-export default function Testimonials() {
+interface TestimonialsProps {
+    readonly testimonials?: Array<{
+        quote: string;
+        name: string;
+        role: string;
+    }> | null;
+}
+
+export default function Testimonials({ testimonials }: TestimonialsProps) {
+    const displayTestimonials = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
+
     return (
         <section className="py-16 md:py-24 bg-accent relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -34,7 +44,7 @@ export default function Testimonials() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {testimonials.map((t, idx) => (
+                    {displayTestimonials.map((t, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 30 }}

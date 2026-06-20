@@ -70,14 +70,14 @@ export default async function ResourceArticleDetailPage({ params }: { params: Pr
         <div className="min-h-screen bg-background">
             <main>
                 <section className="relative w-full h-[60vh] min-h-[480px] flex items-center justify-center overflow-hidden bg-black">
-                    <div className="absolute inset-0 bg-black/60 z-10" />
+                    <div className="absolute inset-0 bg-black/40 z-10" />
                     {heroImage && (
                         <div className="absolute inset-0">
                             <Image
                                 src={heroImage}
                                 alt={article.title}
                                 fill
-                                className="object-cover grayscale brightness-50"
+                                className="object-cover grayscale brightness-75"
                                 priority
                             />
                         </div>

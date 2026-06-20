@@ -69,11 +69,11 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
                         />
                     )}
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/60 via-black/40 to-black/20"
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent"
                         aria-hidden
                     />
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent"
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 to-transparent"
                         aria-hidden
                     />
                 </>

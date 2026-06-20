@@ -42,7 +42,7 @@ export default async function AboutPage() {
             <HistoryTimeline nodes={settings?.historyTimeline ?? null} />
             <WhyJenga />
             <LeadershipGrid team={team} />
-            <Testimonials />
+            <Testimonials testimonials={settings?.impactTestimonials ?? null} />
             <AboutCTAStrip />
         </div>
     );
