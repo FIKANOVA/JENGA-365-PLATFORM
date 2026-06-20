@@ -1,0 +1,10 @@
+--- src/components/dashboard/Admin/AdminDashboard.tsx
++++ src/components/dashboard/Admin/AdminDashboard.tsx
+@@ -16,6 +16,7 @@
+   MapPin,
+   Briefcase,
+   ShoppingBag,
++  Mail,
+ } from "lucide-react";
+ import { SCOPE_TIER_LABELS } from "@/lib/constants/moderator-scopes";
+ import { approveUser, rejectUser, suspendUser } from "@/lib/actions/moderation";

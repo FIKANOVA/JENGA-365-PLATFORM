@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Unlock, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
-import { setPartnerDataStudio } from "@/lib/actions/adminOps";
+import { setPartnerLooker } from "@/lib/actions/adminOps";
 
 export type MilestoneRow = {
     id: string;
@@ -15,11 +15,11 @@ export type MilestoneRow = {
     partnerName: string;
 };
 
-export type PartnerDataStudioRow = {
+export type PartnerLookerRow = {
     id: string;
     orgName: string;
-    dataStudioReportId: string;
-    dataStudioShareUrl: string;
+    lookerReportId: string;
+    lookerShareUrl: string;
 };
 
 export default function EsgUnlockPanel({
@@ -27,7 +27,7 @@ export default function EsgUnlockPanel({
     partners,
 }: {
     milestones: MilestoneRow[];
-    partners: PartnerDataStudioRow[];
+    partners: PartnerLookerRow[];
 }) {
     const router = useRouter();
     const [busyId, setBusyId] = useState<string | null>(null);
@@ -90,10 +90,10 @@ export default function EsgUnlockPanel({
             {/* Looker per-partner config */}
             <section className="space-y-3">
                 <h2 className="text-body font-medium text-foreground flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4" /> Data Studio dashboards (per partner)
+                    <BarChart3 className="w-4 h-4" /> Looker Studio dashboards (per partner)
                 </h2>
                 <p className="text-body-sm text-foreground-subtle">
-                    Set each partner&apos;s Data Studio report ID and login-free share URL. These render the
+                    Set each partner&apos;s Looker report ID and login-free share URL. These render the
                     embedded ESG dashboard at <code>/dashboard/partner</code>.
                 </p>
                 {partners.length === 0 ? (
@@ -106,15 +106,15 @@ export default function EsgUnlockPanel({
     );
 }
 
-function PartnerLookerForm({ partner }: { partner: PartnerDataStudioRow }) {
+function PartnerLookerForm({ partner }: { partner: PartnerLookerRow }) {
     const router = useRouter();
-    const [reportId, setReportId] = useState(partner.dataStudioReportId);
-    const [shareUrl, setShareUrl] = useState(partner.dataStudioShareUrl);
+    const [reportId, setReportId] = useState(partner.lookerReportId);
+    const [shareUrl, setShareUrl] = useState(partner.lookerShareUrl);
     const [saving, setSaving] = useState(false);
 
     async function save() {
         setSaving(true);
-        const result = await setPartnerDataStudio(partner.id, reportId, shareUrl);
+        const result = await setPartnerLooker(partner.id, reportId, shareUrl);
         setSaving(false);
         if ("error" in result) {
             toast.error(result.error);
@@ -129,7 +129,7 @@ function PartnerLookerForm({ partner }: { partner: PartnerDataStudioRow }) {
             <p className="text-body font-medium text-foreground">{partner.orgName}</p>
             <div className="grid sm:grid-cols-2 gap-3">
                 <div>
-                    <label className="jenga-label">Data Studio report ID</label>
+                    <label className="jenga-label">Looker report ID</label>
                     <input className="jenga-input" value={reportId} onChange={(e) => setReportId(e.target.value)} placeholder="abcd-1234-…" />
                 </div>
                 <div>

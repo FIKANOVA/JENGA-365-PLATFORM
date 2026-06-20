@@ -1,3 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jenga365 — Application Flows</title>
+<style>
+  :root {
+    --bg: #0a0a0b; --surface-1: #141416; --surface-2: #1d1d20; --border: #2a2a2e;
+    --fg: #ededef; --fg-muted: #9a9aa2; --accent: #e5484d; --accent-soft: rgba(229,72,77,.12);
+    --green: #46a758; --blue: #5b8def; --radius: 10px;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#fbfbfc; --surface-1:#fff; --surface-2:#f3f3f5; --border:#e4e4e8; --fg:#18181b; --fg-muted:#62626b; --accent-soft:rgba(229,72,77,.08); }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; }
+  header.top { border-bottom: 1px solid var(--border); background: linear-gradient(180deg, var(--surface-1), var(--bg)); }
+  header.top .wrap { padding-top: 40px; padding-bottom: 28px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .sub { color: var(--fg-muted); max-width: 760px; font-size: 14.5px; }
+  .pillrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .pill { font-size: 12px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; color: var(--fg-muted); background: var(--surface-1); }
+  .pill b { color: var(--fg); font-weight: 600; }
+  section { margin-top: 36px; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-muted); margin: 0 0 14px; font-weight: 600; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .card h3 { margin: 0 0 10px; font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td { padding: 5px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td:first-child { color: var(--fg-muted); white-space: nowrap; }
+  code, .mono { font-family: var(--mono); font-size: 12.5px; }
+  code { background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
+  .controls { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 14px 0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid var(--border); }
+  #search { flex: 1 1 240px; min-width: 200px; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-1); color: var(--fg); font-size: 14px; font-family: var(--sans); }
+  #search:focus { outline: none; border-color: var(--blue); }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { font-size: 12.5px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-1); color: var(--fg-muted); cursor: pointer; user-select: none; }
+  .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--fg); }
+  .count { color: var(--fg-muted); font-size: 12.5px; margin-left: auto; }
+  .flow { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); margin-top: 12px; overflow: hidden; }
+  .flow > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .flow > summary::-webkit-details-marker { display: none; }
+  .flow > summary:hover { background: var(--surface-2); }
+  .cat { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 6px; background: var(--surface-2); color: var(--fg-muted); white-space: nowrap; }
+  .flow-name { font-weight: 600; font-size: 14.5px; }
+  .flow-trigger { color: var(--fg-muted); font-size: 12.5px; }
+  .chev { margin-left: auto; color: var(--fg-muted); transition: transform .15s; }
+  .flow[open] .chev { transform: rotate(90deg); }
+  .flow-body { padding: 4px 16px 18px; border-top: 1px solid var(--border); }
+  .kv { display: grid; grid-template-columns: 120px 1fr; gap: 4px 14px; font-size: 13.5px; margin: 14px 0; }
+  .kv dt { color: var(--fg-muted); }
+  .kv dd { margin: 0; }
+  ol.steps { margin: 8px 0; padding-left: 0; list-style: none; counter-reset: s; }
+  ol.steps li { position: relative; padding: 8px 0 8px 34px; border-bottom: 1px dashed var(--border); }
+  ol.steps li:last-child { border-bottom: 0; }
+  ol.steps li::before { counter-increment: s; content: counter(s); position: absolute; left: 0; top: 8px; width: 22px; height: 22px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+  ol.steps .file { display: block; margin-top: 3px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .tag { font-size: 11.5px; padding: 3px 8px; border-radius: 6px; background: var(--surface-2); color: var(--fg-muted); }
+  .tag.db { color: var(--green); }
+  .rule { font-size: 12.5px; color: var(--fg-muted); padding: 6px 0 6px 14px; border-left: 2px solid var(--accent); margin: 6px 0; }
+  .files { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  footer { color: var(--fg-muted); font-size: 12.5px; margin-top: 50px; text-align: center; }
+  .legend { font-size: 12px; color: var(--fg-muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>Jenga365 — Application Flows</h1>
+    <p class="sub" id="metaDesc"></p>
+    <div class="pillrow" id="stackPills"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section>
+    <h2>Roles &amp; approval</h2>
+    <div class="card"><table id="rolesTable"></table></div>
+  </section>
+
+  <section>
+    <h2>Capabilities (RBAC)</h2>
+    <div class="grid2">
+      <div class="card"><h3>Moderator scopes</h3><div id="scopes"></div></div>
+      <div class="card"><h3>Capability → scopes</h3><table id="capTable"></table><p class="legend">Empty = SuperAdmin-only.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Flows</h2>
+    <div class="controls">
+      <input id="search" type="search" placeholder="Search flows, files, rules…" autocomplete="off" />
+      <div class="filters" id="filters"></div>
+      <span class="count" id="count"></span>
+    </div>
+    <div id="flows"></div>
+  </section>
+
+  <footer>
+    Machine-readable companion: <code>docs/flows.json</code> · Generated <span id="genDate"></span> · Paths authoritative, line numbers indicative.
+  </footer>
+</div>
+
+<script type="application/json" id="data">
 {
   "$schema": "https://jenga365.dev/flows.schema.json",
   "meta": {
@@ -12,7 +126,7 @@
       "auth": "Better Auth (sessions, 2FA, admin plugin)",
       "fieldData": "EU KoBoToolbox Server (GDPR) -> webhook ingestion",
       "payments": "Paystack (KES) for donations + store orders",
-      "reporting": "Data Studio (free) over Drizzle pgViews; no in-app reporting UI",
+      "reporting": "Looker Studio (free) over Drizzle pgViews; no in-app reporting UI",
       "cache_rateLimit": "Postgres-backed (rate_limit_buckets); NO Redis/Upstash"
     }
   },
@@ -482,21 +596,21 @@
     },
     {
       "id": "partner-reporting",
-      "name": "Corporate partner reporting (Data Studio)",
+      "name": "Corporate partner reporting (Looker Studio)",
       "category": "reporting",
       "trigger": "Corporate partner views their ESG dashboard",
       "entryPoint": "/dashboard/partner",
       "steps": [
         { "n": 1, "action": "getCsrStats(partnerId) computes mentees sponsored, active mentorships, donations, projects", "file": "src/lib/actions/csr.ts" },
-        { "n": 2, "action": "DataStudioEmbed renders iframe from corporate_partners.dataStudioReportId; share link from dataStudioShareUrl", "file": "src/components/dashboard/Partner/DataStudioEmbed.tsx" }
+        { "n": 2, "action": "LookerEmbed renders iframe from corporate_partners.lookerReportId; share link from lookerShareUrl", "file": "src/components/dashboard/Partner/LookerEmbed.tsx" }
       ],
       "dbEffects": ["READ users, mentorship_pairs, donations, project_locations"],
-      "endState": "Sponsor sees CSR stat cards + embedded Data Studio dashboard + forwardable share link.",
+      "endState": "Sponsor sees CSR stat cards + embedded Looker dashboard + forwardable share link.",
       "rules": [
-        "No in-app custom reporting UI; Data Studio is canonical (CLAUDE.md §10.5, §11)",
+        "No in-app custom reporting UI; Looker Studio is canonical (CLAUDE.md §10.5, §11)",
         "Per-partner isolation via hardcoded data-source filter OR per-partner pgView"
       ],
-      "keyFiles": ["src/app/dashboard/partner/page.tsx", "src/components/dashboard/Partner/DataStudioEmbed.tsx", "src/lib/actions/csr.ts"]
+      "keyFiles": ["src/app/dashboard/partner/page.tsx", "src/components/dashboard/Partner/LookerEmbed.tsx", "src/lib/actions/csr.ts"]
     },
     {
       "id": "dashboard-routing",
@@ -516,3 +630,91 @@
     }
   ]
 }
+</script>
+<script>
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const $ = (s, r=document) => r.querySelector(s);
+  const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
+  const esc = s => String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+
+  // Meta
+  $('#metaDesc').textContent = DATA.meta.description;
+  $('#genDate').textContent = DATA.meta.generated;
+  const stack = DATA.meta.stack;
+  $('#stackPills').innerHTML = Object.entries(stack).map(([k,v]) =>
+    `<span class="pill"><b>${esc(k)}</b> ${esc(v)}</span>`).join('');
+
+  // Roles
+  $('#rolesTable').innerHTML = '<tr><td><b>Role</b></td><td><b>Approval</b></td><td><b>Dashboard</b></td></tr>' +
+    DATA.roles.map(r => `<tr><td style="color:var(--fg)">${esc(r.role)}</td><td>${esc(r.approval)}</td><td><code>${esc(r.dashboard)}</code></td></tr>`).join('');
+
+  // Scopes + capabilities
+  $('#scopes').innerHTML = `<div class="files">${DATA.moderatorScopes.values.map(v=>`<span class="tag">${esc(v)}</span>`).join('')}</div>` +
+    `<p class="legend">${esc(DATA.moderatorScopes.note)}</p>`;
+  $('#capTable').innerHTML = Object.entries(DATA.capabilities.map).map(([cap, scopes]) =>
+    `<tr><td style="color:var(--fg);white-space:normal"><code>${esc(cap)}</code></td><td>${scopes.length ? scopes.map(s=>`<span class="tag">${esc(s)}</span>`).join(' ') : '<span class="tag db">SuperAdmin only</span>'}</td></tr>`).join('');
+
+  // Category filters
+  const cats = DATA.categories;
+  const catLabel = id => (cats.find(c=>c.id===id)||{}).label || id;
+  let activeCat = 'all';
+  let query = '';
+  const filtersEl = $('#filters');
+  const mkChip = (id, label) => { const c = el('button','chip',label); c.setAttribute('aria-pressed', id===activeCat); c.onclick = () => { activeCat = id; render(); }; c.dataset.id = id; return c; };
+  filtersEl.appendChild(mkChip('all','All'));
+  cats.forEach(c => filtersEl.appendChild(mkChip(c.id, c.label)));
+
+  $('#search').addEventListener('input', e => { query = e.target.value.toLowerCase(); render(); });
+
+  const flowsEl = $('#flows');
+
+  function matches(f) {
+    if (activeCat !== 'all' && f.category !== activeCat) return false;
+    if (!query) return true;
+    const hay = JSON.stringify(f).toLowerCase();
+    return hay.includes(query);
+  }
+
+  function flowCard(f) {
+    const d = el('details','flow');
+    const steps = (f.steps||[]).map(s =>
+      `<li>${esc(s.action)}${s.file ? `<code class="file">${esc(s.file)}</code>` : ''}</li>`).join('');
+    const db = (f.dbEffects||[]).map(x=>`<span class="tag db">${esc(x)}</span>`).join('');
+    const rules = (f.rules||[]).map(r=>`<div class="rule">${esc(r)}</div>`).join('');
+    const files = (f.keyFiles||[]).map(x=>`<span class="tag">${esc(x)}</span>`).join('');
+    const views = f.views ? `<dt>pgViews</dt><dd>${f.views.map(v=>`<code>${esc(v)}</code>`).join(' ')}</dd>` : '';
+    d.innerHTML = `
+      <summary>
+        <span class="cat">${esc(catLabel(f.category))}</span>
+        <span>
+          <span class="flow-name">${esc(f.name)}</span><br>
+          <span class="flow-trigger">${esc(f.trigger||'')}</span>
+        </span>
+        <span class="chev">▶</span>
+      </summary>
+      <div class="flow-body">
+        <dl class="kv">
+          <dt>Entry point</dt><dd><code>${esc(f.entryPoint||'')}</code></dd>
+          <dt>End state</dt><dd>${esc(f.endState||'')}</dd>
+          ${views}
+        </dl>
+        <ol class="steps">${steps}</ol>
+        ${db ? `<div class="tags">${db}</div>` : ''}
+        ${rules}
+        ${files ? `<div style="margin-top:12px"><div class="flow-trigger" style="margin-bottom:4px">Key files</div><div class="files">${files}</div></div>` : ''}
+      </div>`;
+    return d;
+  }
+
+  function render() {
+    [...filtersEl.children].forEach(c => c.setAttribute('aria-pressed', c.dataset.id === activeCat));
+    flowsEl.innerHTML = '';
+    const list = DATA.flows.filter(matches);
+    list.forEach(f => flowsEl.appendChild(flowCard(f)));
+    $('#count').textContent = `${list.length} of ${DATA.flows.length} flows`;
+    if (!list.length) flowsEl.appendChild(el('div','card','No flows match.'));
+  }
+  render();
+</script>
+</body>
+</html>

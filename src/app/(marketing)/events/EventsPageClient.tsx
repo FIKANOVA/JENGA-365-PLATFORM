@@ -55,7 +55,7 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                 </PageHero>
 
                 {/* ── Grid Section ── */}
-                <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-24">
                     <div className="space-y-16">
                         {/* Type Selection */}
                         <div className="flex flex-col gap-6">
@@ -83,7 +83,7 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                             {filteredEvents.length > 0 ? (
                                 <EventsGrid events={filteredEvents} />
                             ) : (
-                                <div className="flex flex-col items-center justify-center py-32 text-center space-y-8">
+                                <div className="flex flex-col items-center justify-center py-16 md:py-32 text-center space-y-8">
                                     <CalendarX className="h-20 w-20 text-[var(--border)]" />
                                     <div className="space-y-3">
                                         <h3 className="text-display-md text-foreground">No events scheduled</h3>

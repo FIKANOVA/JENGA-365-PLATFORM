@@ -14,7 +14,7 @@ const PROGRAMME_STEPS = [
     { step: "01", title: "Apply & onboard",      body: "Complete your profile and take the AI-powered assessment. Our system builds a deep picture of your goals, learning style, and aspirations." },
     { step: "02", title: "Get matched",          body: "Our AI matching engine pairs you with up to 3 compatible mentors based on sector fit, personality, and availability." },
     { step: "03", title: "Begin your pathway",   body: "Your 12-week structured programme launches with a kick-off session. Weekly check-ins keep you on track and accountable." },
-    { step: "04", title: "Grow & graduate",      body: "Complete milestones, build your network, and unlock the alumni community — a lifetime of continued support." },
+    { step: "04", title: "Grow & graduate",      body: "Complete milestones, build your network, and unlock the alumni community, a lifetime of continued support." },
 ];
 
 const MENTEE_BENEFITS = [
@@ -66,7 +66,7 @@ export default async function MenteesPage() {
                 </div>
             </PageHero>
 
-            <section className="py-20 lg:py-24 border-b border-border">
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>The programme</p>
@@ -88,7 +88,7 @@ export default async function MenteesPage() {
                 </div>
             </section>
 
-            <section className="py-20 lg:py-24 border-b border-border" style={{ background: "var(--surface-1)" }}>
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border" style={{ background: "var(--surface-1)" }}>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>What you get</p>

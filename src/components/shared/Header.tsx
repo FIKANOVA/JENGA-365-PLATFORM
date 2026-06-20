@@ -21,6 +21,11 @@ import { cn } from "@/lib/utils";
  * Nav is grouped into three dropdowns: Platform, Community, Get Involved.
  * Donate + Store + Sign Up remain visible header CTAs (CLAUDE.md §6); they are NOT
  * duplicated inside the Get Involved dropdown, which carries only distinct links.
+ *
+ * "light" (overlay) mode: on the landing page, before scroll, the header is
+ * transparent and overlays the dark hero with white text; on scroll it gains the
+ * blurred surface and flips to dark text. This is the only route-aware styling
+ * (Moseti owns §6); auth-variant selection remains auth-driven, never route-driven.
  */
 
 type NavItem = { label: string; href?: string; isDonate?: boolean; description?: string; newTab?: boolean };
@@ -62,14 +67,16 @@ function isMinimalRoute(pathname: string | null): boolean {
 }
 
 // ── Outer shell ──────────────────────────────────────────────────────────────
-function Shell({ scrolled, children, drawer }: { scrolled: boolean; children: React.ReactNode; drawer?: React.ReactNode }) {
+function Shell({ scrolled, light, children, drawer }: { scrolled: boolean; light: boolean; children: React.ReactNode; drawer?: React.ReactNode }) {
     return (
         <header
             className={cn(
                 "sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter] duration-200",
-                scrolled
-                    ? "bg-background/60 backdrop-blur-xl backdrop-saturate-150 border-b border-border/60 shadow-lg shadow-black/5"
-                    : "bg-background/30 backdrop-blur-md backdrop-saturate-150 border-b border-transparent",
+                light
+                    ? "bg-transparent border-b border-transparent"
+                    : scrolled
+                      ? "bg-background/70 backdrop-blur-xl backdrop-saturate-150 border-b border-border/60 shadow-lg shadow-black/5"
+                      : "bg-background/30 backdrop-blur-md backdrop-saturate-150 border-b border-transparent",
             )}
         >
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -94,7 +101,7 @@ function MinimalHeader() {
 }
 
 // ── Nav dropdown ─────────────────────────────────────────────────────────────
-function NavDropdown({ group, onItemClick }: { group: NavGroup; onItemClick?: () => void }) {
+function NavDropdown({ group, light, onItemClick }: { group: NavGroup; light: boolean; onItemClick?: () => void }) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -138,20 +145,21 @@ function NavDropdown({ group, onItemClick }: { group: NavGroup; onItemClick?: ()
                 aria-haspopup="menu"
                 aria-expanded={open}
                 onClick={() => setOpen((v) => !v)}
-                className="inline-flex items-center gap-1 px-3 py-2 text-label rounded-md hover:bg-surface-2 transition-colors"
-                style={{ color: "var(--foreground-muted)" }}
+                className={cn(
+                    "inline-flex items-center gap-1 px-3 py-2 text-label font-medium rounded-md transition-colors",
+                    light ? "text-white hover:bg-white/10" : "text-foreground hover:bg-surface-2",
+                )}
             >
                 {group.label}
-                <ChevronDown
-                    className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
-                    aria-hidden
-                />
+                <span className={light ? "text-white/60" : "text-foreground-subtle"} aria-hidden>
+                    +
+                </span>
             </button>
 
             {open && (
                 <div
                     role="menu"
-                    className="absolute left-0 mt-2 w-72 rounded-lg border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
+                    className="absolute left-0 mt-2 w-72 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
                 >
                     <ul className="py-2">
                         {group.items.map((item) => (
@@ -196,7 +204,7 @@ function NavDropdown({ group, onItemClick }: { group: NavGroup; onItemClick?: ()
     );
 }
 
-function PrimaryNav({ isAuthenticated }: { isAuthenticated: boolean }) {
+function PrimaryNav({ isAuthenticated, light }: { isAuthenticated: boolean; light: boolean }) {
     const navGroups = isAuthenticated
         ? NAV_GROUPS.map(group => ({
             ...group,
@@ -207,18 +215,21 @@ function PrimaryNav({ isAuthenticated }: { isAuthenticated: boolean }) {
     return (
         <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
             {navGroups.map((g) => (
-                <NavDropdown key={g.label} group={g} />
+                <NavDropdown key={g.label} group={g} light={light} />
             ))}
         </nav>
     );
 }
 
-function GlobalCTAs() {
+function GlobalCTAs({ light }: { light: boolean }) {
     return (
         <>
             <DonateButton
-                className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label transition-colors hover:bg-surface-2"
-                style={{ color: "var(--brand-red)" }}
+                className={cn(
+                    "hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label font-semibold transition-colors",
+                    light ? "hover:bg-white/10" : "hover:bg-surface-2",
+                )}
+                style={{ color: light ? "#FF6B6B" : "var(--brand-red)" }}
             >
                 <Heart className="h-4 w-4" aria-hidden />
                 Donate
@@ -227,8 +238,11 @@ function GlobalCTAs() {
                 href="/shop"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label hover:bg-surface-2 transition-colors"
-                style={{ color: "var(--foreground-muted)" }}
+                className={cn(
+                    "hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-label transition-colors",
+                    light ? "text-white/90 hover:bg-white/10" : "hover:bg-surface-2",
+                )}
+                style={light ? undefined : { color: "var(--foreground-muted)" }}
             >
                 <ShoppingBag className="h-4 w-4" aria-hidden />
                 Store
@@ -238,21 +252,27 @@ function GlobalCTAs() {
 }
 
 // ── Variant 1: Public ────────────────────────────────────────────────────────
-function PublicHeader({ scrolled, mobileOpen, setMobileOpen }: { scrolled: boolean; mobileOpen: boolean; setMobileOpen: (v: boolean) => void }) {
+function PublicHeader({ scrolled, light, mobileOpen, setMobileOpen }: { scrolled: boolean; light: boolean; mobileOpen: boolean; setMobileOpen: (v: boolean) => void }) {
     return (
         <Shell
             scrolled={scrolled}
+            light={light}
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={false} onClose={() => setMobileOpen(false)} /> : null}
         >
             <Logo type="image" size="md" />
             <PrimaryNav isAuthenticated={false} />
+            <Logo size="md" tone={light ? "light" : "default"} />
+            <PrimaryNav isAuthenticated={false} light={light} />
 
             <div className="flex items-center gap-1.5 sm:gap-2">
-                <GlobalCTAs />
-                <span className="hidden sm:inline-block h-5 w-px bg-border mx-1" aria-hidden />
+                <GlobalCTAs light={light} />
+                <span className={cn("hidden sm:inline-block h-5 w-px mx-1", light ? "bg-white/25" : "bg-border")} aria-hidden />
                 <Link
                     href="/login"
-                    className="hidden sm:inline-flex items-center h-9 px-3 text-label text-foreground hover:bg-surface-2 rounded-md transition-colors"
+                    className={cn(
+                        "hidden sm:inline-flex items-center h-9 px-3 text-label rounded-md transition-colors",
+                        light ? "text-white hover:bg-white/10" : "text-foreground hover:bg-surface-2",
+                    )}
                 >
                     Log In
                 </Link>
@@ -267,7 +287,10 @@ function PublicHeader({ scrolled, mobileOpen, setMobileOpen }: { scrolled: boole
                     type="button"
                     aria-label={mobileOpen ? "Close menu" : "Open menu"}
                     aria-expanded={mobileOpen}
-                    className="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-md text-foreground hover:bg-surface-2"
+                    className={cn(
+                        "md:hidden inline-flex items-center justify-center h-9 w-9 rounded-md transition-colors",
+                        light ? "text-white hover:bg-white/10" : "text-foreground hover:bg-surface-2",
+                    )}
                     onClick={() => setMobileOpen(!mobileOpen)}
                 >
                     {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -278,7 +301,7 @@ function PublicHeader({ scrolled, mobileOpen, setMobileOpen }: { scrolled: boole
 }
 
 // ── Avatar dropdown for authenticated users ──────────────────────────────────
-function AvatarMenu({ name, image, role }: { name: string; image?: string; role?: string }) {
+function AvatarMenu({ name, image, role, light }: { name: string; image?: string; role?: string; light: boolean }) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const ref = useRef<HTMLDivElement>(null);
@@ -305,18 +328,21 @@ function AvatarMenu({ name, image, role }: { name: string; image?: string; role?
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className="inline-flex items-center gap-2 h-9 pl-1.5 pr-2 rounded-full hover:bg-surface-2 transition-colors"
+                className={cn(
+                    "inline-flex items-center gap-2 h-9 pl-1.5 pr-2 rounded-full transition-colors",
+                    light ? "hover:bg-white/10" : "hover:bg-surface-2",
+                )}
                 aria-haspopup="menu"
                 aria-expanded={open}
             >
                 <UserAvatar name={name} image={image} />
-                <ChevronDown className="h-3.5 w-3.5 text-foreground-muted" aria-hidden />
+                <ChevronDown className={cn("h-3.5 w-3.5", light ? "text-white/80" : "text-foreground-muted")} aria-hidden />
             </button>
 
             {open && (
                 <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-64 rounded-lg border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
+                    className="absolute right-0 mt-2 w-64 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
                 >
                     <div className="px-4 py-3 border-b border-border/60 bg-surface-1/60">
                         <p className="text-label font-semibold text-foreground truncate">{name}</p>
@@ -386,11 +412,13 @@ function AvatarMenu({ name, image, role }: { name: string; image?: string; role?
 function AuthenticatedHeader({
     user,
     scrolled,
+    light,
     mobileOpen,
     setMobileOpen,
 }: {
     user: { name?: string | null; image?: string | null; role?: string | null };
     scrolled: boolean;
+    light: boolean;
     mobileOpen: boolean;
     setMobileOpen: (v: boolean) => void;
 }) {
@@ -398,25 +426,30 @@ function AuthenticatedHeader({
     return (
         <Shell
             scrolled={scrolled}
+            light={light}
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} onClose={() => setMobileOpen(false)} /> : null}
         >
             <div className="flex items-center gap-4">
                 <Logo type="image" size="md" />
+                <Logo size="md" tone={light ? "light" : "default"} />
                 <RoleBadge role={user.role ?? null} className="hidden lg:inline-flex" />
             </div>
-            <PrimaryNav isAuthenticated={true} />
+            <PrimaryNav isAuthenticated={true} light={light} />
 
             <div className="flex items-center gap-1.5 sm:gap-2">
-                <GlobalCTAs />
-                <span className="hidden sm:inline-block h-5 w-px bg-border mx-1" aria-hidden />
+                <GlobalCTAs light={light} />
+                <span className={cn("hidden sm:inline-block h-5 w-px mx-1", light ? "bg-white/25" : "bg-border")} aria-hidden />
                 <NotificationBell />
-                <AvatarMenu name={displayName} image={user.image ?? undefined} role={user.role ?? undefined} />
+                <AvatarMenu name={displayName} image={user.image ?? undefined} role={user.role ?? undefined} light={light} />
 
                 <button
                     type="button"
                     aria-label={mobileOpen ? "Close menu" : "Open menu"}
                     aria-expanded={mobileOpen}
-                    className="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-md text-foreground hover:bg-surface-2"
+                    className={cn(
+                        "md:hidden inline-flex items-center justify-center h-9 w-9 rounded-md transition-colors",
+                        light ? "text-white hover:bg-white/10" : "text-foreground hover:bg-surface-2",
+                    )}
                     onClick={() => setMobileOpen(!mobileOpen)}
                 >
                     {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -540,6 +573,11 @@ export default function Header() {
         };
     }, [mobileOpen]);
 
+    // Overlay (transparent + white text) only on the landing hero, before scroll
+    // and before the mobile drawer opens.
+    const isHome = pathname === "/";
+    const light = isHome && !scrolled && !mobileOpen;
+
     // Variant 3: Minimal — guest on auth/legal routes
     if (!isAuthenticated && isMinimalRoute(pathname)) {
         return <MinimalHeader />;
@@ -550,6 +588,8 @@ export default function Header() {
         return (
             <Shell scrolled={scrolled}>
                 <Logo type="image" size="md" />
+            <Shell scrolled={scrolled} light={light}>
+                <Logo size="md" tone={light ? "light" : "default"} />
                 <div className="h-9 w-24 rounded-md bg-surface-2 animate-pulse" aria-hidden />
             </Shell>
         );
@@ -563,10 +603,11 @@ export default function Header() {
                 role: (session.user as { role?: string | null }).role ?? null,
             }}
             scrolled={scrolled}
+            light={light}
             mobileOpen={mobileOpen}
             setMobileOpen={setMobileOpen}
         />
     ) : (
-        <PublicHeader scrolled={scrolled} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <PublicHeader scrolled={scrolled} light={light} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
     );
 }

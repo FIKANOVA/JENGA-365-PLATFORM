@@ -66,7 +66,7 @@ export default function ImpactTicker({ stats }: { stats?: ImpactStats }) {
                  style={{ background: "linear-gradient(to left, var(--brand-black), transparent)" }} aria-hidden />
 
             {/* Two identical sets => seamless -50% loop */}
-            <div className="jenga-marquee-track py-6" aria-hidden>
+            <div className="jenga-marquee-track flex w-max py-6" aria-hidden>
                 {[0, 1].map((set) => (
                     <div key={set} className="flex shrink-0">
                         {items.map((item) => (

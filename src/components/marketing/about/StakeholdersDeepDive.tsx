@@ -7,17 +7,35 @@ import { useSession } from "@/lib/auth/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const STAKEHOLDERS = [
+/**
+ * The four stakeholders, written long-form for the About page.
+ * Auth-aware CTAs, authenticated users see "Open dashboard"; guests see role-specific join.
+ */
+type Stakeholder = {
+    id: "mentee" | "mentor" | "corporate" | "ngo";
+    tag: string;
+    name: string;
+    principle: string;
+    paragraph: string;
+    rules: { label: string; detail: string }[];
+    color: string;
+    colorSoft: string;
+    registerHref: string;
+    joinCta: string;
+    Icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+};
+
+const STAKEHOLDERS: Stakeholder[] = [
     {
         id: "mentee",
         tag: "The Army",
         name: "Mentees",
-        principle: "The Total Athlete: body, mind, and community.",
+        principle: "Total Athlete, earned through Sweat Equity.",
         paragraph:
-            "Mentees are not just participants. They are athletes and young professionals committed to becoming Total Athletes — body, mind, and community. Mentorship is never free: every mentee owes the platform one verified Sweat Equity activity per quarter — a community clean-up, a tree-planting day, or a sustainability advocacy event. Missed quarters trigger a Welfare Officer review under the Three Strikes protocol.",
+            "Mentees are the lifeblood of Jenga365. They are athletes and young professionals committed to becoming Total Athletes, body, mind, and community. Mentorship is never free: every mentee owes the platform one verified Sweat Equity activity per quarter, a community clean-up, a tree-planting day, or a sustainability advocacy event. Missed quarters trigger a Welfare Officer review under the Three Strikes protocol.",
         rules: [
-            { label: "Earn it",        detail: "1 verified Give Back activity per quarter — logged with GPS + photo evidence." },
-            { label: "Get matched",    detail: "AI-matched 1:2 mentorship — capped so attention stays focused." },
+            { label: "Earn it",        detail: "1 verified Give Back activity per quarter, logged with GPS + photo evidence." },
+            { label: "Get matched",    detail: "AI-matched 1:2 mentorship, capped so attention stays focused." },
             { label: "Track resilience", detail: "Baseline + quarterly re-assessments power your growth delta." },
             { label: "Three strikes",  detail: "Three missed quarters → Welfare Officer review → potential suspension." },
         ],
@@ -31,13 +49,13 @@ const STAKEHOLDERS = [
         id: "mentor",
         tag: "Human Capital",
         name: "Mentors",
-        principle: "Plug-and-play philanthropy — one Power Hour per month.",
+        principle: "Plug-and-play philanthropy, one Power Hour per month.",
         paragraph:
-            "Mentors are seasoned professionals who shape the next generation without the overhead. We call the commitment a Power Hour: one focused hour every month. We handle every logistical detail — AI matching, scheduling, session prompts, follow-ups, and impact logging. Mentors are capped at two active mentees so attention isn't diluted across a roster.",
+            "Mentors are seasoned professionals who shape the next generation without the overhead. We call the commitment a Power Hour: one focused hour every month. We handle every logistical detail, AI matching, scheduling, session prompts, follow-ups, and impact logging. Mentors are capped at two active mentees so attention isn't diluted across a roster.",
         rules: [
             { label: "Power Hour",      detail: "Just one focused hour per month. We send the brief and run the comms." },
             { label: "1:2 cap",         detail: "Never more than two active mentees. Quality over volume." },
-            { label: "Admin handled",   detail: "AI matching, scheduling, prompts, notes, follow-ups — all on us." },
+            { label: "Admin handled",   detail: "AI matching, scheduling, prompts, notes, follow-ups, all on us." },
             { label: "Impact tracked",  detail: "Your hours flow into the corporate-partner ESG ledger that funds the platform." },
         ],
         color: "var(--brand-red)",
@@ -52,11 +70,11 @@ const STAKEHOLDERS = [
         name: "Corporate Partners",
         principle: "Invest in people. Measure the return.",
         paragraph:
-            "Corporate Partners fund the engine — but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Data Studio dashboard you can forward straight to your board.",
+            "Corporate Partners fund the engine, but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Looker Studio dashboard you can forward straight to your board.",
         rules: [
             { label: "Milestone-tied",  detail: "Funds release only on verified ESG audits (e.g. 500 trees alive)." },
-            { label: "GPS evidence",    detail: "Tree-survival checks at 6 / 12 / 24 months — geo-tagged, KoBo-piped." },
-            { label: "Data Studio reporting", detail: "Per-partner Data Studio dashboards + shareable links for the board." },
+            { label: "GPS evidence",    detail: "Tree-survival checks at 6 / 12 / 24 months, geo-tagged, KoBo-piped." },
+            { label: "Looker reporting", detail: "Per-partner Looker Studio dashboards + shareable links for the board." },
             { label: "Quarterly M&E",   detail: "Aggregate impact rolled up to your sustainability report each quarter." },
         ],
         color: "var(--brand-black)",
@@ -69,14 +87,14 @@ const STAKEHOLDERS = [
         id: "ngo",
         tag: "Technical Experts",
         name: "NGOs / CBOs",
-        principle: "Resource Exchange — hardware in, workforce out.",
+        principle: "Resource Exchange, hardware in, workforce out.",
         paragraph:
-            "NGOs and CBOs are the technical backbone. You bring the seedlings, the books, the equipment, the on-the-ground expertise. We bring a disciplined, organized volunteer workforce — vetted athlete-mentees doing their quarterly Sweat Equity. A simple Resource Exchange MOU formalises the swap; no payment flow, no corporate Unlock Challenge, no friction.",
+            "NGOs and CBOs are the technical backbone. You bring the seedlings, the books, the equipment, the on-the-ground expertise. We bring a disciplined, organized volunteer workforce, vetted athlete-mentees doing their quarterly Sweat Equity. A simple Resource Exchange MOU formalises the swap; no payment flow, no corporate Unlock Challenge, no friction.",
         rules: [
-            { label: "MOU, not invoice", detail: "Resource Exchange MOU — signed inside your NGO dashboard." },
+            { label: "MOU, not invoice", detail: "Resource Exchange MOU, signed inside your NGO dashboard." },
             { label: "Workforce on tap", detail: "Mentees show up to your projects to clear their Sweat Equity." },
             { label: "Co-branded impact", detail: "Every event is tracked + attributed to both NGO and platform." },
-            { label: "No Unlock Challenge", detail: "Lightweight onboarding — NGOs skip the milestone-tied corporate flow." },
+            { label: "No Unlock Challenge", detail: "Lightweight onboarding, NGOs skip the milestone-tied corporate flow." },
         ],
         color: "var(--brand-green)",
         colorSoft: "var(--brand-green-soft)",
@@ -92,7 +110,7 @@ export default function StakeholdersDeepDive() {
     const [openId, setOpenId] = useState<string>("mentee");
 
     return (
-        <section className="bg-[color:var(--surface-1)] border-y border-border py-20 md:py-32">
+        <section className="bg-[color:var(--surface-1)] border-y border-border py-12 md:py-24">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
                     <div className="lg:w-1/3">
