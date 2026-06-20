@@ -1,0 +1,55 @@
+--- src/components/dashboard/Admin/AdminDashboard.tsx
++++ src/components/dashboard/Admin/AdminDashboard.tsx
+@@ -23,6 +23,7 @@
+   Key,
+   Lock,
+   Mail,
++  ShieldAlert,
+ } from "lucide-react";
+ import { createModeratorInvite } from "@/lib/actions/auth";
+ import { DEFAULT_STATS, MetricTile } from "../shared/BentoCard";
+@@ -470,6 +471,7 @@
+ function UserActionMenu({
+   userId,
+   onAction,
++  email,
+ }: {
+   userId: string;
+   onAction: () => void;
++  email?: string;
+ }) {
+   const [open, setOpen] = useState(false);
+   const [isPending, startTransition] = useTransition();
+@@ -512,6 +514,21 @@
+           >
+             <XCircle className="w-4 h-4" /> Reject
+           </button>
++          {email && (
++            <button
++              onClick={() => {
++                startTransition(async () => {
++                  setOpen(false);
++                  const { sendResetPasswordEmailAction } = await import("@/lib/actions/adminOps");
++                  const res = await sendResetPasswordEmailAction(email);
++                  if (res.error) toast.error(res.error);
++                  else toast.success("Reset password email sent");
++                });
++              }}
++              className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-green-soft)] hover:text-[color:var(--brand-green)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
++            >
++              <Mail className="w-4 h-4" /> Send password reset
++            </button>
++          )}
+           <div className="h-px bg-border my-1" />
+           <button
+             onClick={() => run(() => suspendUser(userId), "suspended")}
+@@ -439,7 +456,7 @@
+                   <ChevronDown className="w-4 h-4" />
+                 )}
+               </button>
+             )}
+-            <UserActionMenu userId={user.id} onAction={onAction} />
++            <UserActionMenu userId={user.id} onAction={onAction} email={user.email} />
+           </div>
+         </td>
+       </tr>

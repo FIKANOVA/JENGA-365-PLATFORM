@@ -92,7 +92,7 @@ export default function StakeholdersDeepDive() {
     const [openId, setOpenId] = useState<string>("mentee");
 
     return (
-        <section className="bg-[color:var(--surface-1)] border-y border-border py-20 md:py-32">
+        <section className="bg-[color:var(--surface-1)] border-y border-border py-12 md:py-24">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
                     <div className="lg:w-1/3">

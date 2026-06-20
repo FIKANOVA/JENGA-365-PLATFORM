@@ -20,7 +20,7 @@ export default async function OurPhilosophy() {
 
     return (
         <section className="border-b border-border" style={{ background: "var(--surface-1)" }}>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-28">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24">
                 <div className="flex items-center gap-3 mb-12">
                     <div className="h-px w-8" style={{ background: "var(--brand-green)" }} />
                     <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>

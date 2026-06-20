@@ -34,7 +34,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                         className="absolute inset-0 h-full w-full object-cover opacity-[0.18] pointer-events-none"
                     />
                 )}
-                <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-28">
+                <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-12 md:pt-20 pb-12 md:pb-24 lg:pt-28 lg:pb-28">
                     <div className="max-w-3xl space-y-6">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                             {event.type?.replace(/_/g, " ")} · {event.date ? format(new Date(event.date), "MMM d, yyyy") : "TBD"}

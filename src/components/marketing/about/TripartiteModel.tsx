@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function TripartiteModel() {
     return (
-        <section className="py-24 md:py-32 bg-accent relative overflow-hidden">
+        <section className="py-12 md:py-24 bg-accent relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-start">
                     {/* Left: Bold Quote */}
