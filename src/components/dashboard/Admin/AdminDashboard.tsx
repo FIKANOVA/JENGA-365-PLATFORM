@@ -15,9 +15,11 @@ import {
   MapPin,
   Briefcase,
   ShoppingBag,
+  Mail,
 } from "lucide-react";
 import { SCOPE_TIER_LABELS } from "@/lib/constants/moderator-scopes";
 import { approveUser, rejectUser, suspendUser } from "@/lib/actions/moderation";
+import { sendResetPasswordEmailAction, updateLegacyUserRoleAction } from "@/lib/actions/adminOps";
 import { createModeratorInvite } from "@/lib/actions/auth";
 import { toast } from "sonner";
 import SyncStoreInventoryButton from "@/components/dashboard/shared/SyncStoreInventoryButton";
@@ -221,7 +223,7 @@ function ExpandableUserRow({
                 )}
               </button>
             )}
-            <UserActionMenu userId={user.id} onAction={onAction} />
+            <UserActionMenu userId={user.id} onAction={onAction} email={user.email} userRole={user.role} />
           </div>
         </td>
       </tr>
@@ -250,9 +252,13 @@ function ExpandableUserRow({
 function UserActionMenu({
   userId,
   onAction,
+  email,
+  userRole,
 }: {
   userId: string;
   onAction: () => void;
+  email?: string;
+  userRole?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -292,7 +298,7 @@ function UserActionMenu({
       </button>
       {open && (
         <div
-          className="absolute right-0 top-12 z-20 bg-background border border-border/70 rounded-lg w-48 p-1 text-body-sm"
+          className="absolute right-0 top-12 z-20 bg-background border border-border/70 rounded-md w-48 p-1 text-body-sm"
           style={{ boxShadow: "var(--shadow-lg)" }}
         >
           <button
@@ -307,6 +313,42 @@ function UserActionMenu({
           >
             <XCircle className="w-4 h-4" /> Reject
           </button>
+          <div className="h-px bg-border my-1" />
+          {email && (
+            <button
+              onClick={() => {
+                startTransition(async () => {
+                  setOpen(false);
+
+                  const res = await sendResetPasswordEmailAction(email);
+                  if (res.error) toast.error(res.error);
+                  else toast.success("Reset password email sent");
+                });
+              }}
+              className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-green-soft)] hover:text-[color:var(--brand-green)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+            >
+              <Mail className="w-4 h-4" /> Password reset
+            </button>
+          )}
+          <div className="h-px bg-border my-1" />
+          <div className="px-3 py-1 text-xs font-semibold text-foreground-muted">Change Role</div>
+          {["SuperAdmin", "Moderator", "CorporatePartner", "NGO", "Mentor", "Mentee"].map(role => role !== userRole && (
+            <button
+              key={role}
+              onClick={() => {
+                startTransition(async () => {
+                  setOpen(false);
+
+                  const res = await updateLegacyUserRoleAction(email!, role as any);
+                  if (res.error) toast.error(res.error);
+                  else { toast.success(`Changed role to ${role}`); onAction(); }
+                });
+              }}
+              className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--surface-2)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+            >
+              {role}
+            </button>
+          ))}
           <div className="h-px bg-border my-1" />
           <button
             onClick={() => run(() => suspendUser(userId), "suspended")}
@@ -368,7 +410,7 @@ function InviteModeratorModal({
         onClick={handleClose}
       />
       <div
-        className="relative bg-background border border-border/70 rounded-2xl w-full max-w-md p-8 space-y-6"
+        className="relative bg-background border border-border/70 rounded-md w-full max-w-md p-8 space-y-6"
         style={{ boxShadow: "var(--shadow-lg)" }}
       >
         <div className="flex items-center justify-between">

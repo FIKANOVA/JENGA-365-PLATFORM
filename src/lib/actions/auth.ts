@@ -156,3 +156,18 @@ export async function saveUserMetadata(userId: string, metadata: Record<string, 
         return { success: false, error: err.message };
     }
 }
+
+/**
+ * Sets the role and automatically approves a newly created user.
+ */
+export async function setUserRoleAndApprove(
+    userId: string,
+    role: "Mentee" | "Mentor" | "CorporatePartner" | "NGO" | "Moderator" | "SuperAdmin"
+) {
+    try {
+        await db.update(users).set({ role, isApproved: true } as any).where(eq(users.id, userId));
+        return { success: true };
+    } catch (err: any) {
+        return { success: false, error: err.message };
+    }
+}

@@ -18,7 +18,7 @@ export default function AboutCTAStrip() {
         <section className="relative overflow-hidden" style={{ background: "var(--brand-black)" }}>
             <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32 text-center">
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 text-center">
                 <div className="mx-auto max-w-3xl">
                     <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                         Build with us

@@ -20,7 +20,7 @@ export default async function OurPhilosophy() {
 
     return (
         <section className="border-b border-border" style={{ background: "var(--surface-1)" }}>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-28">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24">
                 <div className="flex items-center gap-3 mb-12">
                     <div className="h-px w-8" style={{ background: "var(--brand-green)" }} />
                     <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
@@ -40,7 +40,7 @@ export default async function OurPhilosophy() {
                         <p className="text-body-lg text-foreground-muted max-w-xl">
                             Jenga365 was born from the realisation that athletic talent alone
                             isn&apos;t enough to break cycles of poverty. We focus on the holistic
-                            ecosystem surrounding the player — connecting mentors, unlocking
+                            ecosystem surrounding the player, connecting mentors, unlocking
                             financial literacy, and stewarding the environments our athletes call
                             home.
                         </p>
@@ -65,7 +65,7 @@ export default async function OurPhilosophy() {
                         />
                         <PhilosophyCard
                             heading="The approach"
-                            body="We integrate world-class coaching with mandatory mentorship and digital literacy programmes — ensuring every participant has a future, with or without a professional contract."
+                            body="We integrate world-class coaching with mandatory mentorship and digital literacy programmes, ensuring every participant has a future, with or without a professional contract."
                             ctaLabel="Meet our mentors"
                             ctaHref="/mentors"
                         />
@@ -100,7 +100,7 @@ function PhilosophyCard({
 }) {
     return (
         <div
-            className="rounded-lg border border-border bg-background p-6 lg:p-7 space-y-3 transition-colors hover:bg-[color:var(--surface-2)]"
+            className="rounded-md border border-border bg-background p-6 lg:p-7 space-y-3 transition-colors hover:bg-[color:var(--surface-2)]"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <h3 className="text-headline text-foreground">{heading}</h3>

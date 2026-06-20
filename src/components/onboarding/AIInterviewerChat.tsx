@@ -51,7 +51,7 @@ export default function AIInterviewer({ onComplete }: AIInterviewerProps) {
 
     return (
         <div
-            className="flex flex-col h-[500px] rounded-lg border border-border bg-background overflow-hidden"
+            className="flex flex-col h-[500px] rounded-md border border-border bg-background overflow-hidden"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             {/* Header */}

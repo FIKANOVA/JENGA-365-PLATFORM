@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
 import { urlFor } from "@/lib/sanity/client";
+import { motion, Variants } from "framer-motion";
 
 interface SanityImage {
     asset?: { _id?: string; url?: string };
@@ -40,6 +41,8 @@ const DEFAULT_COPY: Required<HeroCopy> = {
  * Landing hero — Total Athlete + Dual-Engine narrative.
  * Copy is sourced from siteSettings.landingHero in Sanity; in-code DEFAULT_COPY
  * is the fallback when a field is empty.
+ *
+ * Enhanced with Framer Motion for better attention capture.
  */
 export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     const { data: session } = useSession();
@@ -54,33 +57,62 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     const secondaryCtaHref = copy?.secondaryCtaHref?.trim() || DEFAULT_COPY.secondaryCtaHref;
 
     const heroUrl = heroImage?.asset?.url
-        ? urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
+        ? heroImage.asset.url.match(/\.(mp4|webm|mov)(\?.*)?$/i)
+            ? heroImage.asset.url // Don't use urlFor on video
+            : urlFor(heroImage).width(1920).height(1080).fit("crop").auto("format").url()
         : null;
     const hasImage = !!heroUrl;
+    const isVideo = hasImage && !!heroUrl?.match(/\.(mp4|webm|mov)(\?.*)?$/i);
 
-    // With a photo behind the hero we show it fully and darken it for legibility,
-    // flipping the copy to light. Without a photo we keep the light radial/topo design.
     const headingColor = hasImage ? "#ffffff" : "var(--foreground)";
     const mutedColor = hasImage ? "rgba(255,255,255,0.88)" : "var(--foreground-muted)";
     const subtleColor = hasImage ? "rgba(255,255,255,0.72)" : "var(--foreground-subtle)";
 
+    const staggerVariants: Variants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: (i: number) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: i * 0.1,
+                duration: 0.8,
+                ease: "easeOut" as const,
+            },
+        }),
+    };
+
     return (
-        <section className="relative overflow-hidden bg-background">
+        <section
+            className={`relative overflow-hidden bg-background ${hasImage ? "-mt-16" : ""}`}
+        >
             {hasImage ? (
                 <>
-                    <img
-                        src={heroUrl!}
-                        alt=""
-                        aria-hidden
-                        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
-                    />
-                    {/* Darkening scrim — heavier on the text (left) side for contrast. */}
+                    {isVideo ? (
+                        <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            src={heroUrl!}
+                        />
+                    ) : (
+                        <motion.img
+                            initial={{ scale: 1.05 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            src={heroUrl!}
+                            alt=""
+                            aria-hidden
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                        />
+                    )}
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/60 to-black/35"
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/60 via-black/40 to-black/20"
                         aria-hidden
                     />
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 to-transparent"
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent"
                         aria-hidden
                     />
                     <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
@@ -92,9 +124,15 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                 </>
             )}
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32 lg:py-40">
+            <div
+                className={`relative mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pt-40 pb-24 md:pt-48 md:pb-32 lg:pt-56 lg:pb-40" : "py-24 md:py-32 lg:py-40"}`}
+            >
                 <div className="max-w-3xl">
-                    <div
+                    <motion.div
+                        custom={0}
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerVariants}
                         className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm"
                         style={{
                             background: hasImage ? "rgba(255,255,255,0.12)" : "var(--surface-1)",
@@ -105,26 +143,43 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                         <span className="text-eyebrow" style={{ color: mutedColor }}>
                             {eyebrow}
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <h1 className="text-display-lg md:text-display-xl whitespace-pre-line" style={{ color: headingColor }}>
+                    <motion.h1
+                        custom={1}
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerVariants}
+                        className="text-display-lg md:text-display-xl whitespace-pre-line"
+                        style={{ color: headingColor }}
+                    >
                         {heading}
-                    </h1>
+                    </motion.h1>
 
-                    <p
+                    <motion.p
+                        custom={2}
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerVariants}
                         className="mt-6 text-body-lg max-w-2xl"
                         style={{ color: mutedColor }}
                     >
                         {description}
-                    </p>
+                    </motion.p>
 
-                    <div className="mt-10 flex flex-col sm:flex-row gap-3">
+                    <motion.div
+                        custom={3}
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerVariants}
+                        className="mt-10 flex flex-col md:flex-row gap-3"
+                    >
                         {isAuthenticated ? (
                             <Link
                                 href="/dashboard"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
+                                className="inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg whitespace-nowrap"
                                 style={{ background: "var(--brand-green)" }}
                             >
                                 Go to dashboard
@@ -134,7 +189,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                             <>
                                 <Link
                                     href={primaryCtaHref}
-                                    className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white"
+                                    className="inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg whitespace-nowrap"
                                     style={{ background: "var(--brand-green)" }}
                                 >
                                     {primaryCtaLabel}
@@ -144,30 +199,34 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                                     href={secondaryCtaHref}
                                     className={
                                         hasImage
-                                            ? "inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-white/30 text-white backdrop-blur-sm hover:bg-white/10 transition-colors"
-                                            : "inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors"
+                                            ? "inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-white/30 text-white backdrop-blur-sm hover:bg-white/10 transition-colors whitespace-nowrap"
+                                            : "inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors whitespace-nowrap"
                                     }
                                 >
                                     {secondaryCtaLabel}
                                 </Link>
                             </>
                         )}
-                    </div>
+                    </motion.div>
 
-                    <p
+                    <motion.p
+                        custom={4}
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerVariants}
                         className="mt-6 text-body-sm"
                         style={{ color: subtleColor }}
                     >
-                        Mentorship is earned — not free. Read the{" "}
+                        Mentorship is earned, not free. Read the{" "}
                         <Link
                             href="#sweat-equity"
-                            className="underline underline-offset-4"
+                            className="font-medium underline decoration-1 underline-offset-4 transition-opacity hover:opacity-70"
                             style={{ color: headingColor }}
                         >
                             Sweat Equity protocol
                         </Link>
                         .
-                    </p>
+                    </motion.p>
                 </div>
             </div>
         </section>

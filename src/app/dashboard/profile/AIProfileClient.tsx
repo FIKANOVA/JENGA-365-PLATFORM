@@ -26,7 +26,7 @@ export default function AIProfileClient() {
     if (state === "idle") {
         return (
             <div
-                className="rounded-lg border border-border bg-background p-10 text-center space-y-6"
+                className="rounded-md border border-border bg-background p-10 text-center space-y-6"
                 style={{ boxShadow: "var(--shadow-sm)" }}
             >
                 <div
@@ -57,7 +57,7 @@ export default function AIProfileClient() {
     if (state === "synthesizing") {
         return (
             <div
-                className="rounded-lg border border-border bg-background p-10 text-center space-y-4"
+                className="rounded-md border border-border bg-background p-10 text-center space-y-4"
                 style={{ boxShadow: "var(--shadow-sm)" }}
             >
                 <div className="flex items-center justify-center gap-2">
@@ -73,7 +73,7 @@ export default function AIProfileClient() {
     if (state === "done") {
         return (
             <div
-                className="rounded-lg border border-border bg-background p-10 text-center space-y-6"
+                className="rounded-md border border-border bg-background p-10 text-center space-y-6"
                 style={{ boxShadow: "var(--shadow-sm)" }}
             >
                 <CheckCircle className="w-14 h-14 mx-auto" style={{ color: "var(--brand-green)" }} />
@@ -96,7 +96,7 @@ export default function AIProfileClient() {
     // error state
     return (
         <div
-            className="rounded-lg border bg-background p-10 text-center space-y-4"
+            className="rounded-md border bg-background p-10 text-center space-y-4"
             style={{ borderColor: "var(--brand-red)", boxShadow: "var(--shadow-sm)" }}
         >
             <p className="text-label" style={{ color: "var(--brand-red)" }}>Synthesis incomplete</p>

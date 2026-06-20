@@ -47,7 +47,7 @@ export default function RegistrationNDAStep({
 
     return (
         <div
-            className="w-full max-w-5xl rounded-lg border border-border bg-background overflow-hidden"
+            className="w-full max-w-5xl rounded-md border border-border bg-background overflow-hidden"
             style={{ boxShadow: "var(--shadow-lg)" }}
         >
             <div className="grid grid-cols-1 lg:grid-cols-12">
@@ -158,7 +158,7 @@ export default function RegistrationNDAStep({
 
                             <label className="flex gap-3 cursor-pointer items-start">
                                 <span
-                                    className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                                    className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border transition-colors shrink-0 ${
                                         agreed
                                             ? "border-transparent"
                                             : "border-border bg-background"

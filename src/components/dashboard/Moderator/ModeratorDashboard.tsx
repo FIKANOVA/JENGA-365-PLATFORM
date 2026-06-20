@@ -54,7 +54,7 @@ function UserProfileCard({ user, onAction, actioning, actioned }: {
     ].filter(Boolean) as { label: string; value: string }[];
 
     return (
-        <div className="rounded-lg border border-border bg-background overflow-hidden" style={{ boxShadow: "var(--shadow-sm)" }}>
+        <div className="rounded-md border border-border bg-background overflow-hidden" style={{ boxShadow: "var(--shadow-sm)" }}>
             <div className="p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="flex items-center gap-4 flex-1">
                     <div
@@ -215,7 +215,7 @@ export default function ModeratorDashboard({
 
                 {showCommerceSection && (
                     <div
-                        className="rounded-lg border border-border bg-background p-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                        className="rounded-md border border-border bg-background p-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <div className="flex items-start gap-3">
@@ -282,7 +282,7 @@ export default function ModeratorDashboard({
                             articlesInReview.map((item) => (
                                 <div
                                     key={item.id}
-                                    className="rounded-lg border border-border bg-background p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                                    className="rounded-md border border-border bg-background p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex-1">

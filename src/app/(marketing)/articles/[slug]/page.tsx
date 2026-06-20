@@ -14,9 +14,9 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const article = await fetchArticleBySlug(slug).catch(() => null);
-    if (!article) return { title: "Article — Jenga365" };
+    if (!article) return { title: "Article | Jenga365" };
     return {
-        title: `${article.title} — Jenga365`,
+        title: `${article.title} | Jenga365`,
         description: article.excerpt,
     };
 }
@@ -63,7 +63,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
     const authorName = article.author?.name ?? "Jenga365 Team";
     const authorRole = article.author?.role ?? "STAFF";
-    const authorBio = article.author?.bio ?? `${authorName} — ${authorRole} at Jenga365`;
+    const authorBio = article.author?.bio ?? `${authorName}, ${authorRole} at Jenga365`;
     const heroImage = article.mainImage?.asset?.url ?? article.image ?? "";
     const readTime = article.readTime ? `${article.readTime} min read` : "5 min read";
     const publishedDate = article.publishedAt ? formatDate(article.publishedAt) : "";
@@ -98,7 +98,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                                     {article.category ?? "Insight"}
                                 </span>
                                 <span className="text-white/60 text-[10px] font-mono tracking-[0.3em] uppercase">
-                                    — {readTime}
+                                    {readTime}
                                 </span>
                             </div>
                             <h1 className="text-white text-display-xl leading-tight">
@@ -114,7 +114,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 </section>
 
                 {/* ── Main Content Grid ── */}
-                <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-20">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
                         {/* Reading Area */}
                         <div className="lg:col-span-8">
@@ -145,7 +145,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
                 {/* ── Guest Footer CTA ── */}
                 {!isAuthenticated && (
-                    <section className="bg-[var(--surface-1)] border-t border-[var(--border)] py-32 mt-20">
+                    <section className="bg-[var(--surface-1)] border-t border-[var(--border)] py-16 md:py-32 mt-20">
                         <div className="max-w-4xl mx-auto px-6 flex flex-col items-center text-center space-y-10">
                             <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--brand-green)]">Final Word</span>
                             <h2 className="text-display-xl text-foreground leading-tight">

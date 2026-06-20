@@ -52,7 +52,7 @@ function CheckEmailContent() {
             </div>
 
             <div
-                className="rounded-lg border border-border bg-background p-5 text-left space-y-3"
+                className="rounded-md border border-border bg-background p-5 text-left space-y-3"
                 style={{ boxShadow: "var(--shadow-sm)" }}
             >
                 {[

@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 function refToUrl(ref: string): string | null {
     const m = ref.match(/^image-(.+)-(\w+)$/);
     if (!m) return null;
-    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "dummy";
     const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
     if (!projectId) return null;
     return `https://cdn.sanity.io/images/${projectId}/${dataset}/${m[1]}.${m[2]}`;

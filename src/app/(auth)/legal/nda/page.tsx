@@ -81,7 +81,7 @@ export default function NDAPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Document */}
                     <article
-                        className="lg:col-span-8 rounded-lg border border-border bg-background p-8 lg:p-12"
+                        className="lg:col-span-8 rounded-md border border-border bg-background p-8 lg:p-12"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <header className="mb-8 space-y-2">
@@ -179,7 +179,7 @@ export default function NDAPage() {
                     {/* Signing box */}
                     <aside className="lg:col-span-4">
                         <div
-                            className="sticky top-24 rounded-lg border border-border bg-background p-6 lg:p-8 space-y-6"
+                            className="sticky top-24 rounded-md border border-border bg-background p-6 lg:p-8 space-y-6"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div className="space-y-1.5">
@@ -208,7 +208,7 @@ export default function NDAPage() {
 
                             <label className="flex gap-3 cursor-pointer items-start">
                                 <span
-                                    className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                                    className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border transition-colors shrink-0 ${
                                         agreed
                                             ? "border-transparent"
                                             : "border-border bg-background"

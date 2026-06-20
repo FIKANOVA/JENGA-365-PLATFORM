@@ -119,23 +119,23 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                             placeholder="Search gear, apparel, or assets..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-sm py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:font-mono placeholder:text-[10px] placeholder:uppercase placeholder:tracking-widest focus:outline-none focus:border-primary transition-all font-sans"
+                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-md py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:font-mono placeholder:text-label placeholder:uppercase placeholder:tracking-widest focus:outline-none focus:border-primary transition-all font-sans"
                         />
                     </div>
                 </PageHero>
 
                 {/* ── Grid Section ── */}
-                <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-24">
                     <div className="space-y-16">
                         {/* Category Selection */}
                         <div className="flex flex-col gap-6">
-                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)] font-bold">Collections</span>
-                            <div className="flex border-b border-[var(--border)] overflow-x-auto hide-scrollbar">
+                            <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)] font-bold">Collections</span>
+                            <div className="flex border-b border-border overflow-x-auto hide-scrollbar">
                                 {categories.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
-                                        className={`px-8 py-5 text-[10px] font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${selectedCategory === cat
+                                        className={`px-8 py-5 text-label font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${selectedCategory === cat
                                             ? "text-[var(--brand-green)]"
                                             : "text-[var(--foreground-subtle)] hover:text-black"
                                             }`}
@@ -153,7 +153,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                             {filteredProducts.length > 0 ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                                     {filteredProducts.map(product => (
-                                        <div key={product._id} className="group flex flex-col bg-white border border-[var(--border)] transition-all duration-500 hover:border-black hover:shadow-2xl relative h-full rounded-sm overflow-hidden">
+                                        <div key={product._id} className="group flex flex-col bg-white border border-border transition-all duration-500 hover:border-foreground hover:shadow-2xl relative h-full rounded-md overflow-hidden">
                                             {/* Visual Area */}
                                             <div className="relative h-80 bg-[var(--surface-1)] overflow-hidden">
                                                 {product.imageUrl ? (
@@ -163,23 +163,23 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                                     />
                                                 ) : (
-                                                    <div className="w-full h-full flex items-center justify-center bg-black/5 italic font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)]">
+                                                    <div className="w-full h-full flex items-center justify-center bg-black/5 italic font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)]">
                                                         No Product Visual
                                                     </div>
                                                 )}
                                                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                                                     {product.stockCount === 0 && (
-                                                        <span className="px-2 py-1 bg-black text-white font-mono text-[8px] uppercase tracking-widest font-bold rounded-sm">
+                                                        <span className="px-2 py-1 bg-black text-white font-mono text-eyebrow tracking-widest font-bold rounded-md">
                                                             OUT OF STOCK
                                                         </span>
                                                     )}
                                                     {product.stockCount > 0 && product.stockCount <= 5 && (
-                                                        <span className="px-2 py-1 bg-[var(--brand-red)] text-white font-mono text-[8px] uppercase tracking-widest font-bold rounded-sm">
+                                                        <span className="px-2 py-1 bg-[var(--brand-red)] text-white font-mono text-eyebrow tracking-widest font-bold rounded-md">
                                                             ONLY {product.stockCount} LEFT
                                                         </span>
                                                     )}
                                                     {product.discountPrice && (
-                                                        <span className="px-2 py-1 bg-[var(--brand-green)] text-white font-mono text-[8px] uppercase tracking-widest font-bold rounded-sm">
+                                                        <span className="px-2 py-1 bg-[var(--brand-green)] text-white font-mono text-eyebrow tracking-widest font-bold rounded-md">
                                                             OFFER
                                                         </span>
                                                     )}
@@ -189,7 +189,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                             {/* Content Area */}
                                             <div className="p-8 flex-1 flex flex-col space-y-4 bg-white">
                                                 <div className="space-y-2 flex-1">
-                                                    <span className="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-[var(--brand-green)]">
+                                                    <span className="font-mono text-label font-bold uppercase tracking-[0.3em] text-[var(--brand-green)]">
                                                         {product.category || "General"}
                                                     </span>
                                                     <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors duration-500">
@@ -197,7 +197,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                     </h3>
                                                 </div>
 
-                                                <div className="pt-6 border-t border-[var(--border)] flex flex-col gap-6">
+                                                <div className="pt-6 border-t border-border flex flex-col gap-6">
                                                     <div className="flex items-end gap-3">
                                                         <span className="text-eyebrow text-foreground-subtle mb-1 italic">KES</span>
                                                         <span className="text-display-sm text-foreground transition-all duration-500 group-hover:text-[var(--brand-green)]">
@@ -213,7 +213,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                     <button
                                                         onClick={() => handleAddToCart(product)}
                                                         disabled={product.stockCount === 0}
-                                                        className={`w-full h-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-widest font-bold transition-all rounded-sm shadow-sm ${product.stockCount === 0
+                                                        className={`w-full h-12 flex items-center justify-center gap-3 font-mono text-eyebrow tracking-widest font-bold transition-all rounded-md shadow-sm ${product.stockCount === 0
                                                             ? "bg-[var(--surface-1)] text-[var(--foreground-subtle)] cursor-not-allowed"
                                                             : "bg-black text-white hover:bg-[var(--brand-green)]"
                                                             }`}
@@ -227,7 +227,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center py-32 text-center space-y-8">
+                                <div className="flex flex-col items-center justify-center py-16 md:py-32 text-center space-y-8">
                                     <PackageX className="h-20 w-20 text-[var(--border)]" />
                                     <div className="space-y-3">
                                         <h3 className="text-display-md text-foreground">Inventory empty</h3>
@@ -235,7 +235,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                     </div>
                                     <button
                                         onClick={() => { setSearch(""); setSelectedCategory("All"); }}
-                                        className="px-10 py-4 border border-[var(--border)] text-black font-mono text-[10px] uppercase tracking-widest hover:bg-black hover:text-white transition-all rounded-sm shadow-xl"
+                                        className="px-10 py-4 border border-border text-black font-mono text-eyebrow tracking-widest hover:bg-black hover:text-white transition-all rounded-md shadow-xl"
                                     >
                                         RESET EXPLORATION
                                     </button>
@@ -255,20 +255,20 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                 <div className="fixed inset-0 z-50 flex justify-end">
                     <div className="absolute inset-0 bg-black/50" onClick={() => setIsCartOpen(false)} />
                     <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
-                        <div className="p-6 border-b border-[var(--border)] flex justify-between items-center">
+                        <div className="p-6 border-b border-border flex justify-between items-center">
                             <h2 className="text-display-sm text-foreground">Your cart</h2>
                             <button onClick={() => setIsCartOpen(false)} aria-label="Close cart" className="text-foreground-muted hover:text-[var(--brand-red)] transition-colors"><X className="h-5 w-5" /></button>
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             {cartItems.length === 0 ? (
-                                <div className="text-center text-[var(--foreground-subtle)] flex flex-col items-center py-20">
+                                <div className="text-center text-[var(--foreground-subtle)] flex flex-col items-center py-12 md:py-20">
                                     <ShoppingBag className="h-12 w-12 mb-4" />
                                     <p>Your cart is empty.</p>
                                 </div>
                             ) : (
                                 cartItems.map(item => (
-                                    <div key={item.product._id} className="flex gap-4 border-b border-[var(--border)] pb-4">
+                                    <div key={item.product._id} className="flex gap-4 border-b border-border pb-4">
                                         <div className="size-16 bg-[var(--surface-1)] shrink-0">
                                             {item.product.imageUrl && (
                                                 <img src={item.product.imageUrl} alt={item.product.title} className="w-full h-full object-cover" />
@@ -276,7 +276,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <h4 className="text-label text-foreground leading-tight truncate">{item.product.title}</h4>
-                                            <p className="text-[12px] text-[var(--foreground-subtle)] mt-1">Qty: {item.quantity}</p>
+                                            <p className="text-label text-[var(--foreground-subtle)] mt-1">Qty: {item.quantity}</p>
                                         </div>
                                         <div className="flex flex-col items-end justify-between shrink-0">
                                             <span className="font-mono font-bold text-sm">KES {(item.product.price * item.quantity).toLocaleString()}</span>
@@ -288,7 +288,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                         </div>
 
                         {cartItems.length > 0 && (
-                            <div className="p-6 border-t border-[var(--border)] bg-[var(--surface-1)] space-y-6">
+                            <div className="p-6 border-t border-border bg-[var(--surface-1)] space-y-6">
                                 <div className="flex justify-between text-headline text-foreground">
                                     <span>Total</span>
                                     <span>KES {cartTotal.toLocaleString()}</span>
@@ -296,13 +296,13 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
 
                                 {!session?.user && (
                                     <div className="space-y-2">
-                                        <label className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] font-bold">Your Email</label>
+                                        <label className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] font-bold">Your Email</label>
                                         <input
                                             placeholder="your@email.com"
                                             type="email"
                                             value={guestEmail}
                                             onChange={(e) => setGuestEmail(e.target.value)}
-                                            className="w-full bg-white border border-[var(--border)] rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-[var(--brand-green)] transition-colors"
+                                            className="w-full bg-white border border-border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-[var(--brand-green)] transition-colors"
                                         />
                                     </div>
                                 )}
@@ -310,7 +310,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                 <button
                                     onClick={handleCheckout}
                                     disabled={isProcessing}
-                                    className="w-full bg-black text-white font-mono uppercase tracking-widest h-14 hover:bg-[var(--brand-green)] transition-all rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full bg-black text-white font-mono uppercase tracking-widest h-14 hover:bg-[var(--brand-green)] transition-all rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isProcessing ? "PROCESSING..." : "CHECKOUT WITH PAYSTACK"}
                                 </button>
@@ -328,7 +328,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                 <div className="relative">
                     <ShoppingCart className="h-5 w-5 group-hover:animate-bounce" />
                     {cartQuantity > 0 && (
-                        <span className="absolute -top-2 -right-3 size-5 bg-[var(--brand-red)] rounded-full text-[10px] flex items-center justify-center font-bold">
+                        <span className="absolute -top-2 -right-3 size-5 bg-[var(--brand-red)] rounded-full text-label flex items-center justify-center font-bold">
                             {cartQuantity}
                         </span>
                     )}
@@ -339,23 +339,23 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
             {orderConfirmation && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/70" onClick={() => setOrderConfirmation(null)} />
-                    <div className="relative bg-white w-full max-w-lg shadow-2xl rounded-sm overflow-hidden">
+                    <div className="relative bg-white w-full max-w-lg shadow-2xl rounded-md overflow-hidden">
                         {/* Header */}
                         <div className="bg-[var(--brand-green)] p-8 text-white text-center space-y-3">
                             <CheckCircle className="mx-auto" size={48} strokeWidth={1.5} />
                             <h2 className="text-display-md">Order confirmed!</h2>
-                            <p className="font-mono text-[10px] uppercase tracking-widest opacity-80">Thank you for supporting the Jenga365 Impact Fund</p>
+                            <p className="font-mono text-eyebrow tracking-widest opacity-80">Thank you for supporting the Jenga365 Impact Fund</p>
                         </div>
 
                         {/* Body */}
                         <div className="p-8 space-y-6">
-                            <div className="flex items-center justify-between py-4 border-b border-[var(--border)]">
-                                <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] font-bold">Reference</span>
+                            <div className="flex items-center justify-between py-4 border-b border-border">
+                                <span className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] font-bold">Reference</span>
                                 <span className="font-mono font-bold text-sm text-black tracking-wider">{orderConfirmation.reference}</span>
                             </div>
 
                             <div className="space-y-3">
-                                <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] font-bold block">Items Ordered</span>
+                                <span className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] font-bold block">Items Ordered</span>
                                 {orderConfirmation.items.map((item, i) => (
                                     <div key={i} className="flex items-center justify-between gap-4">
                                         <div className="flex items-center gap-3 min-w-0">
@@ -368,7 +368,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                 ))}
                             </div>
 
-                            <div className="flex justify-between items-center pt-4 border-t border-[var(--border)]">
+                            <div className="flex justify-between items-center pt-4 border-t border-border">
                                 <span className="text-headline text-foreground">Total paid</span>
                                 <span className="text-display-sm" style={{ color: "var(--brand-green)" }}>KES {orderConfirmation.total.toLocaleString()}</span>
                             </div>
@@ -379,7 +379,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
 
                             <button
                                 onClick={() => setOrderConfirmation(null)}
-                                className="w-full h-12 bg-black text-white font-mono text-[10px] uppercase tracking-widest hover:bg-[var(--brand-green)] transition-all rounded-sm flex items-center justify-center gap-2"
+                                className="w-full h-12 bg-black text-white font-mono text-eyebrow tracking-widest hover:bg-[var(--brand-green)] transition-all rounded-md flex items-center justify-center gap-2"
                             >
                                 <X size={14} />
                                 Continue Shopping

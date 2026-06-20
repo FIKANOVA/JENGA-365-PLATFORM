@@ -30,7 +30,7 @@ export default async function AIProfilePage() {
                 </div>
 
                 <div
-                    className="rounded-lg border border-border bg-background p-6 space-y-2"
+                    className="rounded-md border border-border bg-background p-6 space-y-2"
                     style={{ boxShadow: "var(--shadow-sm)" }}
                 >
                     <p className="text-eyebrow text-foreground-muted">What happens</p>

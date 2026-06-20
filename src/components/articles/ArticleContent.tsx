@@ -42,8 +42,8 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                 <div className="space-y-8 lg:sticky lg:top-[120px]">
                     {/* Author Profile */}
                     <div className="space-y-6">
-                        <div className="relative size-24 rounded-sm border border-[var(--border)] p-1 bg-white shadow-xl">
-                            <div className="relative w-full h-full rounded-sm overflow-hidden bg-[var(--surface-1)]">
+                        <div className="relative size-24 rounded-md border border-border p-1 bg-white shadow-xl">
+                            <div className="relative w-full h-full rounded-md overflow-hidden bg-[var(--surface-1)]">
                                 <Image
                                     src={author.avatar}
                                     alt={author.name}
@@ -55,28 +55,28 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                         <div className="space-y-3">
                             <div className="space-y-1">
                                 <h3 className="text-display-sm text-foreground">{author.name}</h3>
-                                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold block">
+                                <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--brand-green)] font-bold block">
                                     {author.role}
                                 </span>
                             </div>
                             <p className="text-[var(--foreground-muted)] text-[14px] leading-relaxed font-light">
                                 {author.bio}
                             </p>
-                            <button className="pt-2 flex items-center gap-2 group text-[10px] font-mono uppercase tracking-widest text-black hover:text-[var(--brand-green)] transition-colors">
+                            <button className="pt-2 flex items-center gap-2 group text-label font-mono uppercase tracking-widest text-black hover:text-[var(--brand-green)] transition-colors">
                                 <span className="w-6 h-px bg-black group-hover:bg-[var(--brand-green)] transition-colors"></span>
                                 Follow Profile
                             </button>
                         </div>
 
                         {coAuthors && coAuthors.length > 0 && (
-                            <div className="pt-6 border-t border-[var(--border)] space-y-3">
-                                <h4 className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">
+                            <div className="pt-6 border-t border-border space-y-3">
+                                <h4 className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)]">
                                     Co-authors
                                 </h4>
                                 <ul className="space-y-3">
                                     {coAuthors.map((c) => (
                                         <li key={c.name} className="flex items-center gap-3">
-                                            <div className="relative size-9 rounded-sm border border-[var(--border)] overflow-hidden bg-[var(--surface-1)] shrink-0">
+                                            <div className="relative size-9 rounded-md border border-border overflow-hidden bg-[var(--surface-1)] shrink-0">
                                                 {c.avatar && (
                                                     <Image
                                                         src={c.avatar}
@@ -89,7 +89,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                                             <div className="min-w-0">
                                                 <p className="text-body-sm text-foreground truncate">{c.name}</p>
                                                 {c.role && (
-                                                    <p className="font-mono text-[9px] uppercase tracking-widest text-[var(--brand-green)] truncate">
+                                                    <p className="font-mono text-eyebrow tracking-widest text-[var(--brand-green)] truncate">
                                                         {c.role}
                                                     </p>
                                                 )}
@@ -103,12 +103,12 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
 
                     {/* Meta Info */}
                     {topicTags.length > 0 && (
-                        <div className="space-y-6 pt-10 border-t border-[var(--border)]">
+                        <div className="space-y-6 pt-10 border-t border-border">
                             <div className="space-y-4">
-                                <h4 className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--foreground-subtle)]">Topic Area</h4>
+                                <h4 className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)]">Topic Area</h4>
                                 <div className="flex flex-wrap gap-2">
                                     {topicTags.map(tag => (
-                                        <span key={tag} className="px-3 py-1 bg-[var(--surface-1)] border border-[var(--border)] text-[9px] font-mono tracking-widest uppercase">
+                                        <span key={tag} className="px-3 py-1 bg-[var(--surface-1)] border border-border text-label font-mono tracking-widest uppercase">
                                             {tag}
                                         </span>
                                     ))}
@@ -129,7 +129,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                                 image: ({ value }: any) => {
                                     if (!value?.url) return null;
                                     // eslint-disable-next-line @next/next/no-img-element
-                                    return <img src={value.url} alt={value?.alt ?? ""} className="rounded-sm w-full my-8" />;
+                                    return <img src={value.url} alt={value?.alt ?? ""} className="rounded-md w-full my-8" />;
                                 },
                             },
                             marks: {
@@ -163,7 +163,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                         </p>
 
                         <figure className="my-16 space-y-4">
-                            <div className="relative aspect-[16/9] rounded-sm overflow-hidden shadow-2xl border border-[var(--border)] bg-black">
+                            <div className="relative aspect-[16/9] rounded-md overflow-hidden shadow-2xl border border-border bg-black">
                                 <Image
                                     src="https://jenga365.com/wp-content/uploads/2025/07/Fanaka-Studios-SportPesa-Cheza-Dimba-Northrift-11-of-429-scaled.jpg"
                                     alt="Mentorship Impact"
@@ -181,7 +181,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                             The platform&apos;s AI-native matching engine ensures that every connection is built on a foundation of shared values and professional synergy. We are no longer just connecting people; we are curating pathways to success.
                         </p>
 
-                        <blockquote className="my-14 p-12 bg-[var(--surface-1)] border-l-[6px] border-[var(--brand-green)] rounded-sm text-display-sm italic text-foreground leading-tight">
+                        <blockquote className="my-14 p-12 bg-[var(--surface-1)] border-l-[6px] border-[var(--brand-green)] rounded-md text-display-sm italic text-foreground leading-tight">
                             &quot;Greatness is never achieved in isolation. The Jenga365 platform is the connective tissue for the next generation of global stars.&quot;
                         </blockquote>
                     </>

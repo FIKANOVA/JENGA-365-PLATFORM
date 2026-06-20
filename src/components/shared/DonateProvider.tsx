@@ -118,7 +118,7 @@ function DonateModal({ onClose }: { onClose: () => void }) {
         >
             <div className="absolute inset-0 bg-black/60" onClick={onClose} />
             <div
-                className="relative w-full max-w-md rounded-lg border border-border p-6 space-y-5"
+                className="relative w-full max-w-md rounded-md border border-border p-6 space-y-5"
                 style={{ background: "var(--background)", boxShadow: "var(--shadow-lg)" }}
             >
                 <div className="flex items-start justify-between gap-3">

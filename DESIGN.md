@@ -188,22 +188,24 @@ No springs in landing/dashboard surfaces. Reserve springs for purposeful interac
 
 ## 10. Logo
 
-- **Text wordmark only** for v1. Component at `src/components/shared/Logo.tsx`.
-- Format: `Jenga` (neutral foreground) + `365` (brand-green). Single weight (700). Tracking `-0.02em`.
-- Variants:
-  - `default` — black `Jenga`, brand-green `365`.
-  - `mono-light` — white text, brand-green stays.
-  - `mono-dark` — `#0A0A0A` text, brand-green stays.
-- Do **not** reference any image at `/public/assets/logos/*` until custom SVG ships.
+- Uses the `<Logo />` component at `src/components/shared/Logo.tsx`.
+- Supports both `type="text"` (default) and `type="image"` modes.
+- **Text Format (`type="text"`):** `J` (brand-red) + `enga` (black/white depending on mode) + `365` (brand-green). Single weight (700). Tracking `-0.02em`.
+  - Variants:
+    - `default` — black `enga` (or white in dark mode).
+    - `light` — white `enga`.
+    - `dark` — `#0A0A0A` `enga`.
+- **Image Format (`type="image"`):** Uses `/assets/logos/logo.png`. Deployed in the global Header across the app.
 
 ---
 
-## 11. Backgrounds
+## 11. Backgrounds & Assets
 
 - Solid neutral surfaces dominate.
 - Acceptable accents: very faint topographic SVG pattern at 4–6% opacity (nods to spatial-data tracking) on hero or section transitions.
 - **Forbidden:** stop signs, caution imagery, busy stock photos, any AI-generated illustration.
 - Subtle radial gradients allowed for hero (e.g. `radial-gradient(at top, rgba(15,123,58,0.06), transparent 60%)`).
+- **Media Support:** The app supports `png`, `jpg`, and `mp4` across the app (in addition to SVGs).
 
 ---
 
