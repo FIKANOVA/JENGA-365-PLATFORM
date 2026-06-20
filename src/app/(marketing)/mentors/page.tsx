@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 
 export const metadata = {
     title: "Mentors | Jenga365",
-    description: "Meet the seasoned professionals who give back through Jenga365 — guiding the next generation of athletes, leaders, and entrepreneurs.",
+    description: "Meet the seasoned professionals who give back through Jenga365, guiding the next generation of athletes, leaders, and entrepreneurs.",
 };
 
 function fmt(n: number | undefined | null): string {
@@ -71,7 +71,7 @@ export default async function MentorsPage() {
                 </div>
             </PageHero>
 
-            <section className="py-20 lg:py-24 border-b border-border">
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Why it matters</p>
@@ -93,7 +93,7 @@ export default async function MentorsPage() {
                 </div>
             </section>
 
-            <section className="py-16 lg:py-20" style={{ background: "var(--brand-black)" }}>
+            <section className="py-16 lg:py-12 md:py-20" style={{ background: "var(--brand-black)" }}>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
                         {heroStats.map((stat) => (

@@ -16,7 +16,7 @@ export default function EventGallery({ gallery }: EventGalleryProps) {
     if (items.length === 0) return null;
 
     return (
-        <section className="py-20 lg:py-24 bg-background border-b border-border">
+        <section className="py-12 md:py-20 lg:py-12 md:py-24 bg-background border-b border-border">
             <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                 <div className="space-y-3">
                     <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>

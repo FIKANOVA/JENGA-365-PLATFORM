@@ -75,7 +75,7 @@ export default async function HelpPage() {
         <main className="bg-background">
             {/* Hero */}
             <section className="bg-hero-radial border-b border-border">
-                <div className="mx-auto max-w-3xl px-6 lg:px-8 py-20 lg:py-28 text-center space-y-8">
+                <div className="mx-auto max-w-3xl px-6 lg:px-8 py-12 md:py-20 lg:py-16 md:py-28 text-center space-y-8">
                     <div className="space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                             Help center
@@ -98,7 +98,7 @@ export default async function HelpPage() {
 
             {/* Manuals */}
             {visibleManuals.length > 0 && (
-                <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-20">
+                <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-12 md:py-20">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {visibleManuals.map((m) => {
                             const Icon = ICON_MAP[m.iconName ?? ""] ?? BookOpen;
@@ -159,7 +159,7 @@ export default async function HelpPage() {
                     className="border-y border-border"
                     style={{ background: "var(--surface-1)" }}
                 >
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-20">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-12 md:py-20">
                         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-10">
                             <div className="space-y-2">
                                 <p
@@ -198,7 +198,7 @@ export default async function HelpPage() {
             <FAQSection items={settings?.faqItems ?? null} />
 
             {/* Support CTA */}
-            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-24">
+            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-12 md:py-24">
                 <div
                     className="rounded-lg border border-border p-10 lg:p-14 text-center"
                     style={{ background: "var(--foreground)" }}

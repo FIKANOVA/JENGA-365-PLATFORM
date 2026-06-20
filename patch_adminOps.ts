@@ -1,4 +1,10 @@
-"use server";
+import fs from 'fs';
+
+let content = fs.readFileSync('src/lib/actions/adminOps.ts', 'utf8');
+
+// The file was concatenated incorrectly, resulting in duplicate imports and 'use server' declarations.
+// Let's rewrite the file completely based on the previous versions.
+const newContent = `"use server";
 
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
@@ -19,7 +25,7 @@ async function requireSuperAdmin() {
 
 /**
  * Persist a partner's Looker Studio report id and/or login-free share URL.
- * These feed `src/components/dashboard/Partner/LookerEmbed.tsx` so the sponsor
+ * These feed \`src/components/dashboard/Partner/LookerEmbed.tsx\` so the sponsor
  * sees their embedded ESG dashboard at /dashboard/partner.
  */
 export async function setPartnerLooker(
@@ -36,8 +42,6 @@ export async function setPartnerLooker(
     const reportId = lookerReportId.trim() || null;
     const shareUrl = lookerShareUrl.trim() || null;
 
-    // Validate up front so the operator gets a clear message instead of a raw DB
-    // CHECK-constraint error (corporate_partners_looker_share_url_format, migration 0009).
     if (shareUrl && !shareUrl.startsWith("https://lookerstudio.google.com/")) {
         return { error: "Share URL must start with https://lookerstudio.google.com/" };
     }
@@ -72,10 +76,7 @@ export async function sendResetPasswordEmailAction(email: string) {
     }
 
     try {
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
-        await auth.api.forgetPassword({
+        await auth.api.requestPasswordReset({
             body: {
                 email,
                 redirectTo: "/reset-password",
@@ -114,7 +115,7 @@ export async function importLegacyUsersAction(legacyUsers: string[]) {
             });
             results.push({ email, status: "imported" });
         } catch (err) {
-            console.error(`Failed to import ${email}:`, err);
+            console.error(\`Failed to import \${email}:\`, err);
             results.push({ email, status: "error", message: err instanceof Error ? err.message : String(err) });
         }
     }
@@ -129,7 +130,11 @@ export async function updateLegacyUserRoleAction(email: string, role: "SuperAdmi
         await db.update(users).set({ role }).where(eq(users.email, email));
         return { ok: true };
     } catch (err) {
-        console.error(`Failed to update role for ${email}:`, err);
+        console.error(\`Failed to update role for \${email}:\`, err);
         return { error: "Failed to update user role" };
     }
 }
+`;
+
+fs.writeFileSync('src/lib/actions/adminOps.ts', newContent);
+console.log('Fixed src/lib/actions/adminOps.ts');
