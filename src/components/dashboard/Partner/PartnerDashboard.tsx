@@ -192,7 +192,7 @@ export default function PartnerDashboard({
         </section>
       </div>
 
-      {/* Reporting pointer — canonical reporting is the Data Studio embed above per CLAUDE.md §10.5/§11 */}
+      {/* Reporting pointer — canonical reporting is the Looker Studio embed above per CLAUDE.md §10.5/§11 */}
       <BentoCard className="p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-start gap-3">
           <span
@@ -206,7 +206,7 @@ export default function PartnerDashboard({
           </span>
           <div className="space-y-1">
             <h3 className="text-title text-foreground">
-              ESG reports live in Data Studio
+              ESG reports live in Looker Studio
             </h3>
             <p className="text-body-sm text-foreground-muted max-w-md">
               Use the embedded dashboard above for live metrics, or copy the

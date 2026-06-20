@@ -113,8 +113,8 @@ export const corporatePartners = pgTable("corporate_partners", {
     impactTreesPlanted: integer("impact_trees_planted").default(0),
     impactHoursContributed: integer("impact_hours_contributed").default(0),
     stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
-    dataStudioReportId: text("data_studio_report_id"),
-    dataStudioShareUrl: text("data_studio_share_url"),
+    lookerReportId: text("looker_report_id"),
+    lookerShareUrl: text("looker_share_url"),
     isActive: boolean("is_active").default(true).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
@@ -815,11 +815,11 @@ export const mentorCommitmentTracker = pgTable("mentor_commitment_tracker", {
     mentorMonthIdx: uniqueIndex("mentor_month_idx").on(table.mentorId, table.month),
 }));
 
-// ─── Data Studio Views (read-only — Drizzle pgView) ────────────────────────
+// ─── Looker Studio Views (read-only — Drizzle pgView) ────────────────────────
 
 /**
  * View 1: Corporate Partner ESG Scorecard
- * Data Studio reads this to build per-partner dashboards and automated ESG reports.
+ * Looker reads this to build per-partner dashboards and automated ESG reports.
  */
 export const vCorporatePartnerScorecard = pgView("v_corporate_partner_scorecard").as((qb) =>
     qb
@@ -1013,7 +1013,7 @@ export const vProjectLocationPlantings = pgView("v_project_location_plantings").
         .groupBy(treePlantingEvents.projectLocationId)
 );
 
-// Public-facing Data Studio source — unfiltered aggregates for marketing site.
+// Public-facing Looker Studio source — unfiltered aggregates for marketing site.
 // See CLAUDE.md §11 (public site iframe) and drizzle/0013_public_impact_view.sql.
 export const vPublicImpactAggregate = pgView("v_public_impact_aggregate", {
     treesPlantedTotal: integer("trees_planted_total"),
