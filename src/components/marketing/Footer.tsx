@@ -49,13 +49,13 @@ export default function Footer() {
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
                 {/* Top section */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-16 py-14 border-b border-white/5">
+                <div className="grid grid-cols-2 md:grid-cols-12 gap-12 md:gap-16 py-14 border-b border-white/5">
                     {/* Brand */}
-                    <div className="md:col-span-4 space-y-8">
+                    <div className="col-span-2 md:col-span-4 space-y-6 md:space-y-8">
                         <Link href="/">
                             <Logo variant="white" theme="dark" height={40} />
                         </Link>
-                        <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs">
+                        <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs hidden md:block">
                             Kenya&apos;s dual-engine AI platform — building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
                         </p>
                         <div className="flex items-center gap-3">
@@ -76,7 +76,7 @@ export default function Footer() {
 
                     {/* Nav columns */}
                     {footerNav.map((col) => (
-                        <div key={col.title} className="md:col-span-2 space-y-6">
+                        <div key={col.title} className="col-span-1 md:col-span-2 space-y-6">
                             <h4 className="font-mono text-[9px] uppercase tracking-[0.35em] text-white/25 font-bold">
                                 {col.title}
                             </h4>
@@ -96,7 +96,7 @@ export default function Footer() {
                     ))}
 
                     {/* Newsletter */}
-                    <div className="md:col-span-2 space-y-6">
+                    <div className="col-span-2 md:col-span-2 space-y-6">
                         <h4 className="font-mono text-[9px] uppercase tracking-[0.35em] text-white/25 font-bold">
                             Jenga Journal
                         </h4>
@@ -135,19 +135,23 @@ export default function Footer() {
                         <Link href="/terms" className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/20 hover:text-white/60 transition-colors">
                             Terms
                         </Link>
-                        <span className="font-sans text-[11px] text-white/15 italic">Nairobi, Kenya</span>
-                        <span className="hidden md:inline font-sans text-[11px] text-white/20">
-                            Site by{" "}
-                            <a
-                                href="https://www.fikanova.co.ke/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-white/35 hover:text-white/70 transition-colors"
-                            >
-                                Fikanova
-                            </a>
-                        </span>
+                        <span className="hidden md:inline font-sans text-[11px] text-white/15 italic">Nairobi, Kenya</span>
                     </div>
+                </div>
+
+                {/* Developer Credit Bar */}
+                <div className="py-4 border-t border-white/5 flex justify-center items-center">
+                    <span className="font-sans text-[11px] text-white/20">
+                        Site by{" "}
+                        <a
+                            href="https://www.fikanova.co.ke/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white/35 hover:text-white/70 transition-colors underline underline-offset-2"
+                        >
+                            Fikanova
+                        </a>
+                    </span>
                 </div>
             </div>
         </footer>

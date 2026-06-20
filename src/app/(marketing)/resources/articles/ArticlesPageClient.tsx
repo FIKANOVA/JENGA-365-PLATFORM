@@ -141,7 +141,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                         {filteredArticles.length > 0 ? (
                             <ArticlesGrid articles={filteredArticles} />
                         ) : (
-                            <div className="flex flex-col items-center justify-center py-24 text-center space-y-6">
+                            <div className="flex flex-col items-center justify-center py-12 md:py-24 text-center space-y-6">
                                 <SearchX className="h-16 w-16 text-[var(--border)]" />
                                 <h3 className="text-display-md text-foreground">No results found</h3>
                                 <button

@@ -108,7 +108,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                 </>
             )}
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32 lg:py-40">
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 md:py-32 lg:py-40">
                 <div className="max-w-3xl">
                     <motion.div
                         custom={0}

@@ -53,7 +53,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
     return (
         <section className="bg-background">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 md:py-32">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
