@@ -105,8 +105,8 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                         <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[var(--brand-green)] border-2 border-white rounded-full" />
                     </div>
                     <div>
-                        <p className="font-mono text-label font-bold uppercase tracking-widest text-black">Jenga Intelligence</p>
-                        <p className="font-mono text-[7px] uppercase tracking-widest text-[var(--brand-green)]">Processing Node: Active</p>
+                        <p className="text-label font-bold text-black">Jenga Intelligence</p>
+                        <p className="text-[7px] text-[var(--brand-green)]">Processing Node: Active</p>
                     </div>
                 </div>
                 <Sparkles size={14} className="text-black/10" />
@@ -131,9 +131,9 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                                     ? 'bg-black text-white' 
                                     : 'bg-[var(--surface-1)] text-black'
                                 } border border-black/5`}>
-                                    <p className="font-mono text-[11px] leading-relaxed tracking-tight">{msg.content}</p>
+                                    <p className="text-[11px] leading-relaxed">{msg.content}</p>
                                 </div>
-                                <p className="font-mono text-[7px] text-black/20 uppercase tracking-widest">
+                                <p className="text-[7px] text-black/20">
                                     {msg.role === 'user' ? 'User' : 'Jenga AI'} — {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </p>
                             </div>
@@ -166,7 +166,7 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         placeholder={currentStep < steps.length ? "TYPE YOUR RESPONSE..." : "PROTOCOL COMPLETE"}
-                        className="flex-1 bg-[var(--surface-1)] border-b border-black/10 px-4 py-3 font-mono text-eyebrow tracking-widest focus:outline-none focus:border-black transition-all"
+                        className="flex-1 bg-[var(--surface-1)] border-b border-black/10 px-4 py-3 text-eyebrow focus:outline-none focus:border-black transition-all"
                         disabled={isTyping || currentStep >= steps.length + 1}
                     />
                     <button
@@ -191,11 +191,11 @@ export default function AIChatRegistration({ onComplete, onUpdateData, roleName 
                     </div>
                     <div className="space-y-2">
                         <h4 className="text-display-md text-white">Protocol finalized</h4>
-                        <p className="font-mono text-label text-white/50 uppercase tracking-[0.4em]">All identity nodes captured and verified.</p>
+                        <p className="text-label text-white/50">All identity nodes captured and verified.</p>
                     </div>
                     <button
                         onClick={() => onComplete({})}
-                        className="px-12 py-5 bg-white text-black font-mono font-bold text-eyebrow tracking-[0.4em] hover:bg-black hover:text-white border border-transparent hover:border-[var(--brand-red)] transition-all shadow-2xl"
+                        className="px-12 py-5 bg-white text-black font-bold text-eyebrow hover:bg-black hover:text-white border border-transparent hover:border-[var(--brand-red)] transition-all shadow-2xl"
                     >
                         Initialize Commitment →
                     </button>

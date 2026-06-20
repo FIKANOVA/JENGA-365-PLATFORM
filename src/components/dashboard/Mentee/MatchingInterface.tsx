@@ -80,7 +80,7 @@ export default function MatchingInterface() {
                                 </div>
                                 <div className="text-center md:text-right w-full md:w-auto mt-4 md:mt-0 shrink-0">
                                     <div className="text-4xl font-black text-primary font-outfit mb-1">{mentor.matchPercentage}%</div>
-                                    <p className="text-eyebrow tracking-widest text-muted-foreground font-bold mb-6">Total Match Score</p>
+                                    <p className="text-eyebrow text-muted-foreground font-bold mb-6">Total Match Score</p>
                                     <Button
                                         onClick={async () => {
                                             setRequesting(mentor.id);

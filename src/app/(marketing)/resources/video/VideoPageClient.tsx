@@ -62,7 +62,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                 {/* Breadcrumb */}
-                <Link href="/resources" className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
+                <Link href="/resources" className="text-eyebrow text-[var(--foreground-subtle)] hover:text-black transition-colors">
                     ← Resources
                 </Link>
 
@@ -72,7 +72,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-6 py-4 font-mono text-eyebrow tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
+                            className={`px-6 py-4 text-eyebrow whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
                         >
                             {cat}
                             <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
@@ -98,7 +98,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                     </div>
                                 </div>
                                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                                    <span className="font-mono text-eyebrow tracking-widest text-[var(--brand-green)] font-bold">{featuredVideo.category} · {featuredVideo.duration}</span>
+                                    <span className="text-eyebrow text-[var(--brand-green)] font-bold">{featuredVideo.category} · {featuredVideo.duration}</span>
                                     <h2 className="text-display-md text-white mt-2 leading-tight">
                                         {featuredVideo.title}
                                     </h2>
@@ -128,11 +128,11 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                     </div>
                                     {video.duration && (
                                         <div className="absolute bottom-3 right-3 bg-black/70 px-2 py-1">
-                                            <span className="font-mono text-label text-white">{video.duration}</span>
+                                            <span className="text-label text-white">{video.duration}</span>
                                         </div>
                                     )}
                                 </div>
-                                <span className="font-mono text-eyebrow tracking-widest text-[var(--brand-green)] font-bold">{video.category}</span>
+                                <span className="text-eyebrow text-[var(--brand-green)] font-bold">{video.category}</span>
                                 <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors mt-1">
                                     {video.title}
                                 </h3>

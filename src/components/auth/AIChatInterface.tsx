@@ -77,12 +77,12 @@ export default function AIChatInterface({
                     </div>
                     <div className="flex flex-col">
                         <h3 className="text-headline text-foreground leading-none mb-1">{agentName}</h3>
-                        <span className="font-mono text-label font-bold text-[#8A8A8A] tracking-widest uppercase">{agentRole}</span>
+                        <span className="text-label font-bold text-[#8A8A8A]">{agentRole}</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="size-2 bg-[#006600] rounded-full animate-pulse" />
-                    <span className="font-mono text-label text-[#4A4A4A] font-bold tracking-tighter uppercase">Live Session</span>
+                    <span className="text-label text-[#4A4A4A] font-bold">Live Session</span>
                 </div>
             </div>
 
@@ -104,10 +104,10 @@ export default function AIChatInterface({
                                     ? "bg-[#BB0000] text-white rounded-br-none"
                                     : "bg-[#F5F5F3] text-[#1A1A1A] border border-[#E8E4DC] rounded-bl-none"
                                 }`}>
-                                <p className={`text-base leading-relaxed ${m.role === "user" ? "font-mono font-medium" : "font-body"}`}>
+                                <p className={`text-base leading-relaxed ${m.role === "user" ? "font-medium" : "font-body"}`}>
                                     {m.content}
                                 </p>
-                                <span className={`absolute -bottom-6 font-mono text-label font-bold uppercase tracking-widest ${m.role === "user" ? "right-0 text-[#BB0000]" : "left-0 text-[#8A8A8A]"
+                                <span className={`absolute -bottom-6 text-label font-bold ${m.role === "user" ? "right-0 text-[#BB0000]" : "left-0 text-[#8A8A8A]"
                                     }`}>
                                     {m.role === "user" ? "CONFIRMED" : agentName.toUpperCase()}
                                 </span>

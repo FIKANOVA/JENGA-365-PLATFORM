@@ -55,7 +55,7 @@ export default function AuthenticatedHeader({
                     {/* Role Badge */}
                     <div 
                         className={cn(
-                            "hidden sm:flex items-center px-3 py-1 border rounded-md font-mono text-eyebrow tracking-[0.1em]",
+                            "hidden sm:flex items-center px-3 py-1 border rounded-md text-eyebrow ",
                             userRole === "Mentor" && "bg-[var(--red-tint)] text-[var(--red)] border-[rgba(187,0,0,0.2)]",
                             userRole === "Mentee" && "bg-[var(--green-tint)] text-[var(--green)] border-[rgba(0,102,0,0.2)]",
                             userRole === "Corporate" && "bg-[#F5F5F5] text-black border-[var(--border-strong)]",
@@ -73,7 +73,7 @@ export default function AuthenticatedHeader({
                         <Link 
                             key={link.href} 
                             href={link.href}
-                            className={`font-mono text-eyebrow tracking-[0.15em] px-3 py-2 transition-colors ${
+                            className={`text-eyebrow px-3 py-2 transition-colors ${
                                 pathname === link.href ? "text-primary" : "text-slate-600 dark:text-slate-400 hover:text-primary"
                             }`}
                         >
@@ -87,7 +87,7 @@ export default function AuthenticatedHeader({
                     <div className="hidden md:flex items-center gap-4">
                         <Link 
                             href="/dashboard"
-                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2.5 rounded font-black text-eyebrow tracking-[0.2em] hover:bg-primary hover:text-white transition-all shadow-lg shadow-slate-900/10"
+                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2.5 rounded font-black text-eyebrow hover:bg-primary hover:text-white transition-all shadow-lg shadow-slate-900/10"
                         >
                             Dashboard
                         </Link>

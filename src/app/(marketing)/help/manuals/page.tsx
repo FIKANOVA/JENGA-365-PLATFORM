@@ -32,7 +32,7 @@ export default function PublicManualsPage() {
         <main className="min-h-screen pt-16 md:pt-32 pb-12 md:pb-24 bg-background">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
                 <div className="text-center mb-16 space-y-4">
-                    <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
+                    <h1 className="text-4xl font-extrabold sm:text-5xl lg:text-6xl text-foreground">
                         Help <span className="text-primary">Center</span>
                     </h1>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -58,7 +58,7 @@ export default function PublicManualsPage() {
                                 </div>
                                 <div className="relative z-10 flex flex-col h-full">
                                     <div className="flex-1 space-y-4">
-                                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
+                                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
                                             v{doc.version}
                                         </div>
                                         <h3 className="text-2xl font-bold text-foreground">{doc.title}</h3>

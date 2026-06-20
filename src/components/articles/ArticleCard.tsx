@@ -41,7 +41,7 @@ export default function ArticleCard({
                     className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
                 />
                 <div className="absolute top-6 left-6 z-20">
-                    <span className="bg-white text-black px-3 py-1.5 rounded-md text-label font-mono font-bold uppercase tracking-[0.2em] shadow-xl">
+                    <span className="bg-white text-black px-3 py-1.5 rounded-md text-label font-bold shadow-xl">
                         {category}
                     </span>
                 </div>
@@ -49,7 +49,7 @@ export default function ArticleCard({
 
             <div className="flex flex-col p-8 md:p-10 space-y-6 flex-1 bg-white">
                 <div className="space-y-4 flex-1">
-                    <div className="flex items-center gap-3 text-[var(--brand-green)] font-mono text-eyebrow tracking-[0.3em] font-bold">
+                    <div className="flex items-center gap-3 text-[var(--brand-green)] text-eyebrow font-bold">
                         <span>{readTime}</span>
                         <span className="w-4 h-px bg-[var(--border)]"></span>
                         <span className="text-[var(--foreground-subtle)]">{date}</span>

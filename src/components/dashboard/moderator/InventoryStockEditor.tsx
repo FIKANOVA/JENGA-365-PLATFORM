@@ -38,18 +38,18 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
         <div className="p-4 border-t border-gray-100 bg-[#FAFAF8] space-y-3">
             <div className="flex items-center justify-between gap-3">
                 <div className="flex flex-col gap-1 flex-1">
-                    <label className="font-mono text-eyebrow tracking-widest text-gray-400 font-bold">Stock Count</label>
+                    <label className="text-eyebrow text-gray-400 font-bold">Stock Count</label>
                     <input
                         type="number"
                         min={0}
                         value={stockCount}
                         onChange={(e) => setStockCount(Math.max(0, parseInt(e.target.value) || 0))}
-                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-black transition-colors bg-white"
+                        className="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-black transition-colors bg-white"
                     />
                 </div>
 
                 <div className="flex flex-col gap-1 items-center pt-4">
-                    <label className="font-mono text-eyebrow tracking-widest text-gray-400 font-bold">Active</label>
+                    <label className="text-eyebrow text-gray-400 font-bold">Active</label>
                     <button
                         onClick={() => setIsActive(prev => !prev)}
                         className={`w-10 h-6 rounded-full transition-all duration-300 relative ${isActive ? "bg-[var(--brand-green)]" : "bg-gray-200"}`}
@@ -64,7 +64,7 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
             <button
                 onClick={handleSave}
                 disabled={isPending}
-                className="w-full h-9 bg-black text-white font-mono text-eyebrow tracking-widest hover:bg-[var(--brand-green)] transition-all rounded flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full h-9 bg-black text-white text-eyebrow hover:bg-[var(--brand-green)] transition-all rounded flex items-center justify-center gap-2 disabled:opacity-50"
             >
                 {isPending ? (
                     <><Loader2 size={12} className="animate-spin" /> Saving...</>

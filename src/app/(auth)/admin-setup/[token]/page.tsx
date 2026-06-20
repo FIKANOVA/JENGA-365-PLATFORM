@@ -375,7 +375,7 @@ export default function AdminSetupPage() {
                                                     Can&apos;t scan? View manual key
                                                 </summary>
                                                 <div
-                                                    className="mt-2 rounded-md border border-border bg-background px-2 py-1.5 font-mono text-xs break-all select-all text-foreground"
+                                                    className="mt-2 rounded-md border border-border bg-background px-2 py-1.5 text-xs break-all select-all text-foreground"
                                                 >
                                                     {twoFactorSecret}
                                                 </div>
@@ -393,7 +393,7 @@ export default function AdminSetupPage() {
                                         value={twoFactorToken}
                                         onChange={(e) => setTwoFactorToken(e.target.value)}
                                         placeholder="000000"
-                                        className="h-12 w-full rounded-md border border-border bg-background px-3 text-center text-xl tracking-[0.5em] text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
+                                        className="h-12 w-full rounded-md border border-border bg-background px-3 text-center text-xl text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none"
                                         maxLength={6}
                                     />
                                 </label>

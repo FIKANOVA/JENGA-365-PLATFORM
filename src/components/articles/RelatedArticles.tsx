@@ -43,7 +43,7 @@ export default function RelatedArticles({ articles }: RelatedArticlesProps) {
                             <h4 className="text-label text-foreground line-clamp-2 leading-tight group-hover:text-[var(--brand-red)] transition-colors">
                                 {article.title}
                             </h4>
-                            <div className="flex items-center gap-3 text-[var(--foreground-subtle)] font-mono text-eyebrow tracking-widest font-bold">
+                            <div className="flex items-center gap-3 text-[var(--foreground-subtle)] text-eyebrow font-bold">
                                 <span>{article.readTime}</span>
                                 <span className="w-4 h-px bg-[var(--border)]"></span>
                                 <span>{article.date}</span>
@@ -55,7 +55,7 @@ export default function RelatedArticles({ articles }: RelatedArticlesProps) {
 
             <Link
                 href="/resources/articles"
-                className="flex items-center justify-center w-full py-4 border border-border text-black font-mono text-eyebrow tracking-[0.3em] hover:bg-black hover:text-white transition-all rounded-md shadow-sm"
+                className="flex items-center justify-center w-full py-4 border border-border text-black text-eyebrow hover:bg-black hover:text-white transition-all rounded-md shadow-sm"
             >
                 View Library
             </Link>

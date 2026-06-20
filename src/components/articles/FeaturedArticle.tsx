@@ -44,10 +44,10 @@ export default function FeaturedArticle({
                     className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
                 />
                 <div className="absolute bottom-8 left-8 z-20 flex gap-3">
-                    <span className="bg-[var(--brand-green)] text-white text-label font-mono font-bold px-3 py-1.5 uppercase tracking-widest shadow-xl">
+                    <span className="bg-[var(--brand-green)] text-white text-label font-bold px-3 py-1.5 shadow-xl">
                         Featured Insight
                     </span>
-                    <span className="bg-white text-black text-label font-mono font-bold px-3 py-1.5 uppercase tracking-widest shadow-xl">
+                    <span className="bg-white text-black text-label font-bold px-3 py-1.5 shadow-xl">
                         {category}
                     </span>
                 </div>
@@ -55,7 +55,7 @@ export default function FeaturedArticle({
 
             <div className="w-full md:w-1/2 flex flex-col justify-center p-12 md:p-20 space-y-8 bg-white relative">
                 <div className="space-y-4">
-                    <div className="flex items-center gap-3 text-[var(--brand-green)] font-mono text-eyebrow tracking-[0.3em]">
+                    <div className="flex items-center gap-3 text-[var(--brand-green)] text-eyebrow">
                         <span className="w-8 h-px bg-[var(--brand-green)]"></span>
                         <span>{readTime}</span>
                     </div>
@@ -76,11 +76,11 @@ export default function FeaturedArticle({
                         </div>
                         <div className="flex flex-col">
                             <span className="text-body-sm font-medium text-foreground">{author}</span>
-                            <span className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)]">{date}</span>
+                            <span className="text-eyebrow text-[var(--foreground-subtle)]">{date}</span>
                         </div>
                     </div>
                     
-                    <span className="font-mono text-eyebrow tracking-[0.3em] text-black group-hover:text-[var(--brand-green)] transition-colors">
+                    <span className="text-eyebrow text-black group-hover:text-[var(--brand-green)] transition-colors">
                         Read Story →
                     </span>
                 </div>

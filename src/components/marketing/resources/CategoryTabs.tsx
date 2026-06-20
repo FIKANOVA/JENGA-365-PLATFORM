@@ -20,7 +20,7 @@ export default function CategoryTabs({ activeCategory, onCategoryChange }: Categ
                 <button
                     key={cat.id}
                     onClick={() => onCategoryChange(cat.id)}
-                    className={`px-8 py-5 text-label font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${activeCategory === cat.id
+                    className={`px-8 py-5 text-label font-bold whitespace-nowrap transition-all relative group ${activeCategory === cat.id
                             ? "text-[var(--brand-green)]"
                             : "text-[var(--foreground-subtle)] hover:text-black"
                         }`}
