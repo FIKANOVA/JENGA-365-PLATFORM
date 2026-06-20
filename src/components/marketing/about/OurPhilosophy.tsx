@@ -100,7 +100,7 @@ function PhilosophyCard({
 }) {
     return (
         <div
-            className="rounded-lg border border-border bg-background p-6 lg:p-7 space-y-3 transition-colors hover:bg-[color:var(--surface-2)]"
+            className="rounded-md border border-border bg-background p-6 lg:p-7 space-y-3 transition-colors hover:bg-[color:var(--surface-2)]"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <h3 className="text-headline text-foreground">{heading}</h3>

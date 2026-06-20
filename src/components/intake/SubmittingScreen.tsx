@@ -41,7 +41,7 @@ export default function SubmittingScreen({ visible }: SubmittingScreenProps) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
     >
       <div
-        className="rounded-lg border border-border bg-background p-8 min-w-[320px] max-w-sm"
+        className="rounded-md border border-border bg-background p-8 min-w-[320px] max-w-sm"
         style={{ boxShadow: "var(--shadow-lg)" }}
       >
         <div className="mb-6 text-center">

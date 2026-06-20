@@ -3,7 +3,7 @@
 export default function ImpactAttributionCard() {
     return (
         <section
-            className="rounded-lg border p-6 animate-fade-up"
+            className="rounded-md border p-6 animate-fade-up"
             style={{ background: "var(--brand-green-soft)", borderColor: "var(--brand-green)" }}
         >
             <span className="text-eyebrow mb-2 block" style={{ color: "var(--brand-green)" }}>

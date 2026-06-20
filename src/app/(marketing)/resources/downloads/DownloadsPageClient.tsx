@@ -64,17 +64,17 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                 {/* Breadcrumb */}
-                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
+                <Link href="/resources" className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
                     ← Resources
                 </Link>
 
                 {/* Category tabs */}
-                <div className="flex border-b border-[var(--border)] overflow-x-auto mt-8 mb-16">
+                <div className="flex border-b border-border overflow-x-auto mt-8 mb-16">
                     {allCategories.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-6 py-4 font-mono text-[10px] uppercase tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
+                            className={`px-6 py-4 font-mono text-eyebrow tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
                         >
                             {cat}
                             <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
@@ -87,7 +87,7 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                     {filtered.map((item) => (
                         <div
                             key={item.id}
-                            className="group border border-[var(--border)] bg-[var(--surface-1)] p-8 flex flex-col gap-6 hover:border-[var(--brand-green)] transition-all duration-300 relative overflow-hidden"
+                            className="group border border-border bg-[var(--surface-1)] p-8 flex flex-col gap-6 hover:border-[var(--brand-green)] transition-all duration-300 relative overflow-hidden"
                         >
                             {/* Top accent */}
                             <div className="absolute top-0 left-0 h-[3px] w-0 group-hover:w-full bg-[var(--brand-green)] transition-all duration-500" />
@@ -96,14 +96,14 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                             <div className="flex items-center justify-between">
                                 <FormatIcon format={item.format} className="h-8 w-8 text-[var(--brand-green)] opacity-70 group-hover:opacity-100 transition-opacity" />
                                 <div className="flex items-center gap-2">
-                                    <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] font-bold">{item.format}</span>
-                                    {item.size && <span className="font-mono text-[9px] text-[var(--foreground-subtle)]">· {item.size}</span>}
+                                    <span className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] font-bold">{item.format}</span>
+                                    {item.size && <span className="font-mono text-label text-[var(--foreground-subtle)]">· {item.size}</span>}
                                 </div>
                             </div>
 
                             {/* Text */}
                             <div className="flex-1 space-y-3">
-                                <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--brand-green)] font-bold">{item.category}</span>
+                                <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--brand-green)] font-bold">{item.category}</span>
                                 <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors">
                                     {item.title}
                                 </h3>
@@ -116,7 +116,7 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                             {item.locked && !isAuthenticated ? (
                                 <Link
                                     href="/register/mentorship"
-                                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--foreground-subtle)] hover:text-black transition-colors"
+                                    className="flex items-center gap-2 font-mono text-eyebrow tracking-widest font-bold text-[var(--foreground-subtle)] hover:text-black transition-colors"
                                 >
                                     <Lock className="h-4 w-4" />
                                     Members Only
@@ -127,13 +127,13 @@ export default function DownloadsPageClient({ initialDownloads }: DownloadsPageC
                                     download
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--brand-green)] hover:text-black transition-colors"
+                                    className="flex items-center gap-2 font-mono text-eyebrow tracking-widest font-bold text-[var(--brand-green)] hover:text-black transition-colors"
                                 >
                                     <Download className="h-4 w-4" />
                                     Download Free
                                 </a>
                             ) : (
-                                <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest font-bold text-[var(--brand-green)] opacity-50 cursor-not-allowed">
+                                <span className="flex items-center gap-2 font-mono text-eyebrow tracking-widest font-bold text-[var(--brand-green)] opacity-50 cursor-not-allowed">
                                     <Download className="h-4 w-4" />
                                     Coming Soon
                                 </span>

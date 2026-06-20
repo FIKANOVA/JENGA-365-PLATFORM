@@ -140,7 +140,7 @@ export default function StakeholdersDeepDive() {
                                     <div
                                         key={s.id}
                                         className={cn(
-                                            "rounded-xl border overflow-hidden transition-all duration-300",
+                                            "rounded-md border overflow-hidden transition-all duration-300",
                                             isOpen ? "bg-background shadow-md border-border" : "bg-[color:var(--surface-2)] border-transparent hover:border-border"
                                         )}
                                     >
@@ -150,7 +150,7 @@ export default function StakeholdersDeepDive() {
                                         >
                                             <div className="flex items-center gap-4">
                                                 <div
-                                                    className="inline-flex h-12 w-12 items-center justify-center rounded-lg shrink-0 transition-colors"
+                                                    className="inline-flex h-12 w-12 items-center justify-center rounded-md shrink-0 transition-colors"
                                                     style={{
                                                         background: isOpen ? s.colorSoft : "var(--surface-3)",
                                                         color: isOpen ? s.color : "var(--foreground-muted)"
@@ -195,7 +195,7 @@ export default function StakeholdersDeepDive() {
                                                                             href="/dashboard"
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-lg px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
                                                                             Open dashboard
@@ -204,7 +204,7 @@ export default function StakeholdersDeepDive() {
                                                                     ) : (
                                                                         <Link
                                                                             href={s.registerHref}
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-lg px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
                                                                             {s.joinCta}
@@ -219,7 +219,7 @@ export default function StakeholdersDeepDive() {
                                                                     {s.rules.map((rule) => (
                                                                         <div
                                                                             key={rule.label}
-                                                                            className="rounded-lg border border-border bg-[color:var(--surface-1)] p-4 flex gap-3"
+                                                                            className="rounded-md border border-border bg-[color:var(--surface-1)] p-4 flex gap-3"
                                                                         >
                                                                             <div className="mt-0.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ background: s.color }} />
                                                                             <div>

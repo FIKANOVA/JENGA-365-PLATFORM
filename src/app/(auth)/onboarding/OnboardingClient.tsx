@@ -68,7 +68,7 @@ export default function OnboardingClient() {
                             return (
                                 <li key={step.id} className="flex items-center gap-3">
                                     <span
-                                        className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-medium"
+                                        className="inline-flex h-7 w-7 items-center justify-center rounded-full text-label font-medium"
                                         style={palette}
                                     >
                                         {step.done ? (
@@ -98,7 +98,7 @@ export default function OnboardingClient() {
                 <main className="md:col-span-2">
                     {isFinishing ? (
                         <div
-                            className="h-[500px] flex flex-col items-center justify-center rounded-lg border border-border bg-background p-10 text-center"
+                            className="h-[500px] flex flex-col items-center justify-center rounded-md border border-border bg-background p-10 text-center"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <Loader2

@@ -76,11 +76,11 @@
   --foreground-subtle: #71717a;
 
   /* Brand accents — Kenya flag green & red, full saturation */
-  --brand-green: #006600;
+  --brand-green: #00c05f;
   --brand-green-hover: #004d00;
   --brand-green-fg: #ffffff;
   --brand-green-soft: #e6f2e6;
-  --brand-red: #bb0000;
+  --brand-red: #ff211f;
   --brand-red-hover: #960000;
   --brand-red-fg: #ffffff;
   --brand-red-soft: #fce7e7;
@@ -156,10 +156,10 @@
   --foreground-muted: #a1a1aa;
   --foreground-subtle: #71717a;
 
-  --brand-green: #2ea043;
+  --brand-green: #00c05f;
   --brand-green-hover: #3fb957;
   --brand-green-soft: #0e2c1b;
-  --brand-red: #f04747;
+  --brand-red: #ff211f;
   --brand-red-hover: #ff6b6b;
   --brand-red-soft: #2c1313;
   --brand-gold: #ffd700;
@@ -248,6 +248,14 @@
 @layer utilities {
   .text-display-xl {
     font-size: 3rem;
+    @media (min-width: 768px) {
+    }
+    font-size: 3rem;
+    @media (min-width: 768px) {
+
+    }
+
+    line-height: 1.05;
     line-height: 1.1;
     font-weight: 700;
     letter-spacing: -0.025em;

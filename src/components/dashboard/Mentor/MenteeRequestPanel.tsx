@@ -15,7 +15,7 @@ export default function MenteeRequestPanel() {
             </CardHeader>
             <CardContent className="space-y-4">
                 {requests.map((req) => (
-                    <div key={req.id} className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border/50">
+                    <div key={req.id} className="flex items-center justify-between p-4 bg-muted/20 rounded-md border border-border/50">
                         <div className="flex items-center space-x-4">
                             <Avatar>
                                 <AvatarFallback>{req.name[0]}</AvatarFallback>

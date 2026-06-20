@@ -67,7 +67,7 @@ export default function AIChatInterface({
     };
 
     return (
-        <div className="flex flex-col h-[600px] max-w-4xl mx-auto bg-white border border-[#E8E4DC] rounded-sm shadow-xl overflow-hidden">
+        <div className="flex flex-col h-[600px] max-w-4xl mx-auto bg-white border border-[#E8E4DC] rounded-md shadow-xl overflow-hidden">
             {/* Agent Header */}
             <div className="bg-[#FBFBF9] border-b border-[#E8E4DC] p-6 flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -77,12 +77,12 @@ export default function AIChatInterface({
                     </div>
                     <div className="flex flex-col">
                         <h3 className="text-headline text-foreground leading-none mb-1">{agentName}</h3>
-                        <span className="font-mono text-[9px] font-bold text-[#8A8A8A] tracking-widest uppercase">{agentRole}</span>
+                        <span className="font-mono text-label font-bold text-[#8A8A8A] tracking-widest uppercase">{agentRole}</span>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="size-2 bg-[#006600] rounded-full animate-pulse" />
-                    <span className="font-mono text-[10px] text-[#4A4A4A] font-bold tracking-tighter uppercase">Live Session</span>
+                    <span className="font-mono text-label text-[#4A4A4A] font-bold tracking-tighter uppercase">Live Session</span>
                 </div>
             </div>
 
@@ -107,7 +107,7 @@ export default function AIChatInterface({
                                 <p className={`text-base leading-relaxed ${m.role === "user" ? "font-mono font-medium" : "font-body"}`}>
                                     {m.content}
                                 </p>
-                                <span className={`absolute -bottom-6 font-mono text-[9px] font-bold uppercase tracking-widest ${m.role === "user" ? "right-0 text-[#BB0000]" : "left-0 text-[#8A8A8A]"
+                                <span className={`absolute -bottom-6 font-mono text-label font-bold uppercase tracking-widest ${m.role === "user" ? "right-0 text-[#BB0000]" : "left-0 text-[#8A8A8A]"
                                     }`}>
                                     {m.role === "user" ? "CONFIRMED" : agentName.toUpperCase()}
                                 </span>
@@ -122,7 +122,7 @@ export default function AIChatInterface({
                         animate={{ opacity: 1 }}
                         className="flex justify-start"
                     >
-                        <div className="bg-[#F5F5F3] border border-[#E8E4DC] p-4 rounded-sm flex gap-1.5 items-center">
+                        <div className="bg-[#F5F5F3] border border-[#E8E4DC] p-4 rounded-md flex gap-1.5 items-center">
                             <div className="size-1.5 bg-[#BB0000] rounded-full animate-bounce [animation-duration:0.6s]" />
                             <div className="size-1.5 bg-[#BB0000] rounded-full animate-bounce [animation-duration:0.6s] [animation-delay:0.2s]" />
                             <div className="size-1.5 bg-[#BB0000] rounded-full animate-bounce [animation-duration:0.6s] [animation-delay:0.4s]" />
@@ -138,13 +138,13 @@ export default function AIChatInterface({
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Type your response here..."
-                    className="flex-1 bg-white border border-[#E8E4DC] px-6 py-4 rounded-sm text-lg font-body focus:outline-none focus:border-[#BB0000] focus:ring-1 focus:ring-[#BB0000] transition-all shadow-inner"
+                    className="flex-1 bg-white border border-[#E8E4DC] px-6 py-4 rounded-md text-lg font-body focus:outline-none focus:border-[#BB0000] focus:ring-1 focus:ring-[#BB0000] transition-all shadow-inner"
                     autoFocus
                 />
                 <button
                     type="submit"
                     disabled={!input.trim() || isTyping}
-                    className="bg-[#BB0000] text-white px-8 h-14 rounded-sm flex items-center justify-center hover:bg-[#8B0000] active:scale-95 transition-all disabled:opacity-30 disabled:grayscale shadow-lg shadow-[#BB0000]/20"
+                    className="bg-[#BB0000] text-white px-8 h-14 rounded-md flex items-center justify-center hover:bg-[#8B0000] active:scale-95 transition-all disabled:opacity-30 disabled:grayscale shadow-lg shadow-[#BB0000]/20"
                 >
                     <Send className="h-5 w-5" />
                 </button>

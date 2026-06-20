@@ -84,7 +84,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                             <NextLink
                                 href={`/resources/articles/${slug}`}
                                 key={id}
-                                className="group flex flex-col rounded-lg border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
+                                className="group flex flex-col rounded-md border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
                             >
                                 <div className="relative aspect-[16/10] overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {img ? (
@@ -139,7 +139,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
                 {/* Contributor CTA */}
                 <div
-                    className="mt-20 rounded-lg border border-border p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+                    className="mt-20 rounded-md border border-border p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
                     style={{ background: "var(--surface-1)" }}
                 >
                     <div>

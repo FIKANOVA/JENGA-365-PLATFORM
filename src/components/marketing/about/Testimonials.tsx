@@ -41,7 +41,7 @@ export default function Testimonials() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-                            className="group rounded-lg border border-border bg-background p-10 md:p-12 relative flex flex-col justify-between min-h-[400px] transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
+                            className="group rounded-md border border-border bg-background p-10 md:p-12 relative flex flex-col justify-between min-h-[400px] transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div className="relative">

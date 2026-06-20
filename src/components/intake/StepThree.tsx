@@ -113,7 +113,7 @@ export default function StepThree({
                 aria-checked={isSelected}
                 onClick={() => onChange('preferredMentorshipStyle', value)}
                 className={`
-                  w-full text-left px-5 py-4 rounded-xl border-2 transition-colors cursor-pointer
+                  w-full text-left px-5 py-4 rounded-md border-2 transition-colors cursor-pointer
                   ${isSelected
                     ? 'bg-[var(--md-primary-container,#d0e8ff)] border-[var(--md-primary)] text-[var(--md-on-surface)]'
                     : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)]'

@@ -74,14 +74,14 @@ export default function NotificationBell() {
             >
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
-                    <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white border-2 border-white dark:border-slate-900">
+                    <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-label font-bold text-white border-2 border-white dark:border-slate-900">
                         {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                 )}
             </button>
 
             {open && (
-                <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-xl z-50 overflow-hidden">
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
                         <span className="font-mono text-xs font-bold uppercase tracking-widest text-foreground">
@@ -112,7 +112,7 @@ export default function NotificationBell() {
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-bold text-foreground truncate">{n.title}</p>
                                         <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.body}</p>
-                                        <p className="text-[10px] font-mono text-muted-foreground mt-1">
+                                        <p className="text-label font-mono text-muted-foreground mt-1">
                                             {new Date(n.createdAt).toLocaleDateString()}
                                         </p>
                                     </div>
