@@ -196,10 +196,17 @@ function NavDropdown({ group, onItemClick }: { group: NavGroup; onItemClick?: ()
     );
 }
 
-function PrimaryNav() {
+function PrimaryNav({ isAuthenticated }: { isAuthenticated: boolean }) {
+    const navGroups = isAuthenticated
+        ? NAV_GROUPS.map(group => ({
+            ...group,
+            items: group.items.filter(item => item.href !== "/register/partner")
+        }))
+        : NAV_GROUPS;
+
     return (
         <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
-            {NAV_GROUPS.map((g) => (
+            {navGroups.map((g) => (
                 <NavDropdown key={g.label} group={g} />
             ))}
         </nav>
@@ -238,7 +245,7 @@ function PublicHeader({ scrolled, mobileOpen, setMobileOpen }: { scrolled: boole
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={false} onClose={() => setMobileOpen(false)} /> : null}
         >
             <Logo size="md" />
-            <PrimaryNav />
+            <PrimaryNav isAuthenticated={false} />
 
             <div className="flex items-center gap-1.5 sm:gap-2">
                 <GlobalCTAs />
@@ -397,7 +404,7 @@ function AuthenticatedHeader({
                 <Logo size="md" />
                 <RoleBadge role={user.role ?? null} className="hidden lg:inline-flex" />
             </div>
-            <PrimaryNav />
+            <PrimaryNav isAuthenticated={true} />
 
             <div className="flex items-center gap-1.5 sm:gap-2">
                 <GlobalCTAs />
@@ -421,10 +428,17 @@ function AuthenticatedHeader({
 
 // ── Mobile drawer (shared, render outside Shell for full-width) ──────────────
 function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; onClose: () => void }) {
+    const navGroups = isAuthenticated
+        ? NAV_GROUPS.map(group => ({
+            ...group,
+            items: group.items.filter(item => item.href !== "/register/partner")
+        }))
+        : NAV_GROUPS;
+
     return (
         <div className="md:hidden border-t border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 max-h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="mx-auto max-w-7xl px-6 py-3 flex flex-col gap-1">
-                {NAV_GROUPS.map((group) => (
+                {navGroups.map((group) => (
                     <details key={group.label} className="group/section">
                         <summary className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground cursor-pointer list-none">
                             <span className="font-medium">{group.label}</span>

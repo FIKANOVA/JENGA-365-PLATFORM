@@ -3,6 +3,8 @@ import { Trophy, Brain, Users, TrendingUp, ArrowRight } from "lucide-react";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
+import { auth } from "@/lib/auth/config";
+import { headers } from "next/headers";
 
 export const metadata = {
     title: "Mentors | Jenga365",
@@ -23,6 +25,8 @@ const MENTOR_QUALITIES = [
 
 export default async function MentorsPage() {
     const dbStats = await getGlobalImpactStats();
+    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
+    const isAuthenticated = !!session?.user;
 
     const heroStats = [
         { value: fmt(dbStats?.activeMentors),         label: "Active Mentors" },
@@ -39,14 +43,25 @@ export default async function MentorsPage() {
                 description="Share your expertise. Shape the next generation. Jenga365 mentors are the backbone of a movement building Total Athletes and purposeful leaders across Kenya."
             >
                 <div className="flex flex-wrap items-center gap-3">
-                    <Link
-                        href="/register/mentor"
-                        className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
-                        style={{ background: "var(--brand-green)" }}
-                    >
-                        Apply as mentor
-                        <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    {isAuthenticated ? (
+                        <Link
+                            href="/dashboard"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Go to Dashboard
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/register/mentor"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Apply as mentor
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    )}
                     <Link
                         href="/about"
                         className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"

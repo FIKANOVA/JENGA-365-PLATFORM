@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PlayCircle, Play, FileText, Lock, User, ArrowRight, Download } from "lucide-react";
+import { useSession } from "@/lib/auth/client";
 
 export type ResourceType = "ARTICLE" | "DOWNLOAD" | "VIDEO" | "VOICES";
 
@@ -23,6 +24,10 @@ interface ResourceCardProps {
 
 export default function ResourceCard(props: ResourceCardProps) {
     const { type, title, author, role, date, size, format, duration, thumbnail, category, locked } = props;
+    const { data: session } = useSession();
+    const isAuthenticated = !!session?.user;
+
+    const isEffectivelyLocked = locked && !isAuthenticated;
 
     return (
         <div
@@ -88,7 +93,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                 )}
 
                 {/* Guest Locked Overlay */}
-                {locked && (
+                {isEffectivelyLocked && (
                     <div className="absolute inset-0 z-20 bg-black/95 transition-all duration-700 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center p-10 text-center space-y-6">
                         <div className="size-16 bg-[var(--brand-green)]/10 rounded-full flex items-center justify-center">
                             <Lock className="h-6 w-6" style={{ color: "var(--brand-green)" }} />
@@ -144,10 +149,10 @@ export default function ResourceCard(props: ResourceCardProps) {
                     ) : (
                         <div className="flex items-center justify-between">
                              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-black font-bold">
-                                {locked ? "RESTRICTED" : (type === "DOWNLOAD" ? "READY FOR DOWNLOAD" : "VIEW RESOURCE")}
+                                {isEffectivelyLocked ? "RESTRICTED" : (type === "DOWNLOAD" ? "READY FOR DOWNLOAD" : "VIEW RESOURCE")}
                              </span>
-                             <div className={`w-8 h-8 flex items-center justify-center rounded-sm transition-all duration-500 ${locked ? 'bg-[var(--border)] text-white' : 'bg-[var(--brand-green)] text-white group-hover:scale-110 shadow-xl'}`}>
-                                {locked ? <Lock className="h-4 w-4" /> : (type === 'DOWNLOAD' ? <Download className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />)}
+                             <div className={`w-8 h-8 flex items-center justify-center rounded-sm transition-all duration-500 ${isEffectivelyLocked ? 'bg-[var(--border)] text-white' : 'bg-[var(--brand-green)] text-white group-hover:scale-110 shadow-xl'}`}>
+                                {isEffectivelyLocked ? <Lock className="h-4 w-4" /> : (type === 'DOWNLOAD' ? <Download className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />)}
                              </div>
                         </div>
                     )}
