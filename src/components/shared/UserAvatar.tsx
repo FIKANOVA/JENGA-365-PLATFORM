@@ -4,7 +4,7 @@ export default function UserAvatar({ name, image }: { name: string, image?: stri
     return (
         <Avatar className="w-8 h-8 border border-border">
             {image && <AvatarImage src={image} />}
-            <AvatarFallback className="bg-primary/10 text-primary font-bold text-[10px]">
+            <AvatarFallback className="bg-primary/10 text-primary font-bold text-label">
                 {name.split(" ").map(n => n[0]).join("")}
             </AvatarFallback>
         </Avatar>

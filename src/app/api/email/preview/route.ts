@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { EmailService, EmailTemplateType } from '@/lib/email/service';
+import { getSession } from '@/lib/auth/server';
 
 const VALID_TEMPLATES: EmailTemplateType[] = [
     'registration_confirmation',
@@ -27,6 +28,13 @@ const VALID_TEMPLATES: EmailTemplateType[] = [
  * Returns the raw HTML for a template with test data (for iframe rendering)
  */
 export async function GET(req: NextRequest) {
+    if (process.env.NODE_ENV !== 'development') {
+        const session = await getSession();
+        if (!session || session.user.role !== 'SuperAdmin') {
+            return new NextResponse('Not Found', { status: 404 });
+        }
+    }
+
     const template = req.nextUrl.searchParams.get('template');
 
     if (!template || !VALID_TEMPLATES.includes(template as EmailTemplateType)) {

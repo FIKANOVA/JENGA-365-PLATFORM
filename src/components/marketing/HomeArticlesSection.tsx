@@ -53,7 +53,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
     return (
         <section className="bg-background">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 md:py-32">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
@@ -84,7 +84,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                             <NextLink
                                 href={`/resources/articles/${slug}`}
                                 key={id}
-                                className="group flex flex-col rounded-lg border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
+                                className="group flex flex-col rounded-md border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
                             >
                                 <div className="relative aspect-[16/10] overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {img ? (
@@ -121,13 +121,15 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                                             {article.excerpt}
                                         </p>
                                     )}
-                                    <div className="mt-auto flex items-center justify-between pt-2">
+                                    <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
                                         <span className="text-label" style={{ color: "var(--foreground-subtle)" }}>{date}</span>
-                                        <ArrowRight
-                                            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                                            style={{ color: "var(--brand-green)" }}
-                                            aria-hidden
-                                        />
+                                        <span className="inline-flex items-center gap-1.5 text-label font-medium text-muted-foreground transition-colors group-hover:text-primary">
+                                            Read article
+                                            <ArrowRight
+                                                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                                                aria-hidden
+                                            />
+                                        </span>
                                     </div>
                                 </div>
                             </NextLink>
@@ -137,7 +139,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
                 {/* Contributor CTA */}
                 <div
-                    className="mt-20 rounded-lg border border-border p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+                    className="mt-20 rounded-md border border-border p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
                     style={{ background: "var(--surface-1)" }}
                 >
                     <div>

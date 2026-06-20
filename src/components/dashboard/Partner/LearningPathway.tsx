@@ -18,7 +18,7 @@ export default function LearningPathway({ pathway }: Props) {
 
     return (
         <section
-            className="rounded-lg border border-border bg-background p-8"
+            className="rounded-md border border-border bg-background p-8"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <div className="flex justify-between items-start mb-8">

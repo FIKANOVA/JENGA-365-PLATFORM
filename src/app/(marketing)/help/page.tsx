@@ -75,7 +75,7 @@ export default async function HelpPage() {
         <main className="bg-background">
             {/* Hero */}
             <section className="bg-hero-radial border-b border-border">
-                <div className="mx-auto max-w-3xl px-6 lg:px-8 py-20 lg:py-28 text-center space-y-8">
+                <div className="mx-auto max-w-3xl px-6 lg:px-8 py-12 md:py-20 lg:py-16 md:py-28 text-center space-y-8">
                     <div className="space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                             Help center
@@ -98,7 +98,7 @@ export default async function HelpPage() {
 
             {/* Manuals */}
             {visibleManuals.length > 0 && (
-                <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-20">
+                <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-12 md:py-20">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {visibleManuals.map((m) => {
                             const Icon = ICON_MAP[m.iconName ?? ""] ?? BookOpen;
@@ -107,7 +107,7 @@ export default async function HelpPage() {
                                 <Link
                                     key={m._id}
                                     href={`/help/${m.slug}`}
-                                    className="rounded-lg border border-border bg-background p-6 lg:p-8 flex flex-col group hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                                    className="rounded-md border border-border bg-background p-6 lg:p-8 flex flex-col group hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex items-start justify-between">
@@ -119,7 +119,7 @@ export default async function HelpPage() {
                                         </span>
                                         {badge && (
                                             <span
-                                                className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium"
+                                                className="inline-flex items-center rounded-full px-2.5 py-0.5 text-label font-medium"
                                                 style={
                                                     badge.tone === "brand"
                                                         ? {
@@ -159,7 +159,7 @@ export default async function HelpPage() {
                     className="border-y border-border"
                     style={{ background: "var(--surface-1)" }}
                 >
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-20">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-12 md:py-20">
                         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-10">
                             <div className="space-y-2">
                                 <p
@@ -179,7 +179,7 @@ export default async function HelpPage() {
                                 <Link
                                     key={topic._id}
                                     href={`/help/${topic.slug}`}
-                                    className="block rounded-lg border border-border bg-background p-5 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors group"
+                                    className="block rounded-md border border-border bg-background p-5 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors group"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <h4 className="text-title text-foreground group-hover:text-foreground">
@@ -198,9 +198,9 @@ export default async function HelpPage() {
             <FAQSection items={settings?.faqItems ?? null} />
 
             {/* Support CTA */}
-            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-24">
+            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-12 md:py-24">
                 <div
-                    className="rounded-lg border border-border p-10 lg:p-14 text-center"
+                    className="rounded-md border border-border p-10 lg:p-14 text-center"
                     style={{ background: "var(--foreground)" }}
                 >
                     <div className="max-w-2xl mx-auto space-y-5">

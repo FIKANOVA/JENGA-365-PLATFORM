@@ -25,7 +25,7 @@ export default function MenteeGoals({ menteeId }: Props) {
                     return (
                         <div
                             key={goal.id}
-                            className="group rounded-lg border border-border bg-background p-6 flex flex-col h-full hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                            className="group rounded-md border border-border bg-background p-6 flex flex-col h-full hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div className="flex justify-between items-start mb-4">

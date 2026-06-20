@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Search, Download, Layers, Calendar } from "lucide-react";
+import { FundingMapFilters } from "@/lib/actions/fundingMap";
 
 const FundingMap = dynamic(() => import("@/components/dashboard/impact/FundingMap"), {
     ssr: false,
@@ -19,7 +20,7 @@ interface Props {
 }
 
 export default function ImpactMapDashboard({ role }: Props) {
-    const [filters, setFilters] = useState<any>({
+    const [filters, setFilters] = useState<FundingMapFilters>({
         timeFilter: "all",
         layers: ["funding", "trees", "clinics"],
     });

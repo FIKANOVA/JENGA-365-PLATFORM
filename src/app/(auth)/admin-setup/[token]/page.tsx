@@ -122,7 +122,7 @@ export default function AdminSetupPage() {
                 ndaVersion: "ADMIN-2025-V1",
                 role: "SuperAdmin",
                 additionalDeclarations: [true],
-                documentHash: "admin-hash-placeholder",
+                documentHash: "f4b8a0f249c98c013ace7ef4f0da3a5050cfb2a3900b7866dce9aff2c0e7f3ac",
             });
             if (res.success) {
                 toast.success("SuperAdmin setup complete");
@@ -155,7 +155,7 @@ export default function AdminSetupPage() {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center px-6">
                 <div
-                    className="max-w-md w-full rounded-lg border border-border bg-background p-10 text-center space-y-5"
+                    className="max-w-md w-full rounded-md border border-border bg-background p-10 text-center space-y-5"
                     style={{ boxShadow: "var(--shadow-sm)" }}
                 >
                     <AlertTriangle
@@ -234,7 +234,7 @@ export default function AdminSetupPage() {
 
             <main className="flex-1 flex items-center justify-center px-6 py-12 lg:py-16">
                 <div
-                    className="max-w-xl w-full rounded-lg border border-border bg-background p-8 lg:p-12 space-y-8"
+                    className="max-w-xl w-full rounded-md border border-border bg-background p-8 lg:p-12 space-y-8"
                     style={{ boxShadow: "var(--shadow-lg)" }}
                 >
                     <AnimatePresence mode="wait">
@@ -447,7 +447,7 @@ export default function AdminSetupPage() {
                                 </div>
                                 <label className="flex gap-3 cursor-pointer items-start">
                                     <span
-                                        className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                                        className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border transition-colors shrink-0 ${
                                             ndaAgreed
                                                 ? "border-transparent"
                                                 : "border-border bg-background"

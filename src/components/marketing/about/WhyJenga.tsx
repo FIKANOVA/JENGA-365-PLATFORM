@@ -9,19 +9,19 @@ const reasons = [
         id: "holistic",
         title: "Holistic Excellence",
         color: "var(--brand-green)",
-        copy: "We don't just build players — we build people. Every programme balances mental health, education, and professional rugby skills to ensure well-rounded, sustainable growth.",
+        copy: "We don't just build players, we build people. Every programme balances mental health, education, and professional rugby skills to ensure well-rounded, sustainable growth.",
     },
     {
         id: "community",
         title: "Community Focused",
         color: "var(--mentorship-green, #2d7a3a)",
-        copy: "Our mandate grows from raw talent and professional opportunity. Every effort is for the athlete and the community that sustains them — no top-down, no shortcuts.",
+        copy: "Our mandate grows from raw talent and professional opportunity. Every effort is for the athlete and the community that sustains them, no top-down, no shortcuts.",
     },
     {
         id: "safe",
         title: "Safe Haven",
         color: "var(--brand-green)",
-        copy: "We provide a secure environment where mentorship and growth are monitored through precision protocols and AI-assisted matchmaking — so every connection is intentional and accountable.",
+        copy: "We provide a secure environment where mentorship and growth are monitored through precision protocols and AI-assisted matchmaking, so every connection is intentional and accountable.",
     },
     {
         id: "environment",
@@ -33,7 +33,7 @@ const reasons = [
         id: "ai",
         title: "AI-Native Platform",
         color: "var(--foreground)",
-        copy: "Our matching engine uses 768-dimensional vector embeddings and cosine similarity to pair mentors with mentees based on goals, personality, and expertise — not guesswork.",
+        copy: "Our matching engine uses 768-dimensional vector embeddings and cosine similarity to pair mentors with mentees based on goals, personality, and expertise, not guesswork.",
     },
 ];
 
@@ -41,11 +41,11 @@ export default function WhyJenga() {
     const [openId, setOpenId] = useState<string | null>("holistic");
 
     return (
-        <section className="py-24 bg-white border-t border-[#E8E4DC]">
+        <section className="py-12 md:py-24 bg-white border-t border-[#E8E4DC]">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-14 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
                     <div>
-                        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--brand-green)] font-bold block mb-3">
+                        <span className="font-mono text-eyebrow tracking-[0.25em] text-[var(--brand-green)] font-bold block mb-3">
                             Our Differentiators
                         </span>
                         <h2 className="text-display-lg text-foreground">
@@ -67,7 +67,7 @@ export default function WhyJenga() {
                                     className="w-full flex items-center justify-between px-8 py-5 text-left group hover:bg-[#F9F7F4] transition-colors"
                                 >
                                     <div className="flex items-center gap-5">
-                                        <span className="font-mono text-[9px] uppercase tracking-widest text-[#999]">
+                                        <span className="font-mono text-eyebrow tracking-widest text-[#999]">
                                             {String(i + 1).padStart(2, "0")}
                                         </span>
                                         <span className="text-headline text-foreground group-hover:text-[var(--brand-green)] transition-colors">

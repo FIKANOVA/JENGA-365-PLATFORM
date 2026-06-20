@@ -33,7 +33,7 @@ export default function FeaturedVideoSection({ video, heading }: FeaturedVideoSe
     const thumbUrl = video.thumbnail?.asset?.url ?? null;
 
     return (
-        <section className="py-20 lg:py-24 border-b border-border bg-background">
+        <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border bg-background">
             <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-10">
                 <div className="max-w-2xl space-y-3">
                     <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
@@ -50,11 +50,11 @@ export default function FeaturedVideoSection({ video, heading }: FeaturedVideoSe
                 </div>
 
                 <div
-                    className="relative rounded-lg overflow-hidden border border-border"
+                    className="relative rounded-md overflow-hidden border border-border"
                     style={{ aspectRatio: "16 / 9", background: "var(--surface-1)", boxShadow: "var(--shadow-sm)" }}
                 >
                     {parsed.isFile ? (
-                        /* eslint-disable-next-line jsx-a11y/media-has-caption */
+
                         <video
                             src={parsed.embed}
                             controls

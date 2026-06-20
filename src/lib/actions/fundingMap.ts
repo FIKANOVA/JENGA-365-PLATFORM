@@ -23,7 +23,29 @@ const filterSchema = z.object({
     ])).optional(),
 });
 
-export async function getFundingMapData(filters: z.infer<typeof filterSchema>) {
+export type FundingMapFilters = z.infer<typeof filterSchema>;
+
+export type FundingMapData = {
+    type: string;
+    features: Array<{
+        type: string;
+        geometry: {
+            type: string;
+            coordinates: number[];
+        };
+        properties: {
+            id: string;
+            name: string;
+            projectType: string;
+            amount: string | null;
+            youthReached: number | null;
+            date: string;
+            description: string | null;
+        };
+    }>;
+};
+
+export async function getFundingMapData(filters: FundingMapFilters): Promise<FundingMapData> {
     // 1. Auth check
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -38,7 +60,7 @@ export async function getFundingMapData(filters: z.infer<typeof filterSchema>) {
     const parsed = filterSchema.parse(filters);
 
     // 4. DB query building
-    let query = db.select({
+    const query = db.select({
         id: projectLocations.id,
         name: projectLocations.name,
         latitude: projectLocations.latitude,

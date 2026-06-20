@@ -24,7 +24,10 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
                 await setMerchandiseStockCount(sanityProductId, stockCount, isActive);
                 toast.success("Stock updated");
             } catch (err) {
-                toast.error((err as Error).message === "MERCHANDISE_NOT_FOUND"
+                const errorMessage = err instanceof Error ? err.message : String(err);
+                const isNotFound = errorMessage.includes("MERCHANDISE_NOT_FOUND");
+
+                toast.error(isNotFound
                     ? "Run \"Sync Store Inventory\" first to register this product"
                     : "Failed to update stock");
             }
@@ -35,7 +38,7 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
         <div className="p-4 border-t border-gray-100 bg-[#FAFAF8] space-y-3">
             <div className="flex items-center justify-between gap-3">
                 <div className="flex flex-col gap-1 flex-1">
-                    <label className="font-mono text-[9px] uppercase tracking-widest text-gray-400 font-bold">Stock Count</label>
+                    <label className="font-mono text-eyebrow tracking-widest text-gray-400 font-bold">Stock Count</label>
                     <input
                         type="number"
                         min={0}
@@ -46,7 +49,7 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
                 </div>
 
                 <div className="flex flex-col gap-1 items-center pt-4">
-                    <label className="font-mono text-[9px] uppercase tracking-widest text-gray-400 font-bold">Active</label>
+                    <label className="font-mono text-eyebrow tracking-widest text-gray-400 font-bold">Active</label>
                     <button
                         onClick={() => setIsActive(prev => !prev)}
                         className={`w-10 h-6 rounded-full transition-all duration-300 relative ${isActive ? "bg-[var(--brand-green)]" : "bg-gray-200"}`}
@@ -61,7 +64,7 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
             <button
                 onClick={handleSave}
                 disabled={isPending}
-                className="w-full h-9 bg-black text-white font-mono text-[9px] uppercase tracking-widest hover:bg-[var(--brand-green)] transition-all rounded flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full h-9 bg-black text-white font-mono text-eyebrow tracking-widest hover:bg-[var(--brand-green)] transition-all rounded flex items-center justify-center gap-2 disabled:opacity-50"
             >
                 {isPending ? (
                     <><Loader2 size={12} className="animate-spin" /> Saving...</>

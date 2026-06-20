@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Bot, Route, MessageSquare, ShieldCheck, BookOpen, UsersRound, ArrowRight } from "lucide-react";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PageHero from "@/components/shared/PageHero";
+import { auth } from "@/lib/auth/config";
+import { headers } from "next/headers";
 
 export const metadata = {
     title: "Mentees | Jenga365",
@@ -12,7 +14,7 @@ const PROGRAMME_STEPS = [
     { step: "01", title: "Apply & onboard",      body: "Complete your profile and take the AI-powered assessment. Our system builds a deep picture of your goals, learning style, and aspirations." },
     { step: "02", title: "Get matched",          body: "Our AI matching engine pairs you with up to 3 compatible mentors based on sector fit, personality, and availability." },
     { step: "03", title: "Begin your pathway",   body: "Your 12-week structured programme launches with a kick-off session. Weekly check-ins keep you on track and accountable." },
-    { step: "04", title: "Grow & graduate",      body: "Complete milestones, build your network, and unlock the alumni community — a lifetime of continued support." },
+    { step: "04", title: "Grow & graduate",      body: "Complete milestones, build your network, and unlock the alumni community, a lifetime of continued support." },
 ];
 
 const MENTEE_BENEFITS = [
@@ -24,7 +26,10 @@ const MENTEE_BENEFITS = [
     { Icon: UsersRound,    title: "Alumni network",        body: "Graduate into a lifelong community of Jenga365 alumni spanning rugby, business, health, and beyond." },
 ];
 
-export default function MenteesPage() {
+export default async function MenteesPage() {
+    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
+    const isAuthenticated = !!session?.user;
+
     return (
         <div className="flex flex-col bg-background">
             <PageHero
@@ -33,14 +38,25 @@ export default function MenteesPage() {
                 description="Jenga365 connects ambitious young professionals and athletes with seasoned leaders who have walked the road before. Start your structured mentorship journey today."
             >
                 <div className="flex flex-wrap items-center gap-3">
-                    <Link
-                        href="/register/mentorship"
-                        className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
-                        style={{ background: "var(--brand-green)" }}
-                    >
-                        Apply as mentee
-                        <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    {isAuthenticated ? (
+                        <Link
+                            href="/dashboard"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Go to Dashboard
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/register/mentorship"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Apply as mentee
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    )}
                     <Link
                         href="/resources"
                         className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
@@ -50,7 +66,7 @@ export default function MenteesPage() {
                 </div>
             </PageHero>
 
-            <section className="py-20 lg:py-24 border-b border-border">
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>The programme</p>
@@ -60,7 +76,7 @@ export default function MenteesPage() {
                         {PROGRAMME_STEPS.map((s) => (
                             <div
                                 key={s.step}
-                                className="rounded-lg border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-1)]"
+                                className="rounded-md border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-1)]"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <span className="text-display-sm" style={{ color: "var(--brand-green)" }}>{s.step}</span>
@@ -72,7 +88,7 @@ export default function MenteesPage() {
                 </div>
             </section>
 
-            <section className="py-20 lg:py-24 border-b border-border" style={{ background: "var(--surface-1)" }}>
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border" style={{ background: "var(--surface-1)" }}>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>What you get</p>
@@ -82,7 +98,7 @@ export default function MenteesPage() {
                         {MENTEE_BENEFITS.map(({ Icon, title, body }) => (
                             <div
                                 key={title}
-                                className="rounded-lg border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-2)]"
+                                className="rounded-md border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-2)]"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <Icon className="h-5 w-5" style={{ color: "var(--brand-green)" }} />

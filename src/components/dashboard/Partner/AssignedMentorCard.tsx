@@ -5,11 +5,22 @@ import AdminMatchingDashboard from "../shared/AdminMatchingDashboard";
 import { Settings2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+export interface MentorshipPairData {
+    matchScore?: string | number | null;
+    mentor?: {
+        id: string;
+        name: string;
+        expertise?: string[];
+        sessionsTogether?: number;
+    } | null;
+}
+
 interface Props {
-    pair: any;
+    pair: MentorshipPairData;
     menteeId: string;
     menteeName: string;
 }
+
 
 export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props) {
     const [isMatching, setIsMatching] = useState(false);
@@ -19,7 +30,7 @@ export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props
     if (isMatching || !mentor) {
         return (
             <section
-                className="rounded-lg border border-border bg-background p-8 animate-fade-up"
+                className="rounded-md border border-border bg-background p-8 animate-fade-up"
                 style={{ boxShadow: "var(--shadow-sm)" }}
             >
                 <div className="flex items-center justify-between mb-8">
@@ -52,7 +63,7 @@ export default function AssignedMentorCard({ pair, menteeId, menteeName }: Props
 
     return (
         <section
-            className="rounded-lg border border-border p-6 animate-fade-up"
+            className="rounded-md border border-border p-6 animate-fade-up"
             style={{ background: "var(--surface-1)" }}
         >
             <div className="flex items-center justify-between mb-6">

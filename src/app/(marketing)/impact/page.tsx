@@ -7,7 +7,7 @@ import { fetchSiteSettings } from "@/lib/sanity/queries";
 import DonateButton from "@/components/shared/DonateButton";
 
 export const metadata = {
-    title: "Impact | Jenga365 — Measurable Change Through Mentorship",
+    title: "Impact | Jenga365: Measurable Change Through Mentorship",
     description: "Explore the social and environmental impact of the Jenga365 platform. From mentorship hours to career placements, see our data-driven results.",
 };
 
@@ -25,19 +25,19 @@ interface EnvStat {
 
 const DEFAULT_IMPACT_STORIES: ImpactStory[] = [
     {
-        quote: "Jenga365 didn't just match me with a mentor — it matched me with a future. I went from uncertainty to leading a tech team in 18 months.",
+        quote: "Jenga365 didn't just match me with a mentor, it matched me with a future. I went from uncertainty to leading a tech team in 18 months.",
         name: "Grace Wanjiku",
-        role: "Mentee — Software Engineer",
+        role: "Mentee, Software Engineer",
     },
     {
         quote: "The corporate partnership framework allowed our CSR budget to create measurable, trackable impact for the first time.",
         name: "James Karanja",
-        role: "Corporate Partner — Safaricom",
+        role: "Corporate Partner, Safaricom",
     },
     {
         quote: "Through Jenga365's rugby programs, I learned discipline that translated directly to my professional career in finance.",
         name: "Brian Otieno",
-        role: "Mentee — Financial Analyst",
+        role: "Mentee, Financial Analyst",
     },
 ];
 
@@ -132,7 +132,7 @@ export default async function ImpactPage() {
                     description="Data-driven development. From mentorship hours to career placements, every initiative is measured, reported, and refined."
                 />
 
-                <section className="py-20 lg:py-24">
+                <section className="py-12 md:py-20 lg:py-12 md:py-24">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                         <div className="max-w-xl space-y-3">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>By the numbers</p>
@@ -143,7 +143,7 @@ export default async function ImpactPage() {
                             {IMPACT_STATS.map(({ value, label, Icon }) => (
                                 <div
                                     key={label}
-                                    className="rounded-lg border border-border bg-background p-6 transition-colors hover:bg-[color:var(--surface-1)]"
+                                    className="rounded-md border border-border bg-background p-6 transition-colors hover:bg-[color:var(--surface-1)]"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex items-start justify-between mb-4">
@@ -157,7 +157,7 @@ export default async function ImpactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24" style={{ background: "var(--brand-black)" }}>
+                <section className="py-12 md:py-20 lg:py-12 md:py-24" style={{ background: "var(--brand-black)" }}>
                     <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                         <div className="max-w-xl space-y-3">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Success stories</p>
@@ -168,7 +168,7 @@ export default async function ImpactPage() {
                             {stories.map((story) => (
                                 <div
                                     key={story.name}
-                                    className="rounded-lg border p-6 space-y-5"
+                                    className="rounded-md border p-6 space-y-5"
                                     style={{ borderColor: "rgba(255,255,255,0.10)" }}
                                 >
                                     <div className="h-px w-12" style={{ background: "var(--brand-green)" }} />
@@ -185,7 +185,7 @@ export default async function ImpactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24 border-y border-border">
+                <section className="py-12 md:py-20 lg:py-12 md:py-24 border-y border-border">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                             <div className="space-y-6">
@@ -210,7 +210,7 @@ export default async function ImpactPage() {
                                 {ENVIRONMENTAL_STATS.map((stat) => (
                                     <div
                                         key={stat.label}
-                                        className="rounded-lg border border-border bg-background p-5 flex items-start gap-6"
+                                        className="rounded-md border border-border bg-background p-5 flex items-start gap-6"
                                         style={{ boxShadow: "var(--shadow-sm)" }}
                                     >
                                         <span className="text-display-sm min-w-[80px]" style={{ color: "var(--brand-green)" }}>
@@ -227,7 +227,7 @@ export default async function ImpactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24" style={{ background: "var(--surface-1)" }}>
+                <section className="py-12 md:py-20 lg:py-12 md:py-24" style={{ background: "var(--surface-1)" }}>
                     <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center space-y-6">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Join the movement</p>
                         <h2 className="text-display-md text-foreground">Your contribution multiplies.</h2>

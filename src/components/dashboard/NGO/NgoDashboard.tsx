@@ -91,7 +91,7 @@ export default function NgoDashboard({ orgName, mouStatus, exchangeLog }: NgoDas
                 {metrics.map(({ label, value, sub, icon: Icon }) => (
                     <div
                         key={label}
-                        className="rounded-lg border border-border bg-background p-6 space-y-4 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
+                        className="rounded-md border border-border bg-background p-6 space-y-4 hover:border-[color:var(--border-strong,#D4D4D8)] transition-colors"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <div className="flex items-start justify-between">

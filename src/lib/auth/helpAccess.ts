@@ -22,7 +22,7 @@ export type HelpSessionContext = {
  *   mentee     — users.role === "Mentee"
  *   mentor     — users.role === "Mentor"
  *   corporate  — users.role === "CorporatePartner"
- *   ngo        — placeholder for NGO partners (currently same data path as corporate)
+ *   ngo        — NGO partners
  *   content    — Moderator with "content" scope (or SuperAdmin)
  *   all        — SuperAdmin (or Moderator with "all" scope)
  */

@@ -239,8 +239,16 @@ export async function updateMilestoneStatus(input: z.infer<typeof milestoneStatu
             .set({ status: "completed" })
             .where(eq(mentorshipPairs.id, parsed.pairId));
 
-        // Trigger: award certificate badge (placeholder)
-        console.log("Awarding certificate badge...");
+        // Award certificate badge
+        const pair = await db.query.mentorshipPairs.findFirst({
+            where: eq(mentorshipPairs.id, parsed.pairId)
+        });
+        if (pair) {
+            await db.insert(userBadges).values({
+                userId: pair.menteeId,
+                badgeType: "Graduate"
+            });
+        }
     }
 
     await db.insert(activityLog).values({
@@ -284,7 +292,21 @@ export async function flagMentee(input: z.infer<typeof flagMenteeSchema>) {
     }).returning();
 
     if (parsed.severity === "high") {
-        console.log("Notifying SuperAdmin immediately of High Severity flag!");
+        // Fetch all SuperAdmins
+        const superAdmins = await db.query.users.findMany({
+            where: eq(users.role, "SuperAdmin")
+        });
+
+        // Notify all SuperAdmins
+        await Promise.all(
+            superAdmins.map(admin =>
+                createNotification(admin.id, "general", {
+                    title: "High Severity Flag Alert",
+                    body: `A high severity flag (${parsed.flagType}) has been raised for mentee ${parsed.menteeId}.`,
+                    link: `/dashboard/admin/users/${parsed.menteeId}`
+                }).catch(() => {})
+            )
+        );
     }
 
     await db.insert(activityLog).values({

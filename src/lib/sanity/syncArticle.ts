@@ -84,10 +84,23 @@ export async function publishArticleToSanity(neonArticleId: string): Promise<str
         for (const co of coAuthorRows) {
             coAuthorRefs.push({
                 _type: "reference",
+        const promises = coAuthorRows.map(async (co) => {
+            const meta = (co.metadata as { bio?: string; professionalTitle?: string } | null) ?? null;
+            await ensureAuthorDoc({
+                userId: co.id,
+                name: co.name,
+                email: co.email,
+                bio: meta?.bio ?? null,
+                role: meta?.professionalTitle ?? null,
+            });
+            return {
+                _type: "reference" as const,
                 _ref: authorDocIdFor(co.id),
                 _key: `co-${co.id.slice(0, 8)}`,
-            });
-        }
+            };
+        });
+        const refs = await Promise.all(promises);
+        coAuthorRefs.push(...refs);
     }
 
     const sanityId = articleDocIdFor(article.id);

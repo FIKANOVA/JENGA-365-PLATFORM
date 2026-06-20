@@ -49,7 +49,7 @@ export default async function MyArticlesPage() {
 
                 {rows.length === 0 ? (
                     <div
-                        className="rounded-lg border border-dashed border-border p-12 text-center space-y-3"
+                        className="rounded-md border border-dashed border-border p-12 text-center space-y-3"
                         style={{ background: "var(--surface-1)" }}
                     >
                         <PenSquare className="w-10 h-10 mx-auto text-foreground-subtle" />

@@ -8,7 +8,7 @@ import { ArrowRight, ArrowLeft, Check, ShieldCheck } from "lucide-react";
 
 import { signUp } from "@/lib/auth/client";
 import { signNDA } from "@/lib/actions/nda";
-import { setUserRole } from "@/lib/actions/auth";
+import { setUserRoleAndApprove } from "@/lib/actions/auth";
 import { sendMenteeRegistrationEmail } from "@/lib/actions/registration-emails";
 
 import Logo from "@/components/shared/Logo";
@@ -65,7 +65,7 @@ export default function MenteeRegisterPage() {
             }
 
             if (result?.data?.user?.id) {
-                await setUserRole(result.data.user.id, "Mentee");
+                await setUserRoleAndApprove(result.data.user.id, "Mentee");
             }
 
             const ndaResult = await signNDA({
@@ -132,7 +132,7 @@ export default function MenteeRegisterPage() {
                             </header>
 
                             <div
-                                className="rounded-lg border border-border bg-background p-6 lg:p-8 space-y-5"
+                                className="rounded-md border border-border bg-background p-6 lg:p-8 space-y-5"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -245,7 +245,7 @@ export default function MenteeRegisterPage() {
                             </header>
 
                             <div
-                                className="rounded-lg border border-border bg-background p-6 lg:p-8 space-y-6"
+                                className="rounded-md border border-border bg-background p-6 lg:p-8 space-y-6"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <ul className="space-y-3">
@@ -457,7 +457,7 @@ function CheckboxRow({
     return (
         <label className="flex gap-3 cursor-pointer items-start">
             <span
-                className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-sm border transition-colors shrink-0 ${
+                className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border transition-colors shrink-0 ${
                     checked ? "border-transparent" : "border-border bg-background"
                 }`}
                 style={checked ? { background: "var(--brand-green)" } : undefined}

@@ -2,10 +2,11 @@
 
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
-import { corporatePartners } from "@/lib/db/schema";
+import { corporatePartners, users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import crypto from "crypto";
 
 async function requireSuperAdmin() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -40,7 +41,6 @@ export async function setPartnerLooker(
     if (shareUrl && !shareUrl.startsWith("https://lookerstudio.google.com/")) {
         return { error: "Share URL must start with https://lookerstudio.google.com/" };
     }
-    // reportId becomes part of the embed iframe src — keep it to a safe token charset.
     if (reportId && !/^[A-Za-z0-9_-]+$/.test(reportId)) {
         return { error: "Report ID may contain only letters, numbers, hyphens and underscores." };
     }
@@ -58,4 +58,78 @@ export async function setPartnerLooker(
     revalidatePath("/dashboard/admin/esg-unlock");
     revalidatePath("/dashboard/partner");
     return { ok: true };
+}
+
+export async function sendResetPasswordEmailAction(email: string) {
+    await requireSuperAdmin();
+
+    const user = await db.query.users.findFirst({
+        where: eq(users.email, email)
+    });
+
+    if (!user) {
+        return { error: "User not found" };
+    }
+
+    try {
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
+        await auth.api.forgetPassword({
+            body: {
+                email,
+                redirectTo: "/reset-password",
+            }
+        });
+        return { ok: true };
+    } catch (err) {
+        console.error("Failed to send reset password email:", err);
+        return { error: "Failed to send reset password email" };
+    }
+}
+
+export async function importLegacyUsersAction(legacyUsers: string[]) {
+    await requireSuperAdmin();
+    const results = [];
+
+    for (const email of legacyUsers) {
+        try {
+            const existingUser = await db.query.users.findFirst({
+                where: eq(users.email, email),
+            });
+
+            if (existingUser) {
+                results.push({ email, status: "skipped" });
+                continue;
+            }
+
+            const tempPassword = crypto.randomBytes(16).toString("hex") + "A1!";
+
+            await auth.api.signUpEmail({
+                body: {
+                    email,
+                    password: tempPassword,
+                    name: email.split("@")[0],
+                }
+            });
+            results.push({ email, status: "imported" });
+        } catch (err) {
+            console.error(`Failed to import ${email}:`, err);
+            results.push({ email, status: "error", message: err instanceof Error ? err.message : String(err) });
+        }
+    }
+
+    return results;
+}
+
+export async function updateLegacyUserRoleAction(email: string, role: "SuperAdmin" | "Moderator" | "CorporatePartner" | "NGO" | "Mentor" | "Mentee") {
+    await requireSuperAdmin();
+
+    try {
+        await db.update(users).set({ role }).where(eq(users.email, email));
+        return { ok: true };
+    } catch (err) {
+        console.error(`Failed to update role for ${email}:`, err);
+        return { error: "Failed to update user role" };
+    }
 }

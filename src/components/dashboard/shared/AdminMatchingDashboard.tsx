@@ -64,7 +64,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
     if (loading) {
         return (
             <div className="space-y-6">
-                <div className="h-40 bg-muted/50 rounded-3xl animate-pulse flex items-center justify-center">
+                <div className="h-40 bg-muted/50 rounded-md animate-pulse flex items-center justify-center">
                     <Loader2 className="w-6 h-6 animate-spin text-primary" />
                 </div>
             </div>
@@ -74,9 +74,9 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
     return (
         <div className="space-y-8 animate-in fade-in duration-700">
             {/* Current Mentor Section */}
-            <Card className="border-none bg-primary/5 shadow-none rounded-3xl overflow-hidden">
+            <Card className="border-none bg-primary/5 shadow-none rounded-md overflow-hidden">
                 <CardHeader className="pb-2">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Current Assignment</p>
+                    <p className="text-label font-bold uppercase tracking-widest text-primary mb-1">Current Assignment</p>
                     <CardTitle className="text-xl font-outfit">
                         {currentMentor ? `Matched with ${currentMentor.name}` : "Waiting for Match"}
                     </CardTitle>
@@ -97,7 +97,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
                         <Sparkles className="w-5 h-5 text-amber-500" />
                         <h2 className="text-2xl font-bold font-outfit">AI Matching Engine</h2>
                     </div>
-                    <Badge variant="outline" className="font-mono text-[10px] uppercase">
+                    <Badge variant="outline" className="font-mono text-eyebrow">
                         Vector Semantic Search
                     </Badge>
                 </div>
@@ -108,7 +108,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
 
                 <div className="grid grid-cols-1 gap-6">
                     {recommendations.length === 0 ? (
-                        <div className="p-12 text-center border-2 border-dashed rounded-3xl">
+                        <div className="p-12 text-center border-2 border-dashed rounded-md">
                             <Search className="w-12 h-12 mx-auto mb-4 text-muted-foreground/30" />
                             <p className="text-muted-foreground italic">No high-confidence matches found. Ensure the mentee has uploaded a CV.</p>
                         </div>
@@ -116,7 +116,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
                         recommendations.map((mentor) => (
                             <div
                                 key={mentor.id}
-                                className={`group p-6 bg-white border rounded-3xl transition-all duration-300 ${currentMentor?.id === mentor.id ? "ring-2 ring-primary border-primary" : "hover:border-primary/50 hover:shadow-xl"
+                                className={`group p-6 bg-white border rounded-md transition-all duration-300 ${currentMentor?.id === mentor.id ? "ring-2 ring-primary border-primary" : "hover:border-primary/50 hover:shadow-xl"
                                     }`}
                             >
                                 <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
@@ -150,7 +150,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
                                             <div className="text-4xl font-black text-primary font-outfit leading-none mb-1">
                                                 {mentor.matchPercentage}%
                                             </div>
-                                            <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold font-mono">
+                                            <p className="text-eyebrow tracking-widest text-muted-foreground font-bold font-mono">
                                                 Confidence Score
                                             </p>
                                         </div>

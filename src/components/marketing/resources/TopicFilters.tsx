@@ -22,9 +22,9 @@ export default function TopicFilters({ activeTopic, onTopicChange }: TopicFilter
                 <button
                     key={topic}
                     onClick={() => onTopicChange(topic)}
-                    className={`px-5 py-2.5 text-[9px] font-bold tracking-[0.2em] transition-all border rounded-sm ${activeTopic === topic
+                    className={`px-5 py-2.5 text-label font-bold tracking-[0.2em] transition-all border rounded-md ${activeTopic === topic
                             ? "bg-black border-black text-white shadow-xl"
-                            : "bg-white border-[var(--border)] text-black hover:border-black"
+                            : "bg-white border-border text-black hover:border-foreground"
                         }`}
                     style={{ fontFamily: "var(--font-dm-mono)" }}
                 >

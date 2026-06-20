@@ -49,7 +49,7 @@ export default function RegisterHubPage() {
                     return (
                         <div
                             key={p.title}
-                            className="group flex flex-col rounded-lg border border-border bg-background p-8 lg:p-10 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
+                            className="group flex flex-col rounded-md border border-border bg-background p-8 lg:p-10 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)]"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div

@@ -3,10 +3,12 @@ import { Trophy, Brain, Users, TrendingUp, ArrowRight } from "lucide-react";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
+import { auth } from "@/lib/auth/config";
+import { headers } from "next/headers";
 
 export const metadata = {
     title: "Mentors | Jenga365",
-    description: "Meet the seasoned professionals who give back through Jenga365 — guiding the next generation of athletes, leaders, and entrepreneurs.",
+    description: "Meet the seasoned professionals who give back through Jenga365, guiding the next generation of athletes, leaders, and entrepreneurs.",
 };
 
 function fmt(n: number | undefined | null): string {
@@ -23,6 +25,8 @@ const MENTOR_QUALITIES = [
 
 export default async function MentorsPage() {
     const dbStats = await getGlobalImpactStats();
+    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
+    const isAuthenticated = !!session?.user;
 
     const heroStats = [
         { value: fmt(dbStats?.activeMentors),         label: "Active Mentors" },
@@ -39,14 +43,25 @@ export default async function MentorsPage() {
                 description="Share your expertise. Shape the next generation. Jenga365 mentors are the backbone of a movement building Total Athletes and purposeful leaders across Kenya."
             >
                 <div className="flex flex-wrap items-center gap-3">
-                    <Link
-                        href="/register/mentor"
-                        className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
-                        style={{ background: "var(--brand-green)" }}
-                    >
-                        Apply as mentor
-                        <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    {isAuthenticated ? (
+                        <Link
+                            href="/dashboard"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Go to Dashboard
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/register/mentor"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Apply as mentor
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    )}
                     <Link
                         href="/about"
                         className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
@@ -56,7 +71,7 @@ export default async function MentorsPage() {
                 </div>
             </PageHero>
 
-            <section className="py-20 lg:py-24 border-b border-border">
+            <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Why it matters</p>
@@ -66,7 +81,7 @@ export default async function MentorsPage() {
                         {MENTOR_QUALITIES.map(({ Icon, title, body }) => (
                             <div
                                 key={title}
-                                className="rounded-lg border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-1)]"
+                                className="rounded-md border border-border bg-background p-6 space-y-4 transition-colors hover:bg-[color:var(--surface-1)]"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <Icon className="h-5 w-5" style={{ color: "var(--brand-green)" }} />
@@ -78,7 +93,7 @@ export default async function MentorsPage() {
                 </div>
             </section>
 
-            <section className="py-16 lg:py-20" style={{ background: "var(--brand-black)" }}>
+            <section className="py-16 lg:py-12 md:py-20" style={{ background: "var(--brand-black)" }}>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
                         {heroStats.map((stat) => (
