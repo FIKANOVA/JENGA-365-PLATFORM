@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Bot, Route, MessageSquare, ShieldCheck, BookOpen, UsersRound, ArrowRight } from "lucide-react";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PageHero from "@/components/shared/PageHero";
+import { auth } from "@/lib/auth/config";
+import { headers } from "next/headers";
 
 export const metadata = {
     title: "Mentees | Jenga365",
@@ -24,7 +26,10 @@ const MENTEE_BENEFITS = [
     { Icon: UsersRound,    title: "Alumni network",        body: "Graduate into a lifelong community of Jenga365 alumni spanning rugby, business, health, and beyond." },
 ];
 
-export default function MenteesPage() {
+export default async function MenteesPage() {
+    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
+    const isAuthenticated = !!session?.user;
+
     return (
         <div className="flex flex-col bg-background">
             <PageHero
@@ -33,14 +38,25 @@ export default function MenteesPage() {
                 description="Jenga365 connects ambitious young professionals and athletes with seasoned leaders who have walked the road before. Start your structured mentorship journey today."
             >
                 <div className="flex flex-wrap items-center gap-3">
-                    <Link
-                        href="/register/mentorship"
-                        className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
-                        style={{ background: "var(--brand-green)" }}
-                    >
-                        Apply as mentee
-                        <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    {isAuthenticated ? (
+                        <Link
+                            href="/dashboard"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Go to Dashboard
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/register/mentorship"
+                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ background: "var(--brand-green)" }}
+                        >
+                            Apply as mentee
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    )}
                     <Link
                         href="/resources"
                         className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
