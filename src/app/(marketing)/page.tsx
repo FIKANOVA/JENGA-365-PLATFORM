@@ -40,11 +40,11 @@ export const revalidate = 0;
 
 export default async function HomePage() {
     const [dbStats, events, articles, partners, settings] = await Promise.all([
-        getGlobalImpactStats(),
-        fetchEvents(),
+        getGlobalImpactStats().catch(() => null),
+        fetchEvents().catch(() => []),
         fetchArticles().catch(() => []),
         fetchPartners().catch(() => []),
-        fetchSiteSettings(),
+        fetchSiteSettings().catch(() => null),
     ]);
 
     const tickerStats = dbStats
@@ -69,9 +69,9 @@ export default async function HomePage() {
                 heading={settings?.featuredVideoHeading ?? null}
             />
             <ImpactTicker stats={tickerStats} />
-            <WhatWeDoSection />
-            <ChoosePathSection />
-            <SweatEquityBand />
+            <WhatWeDoSection copy={settings?.whatWeDo ?? null} />
+            <ChoosePathSection copy={settings?.choosePath ?? null} />
+            <SweatEquityBand copy={settings?.sweatEquity ?? null} />
             <EventsSection events={events} />
             <PartnerCarousel partners={partners} />
             <HomeArticlesSection articles={articles} />

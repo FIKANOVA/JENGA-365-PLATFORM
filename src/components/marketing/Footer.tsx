@@ -52,9 +52,7 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-16 py-14 border-b border-white/5">
                     {/* Brand */}
                     <div className="md:col-span-4 space-y-8">
-                        <Link href="/">
-                            <Logo variant="white" theme="dark" height={40} />
-                        </Link>
+                        <Logo variant="white" theme="dark" height={40} />
                         <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs">
                             Kenya&apos;s dual-engine AI platform — building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
                         </p>

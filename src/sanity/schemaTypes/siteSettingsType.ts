@@ -178,6 +178,107 @@ export const siteSettingsType = defineType({
             ],
         }),
 
+
+        // ── What We Do (Dual Engine) ─────────────────────────────────────────
+        defineField({
+            name: "whatWeDo",
+            title: "What We Do (Dual Engine)",
+            type: "object",
+            group: "homepage",
+            description: "Override the What We Do section. Leave empty to use defaults.",
+            fields: [
+                defineField({ name: "eyebrow", title: "Eyebrow", type: "string" }),
+                defineField({ name: "heading", title: "Heading", type: "string" }),
+                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+                defineField({
+                    name: "engineA",
+                    title: "Engine A",
+                    type: "object",
+                    fields: [
+                        defineField({ name: "eyebrow", title: "Eyebrow", type: "string" }),
+                        defineField({ name: "title", title: "Title", type: "string" }),
+                        defineField({ name: "body", title: "Body", type: "text", rows: 3 }),
+                        defineField({ name: "bullets", title: "Bullets", type: "array", of: [{ type: "string" }] }),
+                        defineField({ name: "ctaLabel", title: "CTA Label", type: "string" }),
+                    ]
+                }),
+                defineField({
+                    name: "engineB",
+                    title: "Engine B",
+                    type: "object",
+                    fields: [
+                        defineField({ name: "eyebrow", title: "Eyebrow", type: "string" }),
+                        defineField({ name: "title", title: "Title", type: "string" }),
+                        defineField({ name: "body", title: "Body", type: "text", rows: 3 }),
+                        defineField({ name: "bullets", title: "Bullets", type: "array", of: [{ type: "string" }] }),
+                        defineField({ name: "ctaLabel", title: "CTA Label", type: "string" }),
+                    ]
+                })
+            ]
+        }),
+
+        // ── Choose Path ──────────────────────────────────────────────────────
+        defineField({
+            name: "choosePath",
+            title: "Choose Path",
+            type: "object",
+            group: "homepage",
+            description: "Override the Choose Path section. Leave empty to use defaults.",
+            fields: [
+                defineField({ name: "eyebrow", title: "Eyebrow", type: "string" }),
+                defineField({ name: "heading", title: "Heading", type: "string" }),
+                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+                defineField({
+                    name: "paths",
+                    title: "Paths",
+                    type: "array",
+                    of: [
+                        {
+                            type: "object",
+                            fields: [
+                                defineField({ name: "id", title: "ID (mentee, mentor, corporate, ngo)", type: "string" }),
+                                defineField({ name: "tag", title: "Tag (e.g. The Army)", type: "string" }),
+                                defineField({ name: "name", title: "Name", type: "string" }),
+                                defineField({ name: "tagline", title: "Tagline", type: "string" }),
+                                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+                                defineField({ name: "highlights", title: "Highlights", type: "array", of: [{ type: "string" }] }),
+                                defineField({ name: "joinCta", title: "Join CTA", type: "string" })
+                            ]
+                        }
+                    ]
+                })
+            ]
+        }),
+
+        // ── Sweat Equity Band ────────────────────────────────────────────────
+        defineField({
+            name: "sweatEquity",
+            title: "Sweat Equity",
+            type: "object",
+            group: "homepage",
+            description: "Override the Sweat Equity section. Leave empty to use defaults.",
+            fields: [
+                defineField({ name: "eyebrow", title: "Eyebrow", type: "string" }),
+                defineField({ name: "heading", title: "Heading", type: "string" }),
+                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+                defineField({
+                    name: "cards",
+                    title: "Cards",
+                    type: "array",
+                    of: [
+                        {
+                            type: "object",
+                            fields: [
+                                defineField({ name: "title", title: "Title", type: "string" }),
+                                defineField({ name: "body", title: "Body", type: "text", rows: 2 }),
+                            ]
+                        }
+                    ]
+                }),
+                defineField({ name: "ctaLabel", title: "CTA Label", type: "string" })
+            ]
+        }),
+
         // ── About page ───────────────────────────────────────────────────────
         defineField({
             name: "historyTimeline",

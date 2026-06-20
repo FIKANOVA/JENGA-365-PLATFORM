@@ -1,57 +1,81 @@
 import Link from "next/link";
 import { ShieldCheck, Leaf, AlertTriangle } from "lucide-react";
 
-/**
- * Sweat Equity band — communicates the Give Back / Three Strikes protocol
- * BEFORE any "Join Free" CTA on marketing. DESIGN.md §12.
- *
- * Moseti 2026-05-22: "platform heavily promotes 'Join Free' but it fails to
- * communicate the strict Give Back model. Mentorship is earned."
- */
-export default function SweatEquityBand() {
+export interface SweatEquityCopy {
+    eyebrow?: string;
+    heading?: string;
+    description?: string;
+    cards?: Array<{ title: string; body: string }>;
+    ctaLabel?: string;
+}
+
+interface SweatEquityBandProps {
+    readonly copy?: SweatEquityCopy | null;
+}
+
+const DEFAULT_CARDS = [
+    {
+        title: "The commitment",
+        body: "One verified Give Back activity per quarter. Logged through the platform with GPS coordinates.",
+    },
+    {
+        title: "The impact",
+        body: "Your hours contribute directly to a Corporate Partner's quarterly ESG scorecard and unlock additional funding.",
+    },
+    {
+        title: "The protocol",
+        body: "Three missed quarters → Welfare Officer review → potential suspension. We track this because the model only works if it's measured.",
+    }
+];
+
+export default function SweatEquityBand({ copy }: SweatEquityBandProps) {
+    const eyebrow = copy?.eyebrow?.trim() || "Sweat Equity Protocol";
+    const heading = copy?.heading?.trim() || "Mentorship is earned — not free.";
+    const description = copy?.description?.trim() || "Every mentee on Jenga365 commits to quarterly Give Back activities: community clean-ups, tree-planting, or sustainability advocacy. We log each activity with GPS and photo evidence. Three missed quarters and the platform suspends mentorship access pending Welfare Officer review.";
+    const ctaLabel = copy?.ctaLabel?.trim() || "I accept — apply for mentorship";
+
+    const cards = copy?.cards?.length === 3 ? copy.cards : DEFAULT_CARDS;
+
     return (
         <section
             id="sweat-equity"
-            className="bg-background border-y border-border"
+            className="bg-background border-b border-border"
         >
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-24">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 md:py-24">
                 <div className="max-w-2xl">
                     <span
                         className="text-eyebrow"
                         style={{ color: "var(--brand-green)" }}
                     >
-                        Sweat Equity Protocol
+                        {eyebrow}
                     </span>
-                    <h2 className="mt-3 text-display-md">
-                        Mentorship is earned — not free.
+                    <h2 className="mt-3 text-display-sm md:text-display-md">
+                        {heading}
                     </h2>
                     <p
                         className="mt-5 text-body-lg"
                         style={{ color: "var(--foreground-muted)" }}
                     >
-                        Every mentee on Jenga365 commits to quarterly Give Back activities:
-                        community clean-ups, tree-planting, or sustainability advocacy. We log
-                        each activity with GPS and photo evidence. Three missed quarters and the
-                        platform suspends mentorship access pending Welfare Officer review.
+                        {description}
                     </p>
                 </div>
 
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Card
                         icon={ShieldCheck}
-                        title="The commitment"
-                        body="One verified Give Back activity per quarter. Logged through the platform with GPS coordinates."
+                        title={cards[0].title}
+                        body={cards[0].body}
                     />
                     <Card
                         icon={Leaf}
-                        title="The impact"
-                        body="Your hours contribute directly to a Corporate Partner's quarterly ESG scorecard and unlock additional funding."
+                        title={cards[1].title}
+                        body={cards[1].body}
                         accent
                     />
                     <Card
                         icon={AlertTriangle}
-                        title="The protocol"
-                        body="Three missed quarters → Welfare Officer review → potential suspension. We track this because the model only works if it's measured."
+                        title={cards[2].title}
+                        body={cards[2].body}
                     />
                 </div>
 
@@ -61,7 +85,7 @@ export default function SweatEquityBand() {
                         className="inline-flex items-center justify-center h-11 px-5 rounded-md font-medium text-white"
                         style={{ background: "var(--brand-green)" }}
                     >
-                        I accept — apply for mentorship
+                        {ctaLabel}
                     </Link>
                 </div>
             </div>

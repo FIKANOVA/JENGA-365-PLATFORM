@@ -132,11 +132,11 @@ export default async function ImpactPage() {
                     description="Data-driven development. From mentorship hours to career placements, every initiative is measured, reported, and refined."
                 />
 
-                <section className="py-20 lg:py-24">
+                <section className="py-16 lg:py-24">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                         <div className="max-w-xl space-y-3">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>By the numbers</p>
-                            <h2 className="text-display-md text-foreground">Social impact metrics.</h2>
+                            <h2 className="text-display-sm md:text-display-md text-foreground">Social impact metrics.</h2>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -157,11 +157,11 @@ export default async function ImpactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24" style={{ background: "var(--brand-black)" }}>
+                <section className="py-16 lg:py-24" style={{ background: "var(--brand-black)" }}>
                     <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                         <div className="max-w-xl space-y-3">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Success stories</p>
-                            <h2 className="text-display-md" style={{ color: "#FFFFFF" }}>Voices of growth.</h2>
+                            <h2 className="text-display-sm md:text-display-md" style={{ color: "#FFFFFF" }}>Voices of growth.</h2>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -185,13 +185,13 @@ export default async function ImpactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24 border-y border-border">
+                <section className="py-16 lg:py-24 border-y border-border">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                             <div className="space-y-6">
                                 <div className="space-y-3">
                                     <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>ESG compliance</p>
-                                    <h2 className="text-display-md text-foreground">Environmental stewardship.</h2>
+                                    <h2 className="text-display-sm md:text-display-md text-foreground">Environmental stewardship.</h2>
                                 </div>
                                 <p className="text-body-lg text-foreground-muted max-w-xl">
                                     Through our corporate partnerships, we align mentorship activities with sustainable environmental practices. Every program is evaluated against ESG criteria to ensure our growth doesn&apos;t come at the planet&apos;s expense.
@@ -227,10 +227,10 @@ export default async function ImpactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24" style={{ background: "var(--surface-1)" }}>
+                <section className="py-16 lg:py-24" style={{ background: "var(--surface-1)" }}>
                     <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center space-y-6">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Join the movement</p>
-                        <h2 className="text-display-md text-foreground">Your contribution multiplies.</h2>
+                        <h2 className="text-display-sm md:text-display-md text-foreground">Your contribution multiplies.</h2>
                         <p className="text-body-lg text-foreground-muted">
                             Every donation directly funds mentorship sessions, rugby clinics, and career development programs for Kenya&apos;s next generation.
                         </p>

@@ -76,11 +76,11 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                     />
                     {/* Darkening scrim — heavier on the text (left) side for contrast. */}
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/60 to-black/35"
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/90 via-black/80 to-black/50"
                         aria-hidden
                     />
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 to-transparent"
+                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 to-black/10"
                         aria-hidden
                     />
                     <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
@@ -92,7 +92,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                 </>
             )}
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24 md:py-32 lg:py-40">
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-16 md:py-24 lg:py-32">
                 <div className="max-w-3xl">
                     <div
                         className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm"
@@ -107,7 +107,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                         </span>
                     </div>
 
-                    <h1 className="text-display-lg md:text-display-xl whitespace-pre-line" style={{ color: headingColor }}>
+                    <h1 className="text-display-md md:text-display-xl whitespace-pre-line" style={{ color: headingColor }}>
                         {heading}
                     </h1>
 
