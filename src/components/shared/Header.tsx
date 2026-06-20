@@ -93,7 +93,7 @@ function MinimalHeader() {
         <header className="w-full border-b border-border bg-background">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-center">
-                    <Logo size="md" />
+                    <Logo type="image" size="md" />
                 </div>
             </div>
         </header>
@@ -260,6 +260,8 @@ function PublicHeader({ scrolled, light, mobileOpen, setMobileOpen }: { scrolled
             light={light}
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={false} onClose={() => setMobileOpen(false)} /> : null}
         >
+            <Logo type="image" size="md" />
+            <PrimaryNav isAuthenticated={false} />
             <Logo size="md" tone={light ? "light" : "default"} />
             <PrimaryNav isAuthenticated={false} light={light} />
 
@@ -430,6 +432,7 @@ function AuthenticatedHeader({
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} onClose={() => setMobileOpen(false)} /> : null}
         >
             <div className="flex items-center gap-4">
+                <Logo type="image" size="md" />
                 <Logo size="md" tone={light ? "light" : "default"} />
                 <RoleBadge role={user.role ?? null} className="hidden lg:inline-flex" />
             </div>
@@ -585,6 +588,8 @@ export default function Header() {
     // Loading: render Shell with just the logo to avoid CTA flash
     if (isPending) {
         return (
+            <Shell scrolled={scrolled}>
+                <Logo type="image" size="md" />
             <Shell scrolled={scrolled} light={light}>
                 <Logo size="md" tone={light ? "light" : "default"} />
                 <div className="h-9 w-24 rounded-md bg-surface-2 animate-pulse" aria-hidden />
