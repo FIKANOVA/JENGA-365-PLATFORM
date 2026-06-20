@@ -71,7 +71,7 @@ export default function MenteeDashboard({
                 {/* Getting started checklist */}
                 {!allComplete && (
                     <section
-                        className="rounded-lg border border-border bg-background p-6 space-y-4"
+                        className="rounded-md border border-border bg-background p-6 space-y-4"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <div className="flex items-center justify-between">
@@ -119,7 +119,7 @@ export default function MenteeDashboard({
             {/* Right column — journal */}
             <aside className="xl:col-span-1">
                 <div
-                    className="rounded-lg border border-border bg-background p-6 sticky top-4"
+                    className="rounded-md border border-border bg-background p-6 sticky top-4"
                     style={{ boxShadow: "var(--shadow-sm)" }}
                 >
                     <header className="flex items-center justify-between mb-5">
@@ -162,7 +162,7 @@ export default function MenteeDashboard({
                                                 {new Date(entry.recordedAt).toLocaleDateString()}
                                             </span>
                                             <span
-                                                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-medium shrink-0"
+                                                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-label font-medium shrink-0"
                                                 style={palette}
                                             >
                                                 <Smile className="h-3 w-3" />

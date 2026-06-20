@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { giveBackTracking, users } from "@/lib/db/schema";
-import { eq, and, count } from "drizzle-orm";
+import { eq, and, count, inArray } from "drizzle-orm";
 import { createNotification } from "@/lib/notifications/service";
 
 export const dynamic = "force-dynamic";
@@ -58,38 +58,60 @@ export async function GET(req: Request) {
                 )
             );
 
+        if (activeMentees.length === 0) {
+            return NextResponse.json({
+                success: true,
+                quarter: prevQuarter,
+                processed: 0,
+                flagged: 0,
+            });
+        }
+
+        const menteeIds = activeMentees.map(m => m.id);
+
+        // ── Pre-fetch completed tracking records for all mentees for the previous quarter
+        const completedRecords = await db
+            .select({ userId: giveBackTracking.userId })
+            .from(giveBackTracking)
+            .where(
+                and(
+                    inArray(giveBackTracking.userId, menteeIds),
+                    eq(giveBackTracking.quarter, prevQuarter),
+                    eq(giveBackTracking.activityCompleted, true)
+                )
+            );
+
+        const completedUserIds = new Set(completedRecords.map(r => r.userId));
+
+        // ── Pre-fetch failed quarter counts for all mentees
+        const failedCounts = await db
+            .select({
+                userId: giveBackTracking.userId,
+                failedCount: count()
+            })
+            .from(giveBackTracking)
+            .where(
+                and(
+                    inArray(giveBackTracking.userId, menteeIds),
+                    eq(giveBackTracking.activityCompleted, false)
+                )
+            )
+            .groupBy(giveBackTracking.userId);
+
+        const failedCountsMap = new Map(failedCounts.map(r => [r.userId, Number(r.failedCount)]));
+
         let processed = 0;
         let flagged = 0;
 
         for (const mentee of activeMentees) {
             // ── 2. Did they complete their give-back this quarter? ────────────
-            const [completedRecord] = await db
-                .select({ id: giveBackTracking.id })
-                .from(giveBackTracking)
-                .where(
-                    and(
-                        eq(giveBackTracking.userId, mentee.id),
-                        eq(giveBackTracking.quarter, prevQuarter),
-                        eq(giveBackTracking.activityCompleted, true)
-                    )
-                )
-                .limit(1);
-
-            if (completedRecord) continue; // Participated — no strike
+            if (completedUserIds.has(mentee.id)) continue; // Participated — no strike
 
             // ── 3. Count total failed quarters (running strike total) ─────────
-            const [{ failedCount }] = await db
-                .select({ failedCount: count() })
-                .from(giveBackTracking)
-                .where(
-                    and(
-                        eq(giveBackTracking.userId, mentee.id),
-                        eq(giveBackTracking.activityCompleted, false)
-                    )
-                );
+            const failedCount = failedCountsMap.get(mentee.id) || 0;
 
             // Strike count after recording this quarter's failure
-            const newStrikeCount = (Number(failedCount) || 0) + 1;
+            const newStrikeCount = failedCount + 1;
 
             // ── 4. Record this quarter's failure ─────────────────────────────
             await db.insert(giveBackTracking).values({
@@ -122,9 +144,10 @@ export async function GET(req: Request) {
             processed,
             flagged,
         });
-    } catch (err: any) {
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Unknown error occurred";
         return NextResponse.json(
-            { success: false, error: err.message },
+            { success: false, error: message },
             { status: 500 }
         );
     }

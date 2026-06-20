@@ -7,11 +7,11 @@ import PageHero from "@/components/shared/PageHero";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 
 const FALLBACK_VIDEOS = [
-    { id: "v1", title: "Welcome to Jenga365: Our Mission", description: "An introduction to the platform — who we are, what we do, and how we're building the Total Athlete.", duration: "12:45", category: "Platform", thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=800", isFeatured: true, videoUrl: null },
-    { id: "v2", title: "AI Mentorship Matching — How It Works", description: "A walkthrough of our 768-dimensional vector matching engine and what makes it different.", duration: "08:30", category: "Technology", thumbnail: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
+    { id: "v1", title: "Welcome to Jenga365: Our Mission", description: "An introduction to the platform, who we are, what we do, and how we're building the Total Athlete.", duration: "12:45", category: "Platform", thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=800", isFeatured: true, videoUrl: null },
+    { id: "v2", title: "AI Mentorship Matching: How It Works", description: "A walkthrough of our 768-dimensional vector matching engine and what makes it different.", duration: "08:30", category: "Technology", thumbnail: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
     { id: "v3", title: "Mentorship Session: Financial Literacy Fundamentals", description: "A recorded live session between a Jenga365 mentor and mentee group on budgeting and saving.", duration: "34:20", category: "Finance", thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
-    { id: "v4", title: "The Green Game — Environmental Stewardship in Rugby", description: "Athletes explain how they're integrating sustainability into their sport and community practices.", duration: "22:15", category: "Environment", thumbnail: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
-    { id: "v5", title: "Corporate Partnership Onboarding Walkthrough", description: "For new corporate partners — a step-by-step guide to the Jenga365 dashboard and CSR reporting tools.", duration: "18:00", category: "Corporate", thumbnail: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
+    { id: "v4", title: "The Green Game: Environmental Stewardship in Rugby", description: "Athletes explain how they're integrating sustainability into their sport and community practices.", duration: "22:15", category: "Environment", thumbnail: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
+    { id: "v5", title: "Corporate Partnership Onboarding Walkthrough", description: "For new corporate partners, a step-by-step guide to the Jenga365 dashboard and CSR reporting tools.", duration: "18:00", category: "Corporate", thumbnail: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
     { id: "v6", title: "Athlete Keynote: Building Resilience Off The Field", description: "A Jenga365 event keynote by a professional rugby player on mental resilience and leadership.", duration: "28:40", category: "Mentorship", thumbnail: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800", isFeatured: false, videoUrl: null },
 ];
 
@@ -62,17 +62,17 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
                 {/* Breadcrumb */}
-                <Link href="/resources" className="font-mono text-[9px] uppercase tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
+                <Link href="/resources" className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] hover:text-black transition-colors">
                     ← Resources
                 </Link>
 
                 {/* Category tabs */}
-                <div className="flex border-b border-[var(--border)] overflow-x-auto mt-8 mb-16">
+                <div className="flex border-b border-border overflow-x-auto mt-8 mb-16">
                     {allCategories.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-6 py-4 font-mono text-[10px] uppercase tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
+                            className={`px-6 py-4 font-mono text-eyebrow tracking-[0.25em] whitespace-nowrap transition-all relative group ${activeCategory === cat ? "text-[var(--brand-green)]" : "text-[var(--foreground-subtle)] hover:text-black"}`}
                         >
                             {cat}
                             <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
@@ -83,7 +83,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                 {/* Featured video */}
                 {featuredVideo && (
                     <VideoWrapper video={featuredVideo}>
-                        <div className="mb-16 group relative overflow-hidden border border-[var(--border)] bg-black cursor-pointer">
+                        <div className="mb-16 group relative overflow-hidden border border-border bg-black cursor-pointer">
                             <div className="aspect-[21/9] relative overflow-hidden">
                                 {featuredVideo.thumbnail && (
                                     <img
@@ -98,7 +98,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                     </div>
                                 </div>
                                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                                    <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--brand-green)] font-bold">{featuredVideo.category} · {featuredVideo.duration}</span>
+                                    <span className="font-mono text-eyebrow tracking-widest text-[var(--brand-green)] font-bold">{featuredVideo.category} · {featuredVideo.duration}</span>
                                     <h2 className="text-display-md text-white mt-2 leading-tight">
                                         {featuredVideo.title}
                                     </h2>
@@ -128,11 +128,11 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                     </div>
                                     {video.duration && (
                                         <div className="absolute bottom-3 right-3 bg-black/70 px-2 py-1">
-                                            <span className="font-mono text-[9px] text-white">{video.duration}</span>
+                                            <span className="font-mono text-label text-white">{video.duration}</span>
                                         </div>
                                     )}
                                 </div>
-                                <span className="font-mono text-[8px] uppercase tracking-widest text-[var(--brand-green)] font-bold">{video.category}</span>
+                                <span className="font-mono text-eyebrow tracking-widest text-[var(--brand-green)] font-bold">{video.category}</span>
                                 <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors mt-1">
                                     {video.title}
                                 </h3>

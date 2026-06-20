@@ -19,7 +19,7 @@ const DEFAULT_NODES: TimelineNode[] = [
     },
     {
         title: "Community Expansion",
-        date: "Year 2025–2026",
+        date: "Year 2025-2026",
         content: "Launch of the Jenga365 mobile ecosystem, onboarding the first 500 regional mentees across Nairobi, Mombasa, and Kisumu hubs.",
     },
     {
@@ -36,7 +36,7 @@ interface HistoryTimelineProps {
 export default function HistoryTimeline({ nodes: propNodes }: HistoryTimelineProps = {}) {
     const nodes = propNodes && propNodes.length > 0 ? propNodes : DEFAULT_NODES;
     return (
-        <section className="py-24 md:py-32 bg-accent relative overflow-hidden">
+        <section className="py-12 md:py-24 bg-accent relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-20 text-center space-y-4">
                     <span className="text-eyebrow block" style={{ color: "var(--brand-green)" }}>
@@ -75,7 +75,7 @@ export default function HistoryTimeline({ nodes: propNodes }: HistoryTimelinePro
                                 {/* Content Card */}
                                 <div className={`flex-1 w-full pl-20 md:pl-0 ${i % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
                                     <div
-                                        className="group rounded-lg border border-border bg-background p-8 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)] cursor-default"
+                                        className="group rounded-md border border-border bg-background p-8 transition-colors hover:border-[color:var(--border-strong,#D4D4D8)] cursor-default"
                                         style={{ boxShadow: "var(--shadow-sm)" }}
                                     >
                                         <span className="text-eyebrow block mb-3" style={{ color: "var(--brand-green)" }}>

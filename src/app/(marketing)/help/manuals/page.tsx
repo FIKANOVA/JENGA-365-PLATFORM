@@ -29,7 +29,7 @@ export default function PublicManualsPage() {
     };
 
     return (
-        <main className="min-h-screen pt-32 pb-24 bg-background">
+        <main className="min-h-screen pt-16 md:pt-32 pb-12 md:pb-24 bg-background">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
                 <div className="text-center mb-16 space-y-4">
                     <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
@@ -46,13 +46,13 @@ export default function PublicManualsPage() {
                             Loading manuals...
                         </div>
                     ) : documents.length === 0 ? (
-                        <div className="col-span-full py-12 text-center bg-card rounded-2xl border border-border">
+                        <div className="col-span-full py-12 text-center bg-card rounded-md border border-border">
                             <h3 className="text-lg font-medium text-foreground">No Manuals Available</h3>
                             <p className="text-muted-foreground mt-2">Check back later for new documentation.</p>
                         </div>
                     ) : (
                         documents.map((doc) => (
-                            <div key={doc.id} className="group relative bg-card/60 backdrop-blur-xl border border-white/10 dark:border-white/5 shadow-xl rounded-2xl p-8 hover:bg-card/80 transition-all duration-300">
+                            <div key={doc.id} className="group relative bg-card/60 backdrop-blur-xl border border-white/10 dark:border-white/5 shadow-xl rounded-md p-8 hover:bg-card/80 transition-all duration-300">
                                 <div className="absolute top-0 right-0 p-6 pointer-events-none opacity-10 group-hover:opacity-20 transition-opacity">
                                     <BookOpen className="w-24 h-24" />
                                 </div>
@@ -72,7 +72,7 @@ export default function PublicManualsPage() {
                                         </div>
                                         <button
                                             onClick={() => handleDownload(doc)}
-                                            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-6 py-2.5 text-sm font-semibold shadow-sm hover:bg-primary/90 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                            className="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground px-6 py-2.5 text-sm font-semibold shadow-sm hover:bg-primary/90 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                                         >
                                             <Download className="w-4 h-4" /> Download PDF
                                         </button>

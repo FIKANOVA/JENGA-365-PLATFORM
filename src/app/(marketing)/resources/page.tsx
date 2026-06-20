@@ -4,8 +4,8 @@ import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 
 export const metadata = {
-    title: "Resources | Jenga365 — Articles, Downloads, Video & Voices",
-    description: "Explore the Jenga365 knowledge hub — articles, downloadable playbooks, video sessions, and X-Spaces conversations.",
+    title: "Resources | Jenga365: Articles, Downloads, Video & Voices",
+    description: "Explore the Jenga365 knowledge hub, articles, downloadable playbooks, video sessions, and X-Spaces conversations.",
 };
 
 const SECTIONS = [
@@ -16,7 +16,7 @@ const SECTIONS = [
         color: "var(--brand-green)",
         colorSoft: "var(--brand-green-soft)",
         heading: "Insights & thought leadership",
-        body: "In-depth articles on mentorship, rugby development, financial literacy, and community impact — written by practitioners and experts.",
+        body: "In-depth articles on mentorship, rugby development, financial literacy, and community impact, written by practitioners and experts.",
         cta: "Browse articles",
     },
     {
@@ -57,17 +57,17 @@ export default function ResourcesHubPage() {
             <PageHero
                 eyebrow="Knowledge hub"
                 heading={<>The Jenga365 library.</>}
-                description="Articles, downloads, video sessions, and community voices — everything you need to grow, in one place."
+                description="Articles, downloads, video sessions, and community voices, everything you need to grow, in one place."
             />
 
-            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-20 lg:py-24">
+            <section className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-20 lg:py-12 md:py-24">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
                     {SECTIONS.map(({ label, href, Icon, color, colorSoft, heading, body, cta }) => (
                         <Link
                             key={href}
                             href={href}
                             {...(label === "Downloads" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                            className="group relative rounded-lg border border-border bg-background overflow-hidden flex flex-col p-6 lg:p-8 min-h-[260px] transition-shadow hover:shadow-md"
+                            className="group relative rounded-md border border-border bg-background overflow-hidden flex flex-col p-6 lg:p-8 min-h-[260px] transition-shadow hover:shadow-md"
                             style={{ boxShadow: "var(--shadow-sm)" }}
                         >
                             <div className="flex items-center gap-3">

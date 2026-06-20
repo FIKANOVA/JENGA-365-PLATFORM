@@ -22,6 +22,7 @@ vi.mock('drizzle-orm', () => ({
   and: vi.fn((...args) => args),
   count: vi.fn(() => 'count_expr'),
   sql: vi.fn(() => 'sql_expr'),
+  inArray: vi.fn((_col, vals) => ({ inArray: vals })),
 }))
 
 vi.mock('@/lib/notifications/service', () => ({
@@ -98,10 +99,10 @@ describe('Three Strikes cron — auth guard', () => {
 /**
  * Wire up the DB call sequence for the Three Strikes cron.
  *
- * Select call order:
- *   Call 1                — fetch all active mentees
- *   Per CLEAN mentee      — 1 select (completed check → returns row → skip)
- *   Per FAILING mentee    — 2 selects (completed check → empty; failed count)
+ * Select call order (batched version):
+ *   Call 1 — fetch all active mentees
+ *   Call 2 — pre-fetch completed records (inArray)
+ *   Call 3 — pre-fetch failed counts (inArray + groupBy)
  *
  * Insert + update happen only for failing mentees.
  */
@@ -117,49 +118,47 @@ function setupStrikeScenario(
   const mockInsertValues = vi.fn().mockResolvedValue([])
   vi.mocked(db.insert).mockReturnValue({ values: mockInsertValues } as any)
 
-  // Build the exact ordered response sequence for db.select calls
-  // Each entry is the value the full chain resolves to for that call
-  type SelectResponse =
-    | { kind: 'mentees'; rows: { id: string }[] }
-    | { kind: 'completed'; row: { id: string } | null }
-    | { kind: 'failedCount'; count: number }
+  const completedRecords = mentees
+    .filter(m => m.completedThisQuarter)
+    .map(m => ({ userId: m.id }))
 
-  const sequence: SelectResponse[] = [{ kind: 'mentees', rows: menteeRows }]
-
-  for (const mentee of mentees) {
-    if (mentee.completedThisQuarter) {
-      sequence.push({ kind: 'completed', row: { id: 'tracking-row' } })
-      // Clean mentee — no further calls
-    } else {
-      sequence.push({ kind: 'completed', row: null })
-      sequence.push({ kind: 'failedCount', count: mentee.totalFailedQuarters })
-    }
-  }
+  const failedCounts = mentees
+    .filter(m => m.totalFailedQuarters > 0)
+    .map(m => ({ userId: m.id, failedCount: m.totalFailedQuarters }))
 
   let callIndex = 0
   vi.mocked(db.select).mockImplementation(() => {
-    const entry = sequence[callIndex++]
+    const currentIndex = callIndex++
 
-    if (entry?.kind === 'mentees') {
+    if (currentIndex === 0) {
+      // 1. Fetch mentees
       return {
-        from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(entry.rows) }),
+        from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(menteeRows) }),
       } as any
     }
 
-    if (entry?.kind === 'completed') {
-      const result = entry.row ? [entry.row] : []
+    if (currentIndex === 1) {
+      // 2. Fetch completed records
       return {
         from: vi.fn().mockReturnValue({
-          where: vi.fn().mockReturnValue({ limit: vi.fn().mockResolvedValue(result) }),
+          where: vi.fn().mockResolvedValue(completedRecords),
         }),
       } as any
     }
 
-    // failedCount
+    if (currentIndex === 2) {
+      // 3. Fetch failed counts
+      return {
+        from: vi.fn().mockReturnValue({
+          where: vi.fn().mockReturnValue({
+            groupBy: vi.fn().mockResolvedValue(failedCounts),
+          }),
+        }),
+      } as any
+    }
+
     return {
-      from: vi.fn().mockReturnValue({
-        where: vi.fn().mockResolvedValue([{ failedCount: (entry as any)?.count ?? 0 }]),
-      }),
+       from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) })
     } as any
   })
 

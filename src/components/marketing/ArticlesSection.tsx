@@ -6,7 +6,7 @@ export default function ArticlesSection({ articles }: { articles: any[] }) {
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {articles.map((article) => (
                 <Link href={`/resources/articles/${article.slug.current}`} key={article._id} className="group">
-                    <div className="aspect-[16/10] bg-muted rounded-xl overflow-hidden mb-4 relative">
+                    <div className="aspect-[16/10] bg-muted rounded-md overflow-hidden mb-4 relative">
                         {article.mainImage && (
                             <img
                                 src={urlFor(article.mainImage).width(600).url()}

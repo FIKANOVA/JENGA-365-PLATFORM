@@ -68,7 +68,7 @@ function StatCard({
 }) {
     return (
         <div
-            className="rounded-lg border border-border bg-background p-6 flex flex-col justify-between"
+            className="rounded-md border border-border bg-background p-6 flex flex-col justify-between"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <span className="text-eyebrow text-foreground-muted mb-4">{label}</span>

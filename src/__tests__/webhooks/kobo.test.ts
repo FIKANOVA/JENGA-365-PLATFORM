@@ -27,6 +27,7 @@ import { checkAndUnlockMilestones } from '@/lib/actions/corporateUnlock'
 const KOBO_SECRET = 'test-kobo-secret-xyz'
 
 const validPayload = {
+  form_type: 'tree_survival',
   _id: 'kobo-sub-001',
   _submission_time: '2026-04-12T10:00:00Z',
   trees_planted: 200,
@@ -49,14 +50,15 @@ function makeRequest(token?: string, body: unknown = validPayload): Request {
 }
 
 function setupInsertMock() {
-  const mockOnConflict = vi.fn().mockResolvedValue([])
+  const mockReturning = vi.fn().mockResolvedValue([])
+  const mockOnConflict = vi.fn().mockReturnValue({ returning: mockReturning })
   const mockValues = vi.fn().mockReturnValue({ onConflictDoNothing: mockOnConflict })
   vi.mocked(db.insert).mockReturnValue({ values: mockValues } as any)
-  return { mockOnConflict, mockValues }
+  return { mockOnConflict, mockValues, mockReturning }
 }
 
 // ─── Auth guard ───────────────────────────────────────────────────────────────
-describe.skip('KoboToolbox webhook — auth guard', () => {
+describe('KoboToolbox webhook — auth guard', () => {
   beforeEach(() => {
     process.env.KOBO_WEBHOOK_SECRET = KOBO_SECRET
     vi.clearAllMocks()
@@ -87,7 +89,7 @@ describe.skip('KoboToolbox webhook — auth guard', () => {
 })
 
 // ─── Payload validation ───────────────────────────────────────────────────────
-describe.skip('KoboToolbox webhook — payload validation', () => {
+describe('KoboToolbox webhook — payload validation', () => {
   beforeEach(() => {
     process.env.KOBO_WEBHOOK_SECRET = KOBO_SECRET
     vi.clearAllMocks()
@@ -117,7 +119,7 @@ describe.skip('KoboToolbox webhook — payload validation', () => {
 })
 
 // ─── Idempotency ──────────────────────────────────────────────────────────────
-describe.skip('KoboToolbox webhook — idempotency', () => {
+describe('KoboToolbox webhook — idempotency', () => {
   beforeEach(() => {
     process.env.KOBO_WEBHOOK_SECRET = KOBO_SECRET
     vi.clearAllMocks()
@@ -140,7 +142,7 @@ describe.skip('KoboToolbox webhook — idempotency', () => {
 })
 
 // ─── Single responsibility ────────────────────────────────────────────────────
-describe.skip('KoboToolbox webhook — single responsibility', () => {
+describe('KoboToolbox webhook — single responsibility', () => {
   beforeEach(() => {
     process.env.KOBO_WEBHOOK_SECRET = KOBO_SECRET
     vi.clearAllMocks()

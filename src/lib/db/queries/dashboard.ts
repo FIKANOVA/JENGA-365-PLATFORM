@@ -7,7 +7,7 @@ import {
     learningPathways,
     articles,
 } from "@/lib/db/schema";
-import { eq, and, desc, or, gte } from "drizzle-orm";
+import { eq, and, desc, or, gte, inArray } from "drizzle-orm";
 
 // ── Mentee ────────────────────────────────────────────────────────────────────
 
@@ -165,23 +165,31 @@ export async function getMentorUpcomingSessions(mentorId: string, limit = 5) {
         .where(or(...pairs.map((p) => eq(users.id, p.menteeId))));
     const userMap = Object.fromEntries(menteeUsers.map((u) => [u.id, u.name]));
 
-    for (const pair of pairs) {
-        const sessions = await db
-            .select()
-            .from(sessionsLog)
-            .where(
-                and(
-                    eq(sessionsLog.pairId, pair.id),
-                    gte(sessionsLog.sessionDate, now)
-                )
-            )
-            .orderBy(desc(sessionsLog.sessionDate))
-            .limit(3);
+    const pairIds = pairs.map((p) => p.id);
 
-        for (const s of sessions) {
+    const sessions = await db
+        .select()
+        .from(sessionsLog)
+        .where(
+            and(
+                inArray(sessionsLog.pairId, pairIds),
+                gte(sessionsLog.sessionDate, now)
+            )
+        )
+        .orderBy(desc(sessionsLog.sessionDate));
+
+    // Group by pairId and limit to 3 per pair, matching previous behavior
+    const sessionsByPair = new Map<string, typeof sessions>();
+    for (const s of sessions) {
+        if (!sessionsByPair.has(s.pairId)) {
+            sessionsByPair.set(s.pairId, []);
+        }
+        const pairSessions = sessionsByPair.get(s.pairId)!;
+        if (pairSessions.length < 3) {
+            pairSessions.push(s);
             allSessions.push({
                 ...s,
-                menteeName: userMap[menteeIds[pair.id]] ?? undefined,
+                menteeName: userMap[menteeIds[s.pairId]] ?? undefined,
             });
         }
     }

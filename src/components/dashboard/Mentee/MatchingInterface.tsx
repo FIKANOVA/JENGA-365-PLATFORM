@@ -52,14 +52,14 @@ export default function MatchingInterface() {
             </CardHeader>
             <CardContent className="px-0 space-y-6">
                 {matches.length === 0 ? (
-                    <div className="p-12 text-center border-2 border-dashed rounded-3xl opacity-60">
+                    <div className="p-12 text-center border-2 border-dashed rounded-md opacity-60">
                         <UserCheck className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
                         <h3 className="text-lg font-bold font-outfit">No matches yet</h3>
                         <p className="text-sm text-muted-foreground">Complete your profile or upload a CV to trigger matching.</p>
                     </div>
                 ) : (
                     matches.map((mentor) => (
-                        <div key={mentor.id} className="group p-6 bg-background border rounded-3xl hover:border-primary/50 hover:shadow-xl transition-all duration-300">
+                        <div key={mentor.id} className="group p-6 bg-background border rounded-md hover:border-primary/50 hover:shadow-xl transition-all duration-300">
                             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                                 <div className="flex items-center space-x-6 w-full">
                                     <Avatar className="w-16 h-16 border-2 border-primary/20 group-hover:border-primary/50 transition-colors shrink-0">
@@ -80,7 +80,7 @@ export default function MatchingInterface() {
                                 </div>
                                 <div className="text-center md:text-right w-full md:w-auto mt-4 md:mt-0 shrink-0">
                                     <div className="text-4xl font-black text-primary font-outfit mb-1">{mentor.matchPercentage}%</div>
-                                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-6">Total Match Score</p>
+                                    <p className="text-eyebrow tracking-widest text-muted-foreground font-bold mb-6">Total Match Score</p>
                                     <Button
                                         onClick={async () => {
                                             setRequesting(mentor.id);

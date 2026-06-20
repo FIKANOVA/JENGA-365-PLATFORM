@@ -86,7 +86,7 @@ export default function ContactPage() {
                     description="Have questions about our mentorship programs, corporate partnerships, or rugby development initiatives? We're here to help you build the future."
                 />
 
-                <section className="py-20 lg:py-24">
+                <section className="py-12 md:py-20 lg:py-12 md:py-24">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
                             {/* Left: contact info */}
@@ -95,7 +95,7 @@ export default function ContactPage() {
                                     <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Reach out</p>
                                     <h2 className="text-display-md text-foreground">Let&apos;s start a conversation.</h2>
                                     <p className="text-body-lg text-foreground-muted max-w-md">
-                                        Whether you&apos;re a corporate partner looking to fund impact, a prospective mentor, or a youth seeking growth — our doors are open.
+                                        Whether you&apos;re a corporate partner looking to fund impact, a prospective mentor, or a youth seeking growth, our doors are open.
                                     </p>
                                 </div>
 
@@ -118,7 +118,7 @@ export default function ContactPage() {
                                     <ContactItem
                                         Icon={Clock}
                                         label="Office hours"
-                                        lines={["Monday — Friday", "8:00 AM — 6:00 PM EAT"]}
+                                        lines={["Monday-Friday", "8:00 AM-6:00 PM EAT"]}
                                     />
                                 </div>
 
@@ -145,7 +145,7 @@ export default function ContactPage() {
 
                             {/* Right: form */}
                             <div
-                                className="rounded-lg border border-border bg-background p-6 lg:p-8 self-start"
+                                className="rounded-md border border-border bg-background p-6 lg:p-8 self-start"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
                                 <div className="space-y-2 mb-6">
@@ -159,7 +159,7 @@ export default function ContactPage() {
                                         <div className="space-y-1">
                                             <h3 className="text-headline text-foreground">Message sent</h3>
                                             <p className="text-body-sm text-foreground-muted">
-                                                We&apos;ve received your message and will respond within 1–2 business days.
+                                                We&apos;ve received your message and will respond within 1-2 business days.
                                             </p>
                                         </div>
                                         <button
@@ -222,13 +222,13 @@ export default function ContactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24 border-y border-border" style={{ background: "var(--surface-1)" }}>
+                <section className="py-12 md:py-20 lg:py-12 md:py-24 border-y border-border" style={{ background: "var(--surface-1)" }}>
                     <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-8">
                         <div className="space-y-2">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Our location</p>
                             <h2 className="text-display-sm text-foreground">Nairobi Mentorship Hub</h2>
                         </div>
-                        <div className="aspect-[21/9] rounded-lg border border-border overflow-hidden">
+                        <div className="aspect-[21/9] rounded-md border border-border overflow-hidden">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.17022526987!2d36.80277!3d-1.26389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f173c0a1f9de7%3A0xad2c84df45a4e52c!2sWestlands%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
                                 width="100%"
@@ -243,7 +243,7 @@ export default function ContactPage() {
                     </div>
                 </section>
 
-                <section className="py-20 lg:py-24">
+                <section className="py-12 md:py-20 lg:py-12 md:py-24">
                     <div className="mx-auto max-w-3xl px-6 lg:px-8">
                         <div className="text-center space-y-3 mb-10">
                             <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>Common questions</p>
@@ -256,7 +256,7 @@ export default function ContactPage() {
                                 return (
                                     <div
                                         key={index}
-                                        className="rounded-lg border border-border bg-background overflow-hidden"
+                                        className="rounded-md border border-border bg-background overflow-hidden"
                                     >
                                         <button
                                             onClick={() => toggleFaq(index)}

@@ -1,0 +1,10 @@
+--- src/components/dashboard/Admin/AdminDashboard.tsx
++++ src/components/dashboard/Admin/AdminDashboard.tsx
+@@ -21,6 +21,7 @@
+   Key,
+   Lock,
+   Mail,
++  ShieldAlert,
+ } from "lucide-react";
+ import { createModeratorInvite } from "@/lib/actions/auth";
+ import { DEFAULT_STATS, MetricTile } from "../shared/BentoCard";

@@ -43,7 +43,7 @@ export default function UpcomingSessions({ sessions = [] }: UpcomingSessionsProp
                         return (
                             <div
                                 key={session.id}
-                                className={`rounded-lg p-5 flex flex-col gap-4 relative overflow-hidden border ${isUpcoming ? "" : "border-border"}`}
+                                className={`rounded-md p-5 flex flex-col gap-4 relative overflow-hidden border ${isUpcoming ? "" : "border-border"}`}
                                 style={{ ...cardStyle, boxShadow: "var(--shadow-sm)" }}
                             >
                                 {isUpcoming && (

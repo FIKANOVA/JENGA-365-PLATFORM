@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
+import { auth } from "@/lib/auth/config";
+import { headers } from "next/headers";
 
 function fmt(n: number | undefined | null): string {
     if (n === undefined || n === null || !Number.isFinite(Number(n)) || Number(n) <= 0) return "—";
@@ -9,10 +11,12 @@ function fmt(n: number | undefined | null): string {
 
 export default async function ImpactSocialPage() {
     const stats = await getGlobalImpactStats();
+    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
+    const isAuthenticated = !!session?.user;
 
     return (
         <div className="flex flex-col min-h-screen">
-            <main className="flex-1 py-20 container mx-auto px-4">
+            <main className="flex-1 py-12 md:py-20 container mx-auto px-4">
                 <div className="max-w-4xl mx-auto text-center mb-16 space-y-4">
                     <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
                         Measurable change
@@ -53,12 +57,21 @@ export default async function ImpactSocialPage() {
                     >
                         View funding map <ArrowRight className="h-4 w-4" />
                     </Link>
-                    <Link
-                        href="/register/mentorship"
-                        className="inline-flex items-center gap-2 h-11 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
-                    >
-                        Join the movement
-                    </Link>
+                    {isAuthenticated ? (
+                        <Link
+                            href="/dashboard"
+                            className="inline-flex items-center gap-2 h-11 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+                        >
+                            Go to Dashboard
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/register/mentorship"
+                            className="inline-flex items-center gap-2 h-11 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+                        >
+                            Join the movement
+                        </Link>
+                    )}
                 </div>
             </main>
         </div>
@@ -68,7 +81,7 @@ export default async function ImpactSocialPage() {
 function ImpactCard({ title, value, sub }: { title: string; value: string; sub: string }) {
     return (
         <div
-            className="rounded-lg border border-border bg-background p-10 text-center"
+            className="rounded-md border border-border bg-background p-10 text-center"
             style={{ boxShadow: "var(--shadow-sm)" }}
         >
             <h3 className="text-eyebrow text-foreground-muted mb-4">{title}</h3>

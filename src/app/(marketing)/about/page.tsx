@@ -6,8 +6,7 @@ import LeadershipGrid from "@/components/marketing/about/LeadershipGrid";
 import WhyJenga from "@/components/marketing/about/WhyJenga";
 import Testimonials from "@/components/marketing/about/Testimonials";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
-import PartnerCarousel from "@/components/marketing/about/PartnerCarousel";
-import { fetchPartners, fetchSiteSettings, fetchTeamOfficials } from "@/lib/sanity/queries";
+import { fetchSiteSettings, fetchTeamOfficials, fetchVoices } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/client";
 
 export async function generateMetadata() {
@@ -23,17 +22,17 @@ export async function generateMetadata() {
             "Jenga365 is a dual-engine mentorship and rugby impact platform rooted in Kenyan heritage. Learn about our journey, our team, and the principles behind the Total Athlete model.",
         openGraph: {
             title: "About Jenga365",
-            description: "Mentorship. Stewardship. Impact. Building the Total Athlete — 365 days a year.",
+            description: "Mentorship. Stewardship. Impact. Building the Total Athlete, 365 days a year.",
             ...(ogUrl ? { images: [{ url: ogUrl }] } : {}),
         },
     };
 }
 
 export default async function AboutPage() {
-    const [partners, settings, team] = await Promise.all([
-        fetchPartners(),
+    const [settings, team, voices] = await Promise.all([
         fetchSiteSettings(),
         fetchTeamOfficials(),
+        fetchVoices(),
     ]);
 
     return (
@@ -44,8 +43,7 @@ export default async function AboutPage() {
             <HistoryTimeline nodes={settings?.historyTimeline ?? null} />
             <WhyJenga />
             <LeadershipGrid team={team} />
-            <Testimonials />
-            <PartnerCarousel partners={partners} />
+            <Testimonials voices={voices} />
             <AboutCTAStrip />
         </div>
     );

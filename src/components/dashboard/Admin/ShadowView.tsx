@@ -74,7 +74,7 @@ export default function ShadowView({ users }: { users: ShadowUser[] }) {
                         return (
                             <div
                                 key={user.id}
-                                className="flex items-center justify-between p-5 rounded-lg border bg-background transition-colors cursor-pointer"
+                                className="flex items-center justify-between p-5 rounded-md border bg-background transition-colors cursor-pointer"
                                 style={{
                                     borderColor: selected ? "var(--brand-red)" : "var(--border)",
                                     boxShadow: selected ? "var(--shadow-sm)" : undefined,
@@ -126,7 +126,7 @@ export default function ShadowView({ users }: { users: ShadowUser[] }) {
                 {/* Active Shadow Preview */}
                 {isActive && selectedUser && (
                     <div
-                        className="mt-12 border-2 border-dashed p-8 rounded-lg bg-background"
+                        className="mt-12 border-2 border-dashed p-8 rounded-md bg-background"
                         style={{ borderColor: "var(--brand-red)" }}
                     >
                         <div className="flex items-center gap-2 mb-4">

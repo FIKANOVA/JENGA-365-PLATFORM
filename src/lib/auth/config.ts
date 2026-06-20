@@ -37,6 +37,15 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: false, // Kept false so NDA signing works immediately after signUp
+        sendResetPassword: async ({ user, url }: { user: { name: string; email: string }, url: string }) => {
+            try {
+                const { EmailService } = await import("@/lib/email/service");
+                const name = user.name || "User";
+                await EmailService.sendPasswordReset(user.email, name, url);
+            } catch (err) {
+                console.error("[auth] Password reset email failed:", err);
+            }
+        },
     },
 
     emailVerification: {
