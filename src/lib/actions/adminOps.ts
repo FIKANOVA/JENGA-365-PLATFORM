@@ -17,14 +17,14 @@ async function requireSuperAdmin() {
 }
 
 /**
- * Persist a partner's Data Studio report id and/or login-free share URL.
- * These feed `src/components/dashboard/Partner/DataStudioEmbed.tsx` so the sponsor
+ * Persist a partner's Looker Studio report id and/or login-free share URL.
+ * These feed `src/components/dashboard/Partner/LookerEmbed.tsx` so the sponsor
  * sees their embedded ESG dashboard at /dashboard/partner.
  */
-export async function setPartnerDataStudio(
+export async function setPartnerLooker(
     partnerId: string,
-    dataStudioReportId: string,
-    dataStudioShareUrl: string,
+    lookerReportId: string,
+    lookerShareUrl: string,
 ): Promise<{ ok: true } | { error: string }> {
     try {
         await requireSuperAdmin();
@@ -32,11 +32,11 @@ export async function setPartnerDataStudio(
         return { error: err instanceof Error ? err.message : "FORBIDDEN" };
     }
 
-    const reportId = dataStudioReportId.trim() || null;
-    const shareUrl = dataStudioShareUrl.trim() || null;
+    const reportId = lookerReportId.trim() || null;
+    const shareUrl = lookerShareUrl.trim() || null;
 
     // Validate up front so the operator gets a clear message instead of a raw DB
-    // CHECK-constraint error (corporate_partners_data_studio_share_url_format, migration 0009).
+    // CHECK-constraint error (corporate_partners_looker_share_url_format, migration 0009).
     if (shareUrl && !shareUrl.startsWith("https://lookerstudio.google.com/")) {
         return { error: "Share URL must start with https://lookerstudio.google.com/" };
     }
@@ -48,10 +48,10 @@ export async function setPartnerDataStudio(
     try {
         await db
             .update(corporatePartners)
-            .set({ dataStudioReportId: reportId, dataStudioShareUrl: shareUrl })
+            .set({ lookerReportId: reportId, lookerShareUrl: shareUrl })
             .where(eq(corporatePartners.id, partnerId));
     } catch (err) {
-        console.error("[setPartnerDataStudio] update failed:", err);
+        console.error("[setPartnerLooker] update failed:", err);
         return { error: "Could not save Looker settings. Check the report ID and share URL." };
     }
 
