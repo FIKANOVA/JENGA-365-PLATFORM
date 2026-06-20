@@ -70,10 +70,6 @@ const STAKEHOLDERS: Stakeholder[] = [
         name: "Corporate Partners",
         principle: "Invest in people. Measure the return.",
         paragraph:
-            "Corporate Partners fund the engine — but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Looker Studio dashboard you can forward straight to your board.",
-        rules: [
-            { label: "Milestone-tied",  detail: "Funds release only on verified ESG audits (e.g. 500 trees alive)." },
-            { label: "GPS evidence",    detail: "Tree-survival checks at 6 / 12 / 24 months — geo-tagged, KoBo-piped." },
             "Corporate Partners fund the engine, but funds are not released on a handshake. The Corporate Unlock Challenge ties every disbursement to a verified ESG milestone. When 500 sponsored trees survive the latest GPS-anchored audit, the milestone unlocks. When mentorship hours hit the contracted target, the next tranche unlocks. Every metric lives in a Looker Studio dashboard you can forward straight to your board.",
         rules: [
             { label: "Milestone-tied",  detail: "Funds release only on verified ESG audits (e.g. 500 trees alive)." },
@@ -140,7 +136,7 @@ export default function StakeholdersDeepDive() {
                                     <div
                                         key={s.id}
                                         className={cn(
-                                            "rounded-md border overflow-hidden transition-all duration-300",
+                                            "rounded-xl border overflow-hidden transition-all duration-300",
                                             isOpen ? "bg-background shadow-md border-border" : "bg-[color:var(--surface-2)] border-transparent hover:border-border"
                                         )}
                                     >
@@ -150,7 +146,7 @@ export default function StakeholdersDeepDive() {
                                         >
                                             <div className="flex items-center gap-4">
                                                 <div
-                                                    className="inline-flex h-12 w-12 items-center justify-center rounded-md shrink-0 transition-colors"
+                                                    className="inline-flex h-12 w-12 items-center justify-center rounded-lg shrink-0 transition-colors"
                                                     style={{
                                                         background: isOpen ? s.colorSoft : "var(--surface-3)",
                                                         color: isOpen ? s.color : "var(--foreground-muted)"
@@ -195,7 +191,7 @@ export default function StakeholdersDeepDive() {
                                                                             href="/dashboard"
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="inline-flex h-11 items-center gap-2 rounded-lg px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
                                                                             Open dashboard
@@ -204,7 +200,7 @@ export default function StakeholdersDeepDive() {
                                                                     ) : (
                                                                         <Link
                                                                             href={s.registerHref}
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="inline-flex h-11 items-center gap-2 rounded-lg px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
                                                                             {s.joinCta}
@@ -219,7 +215,7 @@ export default function StakeholdersDeepDive() {
                                                                     {s.rules.map((rule) => (
                                                                         <div
                                                                             key={rule.label}
-                                                                            className="rounded-md border border-border bg-[color:var(--surface-1)] p-4 flex gap-3"
+                                                                            className="rounded-lg border border-border bg-[color:var(--surface-1)] p-4 flex gap-3"
                                                                         >
                                                                             <div className="mt-0.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ background: s.color }} />
                                                                             <div>

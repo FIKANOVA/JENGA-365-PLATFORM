@@ -93,7 +93,7 @@ function MinimalHeader() {
         <header className="w-full border-b border-border bg-background">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-center">
-                    <Logo type="image" size="md" />
+                    <Logo size="md" />
                 </div>
             </div>
         </header>
@@ -159,7 +159,6 @@ function NavDropdown({ group, light, onItemClick }: { group: NavGroup; light: bo
             {open && (
                 <div
                     role="menu"
-                    className="absolute left-0 mt-2 w-72 rounded-md border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
                     className="absolute left-0 mt-2 w-72 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
                 >
                     <ul className="py-2">
@@ -260,8 +259,6 @@ function PublicHeader({ scrolled, light, mobileOpen, setMobileOpen }: { scrolled
             light={light}
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={false} onClose={() => setMobileOpen(false)} /> : null}
         >
-            <Logo type="image" size="md" />
-            <PrimaryNav isAuthenticated={false} />
             <Logo size="md" tone={light ? "light" : "default"} />
             <PrimaryNav isAuthenticated={false} light={light} />
 
@@ -343,7 +340,6 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
             {open && (
                 <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-64 rounded-md border border-border/60 bg-background/70 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
                     className="absolute right-0 mt-2 w-64 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
                 >
                     <div className="px-4 py-3 border-b border-border/60 bg-surface-1/60">
@@ -432,7 +428,6 @@ function AuthenticatedHeader({
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} onClose={() => setMobileOpen(false)} /> : null}
         >
             <div className="flex items-center gap-4">
-                <Logo type="image" size="md" />
                 <Logo size="md" tone={light ? "light" : "default"} />
                 <RoleBadge role={user.role ?? null} className="hidden lg:inline-flex" />
             </div>
@@ -588,8 +583,6 @@ export default function Header() {
     // Loading: render Shell with just the logo to avoid CTA flash
     if (isPending) {
         return (
-            <Shell scrolled={scrolled}>
-                <Logo type="image" size="md" />
             <Shell scrolled={scrolled} light={light}>
                 <Logo size="md" tone={light ? "light" : "default"} />
                 <div className="h-9 w-24 rounded-md bg-surface-2 animate-pulse" aria-hidden />
