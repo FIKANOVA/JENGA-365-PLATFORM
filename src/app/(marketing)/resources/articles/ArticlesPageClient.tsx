@@ -116,7 +116,7 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                     <motion.div
                         initial={{ opacity: 0, scale: 0.98 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="mb-16 w-full p-10 flex flex-col md:flex-row items-center justify-between gap-8 border border-[var(--brand-green)]/20 bg-[var(--green-tint)]"
+                        className="mb-16 w-full rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center text-center md:text-left justify-between gap-8 border border-[var(--brand-green)]/20 bg-[var(--green-tint)]"
                     >
                         <div className="space-y-3">
                             <h3 className="text-display-sm text-foreground">
@@ -130,9 +130,13 @@ export default function ArticlesPageClient({ initialArticles }: ArticlesPageClie
                         </div>
                         <Link
                             href={isAuthenticated ? "/dashboard/articles/new" : "/register"}
-                            className="shrink-0 h-14 px-10 bg-[var(--brand-green)] text-white text-label hover:bg-black transition-all shadow-xl flex items-center"
+                            className="group/btn w-full md:w-auto shrink-0 inline-flex items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all shadow-xl hover:bg-black"
+                            style={{ background: "var(--brand-green)" }}
                         >
-                            {isAuthenticated ? "Publish Article" : "Create Free Account"}
+                            <span className="truncate">{isAuthenticated ? "Publish Article" : "Create Free Account"}</span>
+                            <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                <ArrowRight className="h-4 w-4 text-[var(--brand-green)] group-hover/btn:text-black transition-colors" />
+                            </span>
                         </Link>
                     </motion.div>
 

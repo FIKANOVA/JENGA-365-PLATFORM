@@ -139,7 +139,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
                 {/* Contributor CTA */}
                 <div
-                    className="mt-20 rounded-3xl border border-border p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+                    className="mt-20 rounded-3xl border border-border p-8 md:p-12 flex flex-col md:flex-row items-center text-center md:text-left justify-between gap-6"
                     style={{ background: "var(--surface-1)" }}
                 >
                     <div>
@@ -152,11 +152,11 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                     </div>
                     <NextLink
                         href={isAuthenticated ? "/dashboard/articles/new" : "/register"}
-                        className="group/btn shrink-0 inline-flex items-center justify-between gap-4 h-12 pl-6 pr-1.5 rounded-full font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
+                        className="group/btn w-full md:w-auto shrink-0 inline-flex items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
                         style={{ background: "var(--brand-black)" }}
                     >
-                        Become a contributor
-                        <span className="bg-white rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                        <span className="truncate">Become a contributor</span>
+                        <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
                             <ArrowRight className="h-4 w-4 text-black" />
                         </span>
                     </NextLink>
