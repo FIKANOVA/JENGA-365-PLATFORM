@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { users, accounts } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -12,43 +11,42 @@ export async function GET(request: Request) {
         const password = "JengaAdmin2026!";
 
         // Look for the user in the database this environment is actually connected to
-        const u = await db.query.users.findFirst({ where: eq(users.email, email) });
+        let u = await db.query.users.findFirst({ where: eq(users.email, email) });
 
-        if (u) {
-            // User exists, force update the password hash so Better Auth accepts it
-            const { hashPassword } = await import('better-auth/crypto');
-            const hashedPassword = await hashPassword(password);
-            
-            const acc = await db.query.accounts.findFirst({ where: eq(accounts.userId, u.id) });
-            if (acc) {
-                await db.update(accounts).set({ password: hashedPassword }).where(eq(accounts.id, acc.id));
-            } else {
-                const { randomUUID } = await import('node:crypto');
-                await db.insert(accounts).values({
-                    id: randomUUID(),
-                    accountId: u.id,
-                    providerId: "credential",
-                    userId: u.id,
-                    password: hashedPassword,
-                });
-            }
-
-            // Ensure they are SuperAdmin
-            await db.update(users).set({ role: "SuperAdmin" }).where(eq(users.id, u.id));
-
-            return NextResponse.json({ success: true, msg: "Password updated successfully. You can now log in." });
+        if (!u) {
+            // User doesn't exist, use raw Drizzle insert to bypass any BetterAuth API context requirements
+            const [newUser] = await db.insert(users).values({
+                email,
+                name: "Super Admin",
+                role: "SuperAdmin"
+            }).returning();
+            u = newUser;
         } else {
-            // User does not exist, use Better Auth to create them
-            await auth.api.signUpEmail({
-                body: {
-                    email,
-                    password,
-                    name: "Super Admin"
-                }
-            });
-            return NextResponse.json({ success: true, msg: "User created successfully. You can now log in." });
+            // Force role to SuperAdmin just in case
+            await db.update(users).set({ role: "SuperAdmin" }).where(eq(users.id, u.id));
         }
+
+        // Hash password
+        const { hashPassword } = await import('better-auth/crypto');
+        const hashedPassword = await hashPassword(password);
+        
+        // Update or insert account
+        const acc = await db.query.accounts.findFirst({ where: eq(accounts.userId, u.id) });
+        if (acc) {
+            await db.update(accounts).set({ password: hashedPassword }).where(eq(accounts.id, acc.id));
+        } else {
+            const { randomUUID } = await import('node:crypto');
+            await db.insert(accounts).values({
+                id: randomUUID(),
+                accountId: u.id, // Better Auth requires accountId to match the provider's user ID (or our internal user ID)
+                providerId: "credential",
+                userId: u.id,
+                password: hashedPassword,
+            });
+        }
+
+        return NextResponse.json({ success: true, msg: "SuperAdmin account created/updated perfectly. You can now log in." });
     } catch(err: any) {
-        return NextResponse.json({ success: false, error: err.message });
+        return NextResponse.json({ success: false, error: err.message, stack: err.stack });
     }
 }
