@@ -68,6 +68,7 @@ export async function publishArticleToSanity(neonArticleId: string): Promise<str
             })
             .from(users)
             .where(inArray(users.id, coAuthorIds));
+
         const promises = coAuthorRows.map(async (co) => {
             const meta = (co.metadata as { bio?: string; professionalTitle?: string } | null) ?? null;
             await ensureAuthorDoc({
