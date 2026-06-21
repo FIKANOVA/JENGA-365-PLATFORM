@@ -103,55 +103,56 @@ function EngineCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, delay }}
-      className="group rounded-2xl border bg-[color:var(--surface-2)] p-8 md:p-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden"
-      style={{ borderColor: accent ? "var(--brand-green-soft)" : "var(--surface-3)" }}
+      className={`group rounded-3xl border p-6 md:p-8 lg:p-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden flex flex-col ${
+        accent ? "bg-brand-green-soft/30 border-brand-green/20" : "bg-background border-border"
+      }`}
     >
       <div
         className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
-          background: accent ? "linear-gradient(to bottom right, rgba(46, 160, 67, 0.05), transparent)" : "linear-gradient(to bottom right, rgba(255,255,255,0.03), transparent)"
+          background: accent ? "linear-gradient(to bottom right, rgba(46, 160, 67, 0.05), transparent)" : "linear-gradient(to bottom right, rgba(0,0,0,0.02), transparent)"
         }}
       />
       <div className="relative z-10 flex flex-col h-full">
         <div className="flex items-start gap-4 mb-6">
           <div
-            className="flex h-12 w-12 items-center justify-center rounded-xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+            className="flex h-12 w-12 items-center justify-center rounded-2xl flex-shrink-0 transition-transform duration-500 group-hover:scale-110 shadow-sm border border-black/5"
             style={{
-              background: accent ? "var(--brand-green-soft)" : "var(--surface-3)",
+              background: accent ? "var(--brand-green-soft)" : "var(--surface-2)",
               color: accent ? "var(--brand-green)" : "var(--foreground)",
             }}
           >
-            <Icon className="h-6 w-6" />
+            <Icon className="h-5 w-5" />
           </div>
-          <div>
+          <div className="pt-1">
             <span
-              className="text-eyebrow"
+              className="text-eyebrow tracking-widest"
               style={{
-                color: accent ? "var(--brand-green)" : "var(--foreground-muted)",
+                color: accent ? "var(--brand-green)" : "var(--foreground-subtle)",
               }}
             >
               {eyebrow}
             </span>
-            <h3 className="mt-1 text-headline text-foreground">{title}</h3>
+            <h3 className="mt-1.5 text-title text-foreground tracking-tight">{title}</h3>
           </div>
         </div>
 
-        <p className="text-body text-foreground-muted">
+        <p className="text-body-sm text-foreground-muted leading-relaxed">
           {body}
         </p>
 
-        <ul className="mt-6 space-y-3 mb-8">
+        <ul className="mt-6 space-y-3 mb-10">
           {bullets.map((b) => (
             <li
               key={b}
               className="flex items-start gap-3 text-body-sm text-foreground"
             >
               <span
-                className="mt-2 h-1.5 w-1.5 rounded-full flex-shrink-0"
-                style={{ background: "var(--brand-green)" }}
+                className="mt-2 h-1.5 w-1.5 rounded-full flex-shrink-0 shadow-sm"
+                style={{ background: accent ? "var(--brand-green)" : "var(--foreground)" }}
                 aria-hidden
               />
-              {b}
+              <span className="leading-snug opacity-90">{b}</span>
             </li>
           ))}
         </ul>
@@ -159,14 +160,13 @@ function EngineCard({
         <div className="mt-auto">
           <Link
             href={href}
-            className="group/btn inline-flex items-center gap-2 h-11 px-5 rounded-lg text-label font-medium transition-all focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
-            style={{
-              background: accent ? "var(--brand-green)" : "var(--foreground)",
-              color: accent ? "white" : "var(--background)"
-            }}
+            className={`group/btn inline-flex items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full font-medium text-white transition-all duration-300 hover:shadow-lg whitespace-nowrap ${accent ? "hover:bg-brand-green-hover" : "bg-foreground hover:opacity-90"}`}
+            style={accent ? { background: "var(--brand-green)" } : undefined}
           >
             {ctaLabel}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+            <span className="bg-white rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+               <ArrowRight className="h-4 w-4 text-black" />
+            </span>
           </Link>
         </div>
       </div>
