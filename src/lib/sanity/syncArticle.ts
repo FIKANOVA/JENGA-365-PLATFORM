@@ -68,22 +68,7 @@ export async function publishArticleToSanity(neonArticleId: string): Promise<str
             })
             .from(users)
             .where(inArray(users.id, coAuthorIds));
-        await Promise.all(
-            coAuthorRows.map(async (co) => {
-                const meta = (co.metadata as { bio?: string; professionalTitle?: string } | null) ?? null;
-                await ensureAuthorDoc({
-                    userId: co.id,
-                    name: co.name,
-                    email: co.email,
-                    bio: meta?.bio ?? null,
-                    role: meta?.professionalTitle ?? null,
-                });
-            })
-        );
 
-        for (const co of coAuthorRows) {
-            coAuthorRefs.push({
-                _type: "reference",
         const promises = coAuthorRows.map(async (co) => {
             const meta = (co.metadata as { bio?: string; professionalTitle?: string } | null) ?? null;
             await ensureAuthorDoc({
