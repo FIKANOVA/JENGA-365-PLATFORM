@@ -5,7 +5,6 @@ import { ArrowRight, Heart } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
 import DonateButton from "@/components/shared/DonateButton";
 import { urlFor } from "@/lib/sanity/client";
-import { motion, Variants } from "framer-motion";
 
 interface SanityImage {
     asset?: { _id?: string; url?: string };
@@ -31,22 +30,13 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
     const headingColor = hasImage ? "#ffffff" : "var(--foreground)";
     const mutedColor = hasImage ? "rgba(255,255,255,0.88)" : "var(--foreground-muted)";
 
-    const staggerVariants: Variants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: (i: number) => ({
-            opacity: 1,
-            y: 0,
-            transition: {
-                delay: i * 0.1,
-                duration: 0.8,
-                ease: "easeOut" as const,
-            },
-        }),
-    };
-
     return (
-        <section className="relative overflow-hidden bg-hero-radial bg-topo border-b border-border">
-            {hasImage && (
+        <section
+            className={`relative overflow-hidden bg-background flex flex-col justify-end border-b border-border ${
+                hasImage ? "h-[85vh] min-h-[600px] -mt-16" : "py-24 lg:py-32"
+            }`}
+        >
+            {hasImage ? (
                 <>
                     {isVideo ? (
                         <video
@@ -54,88 +44,83 @@ export default function AboutHero({ heroImage }: AboutHeroProps) {
                             loop
                             muted
                             playsInline
-                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none z-0"
                             src={heroUrl!}
                         />
                     ) : (
-                        <motion.img
-                            initial={{ scale: 1.05 }}
-                            animate={{ scale: 1 }}
-                            transition={{ duration: 1.5, ease: "easeOut" }}
+                        <img
                             src={heroUrl!}
                             alt=""
                             aria-hidden
-                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none z-0"
                         />
                     )}
+                    {/* Cinematic Bottom Blur Overlay Mask */}
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent"
-                        aria-hidden
-                    />
-                    <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 to-transparent"
+                        className="absolute inset-0 pointer-events-none z-0 backdrop-blur-xl"
+                        style={{
+                            WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 45%)",
+                            maskImage: "linear-gradient(to top, black 0%, transparent 45%)",
+                        }}
                         aria-hidden
                     />
                 </>
+            ) : (
+                <>
+                    <div className="absolute inset-0 bg-hero-radial pointer-events-none z-0" aria-hidden />
+                    <div className="absolute inset-0 bg-topo opacity-[0.35] pointer-events-none z-0" aria-hidden />
+                </>
             )}
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-12 md:pt-20 pb-12 md:pb-24 lg:pt-32 lg:pb-32">
+
+            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pb-12 md:pb-16" : ""}`}>
                 <div className="max-w-3xl space-y-8">
-                    <motion.p
-                        custom={0}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="text-eyebrow"
-                        style={{ color: hasImage ? "#7CE2A8" : "var(--brand-green)" }}
+                    <p
+                        className="text-eyebrow animate-blur-fade-up"
+                        style={{
+                            color: hasImage ? "#7CE2A8" : "var(--brand-green)",
+                            animationDelay: "100ms"
+                        }}
                     >
                         Established 2023 · Nairobi, Kenya
-                    </motion.p>
+                    </p>
 
-                    <motion.h1
-                        custom={1}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="text-display-xl"
-                        style={{ color: headingColor }}
+                    <h1
+                        className="text-display-xl leading-tight animate-blur-fade-up"
+                        style={{ color: headingColor, animationDelay: "200ms" }}
                     >
                         More than a game.
-                    </motion.h1>
+                    </h1>
 
-                    <motion.p
-                        custom={2}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="text-body-lg max-w-2xl"
-                        style={{ color: mutedColor }}
+                    <p
+                        className="text-body-lg max-w-2xl leading-relaxed animate-blur-fade-up"
+                        style={{ color: mutedColor, animationDelay: "300ms" }}
                     >
                         A dual-engine development initiative committed to sustainable
                         community uplift, through elite sports training and integrated
                         socio-economic support systems.
-                    </motion.p>
+                    </p>
 
-                    <motion.div
-                        custom={3}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="flex flex-wrap items-center gap-3"
+                    <div
+                        className="flex flex-col sm:flex-row items-start gap-4 animate-blur-fade-up"
+                        style={{ animationDelay: "400ms" }}
                     >
                         <DonateButton
-                            className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-md"
+                            className="inline-flex w-full sm:w-auto items-center justify-between gap-3 h-12 pl-7 pr-1.5 rounded-full font-medium text-white transition-colors hover:bg-[#004d00] shadow-lg whitespace-nowrap"
                             style={{ background: "var(--brand-green)" }}
                         >
-                            <Heart className="h-4 w-4" /> Donate
+                            Donate
+                            <span className="bg-white rounded-full p-2 flex items-center justify-center">
+                                <Heart className="h-4 w-4 text-black" />
+                            </span>
                         </DonateButton>
                         <Link
                             href={isAuthenticated ? "/dashboard" : "/register"}
-                            className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background px-5 text-label text-foreground transition-all hover:bg-[color:var(--surface-2)] hover:-translate-y-0.5 shadow-sm"
+                            className={`inline-flex w-full sm:w-auto items-center justify-center gap-2 h-12 px-7 rounded-full font-medium transition-colors whitespace-nowrap ${hasImage ? "liquid-glass text-white" : "bg-surface-2 hover:bg-surface-3 text-foreground"}`}
                         >
                             {isAuthenticated ? "Open dashboard" : "Join the movement"}
                             <ArrowRight className="h-4 w-4" />
                         </Link>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>

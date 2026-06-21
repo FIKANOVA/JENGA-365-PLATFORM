@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
 import { urlFor } from "@/lib/sanity/client";
-import { motion, Variants } from "framer-motion";
 
 interface SanityImage {
     asset?: { _id?: string; url?: string };
@@ -28,9 +27,9 @@ interface HeroSectionProps {
 
 const DEFAULT_COPY: Required<HeroCopy> = {
     eyebrow: "AI-Native Mentorship Platform",
-    heading: "Build the Total Athlete. 365 days a year.",
+    heading: "Build the Total Athlete.\n365 days a year.",
     description:
-        "Jenga365 is Kenya's dual-engine platform connecting human capital with environmental stewardship. AI-matched mentorship pairs athletes and young professionals with seasoned veterans. Quarterly M&E and GPS-verified climate action gives corporate sponsors the ESG data they need.",
+        "Jenga365 is Kenya's dual-engine platform connecting human capital with environmental stewardship. AI-matched mentorship pairs athletes and young professionals with seasoned veterans.",
     primaryCtaLabel: "Apply for mentorship",
     primaryCtaHref: "/register/mentorship",
     secondaryCtaLabel: "Corporate ESG partnership",
@@ -38,11 +37,8 @@ const DEFAULT_COPY: Required<HeroCopy> = {
 };
 
 /**
- * Landing hero — Total Athlete + Dual-Engine narrative.
- * Copy is sourced from siteSettings.landingHero in Sanity; in-code DEFAULT_COPY
- * is the fallback when a field is empty.
- *
- * Enhanced with Framer Motion for better attention capture.
+ * Cinematic Landing Hero — Total Athlete + Dual-Engine narrative.
+ * Copy is sourced from siteSettings.landingHero in Sanity.
  */
 export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     const { data: session } = useSession();
@@ -68,22 +64,11 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     const mutedColor = hasImage ? "rgba(255,255,255,0.88)" : "var(--foreground-muted)";
     const subtleColor = hasImage ? "rgba(255,255,255,0.72)" : "var(--foreground-subtle)";
 
-    const staggerVariants: Variants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: (i: number) => ({
-            opacity: 1,
-            y: 0,
-            transition: {
-                delay: i * 0.1,
-                duration: 0.8,
-                ease: "easeOut" as const,
-            },
-        }),
-    };
-
     return (
         <section
-            className={`relative overflow-hidden bg-background ${hasImage ? "-mt-16" : ""}`}
+            className={`relative overflow-hidden bg-background flex flex-col justify-end ${
+                hasImage ? "h-[85vh] min-h-[600px] -mt-16" : "py-24 lg:py-32"
+            }`}
         >
             {hasImage ? (
                 <>
@@ -93,129 +78,105 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                             loop
                             muted
                             playsInline
-                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none z-0"
                             src={heroUrl!}
                         />
                     ) : (
-                        <motion.img
-                            initial={{ scale: 1.05 }}
-                            animate={{ scale: 1 }}
-                            transition={{ duration: 1.5, ease: "easeOut" }}
+                        <img
                             src={heroUrl!}
                             alt=""
                             aria-hidden
-                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none z-0"
                         />
                     )}
+                    {/* Cinematic Bottom Blur Overlay Mask */}
                     <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent"
+                        className="absolute inset-0 pointer-events-none z-0 backdrop-blur-xl"
+                        style={{
+                            WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 45%)",
+                            maskImage: "linear-gradient(to top, black 0%, transparent 45%)",
+                        }}
                         aria-hidden
                     />
-                    <div
-                        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 to-transparent"
-                        aria-hidden
-                    />
-                    <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
+                    <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none z-0" aria-hidden />
                 </>
             ) : (
                 <>
-                    <div className="absolute inset-0 bg-hero-radial pointer-events-none" aria-hidden />
-                    <div className="absolute inset-0 bg-topo opacity-[0.35] pointer-events-none" aria-hidden />
+                    <div className="absolute inset-0 bg-hero-radial pointer-events-none z-0" aria-hidden />
+                    <div className="absolute inset-0 bg-topo opacity-[0.35] pointer-events-none z-0" aria-hidden />
                 </>
             )}
 
-            <div
-                className={`relative mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pt-16 pb-12 md:pt-24 md:pb-16 lg:pt-32 lg:pb-20" : "py-16 md:py-24 lg:py-32"}`}
-            >
+            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pb-12 md:pb-16" : ""}`}>
                 <div className="max-w-3xl">
-                    <motion.div
-                        custom={0}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm"
+                    <div
+                        className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm animate-blur-fade-up"
                         style={{
                             background: hasImage ? "rgba(255,255,255,0.12)" : "var(--surface-1)",
                             borderColor: hasImage ? "rgba(255,255,255,0.25)" : "var(--border)",
+                            animationDelay: "100ms"
                         }}
                     >
                         <Sparkles className="h-3.5 w-3.5" style={{ color: hasImage ? "#7CE2A8" : "var(--brand-green)" }} />
                         <span className="text-eyebrow" style={{ color: mutedColor }}>
                             {eyebrow}
                         </span>
-                    </motion.div>
+                    </div>
 
-                    <motion.h1
-                        custom={1}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="text-display-lg md:text-display-xl whitespace-pre-line"
-                        style={{ color: headingColor }}
+                    <h1
+                        className="text-display-lg md:text-display-xl whitespace-pre-line leading-tight animate-blur-fade-up"
+                        style={{ color: headingColor, animationDelay: "200ms" }}
                     >
                         {heading}
-                    </motion.h1>
+                    </h1>
 
-                    <motion.p
-                        custom={2}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="mt-6 text-body-lg max-w-2xl"
-                        style={{ color: mutedColor }}
+                    <p
+                        className="mt-6 text-body-lg max-w-2xl leading-relaxed animate-blur-fade-up"
+                        style={{ color: mutedColor, animationDelay: "300ms" }}
                     >
                         {description}
-                    </motion.p>
+                    </p>
 
-                    <motion.div
-                        custom={3}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="mt-10 flex flex-col md:flex-row gap-3"
+                    <div
+                        className="mt-10 flex flex-col sm:flex-row items-start gap-4 animate-blur-fade-up"
+                        style={{ animationDelay: "400ms" }}
                     >
                         {isAuthenticated ? (
                             <Link
                                 href="/dashboard"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg whitespace-nowrap"
+                                className="inline-flex w-full sm:w-auto items-center justify-between gap-3 h-12 pl-7 pr-1.5 rounded-full font-medium text-white transition-colors hover:bg-[#004d00] shadow-lg whitespace-nowrap"
                                 style={{ background: "var(--brand-green)" }}
                             >
                                 Go to dashboard
-                                <ArrowRight className="h-4 w-4" />
+                                <span className="bg-white rounded-full p-2 flex items-center justify-center">
+                                    <ArrowRight className="h-4 w-4 text-black" />
+                                </span>
                             </Link>
                         ) : (
                             <>
                                 <Link
                                     href={primaryCtaHref}
-                                    className="inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 shadow-lg whitespace-nowrap"
+                                    className="inline-flex w-full sm:w-auto items-center justify-between gap-3 h-12 pl-7 pr-1.5 rounded-full font-medium text-white transition-colors hover:bg-[#004d00] shadow-lg whitespace-nowrap"
                                     style={{ background: "var(--brand-green)" }}
                                 >
                                     {primaryCtaLabel}
-                                    <ArrowRight className="h-4 w-4" />
+                                    <span className="bg-white rounded-full p-2 flex items-center justify-center">
+                                        <ArrowRight className="h-4 w-4 text-black" />
+                                    </span>
                                 </Link>
                                 <Link
                                     href={secondaryCtaHref}
-                                    className={
-                                        hasImage
-                                            ? "inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-white/30 text-white backdrop-blur-sm hover:bg-white/10 transition-colors whitespace-nowrap"
-                                            : "inline-flex w-full md:w-auto items-center justify-center gap-2 h-12 px-6 rounded-md font-medium border border-border text-foreground hover:bg-surface-2 transition-colors whitespace-nowrap"
-                                    }
+                                    className={`inline-flex w-full sm:w-auto items-center justify-center gap-2 h-12 px-7 rounded-full font-medium transition-colors whitespace-nowrap ${hasImage ? "liquid-glass text-white" : "bg-surface-2 hover:bg-surface-3 text-foreground"}`}
                                 >
                                     {secondaryCtaLabel}
                                 </Link>
                             </>
                         )}
-                    </motion.div>
+                    </div>
 
-                    <motion.p
-                        custom={4}
-                        initial="hidden"
-                        animate="visible"
-                        variants={staggerVariants}
-                        className="mt-6 text-body-sm"
-                        style={{ color: subtleColor }}
+                    <p
+                        className="mt-6 text-sm animate-blur-fade-up"
+                        style={{ color: subtleColor, animationDelay: "500ms" }}
                     >
                         Mentorship is earned, not free. Read the{" "}
                         <Link
@@ -226,7 +187,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                             Sweat Equity protocol
                         </Link>
                         .
-                    </motion.p>
+                    </p>
                 </div>
             </div>
         </section>
