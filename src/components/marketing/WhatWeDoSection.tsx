@@ -160,11 +160,11 @@ function EngineCard({
         <div className="mt-auto">
           <Link
             href={href}
-            className={`group/btn inline-flex items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full font-medium text-white transition-all duration-300 hover:shadow-lg whitespace-nowrap ${accent ? "hover:bg-brand-green-hover" : "bg-foreground hover:opacity-90"}`}
+            className={`group/btn w-full sm:w-auto inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full font-medium text-white transition-all duration-300 hover:shadow-lg ${accent ? "hover:bg-brand-green-hover" : "bg-foreground hover:opacity-90"}`}
             style={accent ? { background: "var(--brand-green)" } : undefined}
           >
-            {ctaLabel}
-            <span className="bg-white rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+            <span className="truncate text-sm sm:text-base">{ctaLabel}</span>
+            <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
                <ArrowRight className="h-4 w-4 text-black" />
             </span>
           </Link>

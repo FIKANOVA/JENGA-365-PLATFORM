@@ -84,7 +84,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                             <NextLink
                                 href={`/resources/articles/${slug}`}
                                 key={id}
-                                className="group flex flex-col rounded-md border border-border bg-background overflow-hidden transition-shadow hover:shadow-lg"
+                                className="group flex flex-col rounded-3xl border border-border bg-background overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 hover:border-foreground/30"
                             >
                                 <div className="relative aspect-[16/10] overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {img ? (
@@ -139,7 +139,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
                 {/* Contributor CTA */}
                 <div
-                    className="mt-20 rounded-md border border-border p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+                    className="mt-20 rounded-3xl border border-border p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
                     style={{ background: "var(--surface-1)" }}
                 >
                     <div>
@@ -152,11 +152,13 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                     </div>
                     <NextLink
                         href={isAuthenticated ? "/dashboard/articles/new" : "/register"}
-                        className="shrink-0 inline-flex items-center gap-2 h-11 px-5 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                        className="group/btn shrink-0 inline-flex items-center justify-between gap-4 h-12 pl-6 pr-1.5 rounded-full font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
                         style={{ background: "var(--brand-black)" }}
                     >
                         Become a contributor
-                        <ArrowRight className="h-4 w-4" />
+                        <span className="bg-white rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                            <ArrowRight className="h-4 w-4 text-black" />
+                        </span>
                     </NextLink>
                 </div>
             </div>
