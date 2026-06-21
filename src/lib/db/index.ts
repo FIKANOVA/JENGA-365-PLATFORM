@@ -7,7 +7,7 @@ neonConfig.fetchConnectionCache = true;
 const connectionString = process.env.DATABASE_URL;
 let dbClient: ReturnType<typeof drizzle<typeof schema>>;
 
-if (!connectionString || connectionString.includes('dummy') || connectionString.includes('localhost') || process.env.NODE_ENV === 'production') {
+if (!connectionString || connectionString.includes('dummy') || connectionString.includes('localhost')) {
     // Mock DB for build step and unit tests
     const mockTx = {
         update: () => ({ set: () => ({ where: () => ({ returning: () => [] }) }) }),
