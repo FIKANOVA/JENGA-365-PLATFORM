@@ -5,7 +5,7 @@ interface IntakeProgressProps {
 
 export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgressProps) {
   return (
-    <nav aria-label="Intake progress" className="flex items-center justify-center gap-0 font-mono">
+    <nav aria-label="Intake progress" className="flex items-center justify-center gap-0">
       {stepLabels.map((label, index) => {
         const stepNumber = (index + 1) as 1 | 2 | 3
         const isCompleted = stepNumber < currentStep
@@ -34,7 +34,7 @@ export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgre
 
               {/* Label */}
               <span
-                className={`text-xs tracking-wide uppercase leading-tight text-center max-w-[72px] ${
+                className={`text-xs tracking-wide leading-tight text-center max-w-[72px] ${
                   isActive
                     ? "font-bold text-[var(--md-on-surface)]"
                     : isCompleted

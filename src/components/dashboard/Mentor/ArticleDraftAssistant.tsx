@@ -8,7 +8,7 @@ export default function ArticleDraftAssistant() {
             <CardHeader>
                 <CardTitle className="font-outfit flex items-center justify-between">
                     <span>AI Draft Assistant</span>
-                    <Button size="sm" variant="ghost" className="text-xs uppercase tracking-widest opacity-70">New Draft</Button>
+                    <Button size="sm" variant="ghost" className="text-xs opacity-70">New Draft</Button>
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -16,7 +16,7 @@ export default function ArticleDraftAssistant() {
                     I've prepared a draft outline based on your expertise in <strong>Full-Stack Architecture</strong>.
                     Would you like me to expand on the "Serverless Performance" section?
                 </p>
-                <div className="p-4 bg-background border rounded-md h-32 overflow-y-auto text-sm font-mono opacity-80">
+                <div className="p-4 bg-background border rounded-md h-32 overflow-y-auto text-sm opacity-80">
                     1. Introduction to Serverless Scaling\n2. Memory vs Cold-start Optimization\n3. Edge Compute Strategies for SaaS\n...
                 </div>
                 <div className="flex space-x-2">

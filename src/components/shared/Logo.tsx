@@ -41,56 +41,28 @@ export default function Logo({
         tone === "light"
             ? "text-white"
             : tone === "dark"
-                ? "text-zinc-950"
+                ? "text-black dark:text-white"
                 : "text-foreground";
 
     const sizeClass =
         size === "sm" ? "h-6" : size === "lg" ? "h-10" : "h-8";
 
-    // Kenya flag bands across "Jenga": black, white, red, white, green. "365" stays green.
-    const KENYA_FLAG = ["#1A1A1A", "#FFFFFF", "#BB0000", "#FFFFFF", "#006600"];
-    // Outline must contrast the background: light hairline on dark surfaces (so the
-    // black band shows), dark hairline on light surfaces (so the white bands show).
-    const strokeColor = tone === "light" ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.5)";
+    const textScale = size === "sm" ? "1.25rem" : size === "lg" ? "1.75rem" : "1.5rem";
+
     const mark = (
-        <svg
-            viewBox="0 0 300 96"
-            className={cn("w-auto", sizeClass, toneClass, className)}
-            fill="none"
-            role="img"
-            aria-label="Jenga365"
-        >
-            <path
-                d="M40 28 A 150 85 0 0 1 252 22"
-                stroke="currentColor"
-                strokeWidth={3}
-                strokeLinecap="round"
-                fill="none"
-                opacity={0.9}
+        <div className={cn("flex items-center gap-2", className)} aria-label="Jenga365">
+            <img
+                src="/assets/logos/jenga365-symbol-transparent.png"
+                alt=""
+                className={cn("w-auto object-contain", sizeClass)}
             />
-            <path
-                d="M260 68 A 150 85 0 0 1 48 74"
-                stroke="currentColor"
-                strokeWidth={3}
-                strokeLinecap="round"
-                fill="none"
-                opacity={0.9}
-            />
-            <circle cx={40} cy={28} r={7} fill="#E5342A" />
-            <circle cx={260} cy={68} r={7} fill="#16A34A" />
-            <text
-                x={150}
-                y={63}
-                textAnchor="middle"
-                fontWeight={700}
-                fontSize={46}
-                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", letterSpacing: "-1.5px" }}
+            <span
+                className={cn("font-bold", toneClass)}
+                style={{ fontSize: textScale, fontFamily: "var(--font-sans), system-ui, sans-serif" }}
             >
-                <tspan fill="#E5342A">J</tspan>
-                <tspan fill="currentColor">enga36</tspan>
-                <tspan fill="#16A34A">5</tspan>
-            </text>
-        </svg>
+                Jenga365
+            </span>
+        </div>
     );
 
     if (!asLink) return mark;

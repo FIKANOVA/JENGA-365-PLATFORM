@@ -107,7 +107,7 @@ export function MetricTile({
       <span className="text-eyebrow text-foreground-muted">{label}</span>
       <span
         className={cn(
-          "font-semibold tabular-nums tracking-tight text-foreground",
+          "font-semibold tabular-nums text-foreground",
           featured ? "text-display-md lg:text-display-lg" : "text-display-sm",
         )}
       >

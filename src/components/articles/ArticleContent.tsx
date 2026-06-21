@@ -55,14 +55,14 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                         <div className="space-y-3">
                             <div className="space-y-1">
                                 <h3 className="text-display-sm text-foreground">{author.name}</h3>
-                                <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--brand-green)] font-bold block">
+                                <span className="text-eyebrow text-[var(--brand-green)] font-bold block">
                                     {author.role}
                                 </span>
                             </div>
                             <p className="text-[var(--foreground-muted)] text-[14px] leading-relaxed font-light">
                                 {author.bio}
                             </p>
-                            <button className="pt-2 flex items-center gap-2 group text-label font-mono uppercase tracking-widest text-black hover:text-[var(--brand-green)] transition-colors">
+                            <button className="pt-2 flex items-center gap-2 group text-label text-black hover:text-[var(--brand-green)] transition-colors">
                                 <span className="w-6 h-px bg-black group-hover:bg-[var(--brand-green)] transition-colors"></span>
                                 Follow Profile
                             </button>
@@ -70,7 +70,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
 
                         {coAuthors && coAuthors.length > 0 && (
                             <div className="pt-6 border-t border-border space-y-3">
-                                <h4 className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)]">
+                                <h4 className="text-eyebrow text-[var(--foreground-subtle)]">
                                     Co-authors
                                 </h4>
                                 <ul className="space-y-3">
@@ -89,7 +89,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                                             <div className="min-w-0">
                                                 <p className="text-body-sm text-foreground truncate">{c.name}</p>
                                                 {c.role && (
-                                                    <p className="font-mono text-eyebrow tracking-widest text-[var(--brand-green)] truncate">
+                                                    <p className="text-eyebrow text-[var(--brand-green)] truncate">
                                                         {c.role}
                                                     </p>
                                                 )}
@@ -105,10 +105,10 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                     {topicTags.length > 0 && (
                         <div className="space-y-6 pt-10 border-t border-border">
                             <div className="space-y-4">
-                                <h4 className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)]">Topic Area</h4>
+                                <h4 className="text-eyebrow text-[var(--foreground-subtle)]">Topic Area</h4>
                                 <div className="flex flex-wrap gap-2">
                                     {topicTags.map(tag => (
-                                        <span key={tag} className="px-3 py-1 bg-[var(--surface-1)] border border-border text-label font-mono tracking-widest uppercase">
+                                        <span key={tag} className="px-3 py-1 bg-[var(--surface-1)] border border-border text-label">
                                             {tag}
                                         </span>
                                     ))}
@@ -171,7 +171,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                                     className="object-cover grayscale opacity-80"
                                 />
                             </div>
-                            <figcaption className="text-[11px] font-mono uppercase tracking-[0.3em] text-[var(--foreground-subtle)] text-center">
+                            <figcaption className="text-[11px] text-[var(--foreground-subtle)] text-center">
                                 Snapshot: Jenga365 Field Impact Clinic, 2024
                             </figcaption>
                         </figure>

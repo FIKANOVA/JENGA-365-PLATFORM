@@ -94,10 +94,10 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                     <div className="relative z-20 max-w-5xl mx-auto px-6 text-center">
                         <div className="space-y-8">
                             <div className="flex justify-center items-center gap-4">
-                                <span className="bg-[var(--brand-green)] text-white text-[10px] font-mono font-bold px-4 py-1.5 uppercase tracking-[0.3em] rounded-sm shadow-2xl">
+                                <span className="bg-[var(--brand-green)] text-white text-[10px] font-bold px-4 py-1.5 rounded-sm shadow-2xl">
                                     {article.category ?? "Insight"}
                                 </span>
-                                <span className="text-white/60 text-[10px] font-mono tracking-[0.3em] uppercase">
+                                <span className="text-white/60 text-[10px]">
                                     {readTime}
                                 </span>
                             </div>
@@ -147,7 +147,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 {!isAuthenticated && (
                     <section className="bg-[var(--surface-1)] border-t border-[var(--border)] py-16 md:py-32 mt-20">
                         <div className="max-w-4xl mx-auto px-6 flex flex-col items-center text-center space-y-10">
-                            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--brand-green)]">Final Word</span>
+                            <span className="text-[10px] text-[var(--brand-green)]">Final Word</span>
                             <h2 className="text-display-xl text-foreground leading-tight">
                                 Ready to go <span className="italic" style={{ color: "var(--brand-green)" }}>deeper?</span>
                             </h2>
@@ -155,10 +155,10 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                                 Jenga365 is more than a platform; it's an ecosystem of excellence. Join thousands of high-performers today.
                             </p>
                             <div className="flex flex-wrap justify-center gap-6 pt-6">
-                                <Link href="/register/mentorship" className="px-12 py-5 bg-[var(--brand-green)] text-white font-mono text-[10px] uppercase tracking-widest rounded-sm hover:bg-black transition-all">
+                                <Link href="/register/mentorship" className="px-12 py-5 bg-[var(--brand-green)] text-white text-[10px] rounded-sm hover:bg-black transition-all">
                                     CREATE FREE ACCOUNT
                                 </Link>
-                                <Link href="/login" className="px-12 py-5 border border-[var(--border)] text-black font-mono text-[10px] uppercase tracking-widest rounded-sm hover:bg-black hover:text-white transition-all">
+                                <Link href="/login" className="px-12 py-5 border border-[var(--border)] text-black text-[10px] rounded-sm hover:bg-black hover:text-white transition-all">
                                     LOG IN
                                 </Link>
                             </div>

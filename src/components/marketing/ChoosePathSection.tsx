@@ -194,7 +194,7 @@ export default function ChoosePathSection() {
                                 </p>
 
                                 <div className="mt-10 bg-background rounded-xl p-6 border border-border relative z-10">
-                                    <h4 className="text-label text-foreground-muted mb-4 uppercase tracking-wider">The Exchange</h4>
+                                    <h4 className="text-label text-foreground-muted mb-4">The Exchange</h4>
                                     <ul className="space-y-4">
                                         {activeData.highlights.map((line) => (
                                             <li key={line} className="flex items-start gap-3 text-body text-foreground">

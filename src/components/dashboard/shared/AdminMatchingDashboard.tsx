@@ -76,7 +76,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
             {/* Current Mentor Section */}
             <Card className="border-none bg-primary/5 shadow-none rounded-md overflow-hidden">
                 <CardHeader className="pb-2">
-                    <p className="text-label font-bold uppercase tracking-widest text-primary mb-1">Current Assignment</p>
+                    <p className="text-label font-bold text-primary mb-1">Current Assignment</p>
                     <CardTitle className="text-xl font-outfit">
                         {currentMentor ? `Matched with ${currentMentor.name}` : "Waiting for Match"}
                     </CardTitle>
@@ -97,7 +97,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
                         <Sparkles className="w-5 h-5 text-amber-500" />
                         <h2 className="text-2xl font-bold font-outfit">AI Matching Engine</h2>
                     </div>
-                    <Badge variant="outline" className="font-mono text-eyebrow">
+                    <Badge variant="outline" className="text-eyebrow">
                         Vector Semantic Search
                     </Badge>
                 </div>
@@ -150,7 +150,7 @@ export default function AdminMatchingDashboard({ menteeId, menteeName, currentMe
                                             <div className="text-4xl font-black text-primary font-outfit leading-none mb-1">
                                                 {mentor.matchPercentage}%
                                             </div>
-                                            <p className="text-eyebrow tracking-widest text-muted-foreground font-bold font-mono">
+                                            <p className="text-eyebrow text-muted-foreground font-bold">
                                                 Confidence Score
                                             </p>
                                         </div>

@@ -84,13 +84,13 @@ export default function NotificationBell() {
                 <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-xl z-50 overflow-hidden">
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
-                        <span className="font-mono text-xs font-bold uppercase tracking-widest text-foreground">
+                        <span className="text-xs font-bold text-foreground">
                             Notifications
                         </span>
                         {unreadCount > 0 && (
                             <button
                                 onClick={handleMarkAllRead}
-                                className="text-xs text-primary hover:underline font-mono"
+                                className="text-xs text-primary hover:underline"
                             >
                                 Mark all read
                             </button>
@@ -100,7 +100,7 @@ export default function NotificationBell() {
                     {/* List */}
                     <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
                         {notifications.length === 0 ? (
-                            <div className="px-4 py-8 text-center text-sm text-muted-foreground font-mono">
+                            <div className="px-4 py-8 text-center text-sm text-muted-foreground">
                                 No new notifications
                             </div>
                         ) : (
@@ -112,7 +112,7 @@ export default function NotificationBell() {
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-bold text-foreground truncate">{n.title}</p>
                                         <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.body}</p>
-                                        <p className="text-label font-mono text-muted-foreground mt-1">
+                                        <p className="text-label text-muted-foreground mt-1">
                                             {new Date(n.createdAt).toLocaleDateString()}
                                         </p>
                                     </div>

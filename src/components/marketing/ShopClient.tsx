@@ -119,7 +119,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                             placeholder="Search gear, apparel, or assets..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-md py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:font-mono placeholder:text-label placeholder:uppercase placeholder:tracking-widest focus:outline-none focus:border-primary transition-all font-sans"
+                            className="w-full bg-white/10 border border-white/20 backdrop-blur-sm rounded-md py-5 pl-14 pr-8 text-white placeholder:text-white/40 placeholder:placeholder:text-label placeholder:placeholder:focus:outline-none focus:border-primary transition-all font-sans"
                         />
                     </div>
                 </PageHero>
@@ -129,13 +129,13 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                     <div className="space-y-16">
                         {/* Category Selection */}
                         <div className="flex flex-col gap-6">
-                            <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--foreground-subtle)] font-bold">Collections</span>
+                            <span className="text-eyebrow text-[var(--foreground-subtle)] font-bold">Collections</span>
                             <div className="flex border-b border-border overflow-x-auto hide-scrollbar">
                                 {categories.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
-                                        className={`px-8 py-5 text-label font-bold tracking-[0.3em] whitespace-nowrap transition-all relative group ${selectedCategory === cat
+                                        className={`px-8 py-5 text-label font-bold whitespace-nowrap transition-all relative group ${selectedCategory === cat
                                             ? "text-[var(--brand-green)]"
                                             : "text-[var(--foreground-subtle)] hover:text-black"
                                             }`}
@@ -163,23 +163,23 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                                     />
                                                 ) : (
-                                                    <div className="w-full h-full flex items-center justify-center bg-black/5 italic font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)]">
+                                                    <div className="w-full h-full flex items-center justify-center bg-black/5 italic text-eyebrow text-[var(--foreground-subtle)]">
                                                         No Product Visual
                                                     </div>
                                                 )}
                                                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                                                     {product.stockCount === 0 && (
-                                                        <span className="px-2 py-1 bg-black text-white font-mono text-eyebrow tracking-widest font-bold rounded-md">
+                                                        <span className="px-2 py-1 bg-black text-white text-eyebrow font-bold rounded-md">
                                                             OUT OF STOCK
                                                         </span>
                                                     )}
                                                     {product.stockCount > 0 && product.stockCount <= 5 && (
-                                                        <span className="px-2 py-1 bg-[var(--brand-red)] text-white font-mono text-eyebrow tracking-widest font-bold rounded-md">
+                                                        <span className="px-2 py-1 bg-[var(--brand-red)] text-white text-eyebrow font-bold rounded-md">
                                                             ONLY {product.stockCount} LEFT
                                                         </span>
                                                     )}
                                                     {product.discountPrice && (
-                                                        <span className="px-2 py-1 bg-[var(--brand-green)] text-white font-mono text-eyebrow tracking-widest font-bold rounded-md">
+                                                        <span className="px-2 py-1 bg-[var(--brand-green)] text-white text-eyebrow font-bold rounded-md">
                                                             OFFER
                                                         </span>
                                                     )}
@@ -189,7 +189,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                             {/* Content Area */}
                                             <div className="p-8 flex-1 flex flex-col space-y-4 bg-white">
                                                 <div className="space-y-2 flex-1">
-                                                    <span className="font-mono text-label font-bold uppercase tracking-[0.3em] text-[var(--brand-green)]">
+                                                    <span className="text-label font-bold text-[var(--brand-green)]">
                                                         {product.category || "General"}
                                                     </span>
                                                     <h3 className="text-headline text-foreground leading-tight group-hover:text-[var(--brand-green)] transition-colors duration-500">
@@ -204,7 +204,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                             {product.price?.toLocaleString() || 0}
                                                         </span>
                                                         {product.discountPrice && (
-                                                            <span className="text-[var(--foreground-subtle)] line-through text-xs mb-1 font-mono">
+                                                            <span className="text-[var(--foreground-subtle)] line-through text-xs mb-1">
                                                                 {product.discountPrice.toLocaleString()}
                                                             </span>
                                                         )}
@@ -213,7 +213,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                                     <button
                                                         onClick={() => handleAddToCart(product)}
                                                         disabled={product.stockCount === 0}
-                                                        className={`w-full h-12 flex items-center justify-center gap-3 font-mono text-eyebrow tracking-widest font-bold transition-all rounded-md shadow-sm ${product.stockCount === 0
+                                                        className={`w-full h-12 flex items-center justify-center gap-3 text-eyebrow font-bold transition-all rounded-md shadow-sm ${product.stockCount === 0
                                                             ? "bg-[var(--surface-1)] text-[var(--foreground-subtle)] cursor-not-allowed"
                                                             : "bg-black text-white hover:bg-[var(--brand-green)]"
                                                             }`}
@@ -235,7 +235,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                     </div>
                                     <button
                                         onClick={() => { setSearch(""); setSelectedCategory("All"); }}
-                                        className="px-10 py-4 border border-border text-black font-mono text-eyebrow tracking-widest hover:bg-black hover:text-white transition-all rounded-md shadow-xl"
+                                        className="px-10 py-4 border border-border text-black text-eyebrow hover:bg-black hover:text-white transition-all rounded-md shadow-xl"
                                     >
                                         RESET EXPLORATION
                                     </button>
@@ -279,8 +279,8 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                             <p className="text-label text-[var(--foreground-subtle)] mt-1">Qty: {item.quantity}</p>
                                         </div>
                                         <div className="flex flex-col items-end justify-between shrink-0">
-                                            <span className="font-mono font-bold text-sm">KES {(item.product.price * item.quantity).toLocaleString()}</span>
-                                            <button onClick={() => removeFromCart(item.product._id)} className="text-[var(--brand-red)] text-xs font-bold uppercase tracking-widest hover:underline">Remove</button>
+                                            <span className="font-bold text-sm">KES {(item.product.price * item.quantity).toLocaleString()}</span>
+                                            <button onClick={() => removeFromCart(item.product._id)} className="text-[var(--brand-red)] text-xs font-bold hover:underline">Remove</button>
                                         </div>
                                     </div>
                                 ))
@@ -296,7 +296,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
 
                                 {!session?.user && (
                                     <div className="space-y-2">
-                                        <label className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] font-bold">Your Email</label>
+                                        <label className="text-eyebrow text-[var(--foreground-subtle)] font-bold">Your Email</label>
                                         <input
                                             placeholder="your@email.com"
                                             type="email"
@@ -310,7 +310,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                 <button
                                     onClick={handleCheckout}
                                     disabled={isProcessing}
-                                    className="w-full bg-black text-white font-mono uppercase tracking-widest h-14 hover:bg-[var(--brand-green)] transition-all rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full bg-black text-white h-14 hover:bg-[var(--brand-green)] transition-all rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isProcessing ? "PROCESSING..." : "CHECKOUT WITH PAYSTACK"}
                                 </button>
@@ -345,18 +345,18 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                         <div className="bg-[var(--brand-green)] p-8 text-white text-center space-y-3">
                             <CheckCircle className="mx-auto" size={48} strokeWidth={1.5} />
                             <h2 className="text-display-md">Order confirmed!</h2>
-                            <p className="font-mono text-eyebrow tracking-widest opacity-80">Thank you for supporting the Jenga365 Impact Fund</p>
+                            <p className="text-eyebrow opacity-80">Thank you for supporting the Jenga365 Impact Fund</p>
                         </div>
 
                         {/* Body */}
                         <div className="p-8 space-y-6">
                             <div className="flex items-center justify-between py-4 border-b border-border">
-                                <span className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] font-bold">Reference</span>
-                                <span className="font-mono font-bold text-sm text-black tracking-wider">{orderConfirmation.reference}</span>
+                                <span className="text-eyebrow text-[var(--foreground-subtle)] font-bold">Reference</span>
+                                <span className="font-bold text-sm text-black">{orderConfirmation.reference}</span>
                             </div>
 
                             <div className="space-y-3">
-                                <span className="font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)] font-bold block">Items Ordered</span>
+                                <span className="text-eyebrow text-[var(--foreground-subtle)] font-bold block">Items Ordered</span>
                                 {orderConfirmation.items.map((item, i) => (
                                     <div key={i} className="flex items-center justify-between gap-4">
                                         <div className="flex items-center gap-3 min-w-0">
@@ -364,7 +364,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                                             <span className="font-sans text-sm text-black truncate">{item.title}</span>
                                             <span className="text-[var(--foreground-subtle)] text-xs shrink-0">×{item.quantity}</span>
                                         </div>
-                                        <span className="font-mono text-sm font-bold shrink-0">KES {(item.price * item.quantity).toLocaleString()}</span>
+                                        <span className="text-sm font-bold shrink-0">KES {(item.price * item.quantity).toLocaleString()}</span>
                                     </div>
                                 ))}
                             </div>
@@ -380,7 +380,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
 
                             <button
                                 onClick={() => setOrderConfirmation(null)}
-                                className="w-full h-12 bg-black text-white font-mono text-eyebrow tracking-widest hover:bg-[var(--brand-green)] transition-all rounded-md flex items-center justify-center gap-2"
+                                className="w-full h-12 bg-black text-white text-eyebrow hover:bg-[var(--brand-green)] transition-all rounded-md flex items-center justify-center gap-2"
                             >
                                 <X size={14} />
                                 Continue Shopping

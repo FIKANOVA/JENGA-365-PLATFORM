@@ -34,7 +34,7 @@ export default function RegistrationStepper({ currentStep, totalSteps, labels }:
                                     }`}
                             />
                             {labels && labels[i] && (
-                                <span className={`absolute top-8 whitespace-nowrap font-mono text-label font-black tracking-[0.4em] uppercase transition-all duration-500 ${isActive ? "text-primary" : "text-muted-foreground/30"
+                                <span className={`absolute top-8 whitespace-nowrap text-label font-black transition-all duration-500 ${isActive ? "text-primary" : "text-muted-foreground/30"
                                     }`}>
                                     {labels[i]}
                                 </span>

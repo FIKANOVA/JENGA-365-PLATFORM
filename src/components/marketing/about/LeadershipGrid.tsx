@@ -23,10 +23,10 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
             <section className="py-16 md:py-32 bg-[var(--surface-1)]">
                 <div className="max-w-7xl mx-auto px-6 md:px-12">
                     <div className="mb-12 space-y-4">
-                        <span className="font-mono text-eyebrow tracking-[0.6em] text-[var(--brand-green)] block font-bold">
+                        <span className="text-eyebrow text-[var(--brand-green)] block font-bold">
                             The People
                         </span>
-                        <h2 className="font-serif font-bold text-5xl md:text-6xl text-black uppercase tracking-tighter">
+                        <h2 className="font-bold text-display-lg text-foreground">
                             Architects of Change
                         </h2>
                     </div>
@@ -42,10 +42,10 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
         <section className="py-16 md:py-32 bg-[var(--surface-1)]">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
                 <div className="mb-24 space-y-4">
-                    <span className="font-mono text-eyebrow tracking-[0.6em] text-[var(--brand-green)] block font-bold">
+                    <span className="text-eyebrow text-[var(--brand-green)] block font-bold">
                         The People
                     </span>
-                    <h2 className="font-serif font-bold text-5xl md:text-6xl text-black uppercase tracking-tighter">
+                    <h2 className="font-bold text-display-lg text-foreground">
                         Architects of Change
                     </h2>
                     <p className="font-light text-lg text-[var(--foreground-muted)] leading-relaxed max-w-2xl">
@@ -75,11 +75,11 @@ export default function LeadershipGrid({ team = [] }: LeadershipGridProps) {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <h3 className="font-serif font-bold text-3xl text-black uppercase tracking-tight group-hover:text-[var(--brand-green)] transition-colors duration-500">
+                                    <h3 className="font-bold text-display-sm text-foreground group-hover:text-[var(--brand-green)] transition-colors duration-500">
                                         {member.name}
                                     </h3>
                                     <div className="h-px w-12 bg-[var(--brand-green)] group-hover:bg-[var(--brand-red)] transition-colors duration-500 mb-4" />
-                                    <span className="font-mono text-eyebrow tracking-[0.3em] text-[var(--brand-green)] font-bold block">
+                                    <span className="text-eyebrow text-[var(--brand-green)] font-bold block">
                                         {member.role}
                                     </span>
                                 </div>
