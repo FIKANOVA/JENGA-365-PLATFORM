@@ -247,46 +247,38 @@
    ─────────────────────────────────────────────────────────────────────────── */
 @layer utilities {
   .text-display-xl {
-    font-size: 3rem;
-    @media (min-width: 768px) {
-    }
-    font-size: 3rem;
-    @media (min-width: 768px) {
-
-    }
-
-    line-height: 1.05;
+    font-size: 2.5rem;
     line-height: 1.1;
     font-weight: 700;
     letter-spacing: -0.025em;
   }
   @media (min-width: 768px) {
     .text-display-xl {
-      font-size: 4.5rem;
+      font-size: 4rem;
       line-height: 1.05;
     }
   }
   .text-display-lg {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     line-height: 1.1;
     font-weight: 700;
     letter-spacing: -0.022em;
   }
   @media (min-width: 768px) {
     .text-display-lg {
-      font-size: 3.5rem;
+      font-size: 3rem;
       line-height: 1.08;
     }
   }
   .text-display-md {
-    font-size: 2.25rem;
+    font-size: 1.875rem;
     line-height: 1.15;
     font-weight: 700;
     letter-spacing: -0.02em;
   }
   @media (min-width: 768px) {
     .text-display-md {
-      font-size: 2.75rem;
+      font-size: 2.5rem;
       line-height: 1.1;
     }
   }

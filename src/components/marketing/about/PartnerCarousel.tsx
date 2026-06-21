@@ -21,8 +21,8 @@ export default function PartnerCarousel({ partners = [] }: PartnerCarouselProps)
     }
 
     return (
-        <section className="py-12 md:py-24 bg-background overflow-hidden border-b border-border">
-            <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
+        <section className="py-8 md:py-16 bg-background overflow-hidden border-b border-border">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 mb-10">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-border pb-10">
                     <div className="space-y-3">
                         <span className="text-eyebrow text-foreground-muted block text-center md:text-left">
