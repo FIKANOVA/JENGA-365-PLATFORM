@@ -20,8 +20,8 @@ export default async function TermsPage() {
         return (
             <main className="flex-1 bg-background">
                 <PageHero
-                    title="Terms of Service"
-                    subtitle="Placeholder for Terms of Service. Please add this page in Sanity Studio with the slug 'terms'."
+                    heading="Terms of Service"
+                    description="Placeholder for Terms of Service. Please add this page in Sanity Studio with the slug 'terms'."
                 />
             </main>
         );
@@ -30,8 +30,8 @@ export default async function TermsPage() {
     return (
         <main className="flex-1 bg-background">
             <PageHero
-                title={page.title}
-                subtitle={`Last updated: ${new Date(page.lastUpdated).toLocaleDateString()}`}
+                heading={page.title}
+                description={`Last updated: ${new Date(page.lastUpdated).toLocaleDateString()}`}
             />
             <section className="py-16 md:py-24">
                 <div className="max-w-3xl mx-auto px-6 lg:px-8 prose prose-invert">
