@@ -16,6 +16,7 @@ interface PageHeroProps {
     bgImage?: string; // fallback for string urls
     bgFallback?: string; // legacy support to prevent build errors
     overlayOpacity?: number; // legacy support to prevent build errors
+    minHeight?: string; // legacy support to prevent build errors
     children?: React.ReactNode;
 }
 
