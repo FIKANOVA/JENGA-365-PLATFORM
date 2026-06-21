@@ -17,9 +17,19 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
     const isAuthenticated = !!session?.user;
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {events.map((event) => {
                 const isRegistered = registeredEventIds.includes(event._id);
+
+                if (event.lumaEventIframe) {
+                    return (
+                        <div 
+                            key={event._id}
+                            className="flex justify-center"
+                            dangerouslySetInnerHTML={{ __html: event.lumaEventIframe }}
+                        />
+                    );
+                }
 
                 return (
                     <div 

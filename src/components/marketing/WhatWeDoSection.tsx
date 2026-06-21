@@ -13,14 +13,14 @@ import { motion } from "framer-motion";
  */
 export default function WhatWeDoSection() {
   return (
-    <section className="bg-[color:var(--surface-1)] py-12 md:py-24">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section className="bg-[color:var(--surface-1)] min-h-[100svh] flex flex-col justify-center py-16">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="max-w-2xl mb-16"
+          className="max-w-2xl mb-10 md:mb-14"
         >
           <span
             className="text-eyebrow"
@@ -103,7 +103,7 @@ function EngineCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, delay }}
-      className={`group rounded-3xl border p-6 md:p-8 lg:p-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden flex flex-col ${
+      className={`group rounded-3xl border p-6 md:p-8 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden flex flex-col ${
         accent ? "bg-brand-green-soft/30 border-brand-green/20" : "bg-background border-border"
       }`}
     >

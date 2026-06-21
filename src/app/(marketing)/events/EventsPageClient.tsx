@@ -14,11 +14,12 @@ interface Event {
     isOnline: boolean;
     image?: string;
     description?: string;
+    lumaEventIframe?: string;
 }
 
 const EVENT_TYPES = ["ALL", "WEBINAR", "WORKSHOP", "CONFERENCE", "MEETUP"];
 
-export default function EventsPageClient({ initialEvents }: { initialEvents: Event[] }) {
+export default function EventsPageClient({ initialEvents, lumaCalendarIframe }: { initialEvents: Event[]; lumaCalendarIframe?: string }) {
     const [activeCategory, setActiveCategory] = useState("ALL");
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -77,6 +78,16 @@ export default function EventsPageClient({ initialEvents }: { initialEvents: Eve
                                 ))}
                             </div>
                         </div>
+
+                        {/* Luma Calendar */}
+                        {lumaCalendarIframe && (
+                            <div className="w-full flex justify-center mb-16">
+                                <div 
+                                    className="w-full max-w-4xl overflow-hidden rounded-md border border-border/50"
+                                    dangerouslySetInnerHTML={{ __html: lumaCalendarIframe }}
+                                />
+                            </div>
+                        )}
 
                         {/* Events Grid */}
                         <div className="min-h-[600px]">

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Linkedin, Mail, Globe, ArrowRight } from "lucide-react";
+import { Linkedin, Mail, Globe, ArrowRight, Instagram, Twitter } from "lucide-react";
 import Logo from "@/components/shared/Logo";
 
 // Footer nav carries only wayfinding links. Donate / Store / Join are global
@@ -36,9 +36,10 @@ const footerNav = [
 ];
 
 const socials = [
-    { icon: Linkedin, href: "https://linkedin.com/company/jenga365", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/jenga-ccclxv/posts/?feedView=all", label: "LinkedIn" },
+    { icon: Instagram, href: "https://www.instagram.com/jengaccclxv/", label: "Instagram" },
+    { icon: Twitter, href: "https://x.com/jengaccclxv", label: "X" },
     { icon: Mail, href: "mailto:hello@jenga365.com", label: "Email" },
-    { icon: Globe, href: "https://jenga365.com", label: "Website" },
 ];
 
 export default function Footer() {

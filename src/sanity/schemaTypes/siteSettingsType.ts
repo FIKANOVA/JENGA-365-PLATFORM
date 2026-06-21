@@ -93,6 +93,27 @@ export const siteSettingsType = defineType({
             description: "Specific OG image for /about (overrides the default).",
             options: { hotspot: true },
         }),
+        defineField({
+            name: "sweatEquityImage",
+            title: "Sweat Equity Background Image",
+            type: "image",
+            group: "media",
+            description: "Background image for the Sweat Equity section on the homepage.",
+            options: { hotspot: true },
+            fields: [
+                defineField({
+                    name: "alt",
+                    title: "Alt text",
+                    type: "string",
+                    validation: (Rule) =>
+                        Rule.custom((alt, ctx) => {
+                            const parent = ctx.parent as { asset?: unknown } | undefined;
+                            if (parent?.asset && !alt) return "Alt text is required when an image is set";
+                            return true;
+                        }),
+                }),
+            ],
+        }),
 
         // ── Homepage ─────────────────────────────────────────────────────────
         defineField({
@@ -126,6 +147,14 @@ export const siteSettingsType = defineType({
             type: "string",
             group: "homepage",
             description: "Shown above the featured video. Defaults to 'See it in motion'.",
+        }),
+        defineField({
+            name: "lumaCalendarIframe",
+            title: "Luma Calendar Iframe (Events Page)",
+            type: "text",
+            group: "homepage",
+            description: "The complete iframe code provided by Luma for the events calendar. E.g. <iframe src='...'></iframe>",
+            rows: 4,
         }),
 
         // ── Impact page ──────────────────────────────────────────────────────

@@ -39,7 +39,7 @@ export default async function MentorsPage() {
         <div className="flex flex-col bg-background">
             <PageHero
                 eyebrow="The Guide"
-                heading={<>Become a mentor.</>}
+                heading={<>{isAuthenticated ? "The Mentor Network." : "Become a mentor."}</>}
                 description="Share your expertise. Shape the next generation. Jenga365 mentors are the backbone of a movement building Total Athletes and purposeful leaders across Kenya."
             >
                 <div className="flex flex-wrap items-center gap-3">

@@ -67,11 +67,12 @@ function isMinimalRoute(pathname: string | null): boolean {
 }
 
 // ── Outer shell ──────────────────────────────────────────────────────────────
-function Shell({ scrolled, light, children, drawer }: { scrolled: boolean; light: boolean; children: React.ReactNode; drawer?: React.ReactNode }) {
+function Shell({ scrolled, hideHeader, light, children, drawer }: { scrolled: boolean; hideHeader: boolean; light: boolean; children: React.ReactNode; drawer?: React.ReactNode }) {
     return (
         <header
             className={cn(
-                "sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter] duration-200",
+                "sticky top-0 z-50 w-full transition-all duration-300",
+                hideHeader ? "-translate-y-full" : "translate-y-0",
                 light
                     ? "bg-transparent border-b border-transparent"
                     : scrolled
@@ -159,7 +160,7 @@ function NavDropdown({ group, light, onItemClick }: { group: NavGroup; light: bo
             {open && (
                 <div
                     role="menu"
-                    className="absolute left-0 mt-2 w-72 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden z-50"
+                    className="absolute left-0 mt-2 w-72 rounded-lg border border-white/10 bg-[color:var(--brand-black)]/90 backdrop-blur-xl backdrop-saturate-150 shadow-2xl overflow-hidden z-50"
                 >
                     <ul className="py-2">
                         {group.items.map((item) => (
@@ -185,12 +186,12 @@ function NavDropdown({ group, light, onItemClick }: { group: NavGroup; light: bo
                                         role="menuitem"
                                         onClick={close}
                                         {...(item.newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                        className="flex items-start gap-3 px-4 py-3 hover:bg-surface-2"
+                                        className="flex items-start gap-3 px-4 py-3 hover:bg-white/5"
                                     >
                                         <span className="flex flex-col">
-                                            <span className="text-label font-medium text-foreground">{item.label}</span>
+                                            <span className="text-label font-medium text-white">{item.label}</span>
                                             {item.description && (
-                                                <span className="text-body-sm text-foreground-muted">{item.description}</span>
+                                                <span className="text-body-sm text-white/60">{item.description}</span>
                                             )}
                                         </span>
                                     </Link>
@@ -252,10 +253,11 @@ function GlobalCTAs({ light }: { light: boolean }) {
 }
 
 // ── Variant 1: Public ────────────────────────────────────────────────────────
-function PublicHeader({ scrolled, light, mobileOpen, setMobileOpen }: { scrolled: boolean; light: boolean; mobileOpen: boolean; setMobileOpen: (v: boolean) => void }) {
+function PublicHeader({ scrolled, hideHeader, light, mobileOpen, setMobileOpen }: { scrolled: boolean; hideHeader: boolean; light: boolean; mobileOpen: boolean; setMobileOpen: (v: boolean) => void }) {
     return (
         <Shell
             scrolled={scrolled}
+            hideHeader={hideHeader}
             light={light}
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={false} onClose={() => setMobileOpen(false)} /> : null}
         >
@@ -340,10 +342,10 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
             {open && (
                 <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-64 rounded-lg border border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 shadow-xl overflow-hidden"
+                    className="absolute right-0 mt-2 w-64 rounded-lg border border-white/10 bg-[color:var(--brand-black)]/90 backdrop-blur-xl backdrop-saturate-150 shadow-2xl overflow-hidden"
                 >
-                    <div className="px-4 py-3 border-b border-border/60 bg-surface-1/60">
-                        <p className="text-label font-semibold text-foreground truncate">{name}</p>
+                    <div className="px-4 py-3 border-b border-white/10 bg-white/5">
+                        <p className="text-label font-semibold text-white truncate">{name}</p>
                         <div className="mt-1.5">
                             <RoleBadge role={role} />
                         </div>
@@ -356,7 +358,7 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
                                 rel="noopener noreferrer"
                                 role="menuitem"
                                 onClick={() => setOpen(false)}
-                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-surface-2 text-foreground"
+                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-white/10 text-white"
                             >
                                 <LayoutDashboard className="h-4 w-4" aria-hidden />
                                 My Dashboard
@@ -367,7 +369,7 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
                                 href="/dashboard/settings"
                                 role="menuitem"
                                 onClick={() => setOpen(false)}
-                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-surface-2 text-foreground"
+                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-white/10 text-white"
                             >
                                 <Settings className="h-4 w-4" aria-hidden />
                                 Settings
@@ -378,13 +380,13 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
                                 href="/help"
                                 role="menuitem"
                                 onClick={() => setOpen(false)}
-                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-surface-2 text-foreground"
+                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-white/10 text-white"
                             >
                                 <LifeBuoy className="h-4 w-4" aria-hidden />
                                 Help Center
                             </Link>
                         </li>
-                        <li className="border-t border-border my-1" aria-hidden />
+                        <li className="border-t border-white/10 my-1" aria-hidden />
                         <li>
                             <button
                                 type="button"
@@ -393,7 +395,7 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
                                     setOpen(false);
                                     handleSignOut();
                                 }}
-                                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-surface-2 text-foreground"
+                                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-white/10 text-white"
                             >
                                 <LogOut className="h-4 w-4" aria-hidden />
                                 Log Out
@@ -410,12 +412,14 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
 function AuthenticatedHeader({
     user,
     scrolled,
+    hideHeader,
     light,
     mobileOpen,
     setMobileOpen,
 }: {
     user: { name?: string | null; image?: string | null; role?: string | null };
     scrolled: boolean;
+    hideHeader: boolean;
     light: boolean;
     mobileOpen: boolean;
     setMobileOpen: (v: boolean) => void;
@@ -424,6 +428,7 @@ function AuthenticatedHeader({
     return (
         <Shell
             scrolled={scrolled}
+            hideHeader={hideHeader}
             light={light}
             drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} onClose={() => setMobileOpen(false)} /> : null}
         >
@@ -553,14 +558,26 @@ export default function Header() {
     const pathname = usePathname();
     const isAuthenticated = !!session?.user;
     const [scrolled, setScrolled] = useState(false);
+    const [hideHeader, setHideHeader] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const lastScrollY = useRef(0);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 8);
+        const onScroll = () => {
+            const currentScrollY = window.scrollY;
+            setScrolled(currentScrollY > 8);
+
+            if (currentScrollY > lastScrollY.current && currentScrollY > 100 && !mobileOpen) {
+                setHideHeader(true);
+            } else {
+                setHideHeader(false);
+            }
+            lastScrollY.current = currentScrollY;
+        };
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
-    }, []);
+    }, [mobileOpen]);
 
     useEffect(() => {
         if (mobileOpen) document.body.style.overflow = "hidden";
@@ -583,7 +600,7 @@ export default function Header() {
     // Loading: render Shell with just the logo to avoid CTA flash
     if (isPending) {
         return (
-            <Shell scrolled={scrolled} light={light}>
+            <Shell scrolled={scrolled} hideHeader={false} light={light}>
                 <Logo size="md" tone={light ? "light" : "default"} />
                 <div className="h-9 w-24 rounded-md bg-surface-2 animate-pulse" aria-hidden />
             </Shell>
@@ -598,11 +615,12 @@ export default function Header() {
                 role: (session.user as { role?: string | null }).role ?? null,
             }}
             scrolled={scrolled}
+            hideHeader={hideHeader}
             light={light}
             mobileOpen={mobileOpen}
             setMobileOpen={setMobileOpen}
         />
     ) : (
-        <PublicHeader scrolled={scrolled} light={light} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <PublicHeader scrolled={scrolled} hideHeader={hideHeader} light={light} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
     );
 }

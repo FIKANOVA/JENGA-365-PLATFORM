@@ -8,8 +8,10 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   authImage { asset->{ _id, url }, alt, hotspot, crop },
   openGraphImage { asset->{ _id, url }, hotspot, crop },
   aboutOpenGraphImage { asset->{ _id, url }, hotspot, crop },
+  sweatEquityImage { asset->{ _id, url }, hotspot, crop },
   landingHero,
   featuredVideoHeading,
+  lumaCalendarIframe,
   featuredVideo->{
     _id,
     title,
@@ -115,7 +117,8 @@ export const eventsQuery = groq`*[_type == "event" && date >= now()] | order(dat
   capacity,
   "image": mainImage.asset->url,
   "galleryCount": count(gallery),
-  description
+  description,
+  lumaEventIframe
 }`;
 
 export async function fetchEvents() {
@@ -160,7 +163,7 @@ export async function fetchEventBySanityId(sanityDocId: string) {
 export const partnersQuery = groq`*[_type == "partner"] {
   _id,
   name,
-  logo,
+  logo { asset->{ _id, url } },
   website,
   tier
 }`;
@@ -307,5 +310,23 @@ export async function fetchVoices() {
         return await client.fetch(voicesQuery);
     } catch {
         return [];
+    }
+}
+
+// ── Legal Pages ──────────────────────────────────────────────
+export const legalPageBySlugQuery = groq`*[_type == "legalPage" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  lastUpdated,
+  body
+}`;
+
+export async function fetchLegalPageBySlug(slug: string) {
+    if (!slug) return null;
+    try {
+        return await client.fetch(legalPageBySlugQuery, { slug });
+    } catch {
+        return null;
     }
 }

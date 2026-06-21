@@ -14,6 +14,7 @@ interface JenEvent {
     isOnline?: boolean;
     description?: string;
     image?: string;
+    lumaEventIframe?: string;
 }
 
 const FALLBACK_EVENTS: JenEvent[] = [
@@ -25,6 +26,7 @@ const FALLBACK_EVENTS: JenEvent[] = [
         location: "KICC, Nairobi",
         isOnline: false,
         description: "Our flagship annual summit bringing together mentors, athletes, and corporate partners.",
+        lumaEventIframe: `<iframe src="https://luma.com/embed/event/evt-gWucjduFnvtUQxC/simple" width="100%" height="450" frameborder="0" style="border: 1px solid #bfcbda88; border-radius: 4px;" allow="fullscreen; payment" aria-hidden="false" tabindex="0"></iframe>`,
     },
     {
         _id: "e2",
@@ -34,6 +36,7 @@ const FALLBACK_EVENTS: JenEvent[] = [
         location: "Online (Zoom)",
         isOnline: true,
         description: "A practical 3-hour workshop on budgeting, savings, and investment basics.",
+        lumaEventIframe: `<iframe src="https://luma.com/embed/event/evt-mJGYNTh3mcAb1Sr/simple" width="100%" height="450" frameborder="0" style="border: 1px solid #bfcbda88; border-radius: 4px;" allow="fullscreen; payment" aria-hidden="false" tabindex="0"></iframe>`,
     },
     {
         _id: "e3",
@@ -43,6 +46,7 @@ const FALLBACK_EVENTS: JenEvent[] = [
         location: "Strathmore University, Nairobi",
         isOnline: false,
         description: "Meet potential mentors face-to-face and begin your Jenga365 mentorship journey.",
+        lumaEventIframe: `<iframe src="https://luma.com/embed/event/evt-rG1pmkgKCFHduI5/simple" width="100%" height="450" frameborder="0" style="border: 1px solid #bfcbda88; border-radius: 4px;" allow="fullscreen; payment" aria-hidden="false" tabindex="0"></iframe>`,
     },
 ];
 
@@ -57,8 +61,8 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
     const displayEvents = (events && events.length > 0 ? events : FALLBACK_EVENTS).slice(0, 3);
 
     return (
-        <section className="bg-background" style={{ background: "var(--surface-1)" }}>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 md:py-32">
+        <section className="bg-background min-h-[100svh] flex flex-col justify-center py-16" style={{ background: "var(--surface-1)" }}>
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
@@ -76,15 +80,28 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                     </NextLink>
                 </div>
 
-                <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 pb-6 md:pb-0 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {displayEvents.map((event) => {
+                        // If there is a Luma iframe, render it directly and enforce width 100%
+                        if (event.lumaEventIframe) {
+                            const responsiveIframe = event.lumaEventIframe.replace(/width="[^"]+"/, 'width="100%"');
+                            return (
+                                <div 
+                                    key={event._id} 
+                                    className="w-full flex justify-center"
+                                    dangerouslySetInnerHTML={{ __html: responsiveIframe }}
+                                />
+                            );
+                        }
+
+                        // Fallback custom card if no Luma iframe is provided
                         const dateObj = new Date(event.date);
                         const day = format(dateObj, "dd");
                         const month = format(dateObj, "MMM").toUpperCase();
                         return (
                             <article
                                 key={event._id}
-                                className="group flex flex-col rounded-3xl border border-border bg-[color:var(--surface-1)] overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl min-w-[85vw] md:min-w-0 snap-center shrink-0"
+                                className="group flex flex-col rounded-3xl border border-border bg-[color:var(--surface-1)] overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl w-full"
                             >
                                 <div className="relative h-44 overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {event.image ? (

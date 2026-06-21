@@ -37,19 +37,23 @@ export default function AboutCTAStrip() {
 
                 <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
                     <DonateButton
-                        className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                        className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
                         style={{ background: "var(--brand-red)" }}
                     >
-                        <Heart className="h-4 w-4" aria-hidden />
-                        {isAuthenticated ? "Donate & Support" : "Donate Now"}
+                        <span className="truncate">{isAuthenticated ? "Donate & Support" : "Donate Now"}</span>
+                        <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                            <Heart className="h-4 w-4 text-black" aria-hidden />
+                        </span>
                     </DonateButton>
                     <Link
                         href={isAuthenticated ? "/dashboard" : "/register"}
-                        className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                        className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
                         style={{ background: "var(--brand-green)" }}
                     >
-                        {isAuthenticated ? "Go to Dashboard" : "Join Us Today"}
-                        <ArrowRight className="h-4 w-4" />
+                        <span className="truncate">{isAuthenticated ? "Go to Dashboard" : "Join Us Today"}</span>
+                        <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                            <ArrowRight className="h-4 w-4 text-black" />
+                        </span>
                     </Link>
                 </div>
             </div>

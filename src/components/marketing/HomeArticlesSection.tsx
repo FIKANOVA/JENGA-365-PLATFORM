@@ -52,8 +52,8 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
     const displayArticles = (articles && articles.length > 0 ? articles : FALLBACK_ARTICLES).slice(0, 3);
 
     return (
-        <section className="bg-background">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 md:py-24 md:py-32">
+        <section className="bg-background min-h-[100svh] flex flex-col justify-center py-16">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">
                         <span className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
@@ -139,7 +139,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
 
                 {/* Contributor CTA */}
                 <div
-                    className="mt-20 rounded-3xl border border-border p-8 md:p-12 flex flex-col md:flex-row items-center text-center md:text-left justify-between gap-6"
+                    className="mt-12 md:mt-16 rounded-3xl border border-border p-8 md:p-12 flex flex-col md:flex-row items-center text-center md:text-left justify-between gap-6"
                     style={{ background: "var(--surface-1)" }}
                 >
                     <div>
@@ -155,7 +155,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
                         className="group/btn w-full md:w-auto shrink-0 inline-flex items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
                         style={{ background: "var(--brand-black)" }}
                     >
-                        <span className="truncate">Become a contributor</span>
+                        <span className="truncate">{isAuthenticated ? "Contribute" : "Become a contributor"}</span>
                         <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
                             <ArrowRight className="h-4 w-4 text-black" />
                         </span>

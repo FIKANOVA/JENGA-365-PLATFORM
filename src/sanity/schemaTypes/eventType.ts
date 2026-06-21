@@ -53,6 +53,13 @@ export const eventType = defineType({
             validation: (Rule) => Rule.uri({ allowRelative: false, scheme: ["http", "https"] }),
         }),
         defineField({
+            name: "lumaEventIframe",
+            title: "Luma Event Iframe",
+            type: "text",
+            description: "The complete iframe code provided by Luma for this specific event.",
+            rows: 4,
+        }),
+        defineField({
             name: "organizer",
             title: "Organizer / Partner",
             type: "reference",

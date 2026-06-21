@@ -34,7 +34,7 @@ export default async function MenteesPage() {
         <div className="flex flex-col bg-background">
             <PageHero
                 eyebrow="The journey"
-                heading={<>Find your mentor.</>}
+                heading={<>{isAuthenticated ? "Your Mentorship Journey." : "Find your mentor."}</>}
                 description="Jenga365 connects ambitious young professionals and athletes with seasoned leaders who have walked the road before. Start your structured mentorship journey today."
             >
                 <div className="flex flex-wrap items-center gap-3">

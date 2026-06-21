@@ -27,28 +27,14 @@ export default function PartnerCarousel({ partners = [] }: PartnerCarouselProps)
 
     return (
         <section className="py-8 md:py-16 bg-background overflow-hidden border-b border-border">
-            <div className="max-w-7xl mx-auto px-6 md:px-12 mb-10">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-border pb-10">
-                    <div className="space-y-3">
-                        <span className="text-eyebrow text-foreground-muted block text-center md:text-left">
-                            Joint ventures
-                        </span>
-                        <h2 className="text-display-lg text-foreground text-center md:text-left">
-                            Strategic allies.
-                        </h2>
-                    </div>
-                    <p className="text-eyebrow text-foreground-muted text-center md:text-right max-w-[220px]">
-                        Architecting the Jenga365 ecosystem
-                    </p>
-                </div>
-            </div>
 
             <div className="relative group">
                 <div className="flex animate-scroll hover:pause whitespace-nowrap">
                     {[...displayPartners, ...displayPartners, ...displayPartners].map((partner, i) => {
-                        const logoUrl = partner.logo?.asset?.url?.startsWith("http")
-                            ? partner.logo.asset.url
-                            : urlFor(partner.logo).height(160).fit("max").auto("format").url();
+                        const isSanityImage = !!partner.logo?.asset?._id;
+                        const logoUrl = isSanityImage
+                            ? urlFor(partner.logo).height(160).fit("max").auto("format").url()
+                            : partner.logo?.asset?.url;
                         const inner = (
                             <img
                                 src={logoUrl}

@@ -1,5 +1,10 @@
 import Link from "next/link";
 import { ShieldCheck, Leaf, AlertTriangle, ArrowRight } from "lucide-react";
+import { useSession } from "@/lib/auth/client";
+
+interface SweatEquityBandProps {
+    readonly bgImage?: string | null;
+}
 
 /**
  * Sweat Equity band — communicates the Give Back / Three Strikes protocol
@@ -7,16 +12,20 @@ import { ShieldCheck, Leaf, AlertTriangle, ArrowRight } from "lucide-react";
  *
  * Transformed into a dark band for visual contrast and attention capture.
  */
-export default function SweatEquityBand() {
+export default function SweatEquityBand({ bgImage }: SweatEquityBandProps) {
+    const { data: session } = useSession();
+    const isAuthenticated = !!session?.user;
+
     return (
         <section
             id="sweat-equity"
-            className="relative overflow-hidden py-12 md:py-24"
-            style={{ background: "var(--brand-black)" }}
+            className="relative overflow-hidden py-12 md:py-24 border-y border-border"
+            style={{ background: bgImage ? `url(${bgImage}) center/cover no-repeat` : "var(--brand-black)" }}
         >
+            <div className="absolute inset-0 bg-black/80 pointer-events-none" aria-hidden />
             <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row gap-16 items-center">
                     <div className="lg:w-1/2 max-w-2xl">
                         <span
@@ -39,13 +48,29 @@ export default function SweatEquityBand() {
                         </p>
 
                         <div className="mt-10">
-                            <Link
-                                href="/register/mentorship"
-                                className="inline-flex items-center justify-center h-12 px-6 rounded-md font-medium text-white transition-transform hover:-translate-y-0.5 hover:shadow-lg"
-                                style={{ background: "var(--brand-green)" }}
-                            >
-                                Accept and apply
-                            </Link>
+                            {isAuthenticated ? (
+                                <Link
+                                    href="/dashboard"
+                                    className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
+                                    style={{ background: "var(--brand-green)" }}
+                                >
+                                    <span className="truncate">Go to Dashboard</span>
+                                    <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                        <ArrowRight className="h-4 w-4 text-black" />
+                                    </span>
+                                </Link>
+                            ) : (
+                                <Link
+                                    href="/register/mentorship"
+                                    className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
+                                    style={{ background: "var(--brand-green)" }}
+                                >
+                                    <span className="truncate">Accept and apply</span>
+                                    <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                        <ArrowRight className="h-4 w-4 text-black" />
+                                    </span>
+                                </Link>
+                            )}
                         </div>
                     </div>
 

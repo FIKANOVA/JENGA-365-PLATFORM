@@ -14,6 +14,7 @@ import { siteSettingsType } from "./siteSettingsType";
 import { teamOfficialType } from "./teamOfficialType";
 import { helpTopicType } from "./helpTopicType";
 import { userManualType } from "./userManualType";
+import { legalPageType } from "./legalPageType";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
     types: [
@@ -32,5 +33,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
         voicesType,
         helpTopicType,
         userManualType,
+        legalPageType,
     ],
 };

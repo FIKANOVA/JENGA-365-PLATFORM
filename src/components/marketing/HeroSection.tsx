@@ -67,7 +67,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     return (
         <section
             className={`relative overflow-hidden bg-background flex flex-col justify-end ${
-                hasImage ? "min-h-[100svh] -mt-16" : "py-24 lg:py-32"
+                hasImage ? "min-h-[100svh] md:min-h-[calc(100svh-90px)] -mt-16" : "min-h-[100svh] md:min-h-[calc(100svh-90px)] -mt-16"
             }`}
         >
             {hasImage ? (

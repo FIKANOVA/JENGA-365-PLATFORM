@@ -71,7 +71,9 @@ export default async function HomePage() {
                 heading={settings?.featuredVideoHeading ?? null}
             />
             <ChoosePathSection />
-            <SweatEquityBand />
+            <SweatEquityBand 
+                bgImage={settings?.sweatEquityImage?.asset?.url ? urlFor(settings.sweatEquityImage).url() : null}
+            />
             <EventsSection events={events} />
             <HomeArticlesSection articles={articles} />
             <FinalCTAStrip />

@@ -1,4 +1,4 @@
-import { fetchEvents } from "@/lib/sanity/queries";
+import { fetchEvents, fetchSiteSettings } from "@/lib/sanity/queries";
 import EventsPageClient from "./EventsPageClient";
 
 export const metadata = {
@@ -11,6 +11,9 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function EventsPage() {
-    const events = await fetchEvents().catch(() => []);
-    return <EventsPageClient initialEvents={events} />;
+    const [events, settings] = await Promise.all([
+        fetchEvents().catch(() => []),
+        fetchSiteSettings()
+    ]);
+    return <EventsPageClient initialEvents={events} lumaCalendarIframe={settings?.lumaCalendarIframe} />;
 }

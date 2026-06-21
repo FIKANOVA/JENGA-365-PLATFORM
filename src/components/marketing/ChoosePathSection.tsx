@@ -106,7 +106,7 @@ export default function ChoosePathSection() {
     const activeData = PATHS.find((p) => p.id === activeTab)!;
 
     return (
-        <section className="bg-background border-y border-border py-12 md:py-24">
+        <section className="bg-background border-y border-border min-h-[100svh] flex flex-col justify-center py-16">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
                     <div className="lg:w-1/3 shrink-0">
@@ -166,14 +166,14 @@ export default function ChoosePathSection() {
 
                     <div className="lg:w-2/3 flex items-center">
                         <AnimatePresence mode="wait">
-                            <motion.div
-                                key={activeTab}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.3 }}
-                                className="w-full rounded-2xl border border-border bg-[color:var(--surface-1)] p-8 md:p-12 shadow-lg relative overflow-hidden"
-                            >
+                                <motion.div
+                                    key={activeTab}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="w-full rounded-2xl border border-border bg-[color:var(--surface-1)] p-6 md:p-8 shadow-lg relative overflow-hidden"
+                                >
 
 
                                 <header className="flex items-start gap-4 relative z-10">
