@@ -64,7 +64,6 @@ export default async function HomePage() {
                 heroImage={settings?.landingHeroImage ?? null}
                 copy={settings?.landingHero ?? null}
             />
-            <PartnerCarousel partners={partners} />
             <ImpactTicker stats={tickerStats} />
             <WhatWeDoSection />
             <FeaturedVideoSection

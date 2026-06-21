@@ -143,7 +143,7 @@ export default async function ImpactPage() {
                             {IMPACT_STATS.map(({ value, label, Icon }) => (
                                 <div
                                     key={label}
-                                    className="rounded-md border border-border bg-background p-6 transition-colors hover:bg-[color:var(--surface-1)]"
+                                    className="rounded-3xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-[color:var(--surface-1)]"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex items-start justify-between mb-4">
@@ -168,7 +168,7 @@ export default async function ImpactPage() {
                             {stories.map((story) => (
                                 <div
                                     key={story.name}
-                                    className="rounded-md border p-6 space-y-5"
+                                    className="rounded-3xl border p-6 space-y-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                                     style={{ borderColor: "rgba(255,255,255,0.10)" }}
                                 >
                                     <div className="h-px w-12" style={{ background: "var(--brand-green)" }} />
@@ -210,7 +210,7 @@ export default async function ImpactPage() {
                                 {ENVIRONMENTAL_STATS.map((stat) => (
                                     <div
                                         key={stat.label}
-                                        className="rounded-md border border-border bg-background p-5 flex items-start gap-6"
+                                        className="rounded-3xl border border-border bg-background p-5 flex items-start gap-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                                         style={{ boxShadow: "var(--shadow-sm)" }}
                                     >
                                         <span className="text-display-sm min-w-[80px]" style={{ color: "var(--brand-green)" }}>
@@ -236,17 +236,22 @@ export default async function ImpactPage() {
                         </p>
                         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
                             <DonateButton
-                                className="inline-flex h-12 items-center gap-2 rounded-md px-6 text-label font-medium text-white transition-opacity hover:opacity-90"
+                                className="group/btn inline-flex h-12 max-w-full items-center justify-between gap-3 rounded-full pl-5 sm:pl-6 pr-1.5 text-label font-medium text-white transition-all hover:opacity-90 shadow-lg"
                                 style={{ background: "var(--brand-red)" }}
                             >
-                                <Heart className="h-4 w-4" />
-                                Donate now
+                                <span className="truncate text-sm sm:text-base flex items-center gap-2"><Heart className="h-4 w-4" /> Donate now</span>
+                                <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                    <ArrowRight className="h-4 w-4 text-black" />
+                                </span>
                             </DonateButton>
                             <Link
                                 href="/about"
-                                className="inline-flex h-12 items-center gap-2 rounded-md border border-border bg-background px-6 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
+                                className="group/btn inline-flex h-12 max-w-full items-center justify-between gap-3 rounded-full border border-border bg-background pl-5 sm:pl-6 pr-1.5 text-label text-foreground transition-all hover:bg-[color:var(--surface-2)] hover:shadow-lg"
                             >
-                                Learn more
+                                <span className="truncate text-sm sm:text-base">Learn more</span>
+                                <span className="bg-foreground shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                    <ArrowRight className="h-4 w-4 text-background" />
+                                </span>
                             </Link>
                         </div>
                     </div>

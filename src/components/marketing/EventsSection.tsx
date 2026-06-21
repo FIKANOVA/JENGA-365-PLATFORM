@@ -84,7 +84,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                         return (
                             <article
                                 key={event._id}
-                                className="group flex flex-col rounded-md border border-border bg-[color:var(--surface-1)] overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-lg min-w-[85vw] md:min-w-0 snap-center shrink-0"
+                                className="group flex flex-col rounded-3xl border border-border bg-[color:var(--surface-1)] overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl min-w-[85vw] md:min-w-0 snap-center shrink-0"
                             >
                                 <div className="relative h-44 overflow-hidden" style={{ background: "var(--surface-2)" }}>
                                     {event.image ? (
@@ -100,7 +100,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                                         </div>
                                     )}
                                     <div
-                                        className="absolute top-3 left-3 rounded-md px-2.5 py-1.5 text-center shadow"
+                                        className="absolute top-3 left-3 rounded-2xl px-2.5 py-1.5 text-center shadow-md"
                                         style={{ background: "var(--background)" }}
                                     >
                                         <div className="text-headline leading-none" style={{ color: "var(--brand-green)" }}>{day}</div>
@@ -130,11 +130,13 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                                     )}
                                     <NextLink
                                         href={isAuthenticated ? `/dashboard/events/${event._id}` : "/register"}
-                                        className="mt-auto inline-flex items-center justify-center h-10 px-4 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                                        className="group/btn mt-auto inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all duration-300 hover:shadow-lg shadow-sm"
                                         style={{ background: "var(--brand-black)" }}
                                     >
-                                        Register
-                                        <ArrowRight className="h-4 w-4 ml-1.5" />
+                                        <span className="truncate">Register</span>
+                                        <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                            <ArrowRight className="h-4 w-4 text-black" />
+                                        </span>
                                     </NextLink>
                                 </div>
                             </article>
