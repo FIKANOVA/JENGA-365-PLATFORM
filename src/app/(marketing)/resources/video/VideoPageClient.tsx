@@ -89,7 +89,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                     <img
                                         src={featuredVideo.thumbnail}
                                         alt={featuredVideo.title}
-                                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700"
+                                        className="w-full h-full object-cover opacity-80 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700"
                                     />
                                 )}
                                 <div className="absolute inset-0 flex items-center justify-center">
@@ -118,7 +118,7 @@ export default function VideoPageClient({ initialVideos }: VideoPageClientProps)
                                         <img
                                             src={video.thumbnail}
                                             alt={video.title}
-                                            className="w-full h-full object-cover opacity-70 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
+                                            className="w-full h-full object-cover opacity-80 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700"
                                         />
                                     )}
                                     <div className="absolute inset-0 flex items-center justify-center">
