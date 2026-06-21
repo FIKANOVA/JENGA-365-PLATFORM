@@ -541,8 +541,13 @@ export default function AdminDashboard({
 }: AdminDashboardProps) {
   const [roleFilter, setRoleFilter] = useState("All Roles");
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const handleAction = () => {}; // triggers re-render via toast feedback
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [roleFilter, search]);
 
   const filtered = users.filter((u) => {
     const matchesRole =
@@ -565,6 +570,11 @@ export default function AdminDashboard({
       org.toLowerCase().includes(q)
     );
   });
+
+  const ITEMS_PER_PAGE = 6;
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedUsers = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <div className="flex-1 bg-background h-full overflow-y-auto">
@@ -678,7 +688,7 @@ export default function AdminDashboard({
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {filtered.length === 0 ? (
+                {paginatedUsers.length === 0 ? (
                   <tr>
                     <td
                       colSpan={5}
@@ -688,7 +698,7 @@ export default function AdminDashboard({
                     </td>
                   </tr>
                 ) : (
-                  filtered.map((user) => (
+                  paginatedUsers.map((user) => (
                     <ExpandableUserRow
                       key={user.id}
                       user={user}
@@ -701,15 +711,37 @@ export default function AdminDashboard({
           </div>
 
           <div className="p-4 border-t border-border flex items-center justify-between text-body-sm text-foreground-muted">
-            <span>
-              Showing {filtered.length} of {users.length} users
-            </span>
+            <div className="flex items-center gap-4">
+              <span>
+                Showing {filtered.length === 0 ? 0 : startIndex + 1}-{Math.min(filtered.length, startIndex + ITEMS_PER_PAGE)} of {filtered.length} users
+              </span>
+              {totalPages > 1 && (
+                <div className="flex items-center gap-2 ml-4">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="h-8 px-3 rounded-md border border-border bg-background hover:bg-[color:var(--surface-2)] disabled:opacity-50 transition-colors"
+                  >
+                    Prev
+                  </button>
+                  <span className="text-foreground font-medium">Page {currentPage} of {totalPages}</span>
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="h-8 px-3 rounded-md border border-border bg-background hover:bg-[color:var(--surface-2)] disabled:opacity-50 transition-colors"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </div>
             <button
               onClick={() => setInviteModalOpen(true)}
               className="inline-flex items-center gap-2 h-11 rounded-md border border-border bg-background px-4 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
             >
               <Plus className="w-4 h-4" />
-              Invite moderator
+              <span className="hidden sm:inline">Invite moderator</span>
+              <span className="sm:hidden">Invite</span>
             </button>
           </div>
         </BentoCard>

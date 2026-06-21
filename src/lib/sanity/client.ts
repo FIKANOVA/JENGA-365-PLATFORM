@@ -7,11 +7,11 @@ const mockClient = {
     withConfig: () => mockClient,
 };
 
-export const client = process.env.NODE_ENV === "production" ? mockClient as any : createClient({
+export const client = createClient({
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "dummy",
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
     apiVersion: "2024-03-04",
-    useCdn: true, // `false` if you want to ensure fresh data
+    useCdn: false, // Set to false to ensure fresh data from Sanity immediately
     token: process.env.SANITY_API_TOKEN,
 });
 
