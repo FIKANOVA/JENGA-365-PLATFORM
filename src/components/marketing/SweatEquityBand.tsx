@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ShieldCheck, Leaf, AlertTriangle, ArrowRight } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
