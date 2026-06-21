@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 import { fetchLegalPageBySlug } from "@/lib/sanity/queries";
-import PageHero from "@/components/marketing/PageHero";
+import PageHero from "@/components/shared/PageHero";
 import { components } from "@/lib/sanity/portableTextComponents";
 
 export const metadata: Metadata = {
