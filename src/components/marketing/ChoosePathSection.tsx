@@ -207,32 +207,39 @@ export default function ChoosePathSection() {
                                     </ul>
                                 </div>
 
-                                <div className="mt-10 flex flex-wrap items-center gap-4 relative z-10">
+                                <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 relative z-10">
                                     {isAuthenticated ? (
                                         <Link
                                             href={dashboardHref}
-                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
+                                            className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all duration-300 hover:shadow-lg shadow-sm"
                                             style={{ background: activeData.color }}
                                         >
-                                            Open dashboard
-                                            <ArrowRight className="h-4 w-4" />
+                                            <span className="truncate">Open dashboard</span>
+                                            <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                                <ArrowRight className="h-4 w-4" style={{ color: activeData.color }} />
+                                            </span>
                                         </Link>
                                     ) : (
                                         <Link
                                             href={activeData.registerHref}
-                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
+                                            className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all duration-300 hover:shadow-lg shadow-sm"
                                             style={{ background: activeData.color }}
                                         >
-                                            {activeData.joinCta}
-                                            <ArrowRight className="h-4 w-4" />
+                                            <span className="truncate">{activeData.joinCta}</span>
+                                            <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                                <ArrowRight className="h-4 w-4" style={{ color: activeData.color }} />
+                                            </span>
                                         </Link>
                                     )}
                                     {!isAuthenticated && (
                                         <Link
                                             href="/about"
-                                            className="inline-flex h-12 items-center justify-center px-6 rounded-full font-medium text-foreground bg-[color:var(--surface-2)] hover:bg-[color:var(--surface-3)] transition-colors"
+                                            className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-foreground bg-[color:var(--surface-2)] hover:bg-[color:var(--surface-3)] transition-all duration-300 hover:shadow-lg shadow-sm"
                                         >
-                                            Learn more
+                                            <span className="truncate">Learn more</span>
+                                            <span className="bg-foreground shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                                <ArrowRight className="h-4 w-4 text-background" />
+                                            </span>
                                         </Link>
                                     )}
                                 </div>

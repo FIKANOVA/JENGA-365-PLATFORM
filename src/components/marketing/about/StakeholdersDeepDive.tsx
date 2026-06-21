@@ -185,26 +185,30 @@ export default function StakeholdersDeepDive() {
                                                                 <p className="text-body font-medium text-foreground">{s.principle}</p>
                                                                 <p className="text-body-sm text-foreground-muted leading-relaxed">{s.paragraph}</p>
 
-                                                                <div>
+                                                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                                                     {isAuthenticated ? (
                                                                         <Link
                                                                             href="/dashboard"
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-full px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all duration-300 hover:shadow-lg shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
-                                                                            Open dashboard
-                                                                            <ArrowRight className="h-4 w-4" />
+                                                                            <span className="truncate">Open dashboard</span>
+                                                                            <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                                                                <ArrowRight className="h-4 w-4" style={{ color: s.color }} />
+                                                                            </span>
                                                                         </Link>
                                                                     ) : (
                                                                         <Link
                                                                             href={s.registerHref}
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-full px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all duration-300 hover:shadow-lg shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
-                                                                            {s.joinCta}
-                                                                            <ArrowRight className="h-4 w-4" />
+                                                                            <span className="truncate">{s.joinCta}</span>
+                                                                            <span className="bg-white shrink-0 rounded-full p-2 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/btn:translate-x-1">
+                                                                                <ArrowRight className="h-4 w-4" style={{ color: s.color }} />
+                                                                            </span>
                                                                         </Link>
                                                                     )}
                                                                 </div>
