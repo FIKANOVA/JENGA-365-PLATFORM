@@ -51,11 +51,30 @@ export default function Logo({
 
     const mark = (
         <div className={cn("flex items-center gap-2", className)} aria-label="Jenga365">
-            <img
-                src="/assets/logos/jenga365-symbol-transparent.png"
-                alt=""
-                className={cn("w-auto object-contain", sizeClass)}
-            />
+            <svg
+                viewBox="0 0 100 100"
+                className={cn("w-auto object-contain", sizeClass, toneClass)}
+                fill="none"
+                role="img"
+                aria-label="Jenga365 Logo"
+            >
+                <path
+                    d="M 22 22 A 40 40 0 0 1 88 60"
+                    stroke="currentColor"
+                    strokeWidth={8}
+                    strokeLinecap="round"
+                    opacity={0.9}
+                />
+                <path
+                    d="M 78 78 A 40 40 0 0 1 12 40"
+                    stroke="currentColor"
+                    strokeWidth={8}
+                    strokeLinecap="round"
+                    opacity={0.9}
+                />
+                <circle cx="22" cy="22" r="10" fill="#E5342A" />
+                <circle cx="78" cy="78" r="10" fill="#16A34A" />
+            </svg>
             <span
                 className={cn("font-bold", toneClass)}
                 style={{ fontSize: textScale, fontFamily: "var(--font-sans), system-ui, sans-serif" }}
