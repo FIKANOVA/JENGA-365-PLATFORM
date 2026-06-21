@@ -10,7 +10,7 @@ import {
 
 const PUBLIC_ROUTES = [
     "/", "/about", "/articles", "/events", "/resources",
-    "/contact", "/shop", "/donate", "/help", "/impact", "/voices", "/studio"
+    "/contact", "/shop", "/donate", "/help", "/impact", "/voices",
 ];
 const AUTH_ONLY_ROUTES = ["/login", "/register"];
 const ONBOARDING_ROUTES = [
