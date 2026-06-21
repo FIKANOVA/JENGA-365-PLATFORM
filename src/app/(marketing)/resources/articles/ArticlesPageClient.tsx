@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useSession } from "@/lib/auth/client";
-import { Search, SearchX, PenSquare } from "lucide-react";
+import { Search, SearchX, PenSquare, ArrowRight } from "lucide-react";
 import FeaturedArticle from "@/components/articles/FeaturedArticle";
 import ArticlesGrid from "@/components/articles/ArticlesGrid";
 import TopicFilters from "@/components/marketing/resources/TopicFilters";
