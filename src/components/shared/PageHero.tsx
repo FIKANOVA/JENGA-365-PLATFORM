@@ -9,10 +9,13 @@ interface SanityImage {
 
 interface PageHeroProps {
     eyebrow?: string;
+    eyebrowColor?: string; // legacy support
     heading: React.ReactNode;
     description?: string;
     heroImage?: SanityImage | null;
     bgImage?: string; // fallback for string urls
+    bgFallback?: string; // legacy support to prevent build errors
+    overlayOpacity?: number; // legacy support to prevent build errors
     children?: React.ReactNode;
 }
 
