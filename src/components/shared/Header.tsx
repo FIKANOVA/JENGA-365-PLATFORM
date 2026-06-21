@@ -276,7 +276,7 @@ function PublicHeader({ scrolled, light, mobileOpen, setMobileOpen }: { scrolled
                 </Link>
                 <Link
                     href="/register"
-                    className="inline-flex items-center h-9 px-5 text-label font-medium rounded-full text-white transition-colors"
+                    className="inline-flex items-center h-8 px-3 sm:h-9 sm:px-5 text-xs sm:text-label font-medium rounded-full text-white transition-colors"
                     style={{ background: "var(--brand-red)" }}
                 >
                     Sign Up
@@ -286,7 +286,7 @@ function PublicHeader({ scrolled, light, mobileOpen, setMobileOpen }: { scrolled
                     aria-label={mobileOpen ? "Close menu" : "Open menu"}
                     aria-expanded={mobileOpen}
                     className={cn(
-                        "md:hidden inline-flex items-center justify-center h-9 w-9 rounded-full transition-colors",
+                        "md:hidden inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-full transition-colors",
                         light ? "text-white hover:bg-white/10" : "text-foreground hover:bg-surface-2",
                     )}
                     onClick={() => setMobileOpen(!mobileOpen)}

@@ -85,25 +85,25 @@ export default function PageHero({
                 </>
             )}
 
-            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pb-12 md:pb-16" : ""}`}>
+            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 pt-24 ${hasImage ? "pb-12 md:pb-16" : ""}`}>
                 <div className="max-w-3xl space-y-6">
                     {eyebrow && (
                         <p
-                            className="text-eyebrow animate-blur-fade-up"
+                            className="text-xs sm:text-eyebrow animate-blur-fade-up"
                             style={{ color: hasImage ? "#7CE2A8" : "var(--brand-green)", animationDelay: "100ms" }}
                         >
                             {eyebrow}
                         </p>
                     )}
                     <h1
-                        className="text-display-xl leading-tight animate-blur-fade-up"
+                        className="text-display-md sm:text-display-lg lg:text-display-xl leading-tight animate-blur-fade-up"
                         style={{ color: headingColor, animationDelay: "200ms" }}
                     >
                         {heading}
                     </h1>
                     {description && (
                         <p
-                            className="text-body-lg max-w-2xl leading-relaxed animate-blur-fade-up"
+                            className="text-body sm:text-body-lg max-w-2xl leading-relaxed animate-blur-fade-up"
                             style={{ color: mutedColor, animationDelay: "300ms" }}
                         >
                             {description}

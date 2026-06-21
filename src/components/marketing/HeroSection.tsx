@@ -107,7 +107,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                 </>
             )}
 
-            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 ${hasImage ? "pb-12 md:pb-16" : ""}`}>
+            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 pt-24 ${hasImage ? "pb-12 md:pb-16" : ""}`}>
                 <div className="max-w-3xl">
                     <div
                         className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm animate-blur-fade-up"
@@ -118,20 +118,20 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                         }}
                     >
                         <Sparkles className="h-3.5 w-3.5" style={{ color: hasImage ? "#7CE2A8" : "var(--brand-green)" }} />
-                        <span className="text-eyebrow" style={{ color: mutedColor }}>
+                        <span className="text-xs sm:text-eyebrow" style={{ color: mutedColor }}>
                             {eyebrow}
                         </span>
                     </div>
 
                     <h1
-                        className="text-display-lg md:text-display-xl whitespace-pre-line leading-tight animate-blur-fade-up"
+                        className="text-display-md sm:text-display-lg lg:text-display-xl whitespace-pre-line leading-tight animate-blur-fade-up"
                         style={{ color: headingColor, animationDelay: "200ms" }}
                     >
                         {heading}
                     </h1>
 
                     <p
-                        className="mt-6 text-body-lg max-w-2xl leading-relaxed animate-blur-fade-up"
+                        className="mt-6 text-body sm:text-body-lg max-w-2xl leading-relaxed animate-blur-fade-up"
                         style={{ color: mutedColor, animationDelay: "300ms" }}
                     >
                         {description}
