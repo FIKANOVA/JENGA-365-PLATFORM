@@ -174,10 +174,7 @@ export default function ChoosePathSection() {
                                 transition={{ duration: 0.3 }}
                                 className="w-full rounded-2xl border border-border bg-[color:var(--surface-1)] p-8 md:p-12 shadow-lg relative overflow-hidden"
                             >
-                                <div
-                                    className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-10 pointer-events-none transform translate-x-1/3 -translate-y-1/3"
-                                    style={{ background: activeData.color }}
-                                />
+
 
                                 <header className="flex items-start gap-4 relative z-10">
                                     <div className="flex-1">
