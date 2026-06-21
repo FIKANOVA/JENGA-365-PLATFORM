@@ -42,13 +42,13 @@ importers:
         specifier: ^6.0.3
         version: 6.2.0(react@19.2.3)
       '@sanity/client':
-        specifier: ^7.23.0
+        specifier: 7.23.0
         version: 7.23.0
       '@sanity/image-url':
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       '@sanity/ui':
-        specifier: ^3.2.0
+        specifier: 3.2.0
         version: 3.2.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.3(react@19.2.3))(react-is@19.2.7)(react@19.2.3)(styled-components@6.4.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3))
       '@sanity/vision':
         specifier: ^5.13.0
