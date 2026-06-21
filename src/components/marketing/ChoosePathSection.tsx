@@ -211,7 +211,7 @@ export default function ChoosePathSection() {
                                     {isAuthenticated ? (
                                         <Link
                                             href={dashboardHref}
-                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
+                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
                                             style={{ background: activeData.color }}
                                         >
                                             Open dashboard
@@ -220,7 +220,7 @@ export default function ChoosePathSection() {
                                     ) : (
                                         <Link
                                             href={activeData.registerHref}
-                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
+                                            className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 font-medium text-white transition-transform hover:-translate-y-0.5"
                                             style={{ background: activeData.color }}
                                         >
                                             {activeData.joinCta}
@@ -230,7 +230,7 @@ export default function ChoosePathSection() {
                                     {!isAuthenticated && (
                                         <Link
                                             href="/about"
-                                            className="inline-flex h-12 items-center justify-center px-6 rounded-lg font-medium text-foreground bg-[color:var(--surface-2)] hover:bg-[color:var(--surface-3)] transition-colors"
+                                            className="inline-flex h-12 items-center justify-center px-6 rounded-full font-medium text-foreground bg-[color:var(--surface-2)] hover:bg-[color:var(--surface-3)] transition-colors"
                                         >
                                             Learn more
                                         </Link>

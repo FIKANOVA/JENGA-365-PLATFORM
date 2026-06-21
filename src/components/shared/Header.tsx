@@ -333,7 +333,7 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
                 aria-haspopup="menu"
                 aria-expanded={open}
             >
-                <UserAvatar name={name} image={image} />
+                <UserAvatar name={name} image={image} light={light} />
                 <ChevronDown className={cn("h-3.5 w-3.5", light ? "text-white/80" : "text-foreground-muted")} aria-hidden />
             </button>
 

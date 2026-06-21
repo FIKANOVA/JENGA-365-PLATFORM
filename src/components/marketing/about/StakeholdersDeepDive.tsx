@@ -191,7 +191,7 @@ export default function StakeholdersDeepDive() {
                                                                             href="/dashboard"
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-lg px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="inline-flex h-11 items-center gap-2 rounded-full px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
                                                                             Open dashboard
@@ -200,7 +200,7 @@ export default function StakeholdersDeepDive() {
                                                                     ) : (
                                                                         <Link
                                                                             href={s.registerHref}
-                                                                            className="inline-flex h-11 items-center gap-2 rounded-lg px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
+                                                                            className="inline-flex h-11 items-center gap-2 rounded-full px-5 text-label font-medium text-white transition-transform hover:-translate-y-0.5 shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >
                                                                             {s.joinCta}

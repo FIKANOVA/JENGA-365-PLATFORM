@@ -16,9 +16,14 @@ interface PartnerCarouselProps {
 export default function PartnerCarousel({ partners = [] }: PartnerCarouselProps) {
     const withLogos = partners.filter((p) => p.logo?.asset?.url);
 
-    if (withLogos.length === 0) {
-        return null;
-    }
+    // Fallback to placeholders if no partners are configured yet
+    const displayPartners = withLogos.length > 0 ? withLogos : [
+        { _id: "p1", name: "Acme Corp", logo: { asset: { url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" } } },
+        { _id: "p2", name: "Global Tech", logo: { asset: { url: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" } } },
+        { _id: "p3", name: "Stripe", logo: { asset: { url: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" } } },
+        { _id: "p4", name: "Microsoft", logo: { asset: { url: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" } } },
+        { _id: "p5", name: "Spotify", logo: { asset: { url: "https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" } } }
+    ];
 
     return (
         <section className="py-8 md:py-16 bg-background overflow-hidden border-b border-border">
@@ -40,8 +45,10 @@ export default function PartnerCarousel({ partners = [] }: PartnerCarouselProps)
 
             <div className="relative group">
                 <div className="flex animate-scroll hover:pause whitespace-nowrap">
-                    {[...withLogos, ...withLogos, ...withLogos].map((partner, i) => {
-                        const logoUrl = urlFor(partner.logo).height(160).fit("max").auto("format").url();
+                    {[...displayPartners, ...displayPartners, ...displayPartners].map((partner, i) => {
+                        const logoUrl = partner.logo?.asset?.url?.startsWith("http")
+                            ? partner.logo.asset.url
+                            : urlFor(partner.logo).height(160).fit("max").auto("format").url();
                         const inner = (
                             <img
                                 src={logoUrl}
