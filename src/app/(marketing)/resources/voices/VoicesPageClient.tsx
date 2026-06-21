@@ -161,10 +161,8 @@ export default function VoicesPageClient({ initialVoices }: VoicesPageClientProp
 
                             {/* CTA */}
                             <Link
-                                href={voice.xUrl}
-                                className="shrink-0 flex items-center gap-2 px-6 py-3 border border-black text-black text-eyebrow font-bold hover:bg-black hover:text-white transition-all duration-200"
                                 href={voice.url}
-                                className="shrink-0 flex items-center gap-2 px-6 py-3 border border-black text-black font-mono text-eyebrow tracking-widest font-bold hover:bg-black hover:text-white transition-all duration-200"
+                                className="shrink-0 flex items-center gap-2 px-6 py-3 border border-black text-black text-eyebrow font-bold hover:bg-black hover:text-white transition-all duration-200"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
