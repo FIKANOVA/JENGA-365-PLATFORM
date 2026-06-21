@@ -41,11 +41,8 @@ const nextConfig: NextConfig = {
               "child-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",
+              "frame-ancestors 'self' *.sanity.io",
             ].join('; '),
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
           },
           {
             key: 'X-Content-Type-Options',

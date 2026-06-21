@@ -127,8 +127,6 @@ async function run() {
         }
 
         // Create article record
-        try {
-            const [article] = await db.insert(schema.articles).values({
         let article;
         try {
             const [newArticle] = await db.insert(schema.articles).values({
@@ -144,9 +142,6 @@ async function run() {
                 lastEditedAt: pubDate
             }).returning();
 
-            console.log(`✓ Inserted into Neon: ${article.id}`);
-
-            // Publish article to sanity
             article = newArticle;
             console.log(`✓ Inserted into Neon: ${article.id}`);
         } catch (err: any) {
@@ -189,13 +184,6 @@ async function run() {
                 }
             } catch (sanityErr) {
                 console.error(`❌ Error publishing to sanity for ${article.id}:`, sanityErr);
-            }
-
-        } catch (err: any) {
-            if (err.message && err.message.includes('unique constraint')) {
-                console.log(`⚠️ Skipping duplicate post: ${title}`);
-            } else {
-                console.error(`❌ Error migrating post "${title}":`, err);
             }
         }
     }
