@@ -35,18 +35,18 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-black/5 italic font-mono text-eyebrow tracking-widest text-[var(--foreground-subtle)]">
+                                <div className="w-full h-full flex items-center justify-center bg-black/5 italic text-eyebrow text-[var(--foreground-subtle)]">
                                     No Visual Asset
                                 </div>
                             )}
                             
                             {/* Type Badge */}
                             <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
-                                <span className="px-3 py-1 bg-white text-black font-mono text-eyebrow tracking-[0.2em] font-bold shadow-xl rounded-md border border-border">
+                                <span className="px-3 py-1 bg-white text-black text-eyebrow font-bold shadow-xl rounded-md border border-border">
                                     {event.isOnline ? "VIRTUAL SESSION" : "IN-PERSON"}
                                 </span>
                                 {isRegistered && (
-                                    <span className="px-3 py-1 bg-[var(--brand-green)] text-white font-mono text-eyebrow tracking-[0.2em] font-bold shadow-xl rounded-md">
+                                    <span className="px-3 py-1 bg-[var(--brand-green)] text-white text-eyebrow font-bold shadow-xl rounded-md">
                                         SECURED
                                     </span>
                                 )}
@@ -57,11 +57,11 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
                         <div className="p-10 flex-1 flex flex-col space-y-6 bg-white">
                             <div className="space-y-4 flex-1">
                                 <div className="flex items-center gap-3">
-                                    <span className="font-mono text-label font-bold uppercase tracking-[0.3em] text-[var(--brand-green)]">
+                                    <span className="text-label font-bold text-[var(--brand-green)]">
                                         {event.type}
                                     </span>
                                     <span className="w-4 h-px bg-[var(--border)]"></span>
-                                    <span className="font-mono text-label text-[var(--foreground-subtle)] uppercase tracking-widest font-bold">
+                                    <span className="text-label text-[var(--foreground-subtle)] font-bold">
                                         {format(new Date(event.date), "MMM d, yyyy")}
                                     </span>
                                 </div>
@@ -78,7 +78,7 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
                             <div className="pt-8 border-t border-border">
                                 <Link 
                                     href={`/events/${event._id}`}
-                                    className={`w-full h-14 flex items-center justify-center gap-3 font-mono text-eyebrow tracking-widest font-bold transition-all rounded-md shadow-sm ${
+                                    className={`w-full h-14 flex items-center justify-center gap-3 text-eyebrow font-bold transition-all rounded-md shadow-sm ${
                                         isRegistered 
                                         ? 'bg-[var(--surface-1)] text-black hover:bg-black hover:text-white' 
                                         : 'bg-black text-white hover:bg-[var(--brand-green)]'

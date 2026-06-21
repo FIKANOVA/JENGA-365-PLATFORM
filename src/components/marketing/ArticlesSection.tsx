@@ -15,7 +15,7 @@ export default function ArticlesSection({ articles }: { articles: any[] }) {
                             />
                         )}
                     </div>
-                    <div className="flex items-center space-x-2 mb-2 text-xs text-muted-foreground uppercase tracking-widest">
+                    <div className="flex items-center space-x-2 mb-2 text-xs text-muted-foreground">
                         <span>{article.readTime} min read</span>
                         <span>•</span>
                         <span>{article.author?.name}</span>

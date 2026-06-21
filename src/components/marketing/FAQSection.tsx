@@ -47,7 +47,7 @@ export default function FAQSection({ items }: FAQSectionProps) {
         <section className="py-12 md:py-24 bg-white">
             <div className="max-w-4xl mx-auto px-6 md:px-12">
                 <div className="text-center space-y-4 mb-16">
-                    <span className="font-mono text-eyebrow tracking-[0.4em] text-[var(--brand-green)] block font-bold">
+                    <span className="text-eyebrow text-[var(--brand-green)] block font-bold">
                         Common Questions
                     </span>
                     <h2 className="text-display-lg text-foreground">

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-const defaultTestimonials = [
+const FALLBACK_TESTIMONIALS = [
     {
         quote: "Jenga365 didn't just give me a place to play; they gave me a roadmap for my entire future.",
         name: "David Omondi",
@@ -16,15 +16,17 @@ const defaultTestimonials = [
 ];
 
 interface TestimonialsProps {
-    readonly testimonials?: Array<{
-        quote: string;
-        name: string;
-        role: string;
-    }> | null;
+    readonly voices?: any[];
 }
 
-export default function Testimonials({ testimonials }: TestimonialsProps) {
-    const displayTestimonials = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
+export default function Testimonials({ voices }: TestimonialsProps) {
+    const displayVoices = voices && voices.filter((v: any) => v.type === "SOCIALS" || v.type === "ARTICLE_COMMENTS").length > 0
+        ? voices.filter((v: any) => v.type === "SOCIALS" || v.type === "ARTICLE_COMMENTS").map((v: any) => ({
+            quote: v.description,
+            name: v.host,
+            role: v.type === "SOCIALS" ? "Socials" : "Article Comment",
+        }))
+        : FALLBACK_TESTIMONIALS;
 
     return (
         <section className="py-16 md:py-24 bg-accent relative overflow-hidden">
@@ -44,7 +46,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {displayTestimonials.map((t, idx) => (
+                    {displayVoices.map((t, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 30 }}

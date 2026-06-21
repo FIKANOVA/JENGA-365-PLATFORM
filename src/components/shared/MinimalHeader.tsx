@@ -17,7 +17,7 @@ export default function MinimalHeader({ currentStep = 1, totalSteps = 3 }: Minim
                     <Link href="/" className="group transition-transform hover:scale-105 active:scale-95">
                         <Logo variant="premium" height={44} priority />
                     </Link>
-                    <span className="font-mono text-eyebrow tracking-[0.5em] text-muted-foreground/40 font-black">Jenga365 Platform</span>
+                    <span className="text-eyebrow text-muted-foreground/40 font-black">Jenga365 Platform</span>
                 </div>
 
                 {currentStep > 0 && (

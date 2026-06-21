@@ -176,7 +176,7 @@ export default function SettingsPage({
 
                     <form onSubmit={handleSaveProfile} className="space-y-4">
                         <div>
-                            <label className="block font-mono text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                            <label className="block text-xs text-muted-foreground mb-1">
                                 Display Name
                             </label>
                             <input
@@ -189,7 +189,7 @@ export default function SettingsPage({
                         </div>
 
                         <div>
-                            <label className="block font-mono text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                            <label className="block text-xs text-muted-foreground mb-1">
                                 Email
                             </label>
                             <input
@@ -198,11 +198,11 @@ export default function SettingsPage({
                                 disabled
                                 className="w-full border border-input bg-muted rounded-md px-3 py-2 text-sm text-muted-foreground cursor-not-allowed"
                             />
-                            <p className="text-xs text-muted-foreground font-mono mt-1">Email cannot be changed here.</p>
+                            <p className="text-xs text-muted-foreground mt-1">Email cannot be changed here.</p>
                         </div>
 
                         <div>
-                            <label className="block font-mono text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                            <label className="block text-xs text-muted-foreground mb-1">
                                 Location / Region
                             </label>
                             <input
@@ -232,7 +232,7 @@ export default function SettingsPage({
                             <Shield className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
                             <h2 className="text-headline text-foreground">Two-factor authentication</h2>
                         </div>
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-mono font-bold ${
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
                             is2FAEnabled
                                 ? "bg-green-500/10 text-green-600 border border-green-500/20"
                                 : "bg-muted text-muted-foreground border border-border/50"
@@ -251,7 +251,7 @@ export default function SettingsPage({
                             </p>
                             <button
                                 onClick={() => { setTwoFAError(null); setTwoFAStep(is2FAEnabled ? "disable-confirm" : "confirm-password"); }}
-                                className="text-sm font-bold text-primary hover:underline font-mono"
+                                className="text-sm font-bold text-primary hover:underline"
                             >
                                 {is2FAEnabled ? "Disable 2FA" : "Enable 2FA"}
                             </button>
@@ -279,7 +279,7 @@ export default function SettingsPage({
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
                             </div>
-                            {twoFAError && <p className="text-xs text-destructive font-mono">{twoFAError}</p>}
+                            {twoFAError && <p className="text-xs text-destructive">{twoFAError}</p>}
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={handleEnable2FA}
@@ -289,7 +289,7 @@ export default function SettingsPage({
                                     {twoFALoading && <Loader2 className="w-4 h-4 animate-spin" />}
                                     Continue
                                 </button>
-                                <button onClick={resetTwoFA} className="text-sm font-mono text-muted-foreground hover:text-foreground">
+                                <button onClick={resetTwoFA} className="text-sm text-muted-foreground hover:text-foreground">
                                     Cancel
                                 </button>
                             </div>
@@ -315,9 +315,9 @@ export default function SettingsPage({
 
                             {totpSecret && (
                                 <div className="space-y-1">
-                                    <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Manual entry key</p>
+                                    <p className="text-xs text-muted-foreground">Manual entry key</p>
                                     <div className="flex items-center gap-2">
-                                        <code className="text-xs bg-muted px-3 py-2 rounded-md font-mono tracking-widest break-all">
+                                        <code className="text-xs bg-muted px-3 py-2 rounded-md break-all">
                                             {totpSecret}
                                         </code>
                                         <button
@@ -333,15 +333,15 @@ export default function SettingsPage({
 
                             {backupCodes.length > 0 && (
                                 <div className="space-y-2">
-                                    <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider">Backup codes — save these now</p>
+                                    <p className="text-xs text-muted-foreground">Backup codes — save these now</p>
                                     <div className="grid grid-cols-2 gap-2 bg-muted p-4 rounded-md">
                                         {backupCodes.map((code) => (
-                                            <code key={code} className="text-xs font-mono tracking-widest">{code}</code>
+                                            <code key={code} className="text-xs">{code}</code>
                                         ))}
                                     </div>
                                     <button
                                         onClick={() => copyToClipboard(backupCodes.join("\n"))}
-                                        className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+                                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         <Copy className="w-3 h-3" /> Copy all backup codes
                                     </button>
@@ -370,10 +370,10 @@ export default function SettingsPage({
                                 value={verifyCode}
                                 onChange={(e) => setVerifyCode(e.target.value.replace(/\D/g, ""))}
                                 placeholder="000000"
-                                className="w-40 border border-input bg-background rounded-md px-3 py-2 text-sm text-center font-mono tracking-[0.4em] outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                className="w-40 border border-input bg-background rounded-md px-3 py-2 text-sm text-center outline-none focus:ring-1 focus:ring-primary transition-colors"
                                 onKeyDown={(e) => e.key === "Enter" && handleVerifyTotp()}
                             />
-                            {twoFAError && <p className="text-xs text-destructive font-mono">{twoFAError}</p>}
+                            {twoFAError && <p className="text-xs text-destructive">{twoFAError}</p>}
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={handleVerifyTotp}
@@ -383,7 +383,7 @@ export default function SettingsPage({
                                     {twoFALoading && <Loader2 className="w-4 h-4 animate-spin" />}
                                     Confirm
                                 </button>
-                                <button onClick={() => setTwoFAStep("show-qr")} className="text-sm font-mono text-muted-foreground hover:text-foreground">
+                                <button onClick={() => setTwoFAStep("show-qr")} className="text-sm text-muted-foreground hover:text-foreground">
                                     Back
                                 </button>
                             </div>
@@ -425,7 +425,7 @@ export default function SettingsPage({
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
                             </div>
-                            {twoFAError && <p className="text-xs text-destructive font-mono">{twoFAError}</p>}
+                            {twoFAError && <p className="text-xs text-destructive">{twoFAError}</p>}
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={handleDisable2FA}
@@ -435,7 +435,7 @@ export default function SettingsPage({
                                     {twoFALoading && <Loader2 className="w-4 h-4 animate-spin" />}
                                     Disable 2FA
                                 </button>
-                                <button onClick={resetTwoFA} className="text-sm font-mono text-muted-foreground hover:text-foreground">
+                                <button onClick={resetTwoFA} className="text-sm text-muted-foreground hover:text-foreground">
                                     Cancel
                                 </button>
                             </div>

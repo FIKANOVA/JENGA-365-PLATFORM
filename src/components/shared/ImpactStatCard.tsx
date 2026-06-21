@@ -4,10 +4,10 @@ export default function ImpactStatCard({ label, value, trend }: { label: string,
     return (
         <Card className="bg-muted/20 border-none">
             <CardHeader className="p-4 pb-1">
-                <CardTitle className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{label}</CardTitle>
+                <CardTitle className="text-xs font-medium text-muted-foreground">{label}</CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-                <div className="text-3xl font-bold font-outfit">{value}</div>
+                <div className="text-display-sm font-bold font-outfit">{value}</div>
                 {trend && <p className="text-label text-primary mt-1 font-medium">{trend}</p>}
             </CardContent>
         </Card>

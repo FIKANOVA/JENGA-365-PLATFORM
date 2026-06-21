@@ -84,25 +84,33 @@ export async function processAndEmbedDocument(documentId: string) {
     console.log(`[AI Processor] Document split into ${chunks.length} chunks`);
 
     // 5. Generate Embeddings & Save
-    // We process sequentially to avoid rate-limiting limits on free/dev tiers. 
-    // In production, this can be batched (e.g., Promise.all inside chunks of 10).
-    for (let i = 0; i < chunks.length; i++) {
-        const chunkText = chunks[i];
+    // We process in batches to optimize performance while avoiding excessive rate-limiting.
+    const BATCH_SIZE = 10;
+    for (let i = 0; i < chunks.length; i += BATCH_SIZE) {
+        const batchChunks = chunks.slice(i, i + BATCH_SIZE);
+
         try {
-            const vector = await generateProfileEmbedding(chunkText);
+            // Generate embeddings for the batch concurrently
+            const embeddingsBatch = await Promise.all(
+                batchChunks.map(chunk => generateProfileEmbedding(chunk))
+            );
 
-            await db.insert(documentChunks).values({
+            // Prepare the values for a single bulk insert
+            const valuesToInsert = batchChunks.map((chunkText, batchIndex) => ({
                 documentId: doc.id,
-                chunkIndex: i,
+                chunkIndex: i + batchIndex,
                 content: chunkText,
-                embedding: vector
-            });
+                embedding: embeddingsBatch[batchIndex]
+            }));
 
+            // Bulk insert the batch
+            if (valuesToInsert.length > 0) {
+                await db.insert(documentChunks).values(valuesToInsert);
+            }
         } catch (e: any) {
-            console.error(`[AI Processor] Failed to embed chunk ${i}`, e);
-            // Decide if we fail entire process or skip bad chunks.
-            // For now, throw to abort and debug early.
-            throw new Error(`Failed to generate embedding for chunk ${i}`);
+            console.error(`[AI Processor] Failed to process batch starting at index ${i}`, e);
+            // Throw to abort and debug early.
+            throw new Error(`Failed to generate embedding for batch starting at ${i}`);
         }
     }
 

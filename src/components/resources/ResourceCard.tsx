@@ -49,7 +49,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                                 <Play className="h-7 w-7 text-white fill-white" />
                             </div>
                         </div>
-                        <div className="absolute bottom-5 right-5 px-3 py-1 bg-black text-white font-mono text-eyebrow tracking-widest rounded-md">
+                        <div className="absolute bottom-5 right-5 px-3 py-1 bg-black text-white text-eyebrow rounded-md">
                             {duration}
                         </div>
                     </>
@@ -59,10 +59,10 @@ export default function ResourceCard(props: ResourceCardProps) {
                     <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-[var(--surface-1)] group-hover:bg-white transition-colors duration-500">
                         <FileText className="h-16 w-16 text-black/10 group-hover:text-[var(--brand-green)]/20 transition-colors duration-500" strokeWidth={1.2} />
                         <div className="flex flex-col items-center gap-1">
-                            <span className="font-mono text-eyebrow tracking-[0.2em] text-[var(--foreground-subtle)] font-bold">
+                            <span className="text-eyebrow text-[var(--foreground-subtle)] font-bold">
                                 {format?.toUpperCase()} FORMAT
                             </span>
-                            <span className="font-mono text-eyebrow tracking-widest text-black/30">
+                            <span className="text-eyebrow text-black/30">
                                 {size}
                             </span>
                         </div>
@@ -86,7 +86,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                 {/* Pathway Badge */}
                 {(category || role) && (
                     <div className="absolute top-6 left-6 z-10">
-                        <span className="px-3 py-1 bg-white text-black font-mono text-eyebrow tracking-[0.2em] font-bold shadow-xl rounded-md border border-border">
+                        <span className="px-3 py-1 bg-white text-black text-eyebrow font-bold shadow-xl rounded-md border border-border">
                             {category || role}
                         </span>
                     </div>
@@ -103,7 +103,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                             <p className="text-[var(--foreground-subtle)] text-[11px] leading-relaxed max-w-[200px] mx-auto">Requires verified Jenga365 account to download strategic assets.</p>
                         </div>
                         <Link href="/register/mentorship" className="w-full">
-                            <button className="w-full bg-[var(--brand-green)] text-white py-4 px-6 font-mono text-eyebrow tracking-widest hover:bg-white hover:text-black transition-all rounded-md shadow-2xl">
+                            <button className="w-full bg-[var(--brand-green)] text-white py-4 px-6 text-eyebrow hover:bg-white hover:text-black transition-all rounded-md shadow-2xl">
                                 REGISTER TO UNLOCK
                             </button>
                         </Link>
@@ -116,12 +116,12 @@ export default function ResourceCard(props: ResourceCardProps) {
                 <div className="space-y-4 flex-1">
                     <div className="flex items-center gap-3">
                         <span
-                            className={`font-mono text-label font-bold uppercase tracking-[0.3em] ${type === "VIDEO" ? "text-blue-700" : type === "DOWNLOAD" ? "text-[var(--brand-green)]" : "text-[var(--brand-green)]"}`}
+                            className={`text-label font-bold ${type === "VIDEO" ? "text-blue-700" : type === "DOWNLOAD" ? "text-[var(--brand-green)]" : "text-[var(--brand-green)]"}`}
                         >
                             {type}
                         </span>
                         <span className="w-4 h-px bg-[var(--border)]"></span>
-                        <span className="font-mono text-label text-[var(--foreground-subtle)] uppercase tracking-widest font-bold">
+                        <span className="text-label text-[var(--foreground-subtle)] font-bold">
                             {date}
                         </span>
                     </div>
@@ -148,7 +148,7 @@ export default function ResourceCard(props: ResourceCardProps) {
                         </div>
                     ) : (
                         <div className="flex items-center justify-between">
-                             <span className="font-mono text-eyebrow tracking-[0.2em] text-black font-bold">
+                             <span className="text-eyebrow text-black font-bold">
                                 {isEffectivelyLocked ? "RESTRICTED" : (type === "DOWNLOAD" ? "READY FOR DOWNLOAD" : "VIEW RESOURCE")}
                              </span>
                              <div className={`w-8 h-8 flex items-center justify-center rounded-md transition-all duration-500 ${isEffectivelyLocked ? 'bg-[var(--border)] text-white' : 'bg-[var(--brand-green)] text-white group-hover:scale-110 shadow-xl'}`}>

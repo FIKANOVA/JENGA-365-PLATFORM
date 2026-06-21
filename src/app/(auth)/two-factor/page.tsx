@@ -153,7 +153,7 @@ function TwoFactorForm() {
                         inputMode="numeric"
                         autoComplete="one-time-code"
                         maxLength={6}
-                        className="h-12 w-full rounded-md border border-border bg-background px-4 text-center font-mono text-2xl tracking-[0.4em] text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none disabled:opacity-50"
+                        className="h-12 w-full rounded-md border border-border bg-background px-4 text-center text-2xl text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none disabled:opacity-50"
                         placeholder="000000"
                         value={code}
                         onChange={handleCodeChange}

@@ -1,0 +1,16 @@
+ WARN  Unsupported engine: wanted: {"node":"20.x"} (current: {"node":"v22.22.1","pnpm":"10.30.3"})
+
+> jenga365@0.1.0 start /app
+> next start
+
+▲ Next.js 16.2.9
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 233ms
+The `fetchConnectionCache` option is deprecated (now always `true`)
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+⨯ unhandledRejection:  [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+⨯ [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+The `fetchConnectionCache` option is deprecated (now always `true`)
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+⨯ unhandledRejection:  [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]

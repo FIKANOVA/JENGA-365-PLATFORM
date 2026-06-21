@@ -6,7 +6,7 @@ import LeadershipGrid from "@/components/marketing/about/LeadershipGrid";
 import WhyJenga from "@/components/marketing/about/WhyJenga";
 import Testimonials from "@/components/marketing/about/Testimonials";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
-import { fetchSiteSettings, fetchTeamOfficials } from "@/lib/sanity/queries";
+import { fetchSiteSettings, fetchTeamOfficials, fetchVoices } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/client";
 
 export async function generateMetadata() {
@@ -29,9 +29,10 @@ export async function generateMetadata() {
 }
 
 export default async function AboutPage() {
-    const [settings, team] = await Promise.all([
+    const [settings, team, voices] = await Promise.all([
         fetchSiteSettings(),
         fetchTeamOfficials(),
+        fetchVoices(),
     ]);
 
     return (
@@ -42,7 +43,7 @@ export default async function AboutPage() {
             <HistoryTimeline nodes={settings?.historyTimeline ?? null} />
             <WhyJenga />
             <LeadershipGrid team={team} />
-            <Testimonials testimonials={settings?.impactTestimonials ?? null} />
+            <Testimonials voices={voices} />
             <AboutCTAStrip />
         </div>
     );
