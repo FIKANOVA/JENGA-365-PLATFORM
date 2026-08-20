@@ -9,6 +9,7 @@ export const voicesType = defineType({
             name: "title",
             title: "Title",
             type: "string",
+            placeholder: "e.g. Total Athlete: Balancing High-Performance Sport with Career Readiness",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -24,6 +25,7 @@ export const voicesType = defineType({
                 ],
                 layout: "radio",
             },
+            initialValue: "SPACES",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -31,17 +33,21 @@ export const voicesType = defineType({
             title: "Description",
             type: "text",
             rows: 3,
+            placeholder: "e.g. A live conversation on transition strategies for national team players...",
         }),
         defineField({
             name: "host",
             title: "Host / Account",
             type: "string",
             description: "E.g., @jenga365",
+            placeholder: "@jenga365",
+            initialValue: "@jenga365",
         }),
         defineField({
             name: "url",
             title: "URL (X, LinkedIn, Article)",
             type: "url",
+            placeholder: "https://x.com/i/spaces/...",
         }),
         defineField({
             name: "date",

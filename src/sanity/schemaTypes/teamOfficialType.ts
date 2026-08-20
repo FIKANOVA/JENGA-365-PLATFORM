@@ -9,6 +9,7 @@ export const teamOfficialType = defineType({
             name: "name",
             title: "Name",
             type: "string",
+            placeholder: "e.g. Humphrey Kayange",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -22,6 +23,7 @@ export const teamOfficialType = defineType({
             title: "Role / Title",
             type: "string",
             description: "Displayed as the mono-cap subtitle (e.g. EXECUTIVE DIRECTOR).",
+            placeholder: "e.g. EXECUTIVE DIRECTOR & CO-FOUNDER",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -34,6 +36,7 @@ export const teamOfficialType = defineType({
                     name: "alt",
                     title: "Alt text",
                     type: "string",
+                    placeholder: "e.g. Humphrey Kayange headshot",
                 }),
             ],
         }),
@@ -42,6 +45,7 @@ export const teamOfficialType = defineType({
             title: "Short Bio",
             type: "text",
             rows: 4,
+            placeholder: "e.g. Former Kenya 7s Captain and IOC Member leading athletic development and environmental mentorship.",
         }),
         defineField({
             name: "linkedinUrl",

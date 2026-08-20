@@ -122,16 +122,41 @@ export const siteSettingsType = defineType({
             type: "object",
             group: "homepage",
             description: "Override the homepage hero text. Leave any field empty to fall back to the in-code default.",
+            initialValue: {
+                eyebrow: "AI-Native Mentorship Platform",
+                heading: "Build the Total Athlete.\n365 days a year.",
+                description: "Jenga365 is Kenya's dual-engine platform connecting human capital with environmental stewardship. AI-matched mentorship pairs athletes and young professionals with seasoned veterans.",
+                primaryCtaLabel: "Apply for mentorship",
+                primaryCtaHref: "/register/mentorship",
+                secondaryCtaLabel: "Corporate ESG partnership",
+                secondaryCtaHref: "/impact",
+            },
             fields: [
-                defineField({ name: "eyebrow", title: "Eyebrow", type: "string" }),
-                defineField({ name: "heading", title: "Heading", type: "string" }),
-                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
-                defineField({ name: "primaryCtaLabel", title: "Primary CTA label", type: "string" }),
-                defineField({ name: "primaryCtaHref", title: "Primary CTA href", type: "string" }),
-                defineField({ name: "secondaryCtaLabel", title: "Secondary CTA label", type: "string" }),
-                defineField({ name: "secondaryCtaHref", title: "Secondary CTA href", type: "string" }),
+                defineField({ name: "eyebrow", title: "Eyebrow", type: "string", placeholder: "e.g. AI-Native Mentorship Platform" }),
+                defineField({ name: "heading", title: "Heading", type: "string", placeholder: "e.g. Build the Total Athlete.\n365 days a year." }),
+                defineField({ name: "description", title: "Description", type: "text", rows: 3, placeholder: "e.g. Jenga365 is Kenya's dual-engine platform..." }),
+                defineField({ name: "primaryCtaLabel", title: "Primary CTA label", type: "string", placeholder: "e.g. Apply for mentorship" }),
+                defineField({ name: "primaryCtaHref", title: "Primary CTA href", type: "string", placeholder: "e.g. /register/mentorship" }),
+                defineField({ name: "secondaryCtaLabel", title: "Secondary CTA label", type: "string", placeholder: "e.g. Corporate ESG partnership" }),
+                defineField({ name: "secondaryCtaHref", title: "Secondary CTA href", type: "string", placeholder: "e.g. /impact" }),
             ],
             options: { collapsible: true, collapsed: false },
+        }),
+        defineField({
+            name: "impactStatsOverride",
+            title: "Impact Ticker Numbers (Sanity Override)",
+            type: "object",
+            group: "homepage",
+            description: "Customize the impact ticker metrics shown on the homepage. If left empty or set to 0, values automatically fall back to live database calculations.",
+            fields: [
+                defineField({ name: "activeMentors", title: "Active Mentors", type: "number", placeholder: "e.g. 24" }),
+                defineField({ name: "youthImpacted", title: "Youth Engaged", type: "number", placeholder: "e.g. 150" }),
+                defineField({ name: "mentorshipHours", title: "Mentorship Hours", type: "number", placeholder: "e.g. 480" }),
+                defineField({ name: "treesPlanted", title: "Trees Planted", type: "number", placeholder: "e.g. 1200" }),
+                defineField({ name: "activePartnerships", title: "Corporate Partners", type: "number", placeholder: "e.g. 8" }),
+                defineField({ name: "activeNgoPartners", title: "NGO Partners", type: "number", placeholder: "e.g. 12" }),
+            ],
+            options: { collapsible: true, collapsed: true },
         }),
         defineField({
             name: "featuredVideo",
@@ -147,6 +172,8 @@ export const siteSettingsType = defineType({
             type: "string",
             group: "homepage",
             description: "Shown above the featured video. Defaults to 'See it in motion'.",
+            placeholder: "e.g. See it in motion",
+            initialValue: "See it in motion",
         }),
         defineField({
             name: "lumaCalendarIframe",
@@ -154,6 +181,7 @@ export const siteSettingsType = defineType({
             type: "text",
             group: "homepage",
             description: "The complete iframe code provided by Luma for the events calendar. E.g. <iframe src='...'></iframe>",
+            placeholder: "<iframe src='https://luma.com/embed/calendar/cal-...' width='100%' height='600' frameborder='0'></iframe>",
             rows: 4,
         }),
 
@@ -164,14 +192,26 @@ export const siteSettingsType = defineType({
             type: "array",
             group: "impact",
             description: "Quotes shown in the 'Voices of growth' band on /impact.",
+            initialValue: [
+                {
+                    quote: "Jenga365 transformed my athletic discipline into professional clarity. The mentorship helped me transition into software engineering with confidence.",
+                    name: "Brian Ochieng",
+                    role: "Rugby Athlete & Junior Engineer",
+                },
+                {
+                    quote: "Trees for Tries gave our team a higher purpose beyond match days. Planting and tracking tree survival connected us directly with our home county.",
+                    name: "Faith Mwangi",
+                    role: "Mentee & Environmental Lead",
+                },
+            ],
             of: [
                 {
                     type: "object",
                     name: "testimonial",
                     fields: [
                         defineField({ name: "quote", title: "Quote", type: "text", rows: 4, validation: (R) => R.required() }),
-                        defineField({ name: "name", title: "Name", type: "string", validation: (R) => R.required() }),
-                        defineField({ name: "role", title: "Role / context", type: "string" }),
+                        defineField({ name: "name", title: "Name", type: "string", validation: (R) => R.required(), placeholder: "e.g. Brian Ochieng" }),
+                        defineField({ name: "role", title: "Role / context", type: "string", placeholder: "e.g. Mentee & Athlete" }),
                     ],
                     preview: {
                         select: { title: "name", subtitle: "role" },
@@ -185,6 +225,11 @@ export const siteSettingsType = defineType({
             type: "array",
             group: "impact",
             description: "Cards rendered in the 'Environmental stewardship' section on /impact.",
+            initialValue: [
+                { value: "100%", label: "GPS Verified", description: "Independent monitoring and evaluation on all tree survival sites." },
+                { value: "12,000+", label: "Trees Tracked", description: "Surviving indigenous trees across 6 target counties in Kenya." },
+                { value: "3,500+", label: "Give-Back Hours", description: "Direct community service completed by athlete cohorts." },
+            ],
             of: [
                 {
                     type: "object",
@@ -196,9 +241,10 @@ export const siteSettingsType = defineType({
                             type: "string",
                             description: "Static text like '100%' or one of the bound metrics: {{treesAlive}}, {{corporatePartners}}, {{ngoPartners}}",
                             validation: (R) => R.required(),
+                            placeholder: "e.g. 100% or 12,000+",
                         }),
-                        defineField({ name: "label", title: "Label", type: "string", validation: (R) => R.required() }),
-                        defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
+                        defineField({ name: "label", title: "Label", type: "string", validation: (R) => R.required(), placeholder: "e.g. Trees Monitored" }),
+                        defineField({ name: "description", title: "Description", type: "text", rows: 2, placeholder: "e.g. GPS-anchored survival monitoring..." }),
                     ],
                     preview: {
                         select: { title: "label", subtitle: "value" },
@@ -214,14 +260,19 @@ export const siteSettingsType = defineType({
             type: "array",
             group: "about",
             description: "Timeline nodes rendered on /about. Order is preserved.",
+            initialValue: [
+                { title: "Platform Conception", date: "2024", content: "Established as Kenya's first AI-native athlete mentorship and leadership platform." },
+                { title: "Trees for Tries Launch", date: "2025", content: "Integrated climate action and mobile audit verification into quarterly mentee pathways." },
+                { title: "Dual-Engine Expansion", date: "2026", content: "Scaled corporate ESG unlocks, university partnerships, and nationwide community clinics." },
+            ],
             of: [
                 {
                     type: "object",
                     name: "timelineNode",
                     fields: [
-                        defineField({ name: "title", title: "Title", type: "string", validation: (R) => R.required() }),
-                        defineField({ name: "date", title: "Date / era", type: "string" }),
-                        defineField({ name: "content", title: "Content", type: "text", rows: 3 }),
+                        defineField({ name: "title", title: "Title", type: "string", validation: (R) => R.required(), placeholder: "e.g. Platform Conception" }),
+                        defineField({ name: "date", title: "Date / era", type: "string", placeholder: "e.g. 2024" }),
+                        defineField({ name: "content", title: "Content", type: "text", rows: 3, placeholder: "e.g. Established as Kenya's premier..." }),
                     ],
                     preview: {
                         select: { title: "title", subtitle: "date" },
@@ -237,13 +288,27 @@ export const siteSettingsType = defineType({
             type: "array",
             group: "faq",
             description: "Q&A pairs shown in the FAQ section on the homepage / contact page.",
+            initialValue: [
+                {
+                    question: "How does AI mentor matching work?",
+                    answer: "Our pgvector semantic algorithm analyzes career goals, availability, sports discipline, and geographic location to create optimal 1:2 mentor-mentee pairs.",
+                },
+                {
+                    question: "What is the Sweat Equity requirement?",
+                    answer: "Mentorship is earned through service. Mentees complete one verified climate action or community give-back activity each quarter to remain in active standing.",
+                },
+                {
+                    question: "How do Corporate Unlocks work?",
+                    answer: "Corporate sponsors pledge funds tied to ESG milestones. Capital is programmatically unlocked once field surveys verify tree survival rates and volunteer hours.",
+                },
+            ],
             of: [
                 {
                     type: "object",
                     name: "faqItem",
                     fields: [
-                        defineField({ name: "question", title: "Question", type: "string", validation: (R) => R.required() }),
-                        defineField({ name: "answer", title: "Answer", type: "text", rows: 3, validation: (R) => R.required() }),
+                        defineField({ name: "question", title: "Question", type: "string", validation: (R) => R.required(), placeholder: "e.g. How does AI mentor matching work?" }),
+                        defineField({ name: "answer", title: "Answer", type: "text", rows: 3, validation: (R) => R.required(), placeholder: "e.g. Our algorithm pairs mentees..." }),
                     ],
                     preview: {
                         select: { title: "question" },

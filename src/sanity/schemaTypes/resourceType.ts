@@ -9,6 +9,7 @@ export const resourceType = defineType({
             name: "title",
             title: "Title",
             type: "string",
+            placeholder: "e.g. Total Athlete Playbook: Career & Financial Literacy Guide",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -35,6 +36,7 @@ export const resourceType = defineType({
                 ],
                 layout: "dropdown",
             },
+            initialValue: "pdf",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -51,12 +53,14 @@ export const resourceType = defineType({
                     { title: "Community", value: "community" },
                 ],
             },
+            initialValue: "mentorship",
         }),
         defineField({
             name: "externalUrl",
             title: "External URL",
             type: "url",
             description: "YouTube link, Spotify episode, LinkedIn newsletter, X post, etc.",
+            placeholder: "https://...",
             validation: (Rule) =>
                 Rule.uri({ allowRelative: false, scheme: ["http", "https"] }),
         }),

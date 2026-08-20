@@ -9,6 +9,7 @@ export const articleType = defineType({
             name: "title",
             title: "Title",
             type: "string",
+            placeholder: "e.g. The Future of Youth Mentorship in East Africa",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -49,13 +50,14 @@ export const articleType = defineType({
                 ],
                 layout: "radio",
             },
-            initialValue: "draft",
+            initialValue: "published",
         }),
         defineField({
             name: "excerpt",
             title: "Excerpt",
             type: "text",
             rows: 3,
+            placeholder: "A brief summary of the key takeaways and insights...",
             description: "Short summary shown in article cards and previews.",
         }),
         defineField({

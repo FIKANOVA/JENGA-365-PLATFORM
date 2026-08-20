@@ -9,6 +9,7 @@ export const partnerType = defineType({
             name: "name",
             title: "Organization Name",
             type: "string",
+            placeholder: "e.g. Standard Chartered Bank or Kenya Forest Service",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -42,12 +43,14 @@ export const partnerType = defineType({
             name: "website",
             title: "Website",
             type: "url",
+            placeholder: "https://...",
         }),
         defineField({
             name: "description",
             title: "Description",
             type: "text",
             rows: 3,
+            placeholder: "e.g. Strategic partner supporting Trees for Tries and youth leadership.",
         }),
         defineField({
             name: "contactEmail",

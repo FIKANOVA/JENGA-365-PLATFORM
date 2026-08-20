@@ -10,6 +10,7 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   aboutOpenGraphImage { asset->{ _id, url }, hotspot, crop },
   sweatEquityImage { asset->{ _id, url }, hotspot, crop },
   landingHero,
+  impactStatsOverride,
   featuredVideoHeading,
   lumaCalendarIframe,
   featuredVideo->{

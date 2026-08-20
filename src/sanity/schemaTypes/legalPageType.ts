@@ -9,6 +9,7 @@ export const legalPageType = defineType({
             name: "title",
             title: "Title",
             type: "string",
+            placeholder: "e.g. Privacy Policy or Terms of Service",
             validation: (Rule) => Rule.required(),
         }),
         defineField({

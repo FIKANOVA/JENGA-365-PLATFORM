@@ -9,6 +9,7 @@ export const eventType = defineType({
             name: "title",
             title: "Event Title",
             type: "string",
+            placeholder: "e.g. Total Athlete Leadership Summit 2026",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -24,6 +25,9 @@ export const eventType = defineType({
             type: "string",
             options: {
                 list: [
+                    { title: "Conference", value: "Conference" },
+                    { title: "Workshop", value: "Workshop" },
+                    { title: "Webinar", value: "Webinar" },
                     { title: "Rugby Clinic", value: "rugby_clinic" },
                     { title: "Mentorship Session", value: "mentorship" },
                     { title: "Tree Planting", value: "tree_planting" },
@@ -31,6 +35,7 @@ export const eventType = defineType({
                     { title: "Other", value: "other" },
                 ],
             },
+            initialValue: "Conference",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -43,6 +48,7 @@ export const eventType = defineType({
             name: "location",
             title: "Location",
             type: "string",
+            placeholder: "e.g. KICC, Nairobi or Online via Zoom",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -56,12 +62,15 @@ export const eventType = defineType({
             title: "Capacity",
             type: "number",
             description: "Maximum attendee capacity",
+            placeholder: "e.g. 150",
+            initialValue: 100,
         }),
         defineField({
             name: "registrationLink",
             title: "Registration Link",
             type: "url",
-            description: "External registration URL (e.g. Google Forms, Eventbrite)",
+            description: "External registration URL (e.g. Luma, Google Forms, Eventbrite)",
+            placeholder: "https://lu.ma/...",
             validation: (Rule) => Rule.uri({ allowRelative: false, scheme: ["http", "https"] }),
         }),
         defineField({
@@ -69,6 +78,7 @@ export const eventType = defineType({
             title: "Luma Event Iframe",
             type: "text",
             description: "The complete iframe code provided by Luma for this specific event.",
+            placeholder: "<iframe src='https://luma.com/embed/event/evt-...' width='100%' height='450' frameborder='0'></iframe>",
             rows: 4,
         }),
         defineField({
