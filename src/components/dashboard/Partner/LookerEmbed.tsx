@@ -14,6 +14,23 @@ interface LookerEmbedProps {
  * login-free shareable link. Renders a placeholder when the partner has no
  * report configured so the operator can see exactly what's missing.
  */
+function getEmbedUrl(reportId: string | null, shareUrl: string | null): string | null {
+    if (reportId) {
+        const trimmed = reportId.trim();
+        if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+            if (trimmed.includes("/embed/")) return trimmed;
+            return trimmed.replace("lookerstudio.google.com/reporting/", "lookerstudio.google.com/embed/reporting/");
+        }
+        return `https://lookerstudio.google.com/embed/reporting/${encodeURIComponent(trimmed)}/page/p_1`;
+    }
+    if (shareUrl && shareUrl.includes("lookerstudio.google.com")) {
+        const trimmed = shareUrl.trim();
+        if (trimmed.includes("/embed/")) return trimmed;
+        return trimmed.replace("lookerstudio.google.com/reporting/", "lookerstudio.google.com/embed/reporting/");
+    }
+    return null;
+}
+
 export default function LookerEmbed({
     reportId,
     shareUrl,
@@ -49,9 +66,7 @@ export default function LookerEmbed({
         );
     }
 
-    const embedSrc = reportId
-        ? `https://lookerstudio.google.com/embed/reporting/${encodeURIComponent(reportId)}/page/p_1`
-        : null;
+    const embedSrc = getEmbedUrl(reportId, shareUrl);
 
     const handleCopy = async () => {
         if (!shareUrl) return;
