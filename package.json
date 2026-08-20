@@ -19,7 +19,6 @@
     "partner:looker": "dotenv -e .env -- tsx scripts/setup-partner-looker.ts",
     "kobo:forms": "node scripts/kobo-forms/generate.js",
     "seed:partners": "dotenv -e .env -- tsx scripts/seed/seed-partners.ts",
-    "seed:sanity": "dotenv -e .env -- tsx scripts/seed/seed-sanity.ts",
     "migrate:wordpress": "dotenv -e .env -- tsx scripts/seed/migrate-wordpress.ts"
   },
   "dependencies": {
