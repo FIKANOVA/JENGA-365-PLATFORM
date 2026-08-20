@@ -8,10 +8,10 @@ import PageHero from "@/components/shared/PageHero";
 
 interface Event {
     _id: string;
-    title: string;
-    type: string;
-    date: string;
-    isOnline: boolean;
+    title?: string;
+    type?: string;
+    date?: string;
+    isOnline?: boolean;
     image?: string;
     description?: string;
     lumaEventIframe?: string;
@@ -19,19 +19,29 @@ interface Event {
 
 const EVENT_TYPES = ["ALL", "WEBINAR", "WORKSHOP", "CONFERENCE", "MEETUP"];
 
-export default function EventsPageClient({ initialEvents, lumaCalendarIframe }: { initialEvents: Event[]; lumaCalendarIframe?: string }) {
+export default function EventsPageClient({
+    initialEvents = [],
+    lumaCalendarIframe,
+}: {
+    initialEvents?: Event[];
+    lumaCalendarIframe?: string;
+}) {
     const [activeCategory, setActiveCategory] = useState("ALL");
     const [searchQuery, setSearchQuery] = useState("");
 
+    const eventsList = useMemo(() => Array.isArray(initialEvents) ? initialEvents : [], [initialEvents]);
+
     const filteredEvents = useMemo(() => {
-        return initialEvents.filter(event => {
-            const matchesCategory = activeCategory === "ALL" || event.type.toUpperCase() === activeCategory;
-            const matchesSearch =
-                event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (event.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
+        const query = searchQuery.trim().toLowerCase();
+        return eventsList.filter((event) => {
+            const eventType = (event.type ?? "").toUpperCase();
+            const matchesCategory = activeCategory === "ALL" || eventType === activeCategory;
+            const eventTitle = (event.title ?? "").toLowerCase();
+            const eventDesc = (event.description ?? "").toLowerCase();
+            const matchesSearch = !query || eventTitle.includes(query) || eventDesc.includes(query);
             return matchesCategory && matchesSearch;
         });
-    }, [initialEvents, activeCategory, searchQuery]);
+    }, [eventsList, activeCategory, searchQuery]);
 
     return (
         <div className="min-h-screen bg-white">

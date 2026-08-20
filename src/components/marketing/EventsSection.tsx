@@ -95,9 +95,15 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                         }
 
                         // Fallback custom card if no Luma iframe is provided
-                        const dateObj = new Date(event.date);
-                        const day = format(dateObj, "dd");
-                        const month = format(dateObj, "MMM").toUpperCase();
+                        let day = "—";
+                        let month = "TBD";
+                        try {
+                            const d = new Date(event.date);
+                            if (!isNaN(d.getTime())) {
+                                day = format(d, "dd");
+                                month = format(d, "MMM").toUpperCase();
+                            }
+                        } catch {}
                         return (
                             <article
                                 key={event._id}
@@ -109,7 +115,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                                         <img
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                             src={event.image}
-                                            alt={event.title}
+                                            alt={event.title ?? "Event"}
                                         />
                                     ) : (
                                         <div className="flex h-full w-full items-center justify-center" style={{ color: "var(--foreground-subtle)" }}>

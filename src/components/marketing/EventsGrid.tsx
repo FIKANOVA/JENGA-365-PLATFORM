@@ -14,13 +14,26 @@ interface EventsGridProps {
     registeredEventIds?: string[];
 }
 
-export default function EventsGrid({ events, registeredEventIds = [] }: EventsGridProps) {
+function formatEventDate(dateStr?: string | null): string {
+    if (!dateStr) return "TBD";
+    try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return "TBD";
+        return format(d, "MMM d, yyyy");
+    } catch {
+        return "TBD";
+    }
+}
+
+export default function EventsGrid({ events = [], registeredEventIds = [] }: EventsGridProps) {
     const { data: session, isPending } = useSession();
     const isAuthenticated = !!session?.user;
 
+    const list = Array.isArray(events) ? events : [];
+
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {events.map((event) => {
+            {list.map((event) => {
                 const isRegistered = registeredEventIds.includes(event._id);
 
                 if (event.lumaEventIframe) {
@@ -43,7 +56,7 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
                             {event.image ? (
                                 <img 
                                     src={event.image} 
-                                    alt={event.title} 
+                                    alt={event.title ?? "Event"} 
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 />
                             ) : (
@@ -70,21 +83,23 @@ export default function EventsGrid({ events, registeredEventIds = [] }: EventsGr
                             <div className="space-y-4 flex-1">
                                 <div className="flex items-center gap-3">
                                     <span className="text-label font-bold text-[var(--brand-green)]">
-                                        {event.type}
+                                        {event.type ?? "Community"}
                                     </span>
                                     <span className="w-4 h-px bg-[var(--border)]"></span>
                                     <span className="text-label text-[var(--foreground-subtle)] font-semibold">
-                                        {format(new Date(event.date), "MMM d, yyyy")}
+                                        {formatEventDate(event.date)}
                                     </span>
                                 </div>
 
                                 <h3 className="text-title text-foreground tracking-tight leading-snug line-clamp-2 min-h-[2.8em] group-hover:text-[var(--brand-green)] transition-colors duration-500">
-                                    {event.title}
+                                    {event.title ?? "Jenga365 Session"}
                                 </h3>
                                 
-                                <p className="text-[var(--foreground-muted)] text-body-sm leading-relaxed line-clamp-2">
-                                    {event.description}
-                                </p>
+                                {event.description && (
+                                    <p className="text-[var(--foreground-muted)] text-body-sm leading-relaxed line-clamp-2">
+                                        {event.description}
+                                    </p>
+                                )}
                             </div>
 
                             <div className="pt-4 mt-auto">

@@ -23,6 +23,14 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
         ? urlFor(event.mainImage).width(1920).height(960).fit("crop").auto("format").url()
         : null;
 
+    let formattedDate = "TBD";
+    if (event.date) {
+        try {
+            const d = new Date(event.date);
+            if (!isNaN(d.getTime())) formattedDate = format(d, "MMM d, yyyy");
+        } catch {}
+    }
+
     return (
         <div className="flex flex-col">
             <section className="relative overflow-hidden bg-hero-radial bg-topo border-b border-border">
@@ -37,7 +45,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-12 md:pt-20 pb-12 md:pb-24 lg:pt-28 lg:pb-28">
                     <div className="max-w-3xl space-y-6">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
-                            {event.type?.replace(/_/g, " ")} · {event.date ? format(new Date(event.date), "MMM d, yyyy") : "TBD"}
+                            {(event.type ?? "Community").replace(/_/g, " ")} · {formattedDate}
                         </p>
                         <h1 className="text-display-xl text-foreground">{event.title}</h1>
                         {event.location && (

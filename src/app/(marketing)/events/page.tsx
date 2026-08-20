@@ -13,7 +13,7 @@ export const revalidate = 0;
 export default async function EventsPage() {
     const [events, settings] = await Promise.all([
         fetchEvents().catch(() => []),
-        fetchSiteSettings()
+        fetchSiteSettings().catch(() => null),
     ]);
-    return <EventsPageClient initialEvents={events} lumaCalendarIframe={settings?.lumaCalendarIframe} />;
+    return <EventsPageClient initialEvents={Array.isArray(events) ? events : []} lumaCalendarIframe={settings?.lumaCalendarIframe ?? undefined} />;
 }
