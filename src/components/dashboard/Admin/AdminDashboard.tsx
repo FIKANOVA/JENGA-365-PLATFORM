@@ -22,7 +22,9 @@ import { approveUser, rejectUser, suspendUser } from "@/lib/actions/moderation";
 import { sendResetPasswordEmailAction, updateLegacyUserRoleAction } from "@/lib/actions/adminOps";
 import { createModeratorInvite } from "@/lib/actions/auth";
 import { toast } from "sonner";
+import { Sparkles } from "lucide-react";
 import SyncStoreInventoryButton from "@/components/dashboard/shared/SyncStoreInventoryButton";
+import SeedSanityButton from "@/components/dashboard/admin/SeedSanityButton";
 import {
   BentoCard,
   MetricTile,
@@ -632,6 +634,31 @@ export default function AdminDashboard({
             </div>
           </div>
           <SyncStoreInventoryButton />
+        </BentoCard>
+
+        {/* CMS Content & Placeholders — seed starter documents */}
+        <BentoCard className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div
+              className="w-9 h-9 rounded-md flex items-center justify-center shrink-0"
+              style={{
+                background: "var(--surface-2)",
+                color: "var(--brand-green)",
+              }}
+            >
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="text-eyebrow text-foreground-muted">
+                CMS &amp; Studio
+              </p>
+              <h4 className="text-headline text-foreground">Sanity starter content</h4>
+              <p className="text-body-sm text-foreground-muted max-w-xl mt-1">
+                Populate or sync all starter documents (Site Settings, Events, Articles, Voices, Videos, Legal) in Sanity Studio.
+              </p>
+            </div>
+          </div>
+          <SeedSanityButton />
         </BentoCard>
 
         {/* User Management Table */}
