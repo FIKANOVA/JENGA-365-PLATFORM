@@ -14,44 +14,73 @@ export const voicesType = defineType({
         }),
         defineField({
             name: "type",
-            title: "Type",
+            title: "Source Type",
             type: "string",
             options: {
                 list: [
-                    { title: "X-Space", value: "SPACES" },
-                    { title: "X-Thread", value: "THREADS" },
+                    { title: "Google Review", value: "GOOGLE_REVIEW" },
+                    { title: "X (Twitter) Post / Mention", value: "X_POST" },
+                    { title: "X (Twitter) Space", value: "SPACES" },
+                    { title: "X (Twitter) Thread", value: "THREADS" },
+                    { title: "LinkedIn Recommendation / Post", value: "LINKEDIN" },
+                    { title: "Instagram Post / Story", value: "INSTAGRAM" },
+                    { title: "Athlete / Mentee Quote", value: "ATHLETE_QUOTE" },
+                    { title: "Public / Media Mention", value: "PUBLIC_MENTION" },
                     { title: "Social", value: "SOCIALS" },
                     { title: "Article Comment", value: "ARTICLE_COMMENTS" },
                 ],
-                layout: "radio",
+                layout: "dropdown",
             },
-            initialValue: "SPACES",
+            initialValue: "GOOGLE_REVIEW",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: "description",
-            title: "Description",
+            title: "Quote / Review Content",
             type: "text",
             rows: 3,
-            placeholder: "e.g. A live conversation on transition strategies for national team players...",
+            placeholder: "e.g. 'Jenga365 gave me structured mentorship that helped me balance competitive rugby with my degree.'",
+            validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: "host",
-            title: "Host / Account",
+            title: "Author / Reviewer Name",
             type: "string",
-            description: "E.g., @jenga365",
-            placeholder: "@jenga365",
-            initialValue: "@jenga365",
+            description: "E.g. David Omondi or @jenga365",
+            placeholder: "e.g. David Omondi",
+            initialValue: "David Omondi",
+        }),
+        defineField({
+            name: "authorRole",
+            title: "Author Role / Context",
+            type: "string",
+            description: "E.g. Google Verified Reviewer, Mentee (Kenya U20), Corporate Partner",
+            placeholder: "e.g. Mentee & Junior Developer",
+        }),
+        defineField({
+            name: "authorAvatar",
+            title: "Author Profile Picture / Avatar",
+            type: "image",
+            options: { hotspot: true },
+        }),
+        defineField({
+            name: "rating",
+            title: "Star Rating (1 - 5)",
+            type: "number",
+            description: "Used for Google reviews or ratings (1 to 5 stars).",
+            placeholder: "5",
+            initialValue: 5,
+            validation: (Rule) => Rule.min(1).max(5),
         }),
         defineField({
             name: "url",
-            title: "URL (X, LinkedIn, Article)",
+            title: "Public Source URL (Google Review, X post, LinkedIn, etc.)",
             type: "url",
-            placeholder: "https://x.com/i/spaces/...",
+            placeholder: "https://...",
         }),
         defineField({
             name: "date",
-            title: "Date",
+            title: "Review / Post Date",
             type: "datetime",
         }),
         // X-Space specific
@@ -89,11 +118,17 @@ export const voicesType = defineType({
     preview: {
         select: {
             title: "title",
+            subtitle: "host",
             type: "type",
+            media: "authorAvatar",
         },
         prepare(selection) {
-            const { title, type } = selection;
-            return { title, subtitle: type === "SPACES" ? "X-Space" : "X-Thread" };
+            const { title, subtitle, type, media } = selection;
+            return {
+                title: title || "Review / Public Mention",
+                subtitle: `${subtitle ?? "Anonymous"} • ${type ?? "Social"}`,
+                media,
+            };
         },
     },
 });

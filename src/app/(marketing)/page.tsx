@@ -47,15 +47,16 @@ export default async function HomePage() {
         fetchPartners().catch(() => []),
     ]);
 
-    const cmsStats = settings?.impactStatsOverride;
-    const tickerStats = {
-        activeMentors: cmsStats?.activeMentors || dbStats?.activeMentors,
-        youthImpacted: cmsStats?.youthImpacted || dbStats?.youthEngagedActive,
-        mentorshipHours: cmsStats?.mentorshipHours || dbStats?.mentorshipHoursTotal,
-        treesPlanted: cmsStats?.treesPlanted || dbStats?.treesPlantedTotal,
-        activePartnerships: cmsStats?.activePartnerships || dbStats?.activeCorporatePartners,
-        activeNgoPartners: cmsStats?.activeNgoPartners || dbStats?.activeNgoPartners,
-    };
+    const tickerStats = dbStats
+        ? {
+            activeMentors: dbStats.activeMentors,
+            youthImpacted: dbStats.youthEngagedActive,
+            mentorshipHours: dbStats.mentorshipHoursTotal,
+            treesPlanted: dbStats.treesPlantedTotal,
+            activePartnerships: dbStats.activeCorporatePartners,
+            activeNgoPartners: dbStats.activeNgoPartners,
+        }
+        : undefined;
 
     return (
         <div className="flex flex-col">

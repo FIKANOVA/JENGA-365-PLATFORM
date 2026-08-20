@@ -17,7 +17,11 @@ export const revalidate = 0;
 interface ImpactStory {
     quote: string;
     name: string;
-    role: string;
+    role?: string;
+    handle?: string;
+    source?: string;
+    rating?: number;
+    sourceUrl?: string;
 }
 
 interface EnvStat {
@@ -30,17 +34,29 @@ const DEFAULT_IMPACT_STORIES: ImpactStory[] = [
     {
         quote: "Jenga365 didn't just match me with a mentor, it matched me with a future. I went from uncertainty to leading a tech team in 18 months.",
         name: "Grace Wanjiku",
-        role: "Mentee, Software Engineer",
+        role: "Mentee & Software Engineer",
+        handle: "Google Verified Review",
+        source: "google_review",
+        rating: 5,
+        sourceUrl: "https://google.com/maps",
     },
     {
-        quote: "The corporate partnership framework allowed our CSR budget to create measurable, trackable impact for the first time.",
+        quote: "The corporate ESG milestone framework allowed our CSR budget to create measurable, trackable, GPS-audited impact for the first time.",
         name: "James Karanja",
-        role: "Corporate Partner, Safaricom",
+        role: "CSR Director, Enterprise Partner",
+        handle: "LinkedIn Recommendation",
+        source: "linkedin",
+        rating: 5,
+        sourceUrl: "https://linkedin.com",
     },
     {
-        quote: "Through Jenga365's rugby programs, I learned discipline that translated directly to my professional career in finance.",
+        quote: "Through Jenga365's rugby and Trees for Tries program, our cohort learned discipline while reforesting our home county.",
         name: "Brian Otieno",
-        role: "Mentee, Financial Analyst",
+        role: "Athlete & Mentee",
+        handle: "@brian_rugby",
+        source: "x_twitter",
+        rating: 5,
+        sourceUrl: "https://x.com",
     },
 ];
 
@@ -171,16 +187,25 @@ export default async function ImpactPage() {
                             {stories.map((story) => (
                                 <div
                                     key={story.name}
-                                    className="rounded-3xl border p-6 space-y-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                                    style={{ borderColor: "rgba(255,255,255,0.10)" }}
+                                    className="rounded-3xl border p-6 space-y-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between"
+                                    style={{ borderColor: "rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.02)" }}
                                 >
-                                    <div className="h-px w-12" style={{ background: "var(--brand-green)" }} />
-                                    <p className="text-body italic" style={{ color: "rgba(255,255,255,0.78)" }}>
-                                        &ldquo;{story.quote}&rdquo;
-                                    </p>
-                                    <div className="space-y-1">
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between gap-2">
+                                            <div className="h-px w-12" style={{ background: "var(--brand-green)" }} />
+                                            {story.source ? (
+                                                <span className="text-[11px] font-medium tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-white/80 uppercase">
+                                                    {story.source === "google_review" ? "Google Review" : story.source === "x_twitter" ? "X (Twitter)" : story.source.replace("_", " ")}
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                        <p className="text-body italic" style={{ color: "rgba(255,255,255,0.78)" }}>
+                                            &ldquo;{story.quote}&rdquo;
+                                        </p>
+                                    </div>
+                                    <div className="space-y-1 pt-4 border-t border-white/10">
                                         <h4 className="text-headline" style={{ color: "#FFFFFF" }}>{story.name}</h4>
-                                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>{story.role}</p>
+                                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>{story.role ?? story.handle}</p>
                                     </div>
                                 </div>
                             ))}

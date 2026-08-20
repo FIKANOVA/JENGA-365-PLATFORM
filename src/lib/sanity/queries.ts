@@ -10,7 +10,6 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   aboutOpenGraphImage { asset->{ _id, url }, hotspot, crop },
   sweatEquityImage { asset->{ _id, url }, hotspot, crop },
   landingHero,
-  impactStatsOverride,
   featuredVideoHeading,
   lumaCalendarIframe,
   featuredVideo->{
@@ -21,7 +20,7 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
     duration,
     thumbnail { asset->{ _id, url } }
   },
-  impactTestimonials[]{ quote, name, role },
+  impactTestimonials[]{ quote, name, role, handle, source, rating, sourceUrl, avatar { asset->{ _id, url } } },
   environmentalStats[]{ value, label, description },
   historyTimeline[]{ title, date, content },
   faqItems[]{ question, answer }
@@ -295,12 +294,15 @@ export async function fetchVideos() {
 }
 
 // ── Voices ───────────────────────────────────────────────────
-export const voicesQuery = groq`*[_type == "voices"] | order(date desc) {
+export const voicesQuery = groq`*[_type == "voices"] | order(coalesce(date, _createdAt) desc) {
   _id,
   title,
   type,
   description,
   host,
+  authorRole,
+  authorAvatar { asset->{ _id, url } },
+  rating,
   url,
   date,
   duration,
