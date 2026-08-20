@@ -2,7 +2,67 @@ import { neon, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import * as schema from './schema';
 
-neonConfig.fetchConnectionCache = true;
+// Ensure IPv4 is prioritized on server Node environments to prevent Neon fetch timeouts
+if (typeof window === 'undefined' && typeof process !== 'undefined') {
+    import('node:dns').then((dns) => {
+        if (typeof dns?.setDefaultResultOrder === 'function') {
+            try {
+                dns.setDefaultResultOrder('ipv4first');
+            } catch {
+                // Ignore if environment restricts DNS customization
+            }
+        }
+    }).catch(() => {});
+}
+
+// Resilient fetch wrapper with fallback for local Node / undici network timeouts
+if (typeof window === 'undefined' && typeof globalThis.fetch === 'function') {
+    neonConfig.fetchFunction = async (url: string | URL | Request, options?: any) => {
+        try {
+            return await globalThis.fetch(url, options);
+        } catch (fetchErr) {
+            const urlStr = url.toString();
+            if (urlStr.includes('neon.tech')) {
+                const urlObj = new URL(urlStr);
+                const https = await import('node:https');
+                return new Promise((resolve, reject) => {
+                    const body = options?.body;
+                    const reqOptions = {
+                        hostname: urlObj.hostname,
+                        port: urlObj.port || 443,
+                        path: urlObj.pathname + urlObj.search,
+                        method: options?.method || 'POST',
+                        headers: {
+                            ...(options?.headers || {}),
+                            Host: urlObj.hostname,
+                            'Content-Length': body ? Buffer.byteLength(body) : 0,
+                        },
+                        servername: urlObj.hostname,
+                    };
+
+                    const req = https.request(reqOptions, (res) => {
+                        let data = '';
+                        res.on('data', (chunk: string) => (data += chunk));
+                        res.on('end', () => {
+                            resolve({
+                                status: res.statusCode ?? 200,
+                                ok: (res.statusCode ?? 200) >= 200 && (res.statusCode ?? 200) < 300,
+                                text: async () => data,
+                                json: async () => JSON.parse(data),
+                                headers: new Headers(res.headers as any),
+                            } as any);
+                        });
+                    });
+
+                    req.on('error', (err) => reject(err));
+                    if (body) req.write(body);
+                    req.end();
+                });
+            }
+            throw fetchErr;
+        }
+    };
+}
 
 const connectionString = process.env.DATABASE_URL;
 let dbClient: ReturnType<typeof drizzle<typeof schema>>;
