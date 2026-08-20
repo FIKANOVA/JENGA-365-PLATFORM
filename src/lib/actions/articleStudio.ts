@@ -8,6 +8,8 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 import { sanityWriteClient } from "@/lib/sanity/writeClient";
 
+import { revalidatePath } from "next/cache";
+
 async function requireCap(cap: Capability) {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) throw new Error("UNAUTHORIZED");
@@ -37,17 +39,26 @@ export async function publishArticleViaStudio(sanityDocId: string) {
         throw new Error("Article document not found");
     }
 
+    const nowIso = new Date().toISOString();
+
     // Promote the draft if one exists; otherwise just stamp the live doc as published.
     if (draft) {
+        const finalPublishedAt = draft.publishedAt || nowIso;
         await sanityWriteClient
             .transaction()
-            .createOrReplace({ ...draft, _id: publishedId, status: "published" })
+            .createOrReplace({
+                ...draft,
+                _id: publishedId,
+                status: "published",
+                publishedAt: finalPublishedAt,
+            })
             .delete(draftId)
             .commit({ visibility: "async" });
     } else if (published) {
+        const finalPublishedAt = published.publishedAt || nowIso;
         await sanityWriteClient
             .patch(publishedId)
-            .set({ status: "published" })
+            .set({ status: "published", publishedAt: finalPublishedAt })
             .commit({ visibility: "async" });
     }
 
@@ -73,6 +84,10 @@ export async function publishArticleViaStudio(sanityDocId: string) {
             notes: `Published via Studio (sanityId=${publishedId})`,
         });
     }
+
+    revalidatePath("/resources/articles");
+    revalidatePath("/articles");
+    revalidatePath("/");
 
     return { ok: true, publishedId };
 }

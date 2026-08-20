@@ -24,6 +24,9 @@ export const metadata = {
     description: "Get support and find answers to common questions about Jenga365.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Lucide icon name → component map (extend as Sanity authors use more names).
 const ICON_MAP: Record<string, LucideIcon> = {
     BookOpen,

@@ -73,6 +73,12 @@ plans/
 .claude/
 
 # Development-only docs (kept local, not for GitHub)
+SESSION_HANDOFF.md
+CLAUDE_SETUP_HANDOVER.md
+JENGA365_MASTER_TEST_PLAN.md
+JENGA365_QA_TEST_GUIDE.md
+Jenga365 Production Audit.md
+master index.md
 docs/SESSION_HANDOVER.md
 docs/PROJECT_STATE.md
 docs/QA_AUDIT.md
@@ -84,3 +90,4 @@ docs/pdf/
 site-frontend/
 site-backend/
 nginx/
+

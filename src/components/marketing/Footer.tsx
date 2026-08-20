@@ -145,7 +145,7 @@ export default function Footer() {
                     <span className="font-sans text-[11px] text-white/20">
                         Site by{" "}
                         <a
-                            href="https://www.fikanova.co.ke/"
+                            href="https://fikanova.com/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-white/35 hover:text-white/70 transition-colors underline underline-offset-2"

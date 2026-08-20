@@ -35,7 +35,7 @@ export async function fetchSiteSettings() {
 }
 
 // ── Team Officials ──────────────────────────────────────────
-export const teamOfficialsQuery = groq`*[_type == "teamOfficial" && isPublished == true] | order(order asc, name asc) {
+export const teamOfficialsQuery = groq`*[_type == "teamOfficial" && coalesce(isPublished, true) == true] | order(order asc, name asc) {
   _id,
   name,
   slug,
@@ -55,7 +55,7 @@ export async function fetchTeamOfficials() {
 }
 
 // ── Articles ────────────────────────────────────────────────
-export const articlesQuery = groq`*[_type == "article" && publishedAt < now()] | order(publishedAt desc) {
+export const articlesQuery = groq`*[_type == "article" && (status == "published" || publishedAt <= now())] | order(coalesce(publishedAt, _createdAt) desc) {
   _id,
   title,
   slug,
@@ -65,6 +65,7 @@ export const articlesQuery = groq`*[_type == "article" && publishedAt < now()] |
   mainImage { asset->{ _id, url } },
   author->{ name, image { asset->{ url } } },
   publishedAt,
+  _createdAt,
   "readTime": round(length(pt::text(body)) / 200)
 }`;
 
@@ -79,6 +80,7 @@ export const articleBySlugQuery = groq`*[_type == "article" && slug.current == $
   author->{ name, role, bio, image { asset->{ url } } },
   coAuthors[]->{ name, role, image { asset->{ url } } },
   publishedAt,
+  _createdAt,
   body[]{
     ...,
     _type == "image" => { ..., "url": asset->url }
@@ -86,12 +88,13 @@ export const articleBySlugQuery = groq`*[_type == "article" && slug.current == $
   "readTime": round(length(pt::text(body)) / 200)
 }`;
 
-export const relatedArticlesQuery = groq`*[_type == "article" && slug.current != $slug && publishedAt < now()] | order(publishedAt desc)[0...3] {
+export const relatedArticlesQuery = groq`*[_type == "article" && slug.current != $slug && (status == "published" || publishedAt <= now())] | order(coalesce(publishedAt, _createdAt) desc)[0...3] {
   _id,
   title,
   slug,
   mainImage { asset->{ _id, url } },
-  publishedAt
+  publishedAt,
+  _createdAt
 }`;
 
 export async function fetchArticles() {
@@ -107,7 +110,7 @@ export async function fetchRelatedArticles(slug: string) {
 }
 
 // ── Events ──────────────────────────────────────────────────
-export const eventsQuery = groq`*[_type == "event" && date >= now()] | order(date asc) {
+export const eventsQuery = groq`*[_type == "event"] | order(date asc) {
   _id,
   title,
   "type": eventType,
@@ -115,9 +118,10 @@ export const eventsQuery = groq`*[_type == "event" && date >= now()] | order(dat
   location,
   isOnline,
   capacity,
+  registrationLink,
   "image": mainImage.asset->url,
   "galleryCount": count(gallery),
-  description,
+  "description": coalesce(pt::text(description), ""),
   lumaEventIframe
 }`;
 
@@ -251,17 +255,17 @@ export async function fetchProducts() {
 }
 
 // ── Resources (Downloads) ─────────────────────────────────────
-export const resourcesQuery = groq`*[_type == "resource"] | order(_createdAt desc) {
+export const resourcesQuery = groq`*[_type == "resource"] | order(coalesce(publishedAt, _createdAt) desc) {
   _id,
   title,
-  type,
+  "type": coalesce(resourceType, type, "pdf"),
   category,
   description,
-  locked,
+  "locked": coalesce(locked, false),
   "fileUrl": file.asset->url,
   "fileSize": file.asset->size,
-  "format": file.asset->extension,
-  externalLink
+  "format": coalesce(file.asset->extension, resourceType, "pdf"),
+  "externalLink": coalesce(externalUrl, externalLink)
 }`;
 
 export async function fetchResources() {

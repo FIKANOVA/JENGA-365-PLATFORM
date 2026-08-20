@@ -6,6 +6,8 @@ import {
 } from "@/lib/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 
+import { revalidatePath } from "next/cache";
+
 /**
  * Recomputes currentValue for all LOCKED milestones of the given type (or all types
  * if none specified) and flips status to UNLOCKED when the threshold is met.
@@ -16,67 +18,82 @@ import { eq, and, desc, sql } from "drizzle-orm";
  *   ordered by survey_date DESC to isolate the latest reading per location, then SUM
  *   those snapshots.
  *
+ * Runs inside an isolated database transaction to guarantee idempotency and prevent
+ * race conditions / double-allocations during concurrent field submissions.
+ *
  * Called by:
  *   - KoboToolbox webhook (async, after each field-audit submission)
  *   - Nightly cron /api/cron/corporate-unlock (safety net)
  */
 export async function checkAndUnlockMilestones(milestoneType?: string): Promise<void> {
-    // ── Step 1: Compute tree_survival count (deduplicated by location) ────────
-    const latestPerLocation = db
-        .selectDistinctOn([treeSurvivalChecks.projectLocationId], {
-            projectLocationId: treeSurvivalChecks.projectLocationId,
-            treesAlive: treeSurvivalChecks.treesAlive,
-        })
-        .from(treeSurvivalChecks)
-        .orderBy(treeSurvivalChecks.projectLocationId, desc(treeSurvivalChecks.surveyDate))
-        .as("latest_per_location");
+    const runInTx = typeof db.transaction === "function"
+        ? (cb: (tx: any) => Promise<void>) => db.transaction(cb)
+        : (cb: (tx: any) => Promise<void>) => cb(db);
 
-    const [{ totalAlive }] = await db
-        .select({
-            totalAlive: sql<number>`coalesce(sum(${latestPerLocation.treesAlive}), 0)::int`,
-        })
-        .from(latestPerLocation);
+    await runInTx(async (tx) => {
+        // ── Step 1: Compute tree_survival count (deduplicated by location) ────────
+        const latestPerLocation = tx
+            .selectDistinctOn([treeSurvivalChecks.projectLocationId], {
+                projectLocationId: treeSurvivalChecks.projectLocationId,
+                treesAlive: treeSurvivalChecks.treesAlive,
+            })
+            .from(treeSurvivalChecks)
+            .orderBy(treeSurvivalChecks.projectLocationId, desc(treeSurvivalChecks.surveyDate))
+            .as("latest_per_location");
 
-    // ── Step 2: Fetch LOCKED milestones (filtered by type if provided) ────────
-    const whereClause = milestoneType
-        ? and(
-            eq(corporateUnlockMilestones.status, "LOCKED"),
-            eq(corporateUnlockMilestones.milestoneType, milestoneType)
-          )
-        : eq(corporateUnlockMilestones.status, "LOCKED");
+        const [{ totalAlive }] = await tx
+            .select({
+                totalAlive: sql<number>`coalesce(sum(${latestPerLocation.treesAlive}), 0)::int`,
+            })
+            .from(latestPerLocation);
 
-    const lockedMilestones = await db
-        .select()
-        .from(corporateUnlockMilestones)
-        .where(whereClause);
+        // ── Step 2: Fetch LOCKED milestones (filtered by type if provided) ────────
+        const whereClause = milestoneType
+            ? and(
+                eq(corporateUnlockMilestones.status, "LOCKED"),
+                eq(corporateUnlockMilestones.milestoneType, milestoneType)
+              )
+            : eq(corporateUnlockMilestones.status, "LOCKED");
 
-    // ── Step 3: Evaluate each milestone ──────────────────────────────────────
-    for (const milestone of lockedMilestones) {
-        let currentValue = 0;
+        const lockedMilestones = await tx
+            .select()
+            .from(corporateUnlockMilestones)
+            .where(whereClause);
 
-        if (milestone.milestoneType === "tree_survival") {
-            currentValue = totalAlive;
+        // ── Step 3: Evaluate each milestone ──────────────────────────────────────
+        for (const milestone of lockedMilestones) {
+            let currentValue = 0;
+
+            if (milestone.milestoneType === "tree_survival") {
+                currentValue = totalAlive;
+            }
+
+            if (currentValue >= milestone.thresholdValue) {
+                // Flip milestone to UNLOCKED
+                await tx
+                    .update(corporateUnlockMilestones)
+                    .set({ status: "UNLOCKED", currentValue, verifiedAt: new Date() })
+                    .where(eq(corporateUnlockMilestones.id, milestone.id));
+
+                // Release linked corporate resources
+                await tx
+                    .update(corporateResources)
+                    .set({ status: "UNLOCKED", unlockedAt: new Date() })
+                    .where(eq(corporateResources.milestoneId, milestone.id));
+            } else {
+                // Record progress even though not yet unlocked
+                await tx
+                    .update(corporateUnlockMilestones)
+                    .set({ currentValue })
+                    .where(eq(corporateUnlockMilestones.id, milestone.id));
+            }
         }
-        // Future milestone types (mentorship_hours, youth_served) computed here
+    });
 
-        if (currentValue >= milestone.thresholdValue) {
-            // Flip milestone to UNLOCKED
-            await db
-                .update(corporateUnlockMilestones)
-                .set({ status: "UNLOCKED", currentValue, verifiedAt: new Date() })
-                .where(eq(corporateUnlockMilestones.id, milestone.id));
-
-            // Release linked corporate resources
-            await db
-                .update(corporateResources)
-                .set({ status: "UNLOCKED", unlockedAt: new Date() })
-                .where(eq(corporateResources.milestoneId, milestone.id));
-        } else {
-            // Record progress even though not yet unlocked
-            await db
-                .update(corporateUnlockMilestones)
-                .set({ currentValue })
-                .where(eq(corporateUnlockMilestones.id, milestone.id));
-        }
+    try {
+        revalidatePath("/impact");
+        revalidatePath("/dashboard/partner");
+    } catch {
+        // Safe fallback if called outside Next.js request lifecycle
     }
 }

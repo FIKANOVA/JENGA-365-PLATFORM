@@ -46,6 +46,18 @@ export const eventType = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            name: "isOnline",
+            title: "Is Online Event?",
+            type: "boolean",
+            initialValue: false,
+        }),
+        defineField({
+            name: "capacity",
+            title: "Capacity",
+            type: "number",
+            description: "Maximum attendee capacity",
+        }),
+        defineField({
             name: "registrationLink",
             title: "Registration Link",
             type: "url",

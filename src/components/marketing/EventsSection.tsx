@@ -146,7 +146,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                                         </div>
                                     )}
                                     <NextLink
-                                        href={isAuthenticated ? `/dashboard/events/${event._id}` : "/register"}
+                                        href={`/events/${event._id}`}
                                         className="group/btn mt-auto inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all duration-300 hover:shadow-lg shadow-sm"
                                         style={{ background: "var(--brand-black)" }}
                                     >

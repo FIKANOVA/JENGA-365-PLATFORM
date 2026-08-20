@@ -11,6 +11,9 @@ export const metadata = {
     description: "Explore the social and environmental impact of the Jenga365 platform. From mentorship hours to career placements, see our data-driven results.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface ImpactStory {
     quote: string;
     name: string;

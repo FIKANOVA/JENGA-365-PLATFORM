@@ -9,6 +9,9 @@ export const metadata = {
     description: "Real stories from mentors, mentees, and community members in the Jenga365 network.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function VoicesPage() {
     const voices = await fetchVoices();
 

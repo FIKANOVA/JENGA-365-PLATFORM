@@ -29,13 +29,15 @@ vi.mock('drizzle-orm', () => ({
   sql: vi.fn(() => 'mocked_sql'),
 }))
 
-vi.mock('@/lib/db', () => ({
-  db: {
+vi.mock('@/lib/db', () => {
+  const dbMock: any = {
     selectDistinctOn: vi.fn(),
     select: vi.fn(),
     update: vi.fn(),
-  },
-}))
+    transaction: vi.fn(async (cb: any) => cb(dbMock)),
+  }
+  return { db: dbMock }
+})
 
 import { checkAndUnlockMilestones } from '@/lib/actions/corporateUnlock'
 import { db } from '@/lib/db'
