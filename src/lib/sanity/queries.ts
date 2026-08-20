@@ -2,7 +2,7 @@ import { groq } from "next-sanity";
 import { client } from "./client";
 
 // ── Site Settings (singleton) ───────────────────────────────
-export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
+export const siteSettingsQuery = groq`coalesce(*[_id == "siteSettings"][0], *[_type == "siteSettings"][0]) {
   landingHeroImage { asset->{ _id, url }, alt, hotspot, crop },
   aboutHeroImage { asset->{ _id, url }, alt, hotspot, crop },
   authImage { asset->{ _id, url }, alt, hotspot, crop },
