@@ -67,7 +67,9 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
     return (
         <section
             className={`relative overflow-hidden bg-background flex flex-col justify-end ${
-                hasImage ? "min-h-[100svh] md:min-h-[calc(100svh-90px)] -mt-16" : "min-h-[100svh] md:min-h-[calc(100svh-90px)] -mt-16"
+                hasImage
+                    ? "min-h-[80vh] sm:min-h-[88vh] md:min-h-[calc(100svh-80px)] -mt-16"
+                    : "min-h-[75vh] sm:min-h-[85vh] md:min-h-[calc(100svh-80px)] -mt-16"
             }`}
         >
             {hasImage ? (
@@ -107,7 +109,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                 </>
             )}
 
-            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 pt-24 ${hasImage ? "pb-12 md:pb-16" : ""}`}>
+            <div className={`relative z-10 w-full mx-auto max-w-7xl px-6 lg:px-8 pt-20 sm:pt-24 ${hasImage ? "pb-10 sm:pb-12 md:pb-16" : "pb-12 md:pb-16"}`}>
                 <div className="max-w-3xl">
                     <div
                         className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full border backdrop-blur-sm animate-blur-fade-up"

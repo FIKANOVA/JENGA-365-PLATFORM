@@ -52,7 +52,7 @@ export default function HomeArticlesSection({ articles }: HomeArticlesSectionPro
     const displayArticles = (articles && articles.length > 0 ? articles : FALLBACK_ARTICLES).slice(0, 3);
 
     return (
-        <section className="bg-background min-h-[100svh] flex flex-col justify-center py-16">
+        <section className="bg-background py-12 md:py-20 lg:py-28 flex flex-col justify-center border-b border-border/40">
             <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">

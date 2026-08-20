@@ -66,21 +66,20 @@ export default function EventsPageClient({
                 </PageHero>
 
                 {/* ── Grid Section ── */}
-                <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-24">
-                    <div className="space-y-16">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-8 md:py-16">
+                    <div className="space-y-10 md:space-y-14">
                         {/* Type Selection */}
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-4">
                             <span className="text-eyebrow text-[var(--foreground-subtle)] font-bold">Event Type</span>
                             <div className="flex border-b border-border overflow-x-auto hide-scrollbar">
                                 {EVENT_TYPES.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
-                                        className={`px-8 py-5 text-label font-bold whitespace-nowrap transition-all relative group ${activeCategory === cat
+                                        className={`px-4 py-3 sm:px-6 sm:py-4 text-xs sm:text-label font-semibold whitespace-nowrap transition-all relative group ${activeCategory === cat
                                             ? "text-[var(--brand-green)]"
-                                            : "text-[var(--foreground-subtle)] hover:text-black"
+                                            : "text-[var(--foreground-subtle)] hover:text-foreground"
                                             }`}
-                                        style={{ fontFamily: "var(--font-dm-mono)" }}
                                     >
                                         {cat}
                                         <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />

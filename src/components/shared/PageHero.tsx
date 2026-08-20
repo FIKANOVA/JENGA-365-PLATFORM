@@ -46,7 +46,7 @@ export default function PageHero({
     return (
         <section
             className={`relative overflow-hidden bg-background flex flex-col justify-end border-b border-border ${
-                hasImage ? "h-[85vh] min-h-[500px] -mt-16" : "py-24 lg:py-32"
+                hasImage ? "h-[60vh] sm:h-[70vh] md:h-[80vh] min-h-[380px] -mt-16" : "py-10 sm:py-16 md:py-20 lg:py-24"
             }`}
         >
             {hasImage ? (

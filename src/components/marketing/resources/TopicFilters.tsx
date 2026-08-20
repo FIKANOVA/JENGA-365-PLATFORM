@@ -22,13 +22,12 @@ export default function TopicFilters({ activeTopic, onTopicChange }: TopicFilter
                 <button
                     key={topic}
                     onClick={() => onTopicChange(topic)}
-                    className={`px-5 py-2.5 text-label font-bold transition-all border rounded-md ${activeTopic === topic
-                            ? "bg-black border-black text-white shadow-xl"
-                            : "bg-white border-border text-black hover:border-foreground"
+                    className={`px-4 py-2 sm:px-5 sm:py-2 text-xs sm:text-label font-semibold transition-all border rounded-full ${activeTopic === topic
+                            ? "bg-foreground border-foreground text-background shadow-md"
+                            : "bg-background border-border text-foreground hover:border-foreground/60"
                         }`}
-                    style={{ fontFamily: "var(--font-dm-mono)" }}
                 >
-                    {topic.toUpperCase()}
+                    {topic}
                 </button>
             ))}
         </div>

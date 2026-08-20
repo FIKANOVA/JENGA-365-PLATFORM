@@ -13,7 +13,7 @@ import { motion } from "framer-motion";
  */
 export default function WhatWeDoSection() {
   return (
-    <section className="bg-[color:var(--surface-1)] min-h-[100svh] flex flex-col justify-center py-16">
+    <section className="bg-[color:var(--surface-1)] py-12 md:py-20 lg:py-28 flex flex-col justify-center border-b border-border/40">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

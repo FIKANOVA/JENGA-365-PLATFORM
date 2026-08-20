@@ -61,7 +61,7 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
     const displayEvents = (events && events.length > 0 ? events : FALLBACK_EVENTS).slice(0, 3);
 
     return (
-        <section className="bg-background min-h-[100svh] flex flex-col justify-center py-16" style={{ background: "var(--surface-1)" }}>
+        <section className="py-12 md:py-20 lg:py-28 flex flex-col justify-center border-b border-border/40" style={{ background: "var(--surface-1)" }}>
             <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
                 <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
                     <div className="max-w-xl">

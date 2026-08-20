@@ -20,11 +20,10 @@ export default function CategoryTabs({ activeCategory, onCategoryChange }: Categ
                 <button
                     key={cat.id}
                     onClick={() => onCategoryChange(cat.id)}
-                    className={`px-8 py-5 text-label font-bold whitespace-nowrap transition-all relative group ${activeCategory === cat.id
+                    className={`px-4 py-3 sm:px-6 sm:py-4 text-xs sm:text-label font-semibold whitespace-nowrap transition-all relative group ${activeCategory === cat.id
                             ? "text-[var(--brand-green)]"
-                            : "text-[var(--foreground-subtle)] hover:text-black"
+                            : "text-[var(--foreground-subtle)] hover:text-foreground"
                         }`}
-                    style={{ fontFamily: "var(--font-dm-mono)" }}
                 >
                     {cat.label}
                     <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${activeCategory === cat.id ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />

@@ -106,7 +106,7 @@ export default function ChoosePathSection() {
     const activeData = PATHS.find((p) => p.id === activeTab)!;
 
     return (
-        <section className="bg-background border-y border-border min-h-[100svh] flex flex-col justify-center py-16">
+        <section className="bg-background border-y border-border py-12 md:py-20 lg:py-28 flex flex-col justify-center">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
                     <div className="lg:w-1/3 shrink-0">

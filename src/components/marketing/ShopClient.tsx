@@ -128,18 +128,17 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                 <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-24">
                     <div className="space-y-16">
                         {/* Category Selection */}
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-4">
                             <span className="text-eyebrow text-[var(--foreground-subtle)] font-bold">Collections</span>
                             <div className="flex border-b border-border overflow-x-auto hide-scrollbar">
                                 {categories.map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
-                                        className={`px-8 py-5 text-label font-bold whitespace-nowrap transition-all relative group ${selectedCategory === cat
+                                        className={`px-4 py-3 sm:px-6 sm:py-4 text-xs sm:text-label font-semibold whitespace-nowrap transition-all relative group ${selectedCategory === cat
                                             ? "text-[var(--brand-green)]"
-                                            : "text-[var(--foreground-subtle)] hover:text-black"
+                                            : "text-[var(--foreground-subtle)] hover:text-foreground"
                                             }`}
-                                        style={{ fontFamily: "var(--font-dm-mono)" }}
                                     >
                                         {cat.toUpperCase()}
                                         <div className={`absolute bottom-0 left-0 h-[2px] bg-[var(--brand-green)] transition-all duration-300 ${selectedCategory === cat ? "w-full" : "w-0 group-hover:w-full opacity-30"}`} />
@@ -149,18 +148,18 @@ export default function ShopClient({ initialProducts }: { initialProducts: CartP
                         </div>
 
                         {/* Product Grid */}
-                        <div className="min-h-[600px]">
+                        <div className="min-h-[400px]">
                             {filteredProducts.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                                     {filteredProducts.map(product => (
-                                        <div key={product._id} className="group flex flex-col bg-white border border-border transition-all duration-500 hover:border-foreground hover:shadow-2xl relative h-full rounded-md overflow-hidden">
+                                        <div key={product._id} className="group flex flex-col bg-card border border-border transition-all duration-500 hover:border-foreground/40 hover:shadow-xl relative h-full rounded-2xl overflow-hidden">
                                             {/* Visual Area */}
-                                            <div className="relative h-80 bg-[var(--surface-1)] overflow-hidden">
+                                            <div className="relative aspect-[4/3] sm:aspect-square bg-[var(--surface-1)] overflow-hidden">
                                                 {product.imageUrl ? (
                                                     <img
                                                         src={product.imageUrl}
                                                         alt={product.title}
-                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                                     />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center bg-black/5 italic text-eyebrow text-[var(--foreground-subtle)]">

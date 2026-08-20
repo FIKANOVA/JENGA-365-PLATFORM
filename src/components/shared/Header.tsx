@@ -472,7 +472,7 @@ function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; 
 
     return (
         <div className="md:hidden border-t border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 max-h-[calc(100vh-4rem)] overflow-y-auto">
-            <div className="mx-auto max-w-7xl px-6 py-3 flex flex-col gap-1">
+            <div className="mx-auto max-w-7xl px-6 py-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] flex flex-col gap-1">
                 {navGroups.map((group) => (
                     <details key={group.label} className="group/section">
                         <summary className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground cursor-pointer list-none">
@@ -519,8 +519,6 @@ function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; 
                 </DonateButton>
                 <Link
                     href="/shop"
-                    target="_blank"
-                    rel="noopener noreferrer"
                     onClick={onClose}
                     className="flex items-center gap-2.5 px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground"
                 >
