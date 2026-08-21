@@ -31,8 +31,8 @@ export default function BetaBanner() {
                     : "max-h-0 opacity-0 -translate-y-full pointer-events-none overflow-hidden"
             }`}
         >
-            <div className="relative mx-auto max-w-7xl px-8 sm:px-12 py-1.5 sm:py-2 flex items-center justify-center text-[11px] sm:text-xs">
-                {/* Center / Message container */}
+            {/* Center / Message container */}
+            <div className="mx-auto max-w-7xl px-12 sm:px-16 py-1.5 sm:py-2 flex items-center justify-center text-[11px] sm:text-xs">
                 <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-center">
                     <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#14422B] text-[#4ADE80] border border-[#235E3E]">
                         <Sparkles className="w-2.5 h-2.5" />
@@ -50,21 +50,21 @@ export default function BetaBanner() {
                         <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </button>
                 </div>
-
-                {/* Cancel / Close Icon at far right end — prominent, touch-friendly, never hidden */}
-                <button
-                    type="button"
-                    onClick={() => {
-                        setIsRendered(false);
-                        setTimeout(() => setIsDismissed(true), 500);
-                    }}
-                    aria-label="Dismiss beta banner"
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full text-[#A3BFB0] hover:text-white hover:bg-white/15 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#4ADE80] cursor-pointer"
-                    title="Dismiss"
-                >
-                    <X className="w-4 h-4" />
-                </button>
             </div>
+
+            {/* Cancel / Close Icon at the full browser window far right edge (near scrollbar) */}
+            <button
+                type="button"
+                onClick={() => {
+                    setIsRendered(false);
+                    setTimeout(() => setIsDismissed(true), 500);
+                }}
+                aria-label="Dismiss beta banner"
+                className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full text-[#A3BFB0] hover:text-white hover:bg-white/15 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#4ADE80] cursor-pointer z-10"
+                title="Dismiss"
+            >
+                <X className="w-4 h-4" />
+            </button>
         </aside>
     );
 }
