@@ -76,12 +76,18 @@ describe('BUG-01: auth guard', () => {
     const req = makeRequest() // no auth header
     const res = await GET(req)
     expect(res.status).toBe(401)
+    expect(await res.json()).toEqual({ error: 'Unauthorized' })
+    expect(db.select).not.toHaveBeenCalled()
+    expect(db.insert).not.toHaveBeenCalled()
   })
 
   it('returns 401 when Authorization header has wrong secret', async () => {
     const req = makeRequest('Bearer wrong-secret')
     const res = await GET(req)
     expect(res.status).toBe(401)
+    expect(await res.json()).toEqual({ error: 'Unauthorized' })
+    expect(db.select).not.toHaveBeenCalled()
+    expect(db.insert).not.toHaveBeenCalled()
   })
 
   it('returns 200 when Authorization header has correct secret', async () => {
