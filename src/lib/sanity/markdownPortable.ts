@@ -1,3 +1,4 @@
+import type { PortableTextBlock, PortableTextMarkDefinition, PortableTextSpan } from "@portabletext/types";
 import { sanityImageRefFromUrl } from "./imageRef";
 
 // ── Types (slim) ─────────────────────────────────────────────────────────────
@@ -207,7 +208,7 @@ export function portableToMarkdown(
         inBulletGroup = false;
     };
 
-    for (const b of blocks as Array<Record<string, any>>) {
+    for (const b of blocks as (PortableTextBlock | ImageBlock)[]) {
         if (!b || typeof b !== "object") continue;
         if (b._type === "image") {
             flushBullets();
@@ -218,15 +219,16 @@ export function portableToMarkdown(
         }
         if (b._type !== "block") continue;
 
-        const spans = Array.isArray(b.children) ? b.children : [];
-        const markDefs = Array.isArray(b.markDefs) ? b.markDefs : [];
-        const rendered = spans.map((s: any) => {
-            let text = s?.text ?? "";
-            const marks: string[] = Array.isArray(s?.marks) ? s.marks : [];
+        const spans = Array.isArray(b.children) ? b.children as PortableTextSpan[] : [];
+        const markDefs = Array.isArray(b.markDefs) ? b.markDefs as PortableTextMarkDefinition[] : [];
+        const rendered = spans.map((s: PortableTextSpan) => {
+            let text = s.text ?? "";
+            const marks: string[] = Array.isArray(s.marks) ? s.marks : [];
             for (const mk of marks) {
-                const def = markDefs.find((d: any) => d?._key === mk);
+                const def = markDefs.find((d: PortableTextMarkDefinition) => d._key === mk);
                 if (def?._type === "link") {
-                    text = `[${text}](${def.href})`;
+                    // Type cast to custom type since PortableTextMarkDefinition is a generic Record
+                    text = `[${text}](${(def as unknown as MarkDef).href})`;
                 } else if (mk === "strong") text = `**${text}**`;
                 else if (mk === "em") text = `*${text}*`;
                 else if (mk === "code") text = `\`${text}\``;
