@@ -118,8 +118,8 @@ export default function SettingsPage({
             setBackupCodes((result.data as any)?.backupCodes ?? []);
             setTwoFAPassword("");
             setTwoFAStep("show-qr");
-        } catch (e: any) {
-            setTwoFAError(e?.message ?? "Unexpected error.");
+        } catch (e: unknown) {
+            setTwoFAError(e instanceof Error ? e.message : "Unexpected error.");
         } finally {
             setTwoFALoading(false);
         }
@@ -140,8 +140,8 @@ export default function SettingsPage({
             }
             setIs2FAEnabled(true);
             setTwoFAStep("done");
-        } catch (e: any) {
-            setTwoFAError(e?.message ?? "Verification failed.");
+        } catch (e: unknown) {
+            setTwoFAError(e instanceof Error ? e.message : "Verification failed.");
         } finally {
             setTwoFALoading(false);
         }
@@ -163,8 +163,8 @@ export default function SettingsPage({
             setIs2FAEnabled(false);
             setTwoFAPassword("");
             setTwoFAStep("idle");
-        } catch (e: any) {
-            setTwoFAError(e?.message ?? "Unexpected error.");
+        } catch (e: unknown) {
+            setTwoFAError(e instanceof Error ? e.message : "Unexpected error.");
         } finally {
             setTwoFALoading(false);
         }

@@ -16,9 +16,9 @@ export default function AIProfileClient() {
         try {
             await triggerAiProfileSynthesis();
             setState("done");
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error("[AIProfile] Synthesis failed:", e);
-            setErrorMsg(e?.message ?? "Profile synthesis failed. Your interview was saved.");
+            setErrorMsg(e instanceof Error ? e.message : "Profile synthesis failed. Your interview was saved.");
             setState("error");
         }
     }, []);

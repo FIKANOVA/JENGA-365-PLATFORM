@@ -60,8 +60,8 @@ export async function processAndEmbedDocument(documentId: string) {
         if (!response.ok) throw new Error(`HTTP ${response.status} failed to fetch PDF from ${doc.fileUrl}`);
         const arrayBuffer = await response.arrayBuffer();
         pdfBuffer = Buffer.from(arrayBuffer);
-    } catch (e: any) {
-        console.error("[AI Processor] Failed to download PDF", e);
+    } catch (e: unknown) {
+        console.error("[AI Processor] Failed to download PDF", e instanceof Error ? e.message : e);
         throw new Error("Failed to download PDF for processing");
     }
 
@@ -70,8 +70,8 @@ export async function processAndEmbedDocument(documentId: string) {
     try {
         const data = await pdfParse(pdfBuffer);
         extractedText = data.text;
-    } catch (e: any) {
-        console.error("[AI Processor] PDF Parse Failed", e);
+    } catch (e: unknown) {
+        console.error("[AI Processor] PDF Parse Failed", e instanceof Error ? e.message : e);
         throw new Error("Failed to parse text from PDF");
     }
 
@@ -107,8 +107,8 @@ export async function processAndEmbedDocument(documentId: string) {
             if (valuesToInsert.length > 0) {
                 await db.insert(documentChunks).values(valuesToInsert);
             }
-        } catch (e: any) {
-            console.error(`[AI Processor] Failed to process batch starting at index ${i}`, e);
+        } catch (e: unknown) {
+            console.error(`[AI Processor] Failed to process batch starting at index ${i}`, e instanceof Error ? e.message : e);
             // Throw to abort and debug early.
             throw new Error(`Failed to generate embedding for batch starting at ${i}`);
         }
