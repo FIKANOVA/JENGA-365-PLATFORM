@@ -6,9 +6,9 @@ vi.mock('@/lib/auth/config', () => ({
   auth: { api: { getSession: vi.fn() } },
 }))
 vi.mock('@/lib/db', () => ({
-  db: { query: { users: { findFirst: vi.fn() }, menteeIntake: { findFirst: vi.fn().mockResolvedValue(null) } } },
+  db: { query: { users: { findFirst: vi.fn() } } },
 }))
-vi.mock('@/lib/db/schema', () => ({ users: { name: 'users' }, menteeIntake: { userId: 'userId' } }))
+vi.mock('@/lib/db/schema', () => ({ users: { name: 'users' } }))
 vi.mock('@/lib/db/queries/matching', () => ({
   getMentorMatches: vi.fn().mockResolvedValue([{ id: 'mentor-1', matchPercentage: 85 }]),
 }))
@@ -22,7 +22,7 @@ import { getMentorMatches } from '@/lib/db/queries/matching'
 
 const MOCK_EMBEDDING = new Array(768).fill(0.1)
 
-describe.skip('getAiMentorMatches', () => {
+describe('getAiMentorMatches', () => {
   beforeEach(() => vi.clearAllMocks())
   it('returns [] when not authenticated', async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue(null as any)
@@ -34,7 +34,7 @@ describe.skip('getAiMentorMatches', () => {
     vi.mocked(db.query.users.findFirst).mockResolvedValue({ embedding: MOCK_EMBEDDING, embeddingStale: false } as any)
     await getAiMentorMatches()
     expect(db.query.users.findFirst).toHaveBeenCalled()
-    expect(getMentorMatches).toHaveBeenCalledWith(expect.objectContaining({ menteeEmbedding: MOCK_EMBEDDING }))
+    expect(getMentorMatches).toHaveBeenCalledWith(expect.objectContaining({ menteeEmbedding: MOCK_EMBEDDING, menteeId: 'u-1' }))
   })
 
   it('returns [] when user has no embedding in DB', async () => {
@@ -49,33 +49,12 @@ describe.skip('getAiMentorMatches', () => {
     expect(await getAiMentorMatches()).toEqual([])
   })
 
-  it('forwards goalCategories to getMentorMatches when intake has categories', async () => {
+  it('passes menteeId to getMentorMatches', async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue({ user: { id: 'u-1' } } as any)
     vi.mocked(db.query.users.findFirst).mockResolvedValue({ embedding: MOCK_EMBEDDING, embeddingStale: false } as any)
-    vi.mocked(db.query.menteeIntake.findFirst).mockResolvedValue({ goalCategories: ['entrepreneurship'] } as any)
     await getAiMentorMatches()
     expect(getMentorMatches).toHaveBeenCalledWith(
-      expect.objectContaining({ menteeGoalCategories: ['entrepreneurship'] })
-    )
-  })
-
-  it('passes undefined menteeGoalCategories when intake goalCategories is null', async () => {
-    vi.mocked(auth.api.getSession).mockResolvedValue({ user: { id: 'u-1' } } as any)
-    vi.mocked(db.query.users.findFirst).mockResolvedValue({ embedding: MOCK_EMBEDDING, embeddingStale: false } as any)
-    vi.mocked(db.query.menteeIntake.findFirst).mockResolvedValue({ goalCategories: null } as any)
-    await getAiMentorMatches()
-    expect(getMentorMatches).toHaveBeenCalledWith(
-      expect.objectContaining({ menteeGoalCategories: undefined })
-    )
-  })
-
-  it('passes undefined menteeGoalCategories when no intake row exists', async () => {
-    vi.mocked(auth.api.getSession).mockResolvedValue({ user: { id: 'u-1' } } as any)
-    vi.mocked(db.query.users.findFirst).mockResolvedValue({ embedding: MOCK_EMBEDDING, embeddingStale: false } as any)
-    vi.mocked(db.query.menteeIntake.findFirst).mockResolvedValue(null as any)
-    await getAiMentorMatches()
-    expect(getMentorMatches).toHaveBeenCalledWith(
-      expect.objectContaining({ menteeGoalCategories: undefined })
+      expect.objectContaining({ menteeId: 'u-1' })
     )
   })
 })
