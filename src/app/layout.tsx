@@ -43,6 +43,9 @@ export const metadata: Metadata = {
     shortcut: "/assets/logos/Jenga365%20logo.svg",
     apple: "/assets/logos/Jenga365%20logo.svg",
   },
+  verification: {
+    google: "googlec1711f3b52a48f29",
+  },
 };
 
 
