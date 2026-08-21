@@ -12,6 +12,7 @@ import {
     CheckCircle2,
     AlertTriangle,
 } from "lucide-react";
+import Turnstile from "@/components/shared/Turnstile";
 
 const INPUT_CLASS =
     "h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none";
@@ -24,6 +25,7 @@ function ResetPasswordForm() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -56,6 +58,10 @@ function ResetPasswordForm() {
         e.preventDefault();
         setError(null);
 
+        if (!turnstileToken) {
+            return setError("Please complete the spam verification check before submitting.");
+        }
+
         if (password.length < 8) {
             return setError("Password must be at least 8 characters.");
         }
@@ -69,6 +75,7 @@ function ResetPasswordForm() {
                 newPassword: password,
                 token,
             });
+
 
             if (result?.error) {
                 setError(result.error.message ?? "Reset failed. The link may have expired.");
@@ -167,10 +174,23 @@ function ResetPasswordForm() {
                     />
                 </div>
 
+                {/* Cloudflare Turnstile */}
+                <div className="pt-1 flex justify-center">
+                    <Turnstile
+                        action="reset_password"
+                        onSuccess={(token) => {
+                            setTurnstileToken(token);
+                            setError(null);
+                        }}
+                        onError={() => setTurnstileToken(null)}
+                        onExpire={() => setTurnstileToken(null)}
+                    />
+                </div>
+
                 <button
                     type="submit"
-                    disabled={loading}
-                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                    disabled={loading || !turnstileToken}
+                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 cursor-pointer"
                     style={{ background: "var(--brand-green)" }}
                 >
                     {loading ? (
@@ -183,6 +203,7 @@ function ResetPasswordForm() {
                     )}
                 </button>
             </form>
+
         </>
     );
 }

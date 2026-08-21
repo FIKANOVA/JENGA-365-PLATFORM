@@ -5,9 +5,11 @@ import Link from "next/link";
 import Logo from "@/components/shared/Logo";
 import { authClient } from "@/lib/auth/client";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import Turnstile from "@/components/shared/Turnstile";
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("");
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -15,6 +17,12 @@ export default function ForgotPasswordPage() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setError(null);
+
+        if (!turnstileToken) {
+            setError("Please complete the spam verification check before continuing.");
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -99,10 +107,23 @@ export default function ForgotPasswordPage() {
                                 />
                             </div>
 
+                            {/* Cloudflare Turnstile */}
+                            <div className="pt-1 flex justify-center">
+                                <Turnstile
+                                    action="forgot_password"
+                                    onSuccess={(token) => {
+                                        setTurnstileToken(token);
+                                        setError(null);
+                                    }}
+                                    onError={() => setTurnstileToken(null)}
+                                    onExpire={() => setTurnstileToken(null)}
+                                />
+                            </div>
+
                             <button
                                 type="submit"
-                                disabled={loading}
-                                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                                disabled={loading || !turnstileToken}
+                                className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 cursor-pointer"
                                 style={{ background: "var(--brand-green)" }}
                             >
                                 {loading ? (
@@ -115,6 +136,7 @@ export default function ForgotPasswordPage() {
                                 )}
                             </button>
                         </form>
+
 
                         <div className="pt-6 border-t border-border text-center">
                             <Link

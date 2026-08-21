@@ -1,21 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { resend, DEFAULT_FROM } from "@/lib/email/resend";
 import { escapeHtml } from "@/lib/utils";
+import { verifyTurnstileToken } from "@/lib/turnstile";
 
 const CONTACT_RECIPIENT = process.env.CONTACT_EMAIL ?? "hello@jenga365.org";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
-    const { name, email, subject, message } = body as Record<string, string>;
+    const { name, email, subject, message, turnstileToken } = body as Record<string, string>;
 
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
         return NextResponse.json({ error: "Name, email, and message are required." }, { status: 400 });
+    }
+
+    if (!turnstileToken) {
+        return NextResponse.json({ error: "Spam verification token is required." }, { status: 400 });
+    }
+
+    const verifyResult = await verifyTurnstileToken(turnstileToken);
+    if (!verifyResult.success) {
+        return NextResponse.json({ error: verifyResult.error || "Spam check failed. Please refresh and try again." }, { status: 400 });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
+
 
     try {
         const safeName = escapeHtml(name);

@@ -13,6 +13,7 @@ import {
 } from "@/lib/actions/auth";
 import { toast } from "sonner";
 import Logo from "@/components/shared/Logo";
+import Turnstile from "@/components/shared/Turnstile";
 
 const INPUT_CLASS =
     "h-10 w-full rounded-md border border-border bg-background px-3 text-body-sm text-foreground placeholder:text-foreground-subtle transition-colors focus:border-[color:var(--brand-green)] focus:outline-none";
@@ -56,8 +57,10 @@ export default function ModeratorInvitePage() {
 
     const [step, setStep] = useState<1 | 2>(1);
     const [loading, setLoading] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
     const [validating, setValidating] = useState(true);
     const [inviteError, setInviteError] = useState<string | null>(null);
+
 
     const [inviteeEmail, setInviteeEmail] = useState("");
     const [moderationScope, setModerationScopeValue] = useState<string | null>(null);
@@ -320,8 +323,25 @@ export default function ModeratorInvitePage() {
                                     </p>
                                 )}
 
+                                {/* Turnstile Bot Protection */}
+                                <div className="pt-2 flex justify-center">
+                                    <Turnstile
+                                        action="moderator_setup"
+                                        onSuccess={(token) => {
+                                            setTurnstileToken(token);
+                                            setError(null);
+                                        }}
+                                        onError={() => setTurnstileToken(null)}
+                                        onExpire={() => setTurnstileToken(null)}
+                                    />
+                                </div>
+
                                 <button
                                     onClick={() => {
+                                        if (!turnstileToken) {
+                                            setError("Please complete the spam check before continuing.");
+                                            return;
+                                        }
                                         if (!name || !password) {
                                             setError("Please complete all fields.");
                                             return;
@@ -329,11 +349,12 @@ export default function ModeratorInvitePage() {
                                         setError(null);
                                         setStep(2);
                                     }}
-                                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
+                                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 cursor-pointer"
                                     style={{ background: "var(--brand-green)" }}
                                 >
                                     Continue to agreement <ArrowRight className="h-4 w-4" />
                                 </button>
+
                             </>
                         ) : (
                             <>

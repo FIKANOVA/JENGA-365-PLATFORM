@@ -5,6 +5,7 @@ import { MapPin, Mail, Clock, Globe, AtSign, Camera, Plus, Send, MailCheck } fro
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 import { toast } from "sonner";
+import Turnstile from "@/components/shared/Turnstile";
 
 export interface FaqItem {
     question: string;
@@ -54,6 +55,7 @@ export default function ContactClient({ faqItems = [] }: ContactClientProps) {
         subject: "General Inquiry",
         message: "",
     });
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
@@ -69,12 +71,19 @@ export default function ContactClient({ faqItems = [] }: ContactClientProps) {
             toast.error("Please fill in all required fields.");
             return;
         }
+        if (!turnstileToken) {
+            toast.error("Please complete the spam check before sending your message.");
+            return;
+        }
         setIsSubmitting(true);
         try {
             const res = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    turnstileToken,
+                }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error ?? "Unknown error");
@@ -87,6 +96,7 @@ export default function ContactClient({ faqItems = [] }: ContactClientProps) {
             setIsSubmitting(false);
         }
     };
+
 
     return (
         <div className="min-h-screen bg-background">
@@ -218,15 +228,24 @@ export default function ContactClient({ faqItems = [] }: ContactClientProps) {
                                                 className="w-full rounded-md border border-border bg-background px-3 py-2 text-body-sm text-foreground transition-colors focus:border-[color:var(--brand-green)] focus:outline-none resize-none"
                                             />
                                         </Field>
+                                        <div className="py-1 flex justify-center">
+                                            <Turnstile
+                                                action="contact"
+                                                onSuccess={(token) => setTurnstileToken(token)}
+                                                onError={() => setTurnstileToken(null)}
+                                                onExpire={() => setTurnstileToken(null)}
+                                            />
+                                        </div>
                                         <button
                                             type="submit"
-                                            disabled={isSubmitting}
-                                            className="inline-flex w-full h-11 items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                            disabled={isSubmitting || !turnstileToken}
+                                            className="inline-flex w-full h-11 items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 cursor-pointer"
                                             style={{ background: "var(--brand-green)" }}
                                         >
                                             {isSubmitting ? "Sending…" : <>Send message <Send className="h-4 w-4" /></>}
                                         </button>
                                     </form>
+
                                 )}
                             </div>
                         </div>

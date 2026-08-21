@@ -21,6 +21,7 @@ import { sendCorporateRegistrationEmails } from "@/lib/actions/registration-emai
 
 import Logo from "@/components/shared/Logo";
 import RegistrationNDAStep from "@/components/auth/RegistrationNDAStep";
+import Turnstile from "@/components/shared/Turnstile";
 
 const STEPS = [
     { id: 1, label: "Organisation" },
@@ -70,7 +71,9 @@ function CorporateRegisterInner() {
     const searchParams = useSearchParams();
     const [step, setStep] = useState<1 | 2 | 3>(1);
     const [loading, setLoading] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
 
     const [formData, setFormData] = useState({
         orgName: "",
@@ -258,8 +261,25 @@ function CorporateRegisterInner() {
                                     />
                                 </Field>
 
+                                {/* Turnstile Bot Protection */}
+                                <div className="pt-2 flex justify-center">
+                                    <Turnstile
+                                        action="register_corporate"
+                                        onSuccess={(token) => {
+                                            setTurnstileToken(token);
+                                            setError(null);
+                                        }}
+                                        onError={() => setTurnstileToken(null)}
+                                        onExpire={() => setTurnstileToken(null)}
+                                    />
+                                </div>
+
                                 <PrimaryButton
                                     onClick={() => {
+                                        if (!turnstileToken) {
+                                            setError("Please complete the spam check before continuing.");
+                                            return;
+                                        }
                                         if (
                                             formData.orgName &&
                                             formData.contactName &&

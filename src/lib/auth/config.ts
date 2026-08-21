@@ -27,6 +27,18 @@ export const auth = betterAuth({
     // Secret — used for signing sessions and encrypting tokens
     secret: process.env.BETTER_AUTH_SECRET,
 
+    // Social Providers (Google OAuth)
+    socialProviders: {
+        ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+            ? {
+                  google: {
+                      clientId: process.env.GOOGLE_CLIENT_ID,
+                      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                  },
+              }
+            : {}),
+    },
+
     // Advanced - Let DB (Drizzle) generate UUIDs for us
     advanced: {
         // generateId has been removed in newer versions of better-auth,

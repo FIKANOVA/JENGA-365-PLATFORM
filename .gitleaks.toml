@@ -1,0 +1,18 @@
+# Gitleaks / Betterleaks configuration for Jenga365 AI Platform
+title = "Jenga365 Secret Detection Config"
+
+[allowlist]
+description = "Allow official test keys, dummy secrets, and test fixtures"
+regexes = [
+    '''1x00000000000000000000AA''',                       # Cloudflare Turnstile Dummy Site Key
+    '''1x0000000000000000000000000000000AA''',             # Cloudflare Turnstile Dummy Secret Key
+    '''pk_test_[a-zA-Z0-9]+''',                            # Paystack Test Public Key
+    '''sk_test_[a-zA-Z0-9]+''',                            # Paystack Test Secret Key
+    '''AIzaSy[X]{20,}''',                                  # Template Gemini Key in .env.example
+]
+paths = [
+    '''^src/__tests__/''',
+    '''^\.env\.example$''',
+    '''^node_modules/''',
+    '''^\.next/''',
+]
