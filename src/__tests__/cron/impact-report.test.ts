@@ -17,7 +17,7 @@ vi.mock('@/lib/db/schema', () => ({
 vi.mock('drizzle-orm', () => ({
   sql: vi.fn((strings: TemplateStringsArray, ...values: unknown[]) => ({ sql: strings, values })),
   sum: vi.fn((col: unknown) => col),
-  count: vi.fn((col: unknown) => col),
+  countDistinct: vi.fn((col: unknown) => col),
 }))
 
 import { GET } from '@/app/api/cron/impact-report/route'
@@ -41,14 +41,14 @@ function makeRequest(authHeader?: string): Request {
   return new Request('http://localhost/api/cron/impact-report', { headers })
 }
 
-function setupDbMocks(donationAmount: string | null, sessionHours: number | null, sessionCount: number | null) {
+function setupDbMocks(donationAmount: string | null, sessionMinutes: number | null, sessionCount: number | null) {
   let callCount = 0
   vi.mocked(db.select).mockImplementation(() => {
     callCount++
     if (callCount === 1) {
       return { from: vi.fn().mockResolvedValue([{ totalAmount: donationAmount }]) } as any
     }
-    return { from: vi.fn().mockResolvedValue([{ totalHours: sessionHours, youthCount: sessionCount }]) } as any
+    return { from: vi.fn().mockResolvedValue([{ totalMinutes: sessionMinutes, youthCount: sessionCount }]) } as any
   })
   const mockValues = vi.fn().mockResolvedValue([])
   vi.mocked(db.insert).mockReturnValue({ values: mockValues } as any)
@@ -116,14 +116,14 @@ describe('BUG-02: SQL correctness', () => {
     expect(db.select).toHaveBeenCalledTimes(2)
   })
 
-  it('inserts totalMentorshipHours: 360 when sessions query returns 360 minutes', async () => {
+  it('inserts totalMentorshipHours: 6 when sessions query returns 360 minutes', async () => {
     const { mockValues } = setupDbMocks('5000.00', 360, 12)
 
     const req = makeRequest(`Bearer ${TEST_CRON_SECRET}`)
     await GET(req)
 
     const insertedRow = mockValues.mock.calls[0][0]
-    expect(insertedRow.totalMentorshipHours).toBe(360)
+    expect(insertedRow.totalMentorshipHours).toBe(6)
   })
 
   it('inserts totalMentorshipHours: 0 and youthEngaged: 0 gracefully when sessions return nulls', async () => {
