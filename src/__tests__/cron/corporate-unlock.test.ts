@@ -1,5 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
+
+vi.mock('@/lib/db', () => ({
+  db: {
+    delete: vi.fn().mockReturnValue({
+      where: vi.fn().mockResolvedValue([]),
+    }),
+  },
+}))
+
 vi.mock('@/lib/actions/corporateUnlock', () => ({
   checkAndUnlockMilestones: vi.fn().mockResolvedValue(undefined),
 }))
@@ -43,7 +52,7 @@ describe('Corporate Unlock cron — auth guard', () => {
     expect(res.status).toBe(401)
   })
 
-  it('returns 200 { success: true } with correct secret', async () => {
+  it('returns 200 { ok: true } with correct secret', async () => {
     const res = await GET(makeRequest(`Bearer ${CRON_SECRET}`))
     expect(res.status).toBe(200)
     expect((await res.json()).ok).toBe(true)
@@ -60,7 +69,7 @@ describe('Corporate Unlock cron — behaviour', () => {
     expect(checkAndUnlockMilestones).toHaveBeenCalledWith()
   })
 
-  it('returns 500 when checkAndUnlockMilestones throws', async () => {
+  it('throws an error when checkAndUnlockMilestones throws', async () => {
     vi.mocked(checkAndUnlockMilestones).mockRejectedValueOnce(new Error('DB connection lost'))
     await expect(GET(makeRequest(`Bearer ${CRON_SECRET}`))).rejects.toThrow('DB connection lost')
   })
