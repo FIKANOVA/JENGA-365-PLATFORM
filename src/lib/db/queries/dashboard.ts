@@ -236,7 +236,7 @@ export async function getPendingUsers(limit = 20) {
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
 
-export async function getAllUsers(limit = 50) {
+export async function getAllUsers(limit = 100) {
     return db
         .select({
             id: users.id,
@@ -249,6 +249,10 @@ export async function getAllUsers(limit = 50) {
             locationRegion: users.locationRegion,
             metadata: users.metadata,
             moderationScope: users.moderationScope,
+            ndaSigned: users.ndaSigned,
+            ndaSignedAt: users.ndaSignedAt,
+            emailVerified: users.emailVerified,
+            rejectionReason: users.rejectionReason,
             createdAt: users.createdAt,
         })
         .from(users)
