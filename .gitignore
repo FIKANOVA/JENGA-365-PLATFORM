@@ -83,22 +83,22 @@ plans/
 # Claude Code session-local state (lock files, settings overrides)
 .claude/
 
-# Development-only docs (kept local, not for GitHub)
+# Internal engineering & offline documentation
+docs/
+docs-frontend/
+docs-internal-backend/
+mkdocs.*.yml
+.Jules/
+CLAUDE.md
+IMPLEMENTATION_PLAN.md
 SESSION_HANDOFF.md
 CLAUDE_SETUP_HANDOVER.md
 JENGA365_MASTER_TEST_PLAN.md
 JENGA365_QA_TEST_GUIDE.md
 Jenga365 Production Audit.md
 master index.md
-docs/SESSION_HANDOVER.md
-docs/PROJECT_STATE.md
-docs/QA_AUDIT.md
-docs/SUPERADMIN_USER_MANUAL.md
-docs/SANITY_CMS_STATE.md
-docs/PROJECT_STATE_AND_GAPS.md
-docs/USER_TEST_GUIDE.md
-docs/pdf/
 site-frontend/
 site-backend/
 nginx/
+
 

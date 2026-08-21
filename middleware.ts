@@ -11,7 +11,9 @@ import {
 const PUBLIC_ROUTES = [
     "/", "/about", "/articles", "/events", "/resources",
     "/contact", "/shop", "/donate", "/help", "/impact", "/voices",
+    "/privacy", "/terms", "/legal", "/mentors", "/mentees",
 ];
+
 const AUTH_ONLY_ROUTES = ["/login", "/register"];
 const ONBOARDING_ROUTES = [
     "/legal/nda", "/onboarding", "/verify-email",
