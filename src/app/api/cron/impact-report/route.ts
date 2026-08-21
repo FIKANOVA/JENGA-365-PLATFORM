@@ -2,13 +2,24 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { impactReports, donations, sessionsLog } from "@/lib/db/schema";
 import { sum, count } from "drizzle-orm";
+import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
     // BUG-01 FIX: Enforce Vercel Cron secret — prevents unauthenticated triggering
     const authHeader = req.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    const secret = process.env.CRON_SECRET;
+
+    if (!authHeader || !secret) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const token = authHeader.replace(/^Bearer\s+/i, "");
+    const tokenBuf = Buffer.from(token);
+    const secretBuf = Buffer.from(secret);
+
+    if (tokenBuf.length !== secretBuf.length || !crypto.timingSafeEqual(tokenBuf, secretBuf)) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
