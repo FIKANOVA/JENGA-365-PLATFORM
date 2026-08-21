@@ -1,11 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type LogoTone = "default" | "light" | "dark";
-type LogoSize = "sm" | "md" | "lg";
+type LogoSize = "sm" | "md" | "lg" | "xl";
 
 interface LogoProps {
-    /** Wraps the wordmark in a Link to `/`. Defaults true; pass false for embeds (e.g. inside a Sheet). */
+    /** Wraps the logo in a Link to `/`. Defaults true; pass false for embeds (e.g. inside dialogs/sheets). */
     asLink?: boolean;
     tone?: LogoTone;
     size?: LogoSize;
@@ -13,14 +16,8 @@ interface LogoProps {
 }
 
 /**
- * Jenga365 inline-SVG logo: orbit arcs + red/green dots + wordmark
- * (J red, "enga36" neutral, 5 green). Mirrors /public/jenga365-logo.svg.
- * Neutral parts use currentColor so the mark adapts to `tone` (white on dark
- * surfaces, foreground on light); the red/green accents stay fixed.
- *
- * Legacy props (`variant`, `theme`, `showText`, `width`, `height`, `priority`) are
- * silently accepted-and-ignored so call sites elsewhere in the codebase keep
- * compiling during the rollout.
+ * Jenga365 Official Logo component.
+ * Uses the official SVG from /public/assets/logos/Jenga365 logo.svg and /public/jenga365-logo.svg.
  */
 type LegacyProps = {
     variant?: string;
@@ -37,69 +34,40 @@ export default function Logo({
     size = "md",
     className,
 }: LogoProps & LegacyProps) {
-    const toneClass =
-        tone === "light"
-            ? "text-white"
-            : tone === "dark"
-                ? "text-black dark:text-white"
-                : "text-foreground";
-
     const sizeClass =
-        size === "sm" ? "h-6" : size === "lg" ? "h-10" : "h-8";
+        size === "sm"
+            ? "h-8 w-8 sm:h-9 sm:w-9"
+            : size === "lg"
+                ? "h-12 w-12 sm:h-14 sm:w-14"
+                : size === "xl"
+                    ? "h-16 w-16 sm:h-20 sm:w-20"
+                    : "h-9 w-9 sm:h-10 sm:w-10";
 
-    const textScale = size === "sm" ? "1.25rem" : size === "lg" ? "1.75rem" : "1.5rem";
-
-    const mark = (
-        <svg
-            viewBox="0 0 300 96"
-            className={cn("w-auto", sizeClass, toneClass, className)}
-            fill="none"
-            role="img"
-            aria-label="Jenga365"
-        >
-            <path
-                d="M40 28 A 150 85 0 0 1 252 22"
-                stroke="currentColor"
-                strokeWidth={3}
-                strokeLinecap="round"
-                fill="none"
-                opacity={0.9}
+    const logoElement = (
+        <div className={cn("inline-flex items-center justify-center shrink-0", className)}>
+            <img
+                src="/assets/logos/Jenga365%20logo.svg"
+                alt="Jenga365 Logo"
+                className={cn(
+                    sizeClass,
+                    "w-auto object-contain transition-transform duration-200 hover:scale-[1.03]",
+                )}
+                loading="eager"
             />
-            <path
-                d="M260 68 A 150 85 0 0 1 48 74"
-                stroke="currentColor"
-                strokeWidth={3}
-                strokeLinecap="round"
-                fill="none"
-                opacity={0.9}
-            />
-            <circle cx="40" cy="28" r="7" fill="#E5342A" />
-            <circle cx="260" cy="68" r="7" fill="#16A34A" />
-            <text
-                x="150"
-                y="63"
-                textAnchor="middle"
-                fontFamily="var(--font-sans), Inter, system-ui, -apple-system, sans-serif"
-                fontWeight="700"
-                fontSize="46"
-                letterSpacing="-1.5"
-            >
-                <tspan fill="#E5342A">J</tspan>
-                <tspan fill="currentColor">enga36</tspan>
-                <tspan fill="#16A34A">5</tspan>
-            </text>
-        </svg>
+        </div>
     );
 
-    if (!asLink) return mark;
+    if (!asLink) {
+        return logoElement;
+    }
 
     return (
         <Link
             href="/"
-            aria-label="Jenga365 home"
-            className="inline-flex items-center transition-opacity hover:opacity-80"
+            aria-label="Jenga365 Home"
+            className="inline-flex items-center transition-opacity hover:opacity-90 focus:outline-none"
         >
-            {mark}
+            {logoElement}
         </Link>
     );
 }
