@@ -59,8 +59,8 @@ export async function validateAdminInvite(token: string) {
                 moderationScope: invite.moderationScope ?? null,
             }
         };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
     }
 }
 
@@ -73,8 +73,8 @@ export async function finishAdminInvite(token: string) {
             .set({ isUsed: true })
             .where(eq(inviteLinks.token, token));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
     }
 }
 
@@ -114,8 +114,8 @@ export async function createModeratorInvite(
         ).catch((err) => console.error("Admin/Moderator invite email failed:", err));
 
         return { success: true, inviteUrl };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
     }
 }
 
@@ -130,8 +130,8 @@ export async function setUserRole(
     try {
         await db.update(users).set({ role } as any).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
     }
 }
 
@@ -142,8 +142,8 @@ export async function setModeratorScope(userId: string, scope: string) {
     try {
         await db.update(users).set({ moderationScope: scope } as any).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
     }
 }
 
@@ -154,8 +154,8 @@ export async function saveUserMetadata(userId: string, metadata: Record<string, 
     try {
         await db.update(users).set({ metadata }).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
     }
 }
 
@@ -169,8 +169,8 @@ export async function setUserRoleAndApprove(
     try {
         await db.update(users).set({ role, isApproved: true } as any).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
     }
 }
 
@@ -186,8 +186,8 @@ export async function requestPasswordResetAction(email: string) {
             }
         });
         return { success: true };
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("[requestPasswordResetAction] error:", err);
-        return { success: false, error: err?.message || "Failed to send reset link" };
+        return { success: false, error: err instanceof Error ? err.message : "Failed to send reset link" };
     }
 }
