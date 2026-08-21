@@ -1,4 +1,3 @@
-// TODO: rewrite — tests deprecated `mentorSpecialisations` text[] + boost math.
 // Phase 2.1 (a6d9766) switched goal-alignment to `user_goal_tags` table joined
 // in SQL with founder-locked 40/20/15/10/10/5 weights.
 import { describe, it, expect, vi } from 'vitest'
@@ -13,10 +12,10 @@ vi.mock('@/lib/db/schema', () => ({
     embedding: 'embedding',
     isApproved: 'is_approved',
     status: 'status',
-    mentorSpecialisations: 'mentor_specialisations',
   },
   userProfileAssets: { userId: 'user_id', type: 'type' },
   mentorshipPairs: { mentorId: 'mentor_id', status: 'status' },
+  userGoalTags: { userId: 'user_id', category: 'category' },
 }))
 
 const makeSqlObj = () => {
@@ -57,9 +56,9 @@ vi.mock('@/lib/db', () => {
       id: 'm-1',
       name: 'Alice Wanjiku',
       locationRegion: 'Nairobi',
-      totalScore: '0.72',
+      totalScore: '0.82', // 72% base + 10% goal
       profileScore: '0.65',
-      mentorSpecialisations: ['entrepreneur', 'finance'],
+      goalScore: '0.10',
     },
   ]
 
@@ -70,29 +69,30 @@ import { getMentorMatches } from '@/lib/db/queries/matching'
 
 // ─── Goal Alignment scoring ───────────────────────────────────────────────────
 
-describe.skip('goalAlignment — both entrepreneur flags present', () => {
-  it('adds 10 points to matchPercentage when mentee has entrepreneurship goal and mentor is entrepreneur specialist', async () => {
+describe('goalAlignment — correctly mapped from database results', () => {
+  it('maps goalScore into insights.goalAlignment and matchPercentage correctly', async () => {
     const results = await getMentorMatches({
       menteeEmbedding: new Array(768).fill(0.1),
-      menteeGoalCategories: ['entrepreneurship'],
+      menteeId: 'mentee-1',
     })
-    // Base totalScore = 0.72 → 72%. goalAlignment = 1.0 * 0.10 = +10 → 82%
+    // totalScore 0.82 -> 82%
     expect(results[0].matchPercentage).toBe(82)
   })
 
-  it('includes goalAlignment in the insights breakdown', async () => {
+  it('includes goalAlignment in the insights breakdown based on goalScore', async () => {
     const results = await getMentorMatches({
       menteeEmbedding: new Array(768).fill(0.1),
-      menteeGoalCategories: ['entrepreneurship'],
+      menteeId: 'mentee-1',
     })
     expect(results[0].insights).toHaveProperty('goalAlignment')
+    // goalScore 0.10 -> 10%
     expect(results[0].insights.goalAlignment).toBe(10)
   })
 })
 
-describe.skip('goalAlignment — flags absent or mismatched', () => {
-  it('adds 0 points when mentee has entrepreneurship goal but mentor lacks entrepreneur specialisation', async () => {
-    // Override mock to return mentor without entrepreneur specialisation
+describe('goalAlignment — flags absent or mismatched (0 score)', () => {
+  it('maps 0 points when database returns 0 goalScore', async () => {
+    // Override mock to return 0 for goalScore
     const { db } = await import('@/lib/db')
     vi.mocked(db.limit).mockResolvedValueOnce([
       {
@@ -101,29 +101,40 @@ describe.skip('goalAlignment — flags absent or mismatched', () => {
         locationRegion: 'Mombasa',
         totalScore: '0.72',
         profileScore: '0.65',
-        mentorSpecialisations: ['finance', 'law'],
+        goalScore: '0.0',
       },
     ])
     const results = await getMentorMatches({
       menteeEmbedding: new Array(768).fill(0.1),
-      menteeGoalCategories: ['entrepreneurship'],
+      menteeId: 'mentee-2',
     })
     expect(results[0].matchPercentage).toBe(72)
     expect(results[0].insights.goalAlignment).toBe(0)
   })
 
-  it('adds 0 points when menteeGoalCategories is not provided', async () => {
+  it('safely handles null/undefined goalScore', async () => {
+    const { db } = await import('@/lib/db')
+    vi.mocked(db.limit).mockResolvedValueOnce([
+      {
+        id: 'm-3',
+        name: 'Charlie',
+        locationRegion: 'Kisumu',
+        totalScore: '0.72',
+        profileScore: '0.65',
+        goalScore: null,
+      },
+    ])
     const results = await getMentorMatches({
       menteeEmbedding: new Array(768).fill(0.1),
-      // no menteeGoalCategories — goalAlignment = 0 regardless of mentor specialisations
+      menteeId: 'mentee-3',
     })
-    // base totalScore = 0.72 → 72%, goalAlignment = 0 → stays at 72
+
     expect(results[0].matchPercentage).toBe(72)
     expect(results[0].insights.goalAlignment).toBe(0)
   })
 })
 
-describe.skip('goalAlignment — semantic weight reduced to 0.40', () => {
+describe('goalAlignment — semantic weight reduced to 0.40', () => {
   it('returns matchPercentage and insights.profileMatch as distinct values (weights updated)', async () => {
     const results = await getMentorMatches({
       menteeEmbedding: new Array(768).fill(0.1),
