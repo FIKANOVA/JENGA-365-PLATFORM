@@ -103,6 +103,10 @@ export async function GET(req: Request) {
         let processed = 0;
         let flagged = 0;
 
+        const insertData = [];
+        const underReviewIds = [];
+        const notificationPromises = [];
+
         for (const mentee of activeMentees) {
             // ── 2. Did they complete their give-back this quarter? ────────────
             if (completedUserIds.has(mentee.id)) continue; // Participated — no strike
@@ -113,8 +117,8 @@ export async function GET(req: Request) {
             // Strike count after recording this quarter's failure
             const newStrikeCount = failedCount + 1;
 
-            // ── 4. Record this quarter's failure ─────────────────────────────
-            await db.insert(giveBackTracking).values({
+            // ── 4. Collect this quarter's failure for batch insertion ─────────
+            insertData.push({
                 userId: mentee.id,
                 quarter: prevQuarter,
                 activityCompleted: false,
@@ -123,19 +127,34 @@ export async function GET(req: Request) {
 
             // ── 5. Take action based on strike count ──────────────────────────
             if (newStrikeCount >= 3) {
-                await db
-                    .update(users)
-                    .set({ status: "under_review" })
-                    .where(eq(users.id, mentee.id));
+                underReviewIds.push(mentee.id);
                 flagged++;
             } else {
-                await createNotification(mentee.id, "general", {
-                    title: "Give Back Reminder",
-                    body: `You have ${newStrikeCount} strike${newStrikeCount > 1 ? "s" : ""} on the Give Back programme. Please complete an activity next quarter to keep your account in good standing.`,
-                });
+                notificationPromises.push(
+                    createNotification(mentee.id, "general", {
+                        title: "Give Back Reminder",
+                        body: `You have ${newStrikeCount} strike${newStrikeCount > 1 ? "s" : ""} on the Give Back programme. Please complete an activity next quarter to keep your account in good standing.`,
+                    })
+                );
             }
 
             processed++;
+        }
+
+        // ── 6. Execute bulk operations ────────────────────────────────────
+        if (insertData.length > 0) {
+            await db.insert(giveBackTracking).values(insertData);
+        }
+
+        if (underReviewIds.length > 0) {
+            await db
+                .update(users)
+                .set({ status: "under_review" })
+                .where(inArray(users.id, underReviewIds));
+        }
+
+        if (notificationPromises.length > 0) {
+            await Promise.all(notificationPromises);
         }
 
         return NextResponse.json({
