@@ -85,7 +85,7 @@ describe('publishArticleToSanity performance benchmark', () => {
 
         vi.mocked(db.query.articles.findFirst).mockResolvedValue(mockArticle as any);
         vi.mocked(db.query.users.findFirst).mockResolvedValue(mockAuthor as any);
-        vi.mocked(db.where).mockResolvedValue(mockCoAuthorRows as any);
+        vi.mocked((db as any).where).mockResolvedValue(mockCoAuthorRows as any);
 
         // Add artificial delay to ensureAuthorDoc to simulate network latency
         ensureAuthorDocSpy.mockImplementation(async () => {

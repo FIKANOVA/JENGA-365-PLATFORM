@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/shared/Logo";
-import { authClient } from "@/lib/auth/client";
+import { requestPasswordResetAction } from "@/lib/actions/auth";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import Turnstile from "@/components/shared/Turnstile";
 
@@ -26,11 +26,12 @@ export default function ForgotPasswordPage() {
         setLoading(true);
 
         try {
-            await authClient.forgetPassword({
-                email,
-                redirectTo: "/reset-password",
-            });
-            setSubmitted(true);
+            const res = await requestPasswordResetAction(email);
+            if (res.success) {
+                setSubmitted(true);
+            } else {
+                setError(res.error || "Failed to send reset link. Please try again.");
+            }
         } catch {
             setError("Something went wrong. Please try again.");
         } finally {

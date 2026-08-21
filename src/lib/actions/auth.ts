@@ -5,6 +5,7 @@ import { users, inviteLinks } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { EmailService } from "@/lib/email/service";
+import { auth } from "@/lib/auth/config";
 
 /**
  * Validates an invite token and returns the invitee email + role.
@@ -170,5 +171,23 @@ export async function setUserRoleAndApprove(
         return { success: true };
     } catch (err: any) {
         return { success: false, error: err.message };
+    }
+}
+
+/**
+ * Triggers a password reset email via Better Auth.
+ */
+export async function requestPasswordResetAction(email: string) {
+    try {
+        await (auth.api as any).forgetPassword({
+            body: {
+                email: email.trim().toLowerCase(),
+                redirectTo: "/reset-password",
+            }
+        });
+        return { success: true };
+    } catch (err: any) {
+        console.error("[requestPasswordResetAction] error:", err);
+        return { success: false, error: err?.message || "Failed to send reset link" };
     }
 }
