@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Timer, Users, GraduationCap, Trees, Leaf, Building2, ArrowRight, Heart, HandHeart } from "lucide-react";
-import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
+
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
 import { fetchSiteSettings } from "@/lib/sanity/queries";
 import DonateButton from "@/components/shared/DonateButton";
@@ -284,9 +284,8 @@ export default async function ImpactPage() {
                         </div>
                     </div>
                 </section>
-
-                <FinalCTAStrip />
             </main>
         </div>
     );
 }
+

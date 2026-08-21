@@ -93,13 +93,31 @@ export default async function MentorsPage() {
                 </div>
             </section>
 
-            <section className="py-16 lg:py-12 md:py-20" style={{ background: "var(--brand-black)" }}>
+            {/* Impact Metrics Section */}
+            <section className="py-14 md:py-20 border-b border-border" style={{ background: "var(--surface-1)" }}>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+                    <div className="text-center max-w-xl mx-auto mb-10 space-y-2">
+                        <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+                            Network Impact
+                        </p>
+                        <h2 className="text-display-sm text-foreground">
+                            Mentorship by the numbers.
+                        </h2>
+                    </div>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {heroStats.map((stat) => (
-                            <div key={stat.label} className="space-y-1.5 text-center">
-                                <div className="text-display-sm" style={{ color: "#FFFFFF" }}>{stat.value}</div>
-                                <div className="text-eyebrow" style={{ color: "rgba(255,255,255,0.6)" }}>{stat.label}</div>
+                            <div
+                                key={stat.label}
+                                className="rounded-2xl border border-border bg-background p-6 text-center space-y-2 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[color:var(--brand-green)]"
+                                style={{ boxShadow: "var(--shadow-sm)" }}
+                            >
+                                <div className="text-display-md text-foreground font-semibold">
+                                    {stat.value}
+                                </div>
+                                <div className="text-eyebrow text-foreground-muted">
+                                    {stat.label}
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -107,6 +125,7 @@ export default async function MentorsPage() {
             </section>
 
             <AboutCTAStrip />
+
         </div>
     );
 }
