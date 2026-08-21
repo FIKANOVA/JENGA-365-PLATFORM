@@ -99,34 +99,40 @@ function NewsletterForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-3">
-            <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email"
-                disabled={loading}
-                required
-                className="w-full bg-transparent border-b border-white/10 pb-3 text-sm font-sans text-white placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
-            />
-            <div className="py-1">
+        <form onSubmit={handleSubmit} className="space-y-2.5">
+            {/* Input with Subscribe button embedded on the right */}
+            <div className="relative flex items-center border-b border-white/15 focus-within:border-white/40 transition-colors pb-1.5">
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Your email address"
+                    disabled={loading}
+                    required
+                    className="w-full bg-transparent text-sm font-sans text-white placeholder:text-white/30 focus:outline-none pr-24 disabled:opacity-50"
+                />
+                <button
+                    type="submit"
+                    disabled={loading || !turnstileToken}
+                    className="absolute right-0 flex items-center gap-1.5 px-3 py-1 bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold rounded transition-all disabled:opacity-30 disabled:cursor-not-allowed group cursor-pointer"
+                >
+                    <span>{loading ? "..." : "Subscribe"}</span>
+                    <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+                </button>
+            </div>
+
+            {/* Turnstile Widget - slim horizontal and compact height */}
+            <div className="pt-1">
                 <Turnstile
                     action="subscribe"
                     theme="dark"
-                    size="compact"
+                    size="flexible"
+                    className="w-full max-w-[280px]"
                     onSuccess={(token) => setTurnstileToken(token)}
                     onError={() => setTurnstileToken(null)}
                     onExpire={() => setTurnstileToken(null)}
                 />
             </div>
-            <button
-                type="submit"
-                disabled={loading || !turnstileToken}
-                className="flex items-center gap-2 text-[9px] text-white/50 hover:text-white transition-colors font-bold group disabled:opacity-50"
-            >
-                {loading ? "Subscribing..." : "Subscribe"}
-                <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
-            </button>
         </form>
     );
 }
