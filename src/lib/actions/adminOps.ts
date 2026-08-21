@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { corporatePartners, users, moderationLog, notifications } from "@/lib/db/schema";
 import { EmailService } from "@/lib/email/service";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import crypto from "crypto";
@@ -93,13 +93,24 @@ export async function importLegacyUsersAction(legacyUsers: string[]) {
     await requireSuperAdmin();
     const results = [];
 
-    for (const email of legacyUsers) {
-        try {
-            const existingUser = await db.query.users.findFirst({
-                where: eq(users.email, email),
-            });
+    // Filter out duplicates in input
+    const uniqueEmails = Array.from(new Set(legacyUsers));
 
-            if (existingUser) {
+    // Batch fetch existing users
+    let existingEmails = new Set<string>();
+    if (uniqueEmails.length > 0) {
+        const existingUsers = await db.query.users.findMany({
+            where: inArray(users.email, uniqueEmails),
+            columns: {
+                email: true,
+            },
+        });
+        existingEmails = new Set(existingUsers.map(u => u.email));
+    }
+
+    for (const email of uniqueEmails) {
+        try {
+            if (existingEmails.has(email)) {
                 results.push({ email, status: "skipped" });
                 continue;
             }
