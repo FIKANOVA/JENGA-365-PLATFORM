@@ -1,8 +1,8 @@
-import { resend, DEFAULT_FROM } from './resend';
+import { resend, SENDER_ADDRESSES, DEFAULT_FROM } from './resend';
 import * as templates from './templates/definitions';
 
 // ────────────────────────────────────────────────────────────
-//  All 18 transactional email template types
+//  All 19 transactional email template types
 // ────────────────────────────────────────────────────────────
 export type EmailTemplateType =
     | 'registration_confirmation'   // T01
@@ -39,10 +39,11 @@ async function safeSend(params: {
     to: string;
     subject: string;
     html: string;
+    from?: string;
     replyTo?: string;
 }): Promise<EmailResult> {
     try {
-        let fromAddress = DEFAULT_FROM;
+        let fromAddress = params.from || DEFAULT_FROM;
         let response = await resend.emails.send({
             from: fromAddress,
             to: params.to,
@@ -120,6 +121,8 @@ export class EmailService {
     static async sendCorporatePendingApproval(to: string, firstName: string, orgName: string, submittedAt: string) {
         const html = templates.pendingApprovalCorporateEmail(firstName, orgName, submittedAt);
         return safeSend({
+            from: SENDER_ADDRESSES.partnerships,
+            replyTo: "partnerships@jenga365.org",
             to,
             subject: "Partnership application received — Jenga365",
             html,
@@ -156,6 +159,8 @@ export class EmailService {
     static async sendCorporateApproved(to: string, firstName: string, orgName: string) {
         const html = templates.corporateApprovedEmail(firstName, orgName);
         return safeSend({
+            from: SENDER_ADDRESSES.partnerships,
+            replyTo: "partnerships@jenga365.org",
             to,
             subject: `Partnership activated — Welcome to Jenga365, ${orgName}`,
             html,
@@ -169,6 +174,8 @@ export class EmailService {
         const timestamp = new Date().toUTCString();
         const html = templates.ndaSignedConfirmationEmail(firstName, role, fullName, timestamp, hash, signatureId);
         return safeSend({
+            from: SENDER_ADDRESSES.legal,
+            replyTo: "legal@jenga365.org",
             to,
             subject: `Agreement signed — Your Jenga365 ${role} Agreement`,
             html,
@@ -205,6 +212,8 @@ export class EmailService {
     static async sendArticlePublished(to: string, authorName: string, title: string, slug: string) {
         const html = templates.articlePublishedEmail(authorName, title, slug);
         return safeSend({
+            from: SENDER_ADDRESSES.journal,
+            replyTo: "journal@jenga365.org",
             to,
             subject: "Your article is live on Jenga365 🎉",
             html,
@@ -217,6 +226,8 @@ export class EmailService {
     static async sendArticleReturned(to: string, authorName: string, title: string, feedback: string) {
         const html = templates.articleReturnedEmail(authorName, title, feedback);
         return safeSend({
+            from: SENDER_ADDRESSES.journal,
+            replyTo: "journal@jenga365.org",
             to,
             subject: "Your article needs a few changes — Jenga365",
             html,
