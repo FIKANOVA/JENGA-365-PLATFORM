@@ -22,7 +22,7 @@ export const auth = betterAuth({
     }),
 
     // Base URL — used for building callback URLs and cookie domains
-    baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
+    baseURL: process.env.BETTER_AUTH_URL ?? "https://jenga365.org",
 
     // Secret — used for signing sessions and encrypting tokens
     secret: process.env.BETTER_AUTH_SECRET,
@@ -39,18 +39,26 @@ export const auth = betterAuth({
             : {}),
     },
 
-    // Account Linking — allow Google OAuth to link to existing email/password accounts
+    // Account Linking — allow Google OAuth to link seamlessly to existing accounts
     account: {
         accountLinking: {
             enabled: true,
             trustedProviders: ["google"],
+            requireLocalEmailVerified: false,
         },
     },
 
-    // Advanced - Let DB (Drizzle) generate UUIDs for us
+    // Advanced - Cross-subdomain cookie handling and secure session transport
     advanced: {
-        // generateId has been removed in newer versions of better-auth,
-        // relying on databaseHooks below instead.
+        useSecureCookies: process.env.NODE_ENV === "production",
+        crossSubDomainCookies: {
+            enabled: process.env.NODE_ENV === "production",
+            domain: process.env.NODE_ENV === "production" ? ".jenga365.org" : undefined,
+        },
+        defaultCookieAttributes: {
+            sameSite: "lax",
+            secure: process.env.NODE_ENV === "production",
+        },
     },
 
     // Email & password sign-up/sign-in
@@ -246,6 +254,7 @@ export const auth = betterAuth({
                         u.status = "approved";
                         u.ndaSigned = true;
                         u.intakeCompleted = true;
+                        u.emailVerified = true;
                     } else if (!role || !VALID_ROLES.includes(role as typeof VALID_ROLES[number])) {
                         u.role = "Mentee";
                     }

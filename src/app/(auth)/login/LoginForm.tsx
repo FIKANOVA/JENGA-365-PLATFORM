@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { signIn } from "@/lib/auth/client";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -13,6 +13,7 @@ export default function LoginForm() {
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
     const reason = searchParams.get("reason");
+    const oauthError = searchParams.get("error");
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,6 +22,16 @@ export default function LoginForm() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [socialLoading, setSocialLoading] = useState(false);
+
+    useEffect(() => {
+        if (oauthError === "account_not_linked") {
+            setError("An account with this email exists. Please sign in with your email and password.");
+        } else if (oauthError === "state_mismatch") {
+            setError("Google sign-in timed out. Please try signing in again.");
+        } else if (oauthError) {
+            setError(`Authentication notice: ${oauthError.replace(/_/g, " ")}`);
+        }
+    }, [oauthError]);
 
 
     async function handleGoogleSignIn() {
