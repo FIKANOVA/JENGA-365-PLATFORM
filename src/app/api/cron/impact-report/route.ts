@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { impactReports, donations, sessionsLog } from "@/lib/db/schema";
-import { sum, count } from "drizzle-orm";
+import { sum, countDistinct } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
@@ -17,15 +17,15 @@ export async function GET(req: Request) {
         const [[donationStats], [sessionStats]] = await Promise.all([
             db.select({ totalAmount: sum(donations.amount) }).from(donations),
             db.select({
-                totalHours: sum(sessionsLog.durationMinutes),
-                youthCount: count(sessionsLog.id),
+                totalMinutes: sum(sessionsLog.durationMinutes),
+                youthCount: countDistinct(sessionsLog.pairId),
             }).from(sessionsLog),
         ]);
 
         await db.insert(impactReports).values({
             reportPeriod: new Date().toLocaleString("default", { month: "long", year: "numeric" }),
             totalDonations: donationStats.totalAmount || "0",
-            totalMentorshipHours: Number(sessionStats.totalHours) || 0,
+            totalMentorshipHours: Math.floor((Number(sessionStats.totalMinutes) || 0) / 60),
             youthEngaged: Number(sessionStats.youthCount) || 0,
             clinicsHeld: 0,
         });
