@@ -112,8 +112,7 @@ describe('goalAlignment — absent or mismatched', () => {
     expect(results[0].insights.goalAlignment).toBe(0)
   })
 
-  it('returns 0 for goalAlignment when menteeId is not provided', async () => {
-    // Override mock to return 0 for goalScore which happens when no menteeId is provided
+  it('safely handles null/undefined goalScore', async () => {
     const { db } = await import('@/lib/db')
     vi.mocked(db.limit).mockResolvedValueOnce([
       {
@@ -122,12 +121,12 @@ describe('goalAlignment — absent or mismatched', () => {
         locationRegion: 'Nairobi',
         totalScore: '0.72',
         profileScore: '0.65',
-        goalScore: '0.0',
+        goalScore: null,
       },
     ])
     const results = await getMentorMatches({
       menteeEmbedding: new Array(768).fill(0.1),
-      // no menteeId
+      menteeId: 'mentee-3',
     })
     expect(results[0].matchPercentage).toBe(72)
     expect(results[0].insights.goalAlignment).toBe(0)
