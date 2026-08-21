@@ -1,5 +1,6 @@
-import { vi } from "vitest";
+import '@testing-library/jest-dom';
+import { fetch } from 'cross-fetch';
+import { vi } from 'vitest';
 
-vi.mock("server-only", () => {
-  return {};
-});
+global.fetch = fetch;
+vi.mock('server-only', () => ({}));
