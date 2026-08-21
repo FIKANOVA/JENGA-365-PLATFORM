@@ -160,3 +160,29 @@ export const INFO_ROW = (emoji: string, content: string) => `
 export const renderTemplate = (subject: string, content: string) => {
     return EMAIL_SHELL_START(subject) + EMAIL_HEADER + content + EMAIL_FOOTER() + EMAIL_SHELL_END;
 };
+
+export const buildNewsletterWelcomeEmail = (subscriberEmail: string) => {
+    const subject = "Welcome to Jenga Journal";
+    const content = `
+<tr>
+  <td style="padding:40px;">
+    <h1 style="font-family:Georgia,serif;font-size:24px;font-style:italic;color:#1A1A1A;margin:0 0 16px;">Welcome to Jenga Journal</h1>
+    <p style="font-size:15px;line-height:1.6;color:#4A4A4A;margin:0 0 20px;">
+      Thank you for subscribing to Jenga Journal! You'll receive monthly insights covering youth sports mentorship, Total Athlete development, and verified climate action across Kenya.
+    </p>
+    <div style="background-color:#F7F5F0;border-left:3px solid #BB0000;padding:16px 20px;margin:24px 0;">
+      <p style="margin:0;font-size:13px;color:#1A1A1A;font-family:Courier New,monospace;">
+        SUBSCRIBED: ${subscriberEmail}
+      </p>
+    </div>
+    <p style="font-size:14px;color:#777777;margin:24px 0 0;line-height:1.6;">
+      Together, building the Total Athlete 365 days a year.
+    </p>
+  </td>
+</tr>
+`;
+    return {
+        subject,
+        html: renderTemplate(subject, content),
+    };
+};

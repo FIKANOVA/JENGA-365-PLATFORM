@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Linkedin, Mail, Globe, ArrowRight, Instagram, Twitter } from "lucide-react";
 import Logo from "@/components/shared/Logo";
+import { toast } from "sonner";
 
 // Footer nav carries only wayfinding links. Donate / Store / Join are global
 // header CTAs and appear in the final CTA strip directly above the footer, so
@@ -41,6 +43,75 @@ const socials = [
     { icon: Twitter, href: "https://x.com/jengaccclxv", label: "X" },
     { icon: Mail, href: "mailto:info@jenga365.org", label: "Email" },
 ];
+
+function NewsletterForm() {
+    const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [subscribed, setSubscribed] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email || !email.includes("@")) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await fetch("/api/newsletter/subscribe", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: email.trim() }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                toast.error(data.error || "Failed to subscribe. Please try again.");
+                return;
+            }
+
+            setSubscribed(true);
+            setEmail("");
+            toast.success("Thank you for subscribing to Jenga Journal!");
+        } catch {
+            toast.error("Unable to subscribe. Please check your connection.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (subscribed) {
+        return (
+            <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
+                <p className="text-xs text-green-400 font-sans">
+                    ✓ You&apos;re subscribed to Jenga Journal!
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-3">
+            <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your email"
+                disabled={loading}
+                required
+                className="w-full bg-transparent border-b border-white/10 pb-3 text-sm font-sans text-white placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
+            />
+            <button
+                type="submit"
+                disabled={loading}
+                className="flex items-center gap-2 text-[9px] text-white/50 hover:text-white transition-colors font-bold group disabled:opacity-50"
+            >
+                {loading ? "Subscribing..." : "Subscribe"}
+                <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+            </button>
+        </form>
+    );
+}
 
 export default function Footer() {
     return (
@@ -104,17 +175,7 @@ export default function Footer() {
                         <p className="font-sans text-sm text-white/40 leading-relaxed">
                             Monthly insights for mentors, mentees and partners.
                         </p>
-                        <div className="space-y-3">
-                            <input
-                                type="email"
-                                placeholder="Your email"
-                                className="w-full bg-transparent border-b border-white/10 pb-3 text-sm font-sans text-white placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors"
-                            />
-                            <button className="flex items-center gap-2 text-[9px] text-white/50 hover:text-white transition-colors font-bold group">
-                                Subscribe
-                                <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
-                            </button>
-                        </div>
+                        <NewsletterForm />
                     </div>
                 </div>
 
