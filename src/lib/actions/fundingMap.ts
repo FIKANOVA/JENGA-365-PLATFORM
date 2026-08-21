@@ -210,7 +210,7 @@ export async function addProjectLocation(input: z.infer<typeof addLocationSchema
 
 // ── ACTION 3: getFundingBreakdown ─────────────────────────────
 
-export async function getFundingBreakdown(filters: any) {
+export async function getFundingBreakdown(filters?: FundingMapFilters) {
     const session = await auth.api.getSession({
         headers: await headers(),
     });
