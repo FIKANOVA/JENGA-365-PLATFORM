@@ -99,25 +99,25 @@ function NewsletterForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-2.5">
-            {/* Input with Subscribe button embedded on the right */}
-            <div className="relative flex items-center border-b border-white/15 focus-within:border-white/40 transition-colors pb-1.5">
+        <form onSubmit={handleSubmit} className="space-y-3 w-full">
+            {/* Input with Subscribe button embedded flush on the right */}
+            <div className="relative flex items-center border-b border-white/15 focus-within:border-white/40 transition-colors pb-2">
                 <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
+                    placeholder="Enter your email address"
                     disabled={loading}
                     required
-                    className="w-full bg-transparent text-sm font-sans text-white placeholder:text-white/30 focus:outline-none pr-24 disabled:opacity-50"
+                    className="w-full bg-transparent text-sm font-sans text-white placeholder:text-white/30 focus:outline-none pr-28 py-0.5 disabled:opacity-50"
                 />
                 <button
                     type="submit"
                     disabled={loading || !turnstileToken}
-                    className="absolute right-0 flex items-center gap-1.5 px-3 py-1 bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold rounded transition-all disabled:opacity-30 disabled:cursor-not-allowed group cursor-pointer"
+                    className="absolute right-0 flex items-center gap-1.5 px-3.5 py-1.5 bg-white/10 hover:bg-white/20 active:scale-95 text-white text-xs font-medium rounded transition-all disabled:opacity-30 disabled:cursor-not-allowed group cursor-pointer"
                 >
                     <span>{loading ? "..." : "Subscribe"}</span>
-                    <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                 </button>
             </div>
 
@@ -127,7 +127,7 @@ function NewsletterForm() {
                     action="subscribe"
                     theme="dark"
                     size="flexible"
-                    className="w-full max-w-[280px]"
+                    className="w-full max-w-[300px]"
                     onSuccess={(token) => setTurnstileToken(token)}
                     onError={() => setTurnstileToken(null)}
                     onExpire={() => setTurnstileToken(null)}
@@ -145,9 +145,9 @@ export default function Footer() {
 
             <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
                 {/* Top section */}
-                <div className="grid grid-cols-2 md:grid-cols-12 gap-12 md:gap-16 py-14 border-b border-white/5">
+                <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-10 py-14 border-b border-white/5">
                     {/* Brand */}
-                    <div className="col-span-2 md:col-span-4 space-y-6 md:space-y-8">
+                    <div className="col-span-2 md:col-span-3 space-y-6 md:space-y-8">
                         <Link href="/">
                             <Logo asLink={false} tone="light" size="lg" />
                         </Link>
@@ -192,7 +192,7 @@ export default function Footer() {
                     ))}
 
                     {/* Newsletter */}
-                    <div className="col-span-2 md:col-span-2 space-y-6">
+                    <div className="col-span-2 md:col-span-3 space-y-6">
                         <h4 className="text-[9px] text-white/25 font-bold">
                             Jenga Journal
                         </h4>
