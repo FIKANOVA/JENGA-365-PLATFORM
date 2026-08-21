@@ -3,17 +3,18 @@ import path from 'path'
 
 export default defineConfig({
   test: {
-    environment: 'node',
+    environment: 'happy-dom',
     globals: true,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
     },
-    environmentMatchGlobs: [
-      // Component tests require a DOM environment
-      ['src/__tests__/intake/components.test.tsx', 'happy-dom'],
-    ],
     setupFiles: ["vitest.setup.ts"],
+    server: {
+      deps: {
+        inline: ['server-only'],
+      },
+    },
   },
   resolve: {
     alias: {

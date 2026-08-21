@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Search, CalendarX } from "lucide-react";
+import DOMPurify from "isomorphic-dompurify";
 import EventsGrid from "@/components/marketing/EventsGrid";
 import FinalCTAStrip from "@/components/marketing/FinalCTAStrip";
 import PageHero from "@/components/shared/PageHero";
@@ -93,7 +94,12 @@ export default function EventsPageClient({
                             <div className="w-full flex justify-center mb-16">
                                 <div 
                                     className="w-full max-w-4xl overflow-hidden rounded-md border border-border/50"
-                                    dangerouslySetInnerHTML={{ __html: lumaCalendarIframe }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(lumaCalendarIframe, {
+                                            ADD_TAGS: ['iframe'],
+                                            ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'src', 'width', 'height', 'style', 'class']
+                                        })
+                                    }}
                                 />
                             </div>
                         )}
