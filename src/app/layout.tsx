@@ -39,10 +39,18 @@ export const metadata: Metadata = {
     url: "https://jenga365.org",
   },
   icons: {
-    icon: "/assets/logos/Jenga365%20logo.svg",
-    shortcut: "/assets/logos/Jenga365%20logo.svg",
-    apple: "/assets/logos/Jenga365%20logo.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
+  manifest: "/site.webmanifest",
   verification: {
     google: "googlec1711f3b52a48f29",
   },
