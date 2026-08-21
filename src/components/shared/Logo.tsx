@@ -31,19 +31,19 @@ export default function Logo({
 }: LogoProps & LegacyProps) {
     const sizeHeightClass =
         size === "sm"
-            ? "h-7 sm:h-8"
+            ? "h-8 sm:h-9"
             : size === "lg"
-                ? "h-12 sm:h-14"
+                ? "h-14 sm:h-16 md:h-20"
                 : size === "xl"
-                    ? "h-16 sm:h-20"
-                    : "h-9 sm:h-10";
+                    ? "h-20 sm:h-24 md:h-28"
+                    : "h-11 sm:h-12 md:h-14";
 
     const logoElement = (
         <div className={cn("inline-flex items-center justify-center shrink-0", sizeHeightClass, className)}>
             <img
                 src="/assets/logos/Jenga365%20logo.svg"
                 alt="Jenga365 Logo"
-                className="h-full w-auto object-contain transition-transform duration-200 hover:scale-[1.02]"
+                className="h-full w-auto max-w-full object-contain transition-transform duration-200 hover:scale-[1.02]"
                 loading="eager"
             />
         </div>

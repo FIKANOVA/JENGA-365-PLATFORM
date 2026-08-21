@@ -54,7 +54,7 @@ export default function Footer() {
                     {/* Brand */}
                     <div className="col-span-2 md:col-span-4 space-y-6 md:space-y-8">
                         <Link href="/">
-                            <Logo asLink={false} tone="light" size="md" />
+                            <Logo asLink={false} tone="light" size="lg" />
                         </Link>
                         <p className="font-sans text-sm text-white/40 leading-relaxed max-w-xs hidden md:block">
                             Kenya&apos;s dual-engine AI platform, building the Total Athlete through mentorship, financial literacy, and environmental stewardship.
