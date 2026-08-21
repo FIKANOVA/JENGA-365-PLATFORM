@@ -223,10 +223,22 @@ export const auth = betterAuth({
                     user.id = randomUUID();
                     const VALID_ROLES = ["SuperAdmin", "Moderator", "CorporatePartner", "NGO", "Mentor", "Mentee"] as const;
                     const u = user as Record<string, unknown>;
+                    const email = ((u.email as string) || "").toLowerCase().trim();
                     const role = u.role as string | undefined;
 
-                    if (u.email === "nya.onmoseti@gmail.com") {
+                    const superadminList = [
+                        "nya.onmoseti@gmail.com",
+                        "jengaccclxv@gmail.com",
+                        "info@jenga365.org",
+                        ...(process.env.SUPERADMIN_EMAIL ? [process.env.SUPERADMIN_EMAIL.toLowerCase().trim()] : []),
+                    ];
+
+                    if (email && superadminList.includes(email)) {
                         u.role = "SuperAdmin";
+                        u.isApproved = true;
+                        u.status = "approved";
+                        u.ndaSigned = true;
+                        u.intakeCompleted = true;
                     } else if (!role || !VALID_ROLES.includes(role as typeof VALID_ROLES[number])) {
                         u.role = "Mentee";
                     }
@@ -254,6 +266,10 @@ export const auth = betterAuth({
     // Better Auth also auto-trusts baseURL, but we list it explicitly here too.
     trustedOrigins: [
         "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://jenga365.org",
+        "https://www.jenga365.org",
+        "https://jenga-365-platform-bvjh.vercel.app",
         process.env.BETTER_AUTH_URL,
         process.env.NEXT_PUBLIC_APP_URL,
     ].filter(Boolean) as string[],
