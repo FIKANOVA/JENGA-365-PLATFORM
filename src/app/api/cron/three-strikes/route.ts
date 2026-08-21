@@ -103,9 +103,14 @@ export async function GET(req: Request) {
         let processed = 0;
         let flagged = 0;
 
-        const insertData = [];
-        const underReviewIds = [];
-        const notificationPromises = [];
+        const trackingInserts: {
+            userId: string;
+            quarter: string;
+            activityCompleted: boolean;
+            strikeCount: number;
+        }[] = [];
+        const flaggedMentees: string[] = [];
+        const notificationPromises: Promise<void>[] = [];
 
         for (const mentee of activeMentees) {
             // ── 2. Did they complete their give-back this quarter? ────────────
@@ -117,8 +122,8 @@ export async function GET(req: Request) {
             // Strike count after recording this quarter's failure
             const newStrikeCount = failedCount + 1;
 
-            // ── 4. Collect this quarter's failure for batch insertion ─────────
-            insertData.push({
+            // ── 4. Record this quarter's failure ─────────────────────────────
+            trackingInserts.push({
                 userId: mentee.id,
                 quarter: prevQuarter,
                 activityCompleted: false,
@@ -127,7 +132,7 @@ export async function GET(req: Request) {
 
             // ── 5. Take action based on strike count ──────────────────────────
             if (newStrikeCount >= 3) {
-                underReviewIds.push(mentee.id);
+                flaggedMentees.push(mentee.id);
                 flagged++;
             } else {
                 notificationPromises.push(
@@ -141,16 +146,16 @@ export async function GET(req: Request) {
             processed++;
         }
 
-        // ── 6. Execute bulk operations ────────────────────────────────────
-        if (insertData.length > 0) {
-            await db.insert(giveBackTracking).values(insertData);
+        // ── 6. Execute batch database operations ─────────────────────────────
+        if (trackingInserts.length > 0) {
+            await db.insert(giveBackTracking).values(trackingInserts);
         }
 
-        if (underReviewIds.length > 0) {
+        if (flaggedMentees.length > 0) {
             await db
                 .update(users)
                 .set({ status: "under_review" })
-                .where(inArray(users.id, underReviewIds));
+                .where(inArray(users.id, flaggedMentees));
         }
 
         if (notificationPromises.length > 0) {
