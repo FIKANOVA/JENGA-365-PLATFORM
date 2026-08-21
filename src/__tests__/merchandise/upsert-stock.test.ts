@@ -1,8 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-const { mockFindFirst, mockUpdate, mockInsert, mockFetch, mockRequireCapability, mockRevalidatePath } = vi.hoisted(() => {
+const { mockFindFirst, mockSelect, mockUpdate, mockInsert, mockFetch, mockRequireCapability, mockRevalidatePath } = vi.hoisted(() => {
   return {
     mockFindFirst: vi.fn(),
+    mockSelect: vi.fn(() => ({
+      from: vi.fn(() => ({
+        where: vi.fn(() => Promise.resolve([])),
+      })),
+    })),
     mockUpdate: vi.fn(),
     mockInsert: vi.fn(),
     mockFetch: vi.fn(),
@@ -26,6 +31,7 @@ vi.mock('next/cache', () => ({
 vi.mock('@/lib/db', () => ({
   db: {
     query: { merchandise: { findFirst: mockFindFirst } },
+    select: mockSelect,
     update: mockUpdate,
     insert: mockInsert,
   },
@@ -45,6 +51,7 @@ vi.mock('drizzle-orm', () => ({
   and: vi.fn(() => 'and'),
   gt: vi.fn(() => 'gt'),
   sql: vi.fn((s) => ({ sql: s })),
+  inArray: vi.fn((col, val) => ({ inArray: { col, val } })),
 }))
 
 import { upsertMerchandiseStock } from '@/lib/actions/merchandise'
@@ -111,7 +118,13 @@ describe('upsertMerchandiseStock', () => {
     }
 
     mockFetch.mockResolvedValue([newProduct])
-    mockFindFirst.mockResolvedValue(null)
+
+    // Simulate select returning empty array (not existing)
+    mockSelect.mockReturnValueOnce({
+      from: vi.fn(() => ({
+        where: vi.fn(() => Promise.resolve([])),
+      })),
+    })
 
     const mockValues = vi.fn().mockResolvedValue([{ id: 'merch-new' }])
     mockInsert.mockReturnValue({ values: mockValues })
@@ -120,7 +133,7 @@ describe('upsertMerchandiseStock', () => {
 
     expect(result.inserted).toBe(1)
     expect(result.updated).toBe(0)
-    expect(mockFindFirst).toHaveBeenCalledTimes(1)
+    expect(mockSelect).toHaveBeenCalledTimes(1)
 
     expect(mockInsert).toHaveBeenCalledTimes(1)
     expect(mockValues).toHaveBeenCalledWith(expect.objectContaining({
@@ -145,7 +158,13 @@ describe('upsertMerchandiseStock', () => {
     }
 
     mockFetch.mockResolvedValue([existingProduct])
-    mockFindFirst.mockResolvedValue({ id: 'db-id-1', sanityProductId: 'prod-existing', stockCount: 10 })
+
+    // Simulate select returning the existing product
+    mockSelect.mockReturnValueOnce({
+      from: vi.fn(() => ({
+        where: vi.fn(() => Promise.resolve([{ sanityProductId: 'prod-existing' }])),
+      })),
+    })
 
     const mockSet = vi.fn().mockReturnValue({
       where: vi.fn().mockResolvedValue([{ id: 'db-id-1' }])
@@ -175,10 +194,17 @@ describe('upsertMerchandiseStock', () => {
       { _id: 'prod-success', title: 'Successful Product', price: 20 }
     ])
 
-    // First call throws, second call succeeds
-    mockFindFirst
+    // Simulate select returning empty array for both (neither exists)
+    mockSelect.mockReturnValueOnce({
+      from: vi.fn(() => ({
+        where: vi.fn(() => Promise.resolve([])),
+      })),
+    })
+
+    const mockValues = vi.fn()
       .mockRejectedValueOnce(new Error('DB Error'))
-      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce([{ id: 'merch-success' }])
+    mockInsert.mockReturnValue({ values: mockValues })
 
     const result = await upsertMerchandiseStock()
 

@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { merchandise } from "@/lib/db/schema";
-import { eq, and, gt, sql } from "drizzle-orm";
+import { eq, and, gt, sql, inArray } from "drizzle-orm";
 import { requireCapability } from "@/lib/auth/guard";
 import { client as sanityClient } from "@/lib/sanity/client";
 import { groq } from "next-sanity";
@@ -72,11 +72,20 @@ export async function upsertMerchandiseStock(): Promise<MerchandiseSyncResult> {
     let updated = 0;
     let skipped = 0;
 
-    for (const product of products) {
+    const productIds = products.map((p) => p._id).filter((id): id is string => !!id);
+
+    // Batch fetch existing merchandise records to prevent N+1 query issue
+    const existingMerchList = productIds.length > 0
+        ? await db.select({ sanityProductId: merchandise.sanityProductId }).from(merchandise).where(inArray(merchandise.sanityProductId, productIds))
+        : [];
+
+    const existingSet = new Set(existingMerchList.map(m => m.sanityProductId));
+
+    const promises = products.map(async (product) => {
         if (!product._id || !product.title || product.price == null) {
             skipped += 1;
             errors.push(`Skipped product ${product._id ?? "<unknown>"}: missing required fields`);
-            continue;
+            return;
         }
 
         const mainImageUrl = product.mainImageUrl ?? null;
@@ -93,11 +102,9 @@ export async function upsertMerchandiseStock(): Promise<MerchandiseSyncResult> {
             }));
 
         try {
-            const existing = await db.query.merchandise.findFirst({
-                where: eq(merchandise.sanityProductId, product._id),
-            });
+            const isExisting = existingSet.has(product._id);
 
-            if (existing) {
+            if (isExisting) {
                 // Preserve stockCount — only catalog metadata is overwritten.
                 await db.update(merchandise)
                     .set({
@@ -133,7 +140,9 @@ export async function upsertMerchandiseStock(): Promise<MerchandiseSyncResult> {
             skipped += 1;
             errors.push(`Failed to sync ${product.title} (${product._id}): ${(err as Error).message}`);
         }
-    }
+    });
+
+    await Promise.all(promises);
 
     revalidatePath("/shop");
     revalidatePath("/dashboard/moderator/inventory");
