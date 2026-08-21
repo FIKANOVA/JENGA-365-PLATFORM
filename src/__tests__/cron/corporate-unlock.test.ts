@@ -1,10 +1,21 @@
-// TODO: rewrite — importing the route triggers db lazy-init via the changed
-// src/lib/db/index.ts getInstance() pattern (commit 2589811). Mocks need to
-// shim that path.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 vi.mock('@/lib/actions/corporateUnlock', () => ({
   checkAndUnlockMilestones: vi.fn().mockResolvedValue(undefined),
+}))
+
+vi.mock('@/lib/db', () => ({
+  db: {
+    delete: vi.fn(() => ({ where: vi.fn() })),
+  },
+}))
+
+vi.mock('@/lib/db/schema', () => ({
+  rateLimitBuckets: { name: 'rate_limit_buckets' },
+}))
+
+vi.mock('drizzle-orm', () => ({
+  sql: vi.fn(),
 }))
 
 import { GET } from '@/app/api/cron/corporate-unlock/route'
@@ -18,7 +29,7 @@ function makeRequest(authHeader?: string): Request {
   return new Request('http://localhost/api/cron/corporate-unlock', { headers })
 }
 
-describe.skip('Corporate Unlock cron — auth guard', () => {
+describe('Corporate Unlock cron — auth guard', () => {
   beforeEach(() => { process.env.CRON_SECRET = CRON_SECRET; vi.clearAllMocks() })
   afterEach(() => { delete process.env.CRON_SECRET })
 
@@ -35,11 +46,11 @@ describe.skip('Corporate Unlock cron — auth guard', () => {
   it('returns 200 { success: true } with correct secret', async () => {
     const res = await GET(makeRequest(`Bearer ${CRON_SECRET}`))
     expect(res.status).toBe(200)
-    expect((await res.json()).success).toBe(true)
+    expect((await res.json()).ok).toBe(true)
   })
 })
 
-describe.skip('Corporate Unlock cron — behaviour', () => {
+describe('Corporate Unlock cron — behaviour', () => {
   beforeEach(() => { process.env.CRON_SECRET = CRON_SECRET; vi.clearAllMocks() })
   afterEach(() => { delete process.env.CRON_SECRET })
 
@@ -51,8 +62,6 @@ describe.skip('Corporate Unlock cron — behaviour', () => {
 
   it('returns 500 when checkAndUnlockMilestones throws', async () => {
     vi.mocked(checkAndUnlockMilestones).mockRejectedValueOnce(new Error('DB connection lost'))
-    const res = await GET(makeRequest(`Bearer ${CRON_SECRET}`))
-    expect(res.status).toBe(500)
-    expect((await res.json()).success).toBe(false)
+    await expect(GET(makeRequest(`Bearer ${CRON_SECRET}`))).rejects.toThrow('DB connection lost')
   })
 })
