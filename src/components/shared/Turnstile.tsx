@@ -19,6 +19,7 @@ declare global {
                     theme?: "light" | "dark" | "auto";
                     size?: "normal" | "compact" | "flexible";
                     action?: string;
+                    appearance?: "always" | "execute" | "interaction-only";
                 }
             ) => string;
             reset: (widgetId?: string) => void;
@@ -86,6 +87,7 @@ export default function Turnstile({
                     action,
                     theme,
                     size,
+                    appearance: "always",
                     callback: (token: string) => {
                         if (!isCancelled) {
                             onSuccessRef.current?.(token);
