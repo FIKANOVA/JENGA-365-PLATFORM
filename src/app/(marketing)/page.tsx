@@ -25,11 +25,13 @@ export async function generateMetadata() {
         : undefined;
 
     return {
-        title: "Jenga365: Building Growth. Connecting Futures.",
-        description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
+        title: "Jenga365 — Dual-Engine Platform for Mentorship & Climate Action",
+        applicationName: "Jenga365",
+        description: "Jenga365 is Kenya's AI-native mentorship and climate action platform. Building growth and connecting futures 365 days a year.",
         openGraph: {
-            title: "Jenga365: Building Growth. Connecting Futures.",
-            description: "Kenya's AI-native rugby and mentorship platform. Verified impact, 365 days a year.",
+            title: "Jenga365 — Dual-Engine Platform for Mentorship & Climate Action",
+            siteName: "Jenga365",
+            description: "Jenga365 is Kenya's AI-native mentorship and climate action platform.",
             ...(ogUrl ? { images: [{ url: ogUrl }] } : {}),
         },
     };

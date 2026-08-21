@@ -23,9 +23,21 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jenga365: Total Athlete. 365 Days a Year.",
+  title: {
+    default: "Jenga365 — Dual-Engine Platform for Youth Mentorship & Climate Action",
+    template: "%s | Jenga365",
+  },
+  applicationName: "Jenga365",
   description:
-    "Kenya's AI-native mentorship and environmental stewardship platform. Building the Total Athlete through structured mentorship (Engine A) and measurable climate action (Engine B).",
+    "Jenga365 is Kenya's AI-native mentorship and environmental stewardship platform. Building the Total Athlete through structured mentorship and verified climate action.",
+  metadataBase: new URL("https://jenga365.org"),
+  openGraph: {
+    title: "Jenga365 — Youth Mentorship & Climate Action Platform",
+    description:
+      "Jenga365 is Kenya's AI-native mentorship and environmental stewardship platform. Building the Total Athlete through structured mentorship and verified climate action.",
+    siteName: "Jenga365",
+    url: "https://jenga365.org",
+  },
   icons: {
     icon: "/assets/logos/Jenga365%20logo.svg",
     shortcut: "/assets/logos/Jenga365%20logo.svg",
