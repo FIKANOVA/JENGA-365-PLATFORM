@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Official Cloudflare test site key (always passes on localhost / test environments)
+// Production Cloudflare Turnstile Site Key
+const DEFAULT_SITE_KEY = "0x4AAAAAAEXuMXn6500RH46Z";
+// Official Cloudflare test site key (for local sandbox testing)
 const TEST_SITE_KEY = "1x00000000000000000000AA";
 
 declare global {
@@ -49,27 +51,18 @@ export default function Turnstile({
     const widgetIdRef = useRef<string | null>(null);
     const [scriptLoaded, setScriptLoaded] = useState(false);
 
-    const configuredKey = siteKey || process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY;
-    
-    // Determine whether to load the widget:
-    // On localhost, we can use TEST_SITE_KEY if no key is configured.
-    // On remote/production domains without a key, auto-bypass to avoid blocking forms.
     const isLocalhost = typeof window !== "undefined" && (
         window.location.hostname === "localhost" ||
         window.location.hostname === "127.0.0.1" ||
         window.location.hostname.endsWith(".localhost")
     );
 
-    const effectiveSiteKey = configuredKey || (isLocalhost ? TEST_SITE_KEY : null);
+    const effectiveSiteKey =
+        siteKey ||
+        process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY ||
+        (isLocalhost ? TEST_SITE_KEY : DEFAULT_SITE_KEY);
 
-    // If Turnstile is unconfigured on a deployed domain, auto-resolve immediately
-    useEffect(() => {
-        if (!effectiveSiteKey) {
-            onSuccess("unconfigured-turnstile-token");
-        }
-    }, [effectiveSiteKey, onSuccess]);
-
-    // Load the Turnstile script dynamically if we have a valid key
+    // Load the Turnstile script dynamically
     useEffect(() => {
         if (typeof window === "undefined" || !effectiveSiteKey) return;
 
@@ -99,12 +92,9 @@ export default function Turnstile({
         };
         script.onerror = () => {
             onError?.("Failed to load spam verification script.");
-            if (!configuredKey) {
-                onSuccess("unconfigured-turnstile-token");
-            }
         };
         document.head.appendChild(script);
-    }, [effectiveSiteKey, configuredKey, onError, onSuccess]);
+    }, [effectiveSiteKey, onError]);
 
     // Render the widget once script is loaded and container is ready
     useEffect(() => {
@@ -131,9 +121,6 @@ export default function Turnstile({
                 "error-callback": (code?: string) => {
                     console.warn("[Turnstile] Challenge error:", code);
                     onError?.(code ? `Turnstile error: ${code}` : "Spam check failed.");
-                    if (!configuredKey) {
-                        onSuccess("unconfigured-turnstile-token");
-                    }
                 },
                 "expired-callback": () => {
                     onExpire?.();
@@ -142,9 +129,6 @@ export default function Turnstile({
             widgetIdRef.current = id;
         } catch (err) {
             console.error("[Turnstile] Render error:", err);
-            if (!configuredKey) {
-                onSuccess("unconfigured-turnstile-token");
-            }
         }
 
         return () => {
@@ -157,7 +141,7 @@ export default function Turnstile({
                 widgetIdRef.current = null;
             }
         };
-    }, [scriptLoaded, effectiveSiteKey, configuredKey, action, theme, onSuccess, onError, onExpire]);
+    }, [scriptLoaded, effectiveSiteKey, action, theme, onSuccess, onError, onExpire]);
 
     if (!effectiveSiteKey) {
         return null;

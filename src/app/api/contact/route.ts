@@ -17,7 +17,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Spam verification token is required." }, { status: 400 });
     }
 
-    const verifyResult = await verifyTurnstileToken(turnstileToken);
+    const clientIp =
+        req.headers.get("cf-connecting-ip") ||
+        req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+        null;
+
+    const verifyResult = await verifyTurnstileToken(turnstileToken, clientIp, "contact");
     if (!verifyResult.success) {
         return NextResponse.json({ error: verifyResult.error || "Spam check failed. Please refresh and try again." }, { status: 400 });
     }

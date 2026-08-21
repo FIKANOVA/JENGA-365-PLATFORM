@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
             req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
             null;
 
-        const verifyResult = await verifyTurnstileToken(turnstileToken, clientIp);
+        const verifyResult = await verifyTurnstileToken(turnstileToken, clientIp, "feedback");
 
         if (!verifyResult.success) {
             return NextResponse.json(
