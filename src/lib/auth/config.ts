@@ -226,12 +226,11 @@ export const auth = betterAuth({
                     const email = ((u.email as string) || "").toLowerCase().trim();
                     const role = u.role as string | undefined;
 
-                    const superadminList = [
-                        "nya.onmoseti@gmail.com",
-                        "jengaccclxv@gmail.com",
-                        "info@jenga365.org",
-                        ...(process.env.SUPERADMIN_EMAIL ? [process.env.SUPERADMIN_EMAIL.toLowerCase().trim()] : []),
-                    ];
+                    const rawSuperadmins = process.env.SUPERADMIN_EMAILS || process.env.SUPERADMIN_EMAIL || "";
+                    const superadminList = rawSuperadmins
+                        .split(",")
+                        .map((e) => e.toLowerCase().trim())
+                        .filter(Boolean);
 
                     if (email && superadminList.includes(email)) {
                         u.role = "SuperAdmin";
