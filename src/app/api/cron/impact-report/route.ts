@@ -36,9 +36,9 @@ export async function GET(req: Request) {
 
         await db.insert(impactReports).values({
             reportPeriod: new Date().toLocaleString("default", { month: "long", year: "numeric" }),
-            totalDonations: donationStats.totalAmount || "0",
-            totalMentorshipHours: Math.floor((Number(sessionStats.totalMinutes) || 0) / 60),
-            youthEngaged: Number(sessionStats.youthCount) || 0,
+            totalDonations: donationStats?.totalAmount || "0",
+            totalMentorshipHours: Math.floor((Number(sessionStats?.totalMinutes) || 0) / 60),
+            youthEngaged: Number(sessionStats?.youthCount) || 0,
             clinicsHeld: 0,
         });
 
@@ -47,3 +47,4 @@ export async function GET(req: Request) {
         return NextResponse.json({ success: false, error: err.message }, { status: 500 });
     }
 }
+
