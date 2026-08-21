@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type LogoTone = "default" | "light" | "dark";
@@ -15,10 +14,6 @@ interface LogoProps {
     className?: string;
 }
 
-/**
- * Jenga365 Official Logo component.
- * Uses the official SVG from /public/assets/logos/Jenga365 logo.svg and /public/jenga365-logo.svg.
- */
 type LegacyProps = {
     variant?: string;
     theme?: string;
@@ -34,24 +29,21 @@ export default function Logo({
     size = "md",
     className,
 }: LogoProps & LegacyProps) {
-    const sizeClass =
+    const sizeHeightClass =
         size === "sm"
-            ? "h-8 w-8 sm:h-9 sm:w-9"
+            ? "h-7 sm:h-8"
             : size === "lg"
-                ? "h-12 w-12 sm:h-14 sm:w-14"
+                ? "h-12 sm:h-14"
                 : size === "xl"
-                    ? "h-16 w-16 sm:h-20 sm:w-20"
-                    : "h-9 w-9 sm:h-10 sm:w-10";
+                    ? "h-16 sm:h-20"
+                    : "h-9 sm:h-10";
 
     const logoElement = (
-        <div className={cn("inline-flex items-center justify-center shrink-0", className)}>
+        <div className={cn("inline-flex items-center justify-center shrink-0", sizeHeightClass, className)}>
             <img
                 src="/assets/logos/Jenga365%20logo.svg"
                 alt="Jenga365 Logo"
-                className={cn(
-                    sizeClass,
-                    "w-auto object-contain transition-transform duration-200 hover:scale-[1.03]",
-                )}
+                className="h-full w-auto object-contain transition-transform duration-200 hover:scale-[1.02]"
                 loading="eager"
             />
         </div>
