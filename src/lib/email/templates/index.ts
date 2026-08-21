@@ -79,12 +79,12 @@ export const EMAIL_FOOTER = (unsubscribeUrl: string = '#') => `
       <tr>
         <td style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
           <p style="margin:0;font-size:11px;color:#4A4A4A;font-family:Courier New,monospace;text-align:center;line-height:1.8;">
-            © 2025 Jenga365 · Nairobi, Kenya<br>
-            <a href="mailto:info@jenga365.com" style="color:#BB0000;text-decoration:none;">info@jenga365.com</a> · +254-741-058-917
+            © 2026 Jenga365 · Nairobi, Kenya<br>
+            <a href="mailto:info@jenga365.org" style="color:#BB0000;text-decoration:none;">info@jenga365.org</a> · +254-741-058-917
           </p>
           <p style="margin:12px 0 0;font-size:10px;color:#4A4A4A;font-family:Courier New,monospace;text-align:center;">
             <a href="${unsubscribeUrl}" style="color:#4A4A4A;text-decoration:underline;">Unsubscribe</a> · 
-            <a href="https://jenga365.com/privacy" style="color:#4A4A4A;text-decoration:underline;">Privacy Policy</a>
+            <a href="https://jenga365.org/privacy" style="color:#4A4A4A;text-decoration:underline;">Privacy Policy</a>
           </p>
         </td>
       </tr>

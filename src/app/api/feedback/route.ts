@@ -6,7 +6,7 @@ import { escapeHtml } from "@/lib/utils";
 const FEEDBACK_RECIPIENT =
     process.env.FEEDBACK_EMAIL ||
     process.env.CONTACT_EMAIL ||
-    "hello@jenga365.org";
+    "jengaccclxv@gmail.com";
 
 const CATEGORY_LABELS: Record<string, string> = {
     feature: "💡 Idea / Feature Request",

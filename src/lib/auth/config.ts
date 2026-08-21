@@ -85,7 +85,7 @@ export const auth = betterAuth({
                 const { Resend } = await import("resend");
                 const resend = new Resend(process.env.RESEND_API_KEY);
                 await resend.emails.send({
-                    from: process.env.RESEND_FROM_EMAIL ?? "noreply@jenga365.com",
+                    from: process.env.RESEND_FROM_EMAIL ?? "Jenga365 <info@jenga365.org>",
                     to: user.email,
                     subject: "Verify your Jenga365 email",
                     html: `
@@ -184,7 +184,7 @@ export const auth = betterAuth({
                         const { Resend } = await import("resend");
                         const resend = new Resend(process.env.RESEND_API_KEY);
                         await resend.emails.send({
-                            from: process.env.RESEND_FROM_EMAIL ?? "noreply@jenga365.com",
+                            from: process.env.RESEND_FROM_EMAIL ?? "Jenga365 <info@jenga365.org>",
                             to: user.email,
                             subject: "Your Jenga365 login code",
                             html: `

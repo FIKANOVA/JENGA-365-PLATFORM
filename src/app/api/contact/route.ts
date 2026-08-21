@@ -3,7 +3,7 @@ import { resend, DEFAULT_FROM } from "@/lib/email/resend";
 import { escapeHtml } from "@/lib/utils";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 
-const CONTACT_RECIPIENT = process.env.CONTACT_EMAIL ?? "hello@jenga365.org";
+const CONTACT_RECIPIENT = process.env.CONTACT_EMAIL ?? "jengaccclxv@gmail.com";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();

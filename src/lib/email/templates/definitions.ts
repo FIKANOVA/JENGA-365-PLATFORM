@@ -263,7 +263,7 @@ export const mentorRejectedEmail = (firstName: string, feedback: string, reapply
         ${INFO_ROW('📧', 'Contact us if you have any questions')}
 
         <div style="margin-top:24px;">
-          ${BUTTON('Contact Support →', 'mailto:info@jenga365.com', 'ghost')}
+          ${BUTTON('Contact Support →', 'mailto:info@jenga365.org', 'ghost')}
         </div>
       </td>
     </tr>

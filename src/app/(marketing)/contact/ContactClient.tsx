@@ -131,7 +131,7 @@ export default function ContactClient({ faqItems = [] }: ContactClientProps) {
                                         Icon={Mail}
                                         label="General inquiries"
                                         links={[
-                                            { label: "hello@jenga365.org", href: "mailto:hello@jenga365.org" },
+                                            { label: "info@jenga365.org", href: "mailto:info@jenga365.org" },
                                             { label: "+254 (0) 700 365 365", href: "tel:+254700365365" },
                                         ]}
                                     />

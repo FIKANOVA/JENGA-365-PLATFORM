@@ -39,7 +39,7 @@ const socials = [
     { icon: Linkedin, href: "https://www.linkedin.com/company/jenga-ccclxv/posts/?feedView=all", label: "LinkedIn" },
     { icon: Instagram, href: "https://www.instagram.com/jengaccclxv/", label: "Instagram" },
     { icon: Twitter, href: "https://x.com/jengaccclxv", label: "X" },
-    { icon: Mail, href: "mailto:hello@jenga365.com", label: "Email" },
+    { icon: Mail, href: "mailto:info@jenga365.org", label: "Email" },
 ];
 
 export default function Footer() {

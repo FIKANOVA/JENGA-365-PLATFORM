@@ -232,7 +232,7 @@ export default async function HelpPage() {
                                 <MessageCircle className="h-4 w-4" /> Contact support
                             </Link>
                             <Link
-                                href="mailto:support@jenga365.com"
+                                href="mailto:info@jenga365.org"
                                 className="inline-flex h-11 items-center justify-center gap-2 rounded-md border px-5 text-label font-medium transition-colors"
                                 style={{
                                     borderColor: "color-mix(in srgb, var(--background) 25%, transparent)",
