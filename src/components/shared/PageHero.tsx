@@ -68,9 +68,14 @@ export default function PageHero({
                             className="absolute inset-0 h-full w-full object-cover pointer-events-none z-0"
                         />
                     )}
+                    {/* Dark gradient overlay for clear white text readability */}
+                    <div
+                        className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-t from-black/90 via-black/65 to-black/45"
+                        aria-hidden
+                    />
                     {/* Cinematic Bottom Blur Overlay Mask */}
                     <div
-                        className="absolute inset-0 pointer-events-none z-0 backdrop-blur-xl"
+                        className="absolute inset-0 pointer-events-none z-0 backdrop-blur-md"
                         style={{
                             WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 45%)",
                             maskImage: "linear-gradient(to top, black 0%, transparent 45%)",

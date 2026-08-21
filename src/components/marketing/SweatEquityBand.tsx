@@ -24,7 +24,7 @@ export default function SweatEquityBand({ bgImage }: SweatEquityBandProps) {
             className="relative overflow-hidden py-12 md:py-24 border-y border-border"
             style={{ background: bgImage ? `url(${bgImage}) center/cover no-repeat` : "var(--brand-black)" }}
         >
-            <div className="absolute inset-0 bg-black/80 pointer-events-none" aria-hidden />
+            <div className="absolute inset-0 bg-black/85 pointer-events-none" aria-hidden />
             <div className="absolute inset-0 bg-topo opacity-[0.10] pointer-events-none" aria-hidden />
 
             <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
