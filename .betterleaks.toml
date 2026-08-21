@@ -1,5 +1,6 @@
-# Gitleaks / Betterleaks configuration for Jenga365 AI Platform
+# Betterleaks configuration for Jenga365 AI Platform
 title = "Jenga365 Secret Detection Config"
+
 
 [allowlist]
 description = "Allow official test keys, dummy secrets, and test fixtures"
