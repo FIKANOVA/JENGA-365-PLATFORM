@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 // Production Cloudflare Turnstile Site Key
 const DEFAULT_SITE_KEY = "0x4AAAAAAEXuMXn6500RH46Z";
-// Official Cloudflare test site key (for local sandbox testing)
+// Official Cloudflare test site key (always passes on local test environments)
 const TEST_SITE_KEY = "1x00000000000000000000AA";
 
 declare global {
@@ -51,6 +51,17 @@ export default function Turnstile({
     const widgetIdRef = useRef<string | null>(null);
     const [scriptLoaded, setScriptLoaded] = useState(false);
 
+    // Keep stable callback refs to prevent re-rendering/destroying widget on parent state changes
+    const onSuccessRef = useRef(onSuccess);
+    const onErrorRef = useRef(onError);
+    const onExpireRef = useRef(onExpire);
+
+    useEffect(() => {
+        onSuccessRef.current = onSuccess;
+        onErrorRef.current = onError;
+        onExpireRef.current = onExpire;
+    });
+
     const isLocalhost = typeof window !== "undefined" && (
         window.location.hostname === "localhost" ||
         window.location.hostname === "127.0.0.1" ||
@@ -91,23 +102,18 @@ export default function Turnstile({
             setScriptLoaded(true);
         };
         script.onerror = () => {
-            onError?.("Failed to load spam verification script.");
+            onErrorRef.current?.("Failed to load spam verification script.");
         };
         document.head.appendChild(script);
-    }, [effectiveSiteKey, onError]);
+    }, [effectiveSiteKey]);
 
     // Render the widget once script is loaded and container is ready
     useEffect(() => {
         if (!scriptLoaded || !containerRef.current || !window.turnstile || !effectiveSiteKey) return;
 
-        // Clean up any previously rendered widget
+        // If widget already rendered for this container, don't re-render
         if (widgetIdRef.current) {
-            try {
-                window.turnstile.remove(widgetIdRef.current);
-            } catch {
-                // ignore
-            }
-            widgetIdRef.current = null;
+            return;
         }
 
         try {
@@ -116,14 +122,14 @@ export default function Turnstile({
                 action,
                 theme,
                 callback: (token: string) => {
-                    onSuccess(token);
+                    onSuccessRef.current(token);
                 },
                 "error-callback": (code?: string) => {
                     console.warn("[Turnstile] Challenge error:", code);
-                    onError?.(code ? `Turnstile error: ${code}` : "Spam check failed.");
+                    onErrorRef.current?.(code ? `Turnstile error: ${code}` : "Spam check failed.");
                 },
                 "expired-callback": () => {
-                    onExpire?.();
+                    onExpireRef.current?.();
                 },
             });
             widgetIdRef.current = id;
@@ -141,7 +147,7 @@ export default function Turnstile({
                 widgetIdRef.current = null;
             }
         };
-    }, [scriptLoaded, effectiveSiteKey, action, theme, onSuccess, onError, onExpire]);
+    }, [scriptLoaded, effectiveSiteKey, action, theme]);
 
     if (!effectiveSiteKey) {
         return null;
