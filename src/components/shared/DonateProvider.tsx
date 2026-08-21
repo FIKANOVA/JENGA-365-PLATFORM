@@ -9,7 +9,7 @@ const PRESETS = [500, 1000, 2500, 5000] as const;
 const CAUSES = [
     { id: "RUGBY", label: "Rugby Development" },
     { id: "ECO", label: "Jenga Green Initiative" },
-    { id: "EDU", label: "Jenga AI Lab" },
+    { id: "EDU", label: "Jenga365" },
 ] as const;
 
 type DonateCtx = { openDonate: () => void };

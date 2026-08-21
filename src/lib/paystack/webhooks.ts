@@ -31,7 +31,7 @@ export function verifyPaystackWebhook(
 const CAUSE_IMPACT: Record<string, string> = {
     RUGBY: "Your gift funds rugby equipment and clinic time for youth players in Kenyan schools.",
     ECO: "Your gift seeds and audits trees in our GPS-anchored tree-survival programmes.",
-    EDU: "Your gift powers the Jenga AI Lab — mentorship matching, embeddings, and platform tooling.",
+    EDU: "Your gift powers Jenga365 — mentorship matching, embeddings, and platform tooling.",
 };
 
 function extractCause(metadata: PaystackEvent["data"]["metadata"]): string | null {
