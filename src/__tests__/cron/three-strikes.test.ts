@@ -221,7 +221,9 @@ describe('Three Strikes cron — strike logic', () => {
     await GET(makeRequest(`Bearer ${CRON_SECRET}`))
     expect(db.insert).toHaveBeenCalledOnce()
     expect(mockInsertValues).toHaveBeenCalledWith(
-      expect.objectContaining({ userId: 'mentee-6', activityCompleted: false }),
+      expect.arrayContaining([
+        expect.objectContaining({ userId: 'mentee-6', activityCompleted: false })
+      ])
     )
   })
 
