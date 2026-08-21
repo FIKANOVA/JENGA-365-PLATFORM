@@ -10,6 +10,15 @@ import { authClient, signOut } from "@/lib/auth/client";
 interface SettingsPageProps {
     initialName?: string;
     initialEmail?: string;
+    initialLocationRegion?: string;
+    initialProfession?: string;
+    initialBio?: string;
+    initialLinkedIn?: string;
+    initialX?: string;
+    initialInstagram?: string;
+    initialYoutube?: string;
+    initialTiktok?: string;
+    initialWebsite?: string;
     twoFactorEnabled?: boolean;
 }
 
@@ -19,11 +28,29 @@ type TwoFAStep = "idle" | "confirm-password" | "show-qr" | "verify-code" | "done
 export default function SettingsPage({
     initialName = "",
     initialEmail = "",
+    initialLocationRegion = "",
+    initialProfession = "",
+    initialBio = "",
+    initialLinkedIn = "",
+    initialX = "",
+    initialInstagram = "",
+    initialYoutube = "",
+    initialTiktok = "",
+    initialWebsite = "",
     twoFactorEnabled = false,
 }: SettingsPageProps) {
     const router = useRouter();
     const [name, setName] = useState(initialName);
-    const [locationRegion, setLocationRegion] = useState("");
+    const [locationRegion, setLocationRegion] = useState(initialLocationRegion);
+    const [profession, setProfession] = useState(initialProfession);
+    const [bio, setBio] = useState(initialBio);
+    const [linkedIn, setLinkedIn] = useState(initialLinkedIn);
+    const [x, setX] = useState(initialX);
+    const [instagram, setInstagram] = useState(initialInstagram);
+    const [youtube, setYoutube] = useState(initialYoutube);
+    const [tiktok, setTiktok] = useState(initialTiktok);
+    const [website, setWebsite] = useState(initialWebsite);
+
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [exporting, setExporting] = useState(false);
@@ -49,7 +76,18 @@ export default function SettingsPage({
         e.preventDefault();
         setSaving(true);
         try {
-            await updateProfile({ name, locationRegion: locationRegion || undefined });
+            await updateProfile({
+                name,
+                locationRegion: locationRegion || undefined,
+                profession: profession || undefined,
+                bio: bio || undefined,
+                linkedIn: linkedIn || undefined,
+                x: x || undefined,
+                instagram: instagram || undefined,
+                youtube: youtube || undefined,
+                tiktok: tiktok || undefined,
+                website: website || undefined,
+            });
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
         } catch (err) {
@@ -230,17 +268,125 @@ export default function SettingsPage({
                             <p className="text-xs text-muted-foreground mt-1">Email cannot be changed here.</p>
                         </div>
 
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs text-muted-foreground mb-1">
+                                    Profession / Job Title
+                                </label>
+                                <input
+                                    type="text"
+                                    value={profession}
+                                    onChange={(e) => setProfession(e.target.value)}
+                                    placeholder="e.g. Software Engineer, Rugby Coach"
+                                    className="w-full border border-input bg-background rounded-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs text-muted-foreground mb-1">
+                                    Location / Region
+                                </label>
+                                <input
+                                    type="text"
+                                    value={locationRegion}
+                                    onChange={(e) => setLocationRegion(e.target.value)}
+                                    placeholder="e.g. Nairobi, Kenya"
+                                    className="w-full border border-input bg-background rounded-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                />
+                            </div>
+                        </div>
+
                         <div>
                             <label className="block text-xs text-muted-foreground mb-1">
-                                Location / Region
+                                Bio / Personal Statement
                             </label>
-                            <input
-                                type="text"
-                                value={locationRegion}
-                                onChange={(e) => setLocationRegion(e.target.value)}
-                                placeholder="e.g. Nairobi, Kenya"
+                            <textarea
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                placeholder="A brief introduction about your background, expertise, or goals..."
+                                rows={3}
                                 className="w-full border border-input bg-background rounded-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-primary transition-colors"
                             />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs text-muted-foreground mb-1">
+                                Website / Portfolio URL
+                            </label>
+                            <input
+                                type="url"
+                                value={website}
+                                onChange={(e) => setWebsite(e.target.value)}
+                                placeholder="https://yourwebsite.com"
+                                className="w-full border border-input bg-background rounded-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-primary transition-colors"
+                            />
+                        </div>
+
+                        {/* Social Media & Channels */}
+                        <div className="pt-2 border-t border-border/40 space-y-3">
+                            <p className="text-xs font-semibold text-foreground">Social Profiles & Channels</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label className="block text-[11px] text-muted-foreground mb-1">
+                                        LinkedIn
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={linkedIn}
+                                        onChange={(e) => setLinkedIn(e.target.value)}
+                                        placeholder="linkedin.com/in/username"
+                                        className="w-full border border-input bg-background rounded-md px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] text-muted-foreground mb-1">
+                                        X (Twitter)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={x}
+                                        onChange={(e) => setX(e.target.value)}
+                                        placeholder="@handle or x.com/handle"
+                                        className="w-full border border-input bg-background rounded-md px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] text-muted-foreground mb-1">
+                                        Instagram
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={instagram}
+                                        onChange={(e) => setInstagram(e.target.value)}
+                                        placeholder="@username or instagram.com/user"
+                                        className="w-full border border-input bg-background rounded-md px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] text-muted-foreground mb-1">
+                                        YouTube
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={youtube}
+                                        onChange={(e) => setYoutube(e.target.value)}
+                                        placeholder="@channel or youtube.com/@channel"
+                                        className="w-full border border-input bg-background rounded-md px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                    />
+                                </div>
+                                <div className="sm:col-span-2">
+                                    <label className="block text-[11px] text-muted-foreground mb-1">
+                                        TikTok
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={tiktok}
+                                        onChange={(e) => setTiktok(e.target.value)}
+                                        placeholder="@handle or tiktok.com/@handle"
+                                        className="w-full border border-input bg-background rounded-md px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary transition-colors"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <button

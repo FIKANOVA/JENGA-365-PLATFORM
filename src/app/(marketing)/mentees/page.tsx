@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Bot, Route, MessageSquare, ShieldCheck, BookOpen, UsersRound, ArrowRight } from "lucide-react";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PageHero from "@/components/shared/PageHero";
+import { getPublicMentees } from "@/lib/db/queries/users";
+import UserProfileGrid from "@/components/marketing/profiles/UserProfileGrid";
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 
@@ -27,7 +29,10 @@ const MENTEE_BENEFITS = [
 ];
 
 export default async function MenteesPage() {
-    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
+    const [mentees, session] = await Promise.all([
+        getPublicMentees(24).catch(() => []),
+        auth.api.getSession({ headers: await headers() }).catch(() => null),
+    ]);
     const isAuthenticated = !!session?.user;
 
     return (
@@ -88,6 +93,7 @@ export default async function MenteesPage() {
                 </div>
             </section>
 
+            {/* What you get Section */}
             <section className="py-12 md:py-20 lg:py-12 md:py-24 border-b border-border" style={{ background: "var(--surface-1)" }}>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-12">
                     <div className="max-w-xl space-y-3">
@@ -107,6 +113,19 @@ export default async function MenteesPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* Signed-Up Mentees Profile Directory Section (Below What You Get) */}
+            <section id="directory" className="py-14 md:py-24 border-b border-border scroll-mt-20">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <UserProfileGrid
+                        profiles={mentees}
+                        subtitle="Rising Talent"
+                        title="Meet our mentees."
+                        emptyMessage="No mentees currently match your search."
+                        defaultRole="Mentee"
+                    />
                 </div>
             </section>
 

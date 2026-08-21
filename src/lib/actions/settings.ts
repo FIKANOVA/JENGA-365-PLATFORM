@@ -17,18 +17,60 @@ export async function updateProfile(data: {
     name?: string;
     locationRegion?: string;
     image?: string;
+    profession?: string;
+    bio?: string;
+    linkedIn?: string;
+    x?: string;
+    instagram?: string;
+    youtube?: string;
+    tiktok?: string;
+    website?: string;
+    orgName?: string;
 }) {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) throw new Error("UNAUTHORIZED");
 
+    const userId = session.user.id;
     const updates: Record<string, unknown> = {};
     if (data.name !== undefined) updates.name = data.name;
     if (data.locationRegion !== undefined) updates.locationRegion = data.locationRegion;
     if (data.image !== undefined) updates.image = data.image;
 
+    const metadataKeys = [
+        "profession",
+        "bio",
+        "linkedIn",
+        "x",
+        "instagram",
+        "youtube",
+        "tiktok",
+        "website",
+        "orgName",
+    ];
+    const hasMetadata = metadataKeys.some((k) => (data as any)[k] !== undefined);
+
+    if (hasMetadata) {
+        const existing = await db.query.users.findFirst({
+            where: eq(users.id, userId),
+            columns: { metadata: true },
+        });
+        const currentMeta = (existing?.metadata as Record<string, unknown>) || {};
+        const newMeta = { ...currentMeta };
+
+        for (const k of metadataKeys) {
+            if ((data as any)[k] !== undefined) {
+                newMeta[k] = (data as any)[k];
+                if (k === "profession") {
+                    newMeta.professionalTitle = (data as any)[k];
+                }
+            }
+        }
+        updates.metadata = newMeta;
+    }
+
     if (Object.keys(updates).length === 0) return { success: true };
 
-    await db.update(users).set(updates).where(eq(users.id, session.user.id));
+    await db.update(users).set(updates).where(eq(users.id, userId));
     return { success: true };
 }
 

@@ -1,10 +1,5 @@
-/**
- * Authentic baseline impact metrics — DESIGN.md §12.
- *
- * Per Moseti (2026-05-22): replace the prior vanity numbers ("750K+ Lives",
- * "12,000 Mentors") with verified DB stats. If a stat hasn't yet been verified,
- * render "—" rather than an aspirational figure. Credibility > optics.
- */
+import Link from "next/link";
+
 interface ImpactStats {
     youthImpacted?: number;
     livesImpacted?: number;
@@ -26,24 +21,27 @@ function fmt(n: unknown): string {
 
 export default function ImpactTicker({ stats }: { stats?: ImpactStats }) {
     const items = [
-        { label: "Active mentors", value: fmt(stats?.activeMentors ?? stats?.volunteersCount) },
-        { label: "Youth engaged", value: fmt(stats?.youthImpacted ?? stats?.livesImpacted) },
-        { label: "Mentorship hours", value: fmt(stats?.mentorshipHours) },
-        { label: "Trees planted (verified)", value: fmt(stats?.treesPlanted) },
-        { label: "Corporate partners", value: fmt(stats?.activePartnerships) },
-        { label: "NGO partners", value: fmt(stats?.activeNgoPartners) },
+        { label: "Active mentors", value: fmt(stats?.activeMentors ?? stats?.volunteersCount), href: "/mentors#directory" },
+        { label: "Youth engaged", value: fmt(stats?.youthImpacted ?? stats?.livesImpacted), href: "/mentees#directory" },
+        { label: "Mentorship hours", value: fmt(stats?.mentorshipHours), href: "/impact" },
+        { label: "Trees planted (verified)", value: fmt(stats?.treesPlanted), href: "/impact#environmental" },
+        { label: "Corporate partners", value: fmt(stats?.activePartnerships), href: "/impact#partners" },
+        { label: "NGO partners", value: fmt(stats?.activeNgoPartners), href: "/impact#partners" },
     ];
 
-    const Stat = ({ label, value }: { label: string; value: string }) => (
-        <div className="flex items-center gap-3 px-8 shrink-0">
-            <span className="text-display-sm leading-none" style={{ color: "#ffffff" }}>
+    const Stat = ({ label, value, href }: { label: string; value: string; href: string }) => (
+        <Link
+            href={href}
+            className="group flex items-center gap-3 px-8 shrink-0 transition-opacity hover:opacity-80 cursor-pointer"
+        >
+            <span className="text-display-sm leading-none group-hover:text-[color:var(--brand-green)] transition-colors" style={{ color: "#ffffff" }}>
                 {value}
             </span>
-            <span className="text-label whitespace-nowrap" style={{ color: "rgba(255,255,255,0.65)" }}>
+            <span className="text-label whitespace-nowrap group-hover:text-white transition-colors" style={{ color: "rgba(255,255,255,0.65)" }}>
                 {label}
             </span>
             <span className="ml-5 h-5 w-px" style={{ background: "rgba(255,255,255,0.15)" }} aria-hidden />
-        </div>
+        </Link>
     );
 
     return (
@@ -55,7 +53,9 @@ export default function ImpactTicker({ stats }: { stats?: ImpactStats }) {
             {/* Screen-reader / no-motion accessible version */}
             <ul className="sr-only">
                 {items.map((i) => (
-                    <li key={i.label}>{i.label}: {i.value}</li>
+                    <li key={i.label}>
+                        <Link href={i.href}>{i.label}: {i.value}</Link>
+                    </li>
                 ))}
             </ul>
 
@@ -70,7 +70,7 @@ export default function ImpactTicker({ stats }: { stats?: ImpactStats }) {
                 {[0, 1].map((set) => (
                     <div key={set} className="flex shrink-0">
                         {items.map((item) => (
-                            <Stat key={`${set}-${item.label}`} label={item.label} value={item.value} />
+                            <Stat key={`${set}-${item.label}`} label={item.label} value={item.value} href={item.href} />
                         ))}
                     </div>
                 ))}

@@ -3,6 +3,8 @@ import { Trophy, Brain, Users, TrendingUp, ArrowRight } from "lucide-react";
 import AboutCTAStrip from "@/components/marketing/about/AboutCTAStrip";
 import PageHero from "@/components/shared/PageHero";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
+import { getPublicMentors } from "@/lib/db/queries/users";
+import UserProfileGrid from "@/components/marketing/profiles/UserProfileGrid";
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 
@@ -24,15 +26,18 @@ const MENTOR_QUALITIES = [
 ];
 
 export default async function MentorsPage() {
-    const dbStats = await getGlobalImpactStats();
+    const [dbStats, mentors] = await Promise.all([
+        getGlobalImpactStats().catch(() => null),
+        getPublicMentors(24).catch(() => []),
+    ]);
     const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
     const isAuthenticated = !!session?.user;
 
     const heroStats = [
-        { value: fmt(dbStats?.activeMentors),         label: "Active Mentors" },
-        { value: fmt(dbStats?.youthEngagedActive),    label: "Mentees Reached" },
-        { value: "12 wks",                            label: "Programme Duration" },
-        { value: fmt(dbStats?.mentorshipHoursTotal),  label: "Mentorship Hours" },
+        { value: fmt(dbStats?.activeMentors),         label: "Active Mentors",      href: "#directory" },
+        { value: fmt(dbStats?.youthEngagedActive),    label: "Mentees Reached",     href: "/mentees#directory" },
+        { value: "12 wks",                            label: "Programme Duration",  href: "#directory" },
+        { value: fmt(dbStats?.mentorshipHoursTotal),  label: "Mentorship Hours",    href: "#directory" },
     ];
 
     return (
@@ -107,20 +112,35 @@ export default async function MentorsPage() {
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {heroStats.map((stat) => (
-                            <div
+                            <Link
                                 key={stat.label}
-                                className="rounded-2xl border border-border bg-background p-6 text-center space-y-2 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[color:var(--brand-green)]"
+                                href={stat.href}
+                                className="group rounded-2xl border border-border bg-background p-6 text-center space-y-2 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[color:var(--brand-green)] cursor-pointer"
                                 style={{ boxShadow: "var(--shadow-sm)" }}
                             >
-                                <div className="text-display-md text-foreground font-semibold">
+                                <div className="text-display-md text-foreground font-semibold group-hover:text-[color:var(--brand-green)] transition-colors">
                                     {stat.value}
                                 </div>
-                                <div className="text-eyebrow text-foreground-muted">
-                                    {stat.label}
+                                <div className="text-eyebrow text-foreground-muted group-hover:text-foreground transition-colors flex items-center justify-center gap-1">
+                                    <span>{stat.label}</span>
+                                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* Signed-Up Mentors Profile Directory Section (Below Network Impact) */}
+            <section id="directory" className="py-14 md:py-24 border-b border-border scroll-mt-20">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <UserProfileGrid
+                        profiles={mentors}
+                        subtitle="Vetted Mentors"
+                        title="Meet our mentors."
+                        emptyMessage="No mentors currently match your search."
+                        defaultRole="Mentor"
+                    />
                 </div>
             </section>
 

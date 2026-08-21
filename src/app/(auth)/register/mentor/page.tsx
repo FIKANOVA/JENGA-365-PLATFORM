@@ -46,6 +46,11 @@ export default function MentorRegisterPage() {
         lastName: "",
         professionalTitle: "",
         linkedIn: "",
+        x: "",
+        instagram: "",
+        youtube: "",
+        tiktok: "",
+        website: "",
         email: "",
         password: "",
         hoursPerMonth: "0",
@@ -83,7 +88,13 @@ export default function MentorRegisterPage() {
                 await saveUserMetadata(result.data.user.id, {
                     meetingPreference: formData.meetingPreference,
                     professionalTitle: formData.professionalTitle,
+                    profession: formData.professionalTitle,
                     linkedIn: formData.linkedIn || "",
+                    x: formData.x || "",
+                    instagram: formData.instagram || "",
+                    youtube: formData.youtube || "",
+                    tiktok: formData.tiktok || "",
+                    website: formData.website || "",
                 });
             }
 
@@ -209,11 +220,83 @@ export default function MentorRegisterPage() {
                                         }
                                     >
                                         <Input
-                                            type="url"
+                                            type="text"
                                             name="linkedIn"
                                             value={formData.linkedIn}
                                             onChange={handleInputChange}
                                             placeholder="linkedin.com/in/you"
+                                        />
+                                    </Field>
+                                    <Field
+                                        label={
+                                            <>
+                                                X (Twitter){" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            type="text"
+                                            name="x"
+                                            value={formData.x}
+                                            onChange={handleInputChange}
+                                            placeholder="@handle"
+                                        />
+                                    </Field>
+                                    <Field
+                                        label={
+                                            <>
+                                                Instagram{" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            type="text"
+                                            name="instagram"
+                                            value={formData.instagram}
+                                            onChange={handleInputChange}
+                                            placeholder="@username"
+                                        />
+                                    </Field>
+                                    <Field
+                                        label={
+                                            <>
+                                                YouTube / TikTok{" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            type="text"
+                                            name="youtube"
+                                            value={formData.youtube}
+                                            onChange={handleInputChange}
+                                            placeholder="@channel"
+                                        />
+                                    </Field>
+                                    <Field
+                                        label={
+                                            <>
+                                                Personal / Portfolio Website{" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            type="text"
+                                            name="website"
+                                            value={formData.website}
+                                            onChange={handleInputChange}
+                                            placeholder="https://yourwebsite.com"
                                         />
                                     </Field>
                                 </div>

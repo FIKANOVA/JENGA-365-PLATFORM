@@ -3,6 +3,8 @@ import { Timer, Users, GraduationCap, Trees, Leaf, Building2, ArrowRight, Heart,
 import PageHero from "@/components/shared/PageHero";
 
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
+import { getPublicCommunityProfiles } from "@/lib/db/queries/users";
+import UserProfileGrid from "@/components/marketing/profiles/UserProfileGrid";
 import { fetchSiteSettings } from "@/lib/sanity/queries";
 import DonateButton from "@/components/shared/DonateButton";
 
@@ -85,9 +87,10 @@ function resolveStatValue(raw: string, dbStats: Awaited<ReturnType<typeof getGlo
 }
 
 export default async function ImpactPage() {
-    const [dbStats, settings] = await Promise.all([
-        getGlobalImpactStats(),
-        fetchSiteSettings(),
+    const [dbStats, settings, communityProfiles] = await Promise.all([
+        getGlobalImpactStats().catch(() => null),
+        fetchSiteSettings().catch(() => null),
+        getPublicCommunityProfiles(36).catch(() => []),
     ]);
 
     const stories: ImpactStory[] = settings?.impactTestimonials?.length
@@ -95,19 +98,20 @@ export default async function ImpactPage() {
         : DEFAULT_IMPACT_STORIES;
 
     const IMPACT_STATS = [
-        { value: fmt(dbStats?.mentorshipHoursTotal),     label: "Mentorship Hours Logged",   Icon: Timer },
-        { value: fmt(dbStats?.activeMentors),            label: "Active Mentors",            Icon: Users },
-        { value: fmt(dbStats?.youthEngagedActive),       label: "Youth Engaged",             Icon: GraduationCap },
-        { value: fmt(dbStats?.treesPlantedTotal),        label: "Trees Planted",             Icon: Trees },
+        { value: fmt(dbStats?.mentorshipHoursTotal),     label: "Mentorship Hours Logged",   Icon: Timer,           href: "/impact" },
+        { value: fmt(dbStats?.activeMentors),            label: "Active Mentors",            Icon: Users,           href: "/mentors#directory" },
+        { value: fmt(dbStats?.youthEngagedActive),       label: "Youth Engaged",             Icon: GraduationCap,   href: "/mentees#directory" },
+        { value: fmt(dbStats?.treesPlantedTotal),        label: "Trees Planted",             Icon: Trees,           href: "#environmental" },
         {
             value: dbStats?.survivalRatePct && dbStats.survivalRatePct > 0
                 ? `${dbStats.survivalRatePct}%`
                 : "—",
             label: "Tree Survival Rate",
             Icon: Leaf,
+            href: "#environmental",
         },
-        { value: fmt(dbStats?.activeCorporatePartners),  label: "Corporate Partners",        Icon: Building2 },
-        { value: fmt(dbStats?.activeNgoPartners),        label: "NGO Partners",              Icon: HandHeart },
+        { value: fmt(dbStats?.activeCorporatePartners),  label: "Corporate Partners",        Icon: Building2,       href: "#partners" },
+        { value: fmt(dbStats?.activeNgoPartners),        label: "NGO Partners",              Icon: HandHeart,       href: "#partners" },
     ];
 
     const DEFAULT_ENVIRONMENTAL_STATS: EnvStat[] = [
@@ -159,18 +163,20 @@ export default async function ImpactPage() {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {IMPACT_STATS.map(({ value, label, Icon }) => (
-                                <div
+                            {IMPACT_STATS.map(({ value, label, Icon, href }) => (
+                                <Link
                                     key={label}
-                                    className="rounded-3xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-[color:var(--surface-1)]"
+                                    href={href}
+                                    className="group rounded-3xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-[color:var(--surface-1)] hover:border-[color:var(--brand-green)] cursor-pointer"
                                     style={{ boxShadow: "var(--shadow-sm)" }}
                                 >
                                     <div className="flex items-start justify-between mb-4">
-                                        <Icon className="h-5 w-5" style={{ color: "var(--brand-green)" }} />
+                                        <Icon className="h-5 w-5 text-foreground-muted group-hover:text-[color:var(--brand-green)] transition-colors" />
+                                        <ArrowRight className="w-4 h-4 text-foreground-muted opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </div>
-                                    <div className="text-display-sm text-foreground">{value}</div>
-                                    <p className="mt-2 text-eyebrow text-foreground-muted">{label}</p>
-                                </div>
+                                    <div className="text-display-sm text-foreground group-hover:text-[color:var(--brand-green)] transition-colors">{value}</div>
+                                    <p className="mt-2 text-eyebrow text-foreground-muted group-hover:text-foreground transition-colors">{label}</p>
+                                </Link>
                             ))}
                         </div>
                     </div>
@@ -213,7 +219,7 @@ export default async function ImpactPage() {
                     </div>
                 </section>
 
-                <section className="py-12 md:py-20 lg:py-12 md:py-24 border-y border-border">
+                <section id="environmental" className="py-12 md:py-20 lg:py-12 md:py-24 border-y border-border scroll-mt-20">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                             <div className="space-y-6">
@@ -252,6 +258,20 @@ export default async function ImpactPage() {
                                 ))}
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                {/* Partners & Community Profiles Section */}
+                <section id="partners" className="py-14 md:py-24 border-b border-border scroll-mt-20">
+                    <div id="community" className="mx-auto max-w-7xl px-6 lg:px-8 scroll-mt-20">
+                        <UserProfileGrid
+                            profiles={communityProfiles}
+                            subtitle="Verified Network"
+                            title="Partners & community directory."
+                            showRoleFilters={true}
+                            emptyMessage="No partner or community profiles found."
+                            defaultRole="All"
+                        />
                     </div>
                 </section>
 

@@ -8,7 +8,7 @@ import { ArrowRight, ArrowLeft, Check, ShieldCheck } from "lucide-react";
 
 import { signUp, signIn } from "@/lib/auth/client";
 import { signNDA } from "@/lib/actions/nda";
-import { setUserRoleAndApprove } from "@/lib/actions/auth";
+import { setUserRoleAndApprove, saveUserMetadata } from "@/lib/actions/auth";
 import { sendMenteeRegistrationEmail } from "@/lib/actions/registration-emails";
 
 import Logo from "@/components/shared/Logo";
@@ -34,6 +34,13 @@ export default function MenteeRegisterPage() {
         lastName: "",
         currentLevel: "",
         educationGoal: "",
+        profession: "",
+        linkedIn: "",
+        x: "",
+        instagram: "",
+        youtube: "",
+        tiktok: "",
+        website: "",
         email: "",
         password: "",
         agreedToTerms: false,
@@ -83,6 +90,16 @@ export default function MenteeRegisterPage() {
 
             if (result?.data?.user?.id) {
                 await setUserRoleAndApprove(result.data.user.id, "Mentee");
+                await saveUserMetadata(result.data.user.id, {
+                    currentLevel: formData.currentLevel,
+                    profession: formData.profession || "",
+                    linkedIn: formData.linkedIn || "",
+                    x: formData.x || "",
+                    instagram: formData.instagram || "",
+                    youtube: formData.youtube || "",
+                    tiktok: formData.tiktok || "",
+                    website: formData.website || "",
+                });
             }
 
             const ndaResult = await signNDA({
@@ -240,6 +257,113 @@ export default function MenteeRegisterPage() {
                                         <option value="Postgraduate">Postgraduate</option>
                                         <option value="Early Career">Early career</option>
                                     </Select>
+                                </Field>
+
+                                <Field
+                                    label={
+                                        <>
+                                            Aspiration / Career Goal{" "}
+                                            <span className="text-foreground-subtle font-normal">
+                                                (optional)
+                                            </span>
+                                        </>
+                                    }
+                                >
+                                    <Input
+                                        name="profession"
+                                        value={formData.profession}
+                                        onChange={handleInputChange}
+                                        placeholder="e.g. Aspiring Software Developer, Rugby Athlete"
+                                    />
+                                </Field>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <Field
+                                        label={
+                                            <>
+                                                LinkedIn{" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            name="linkedIn"
+                                            value={formData.linkedIn}
+                                            onChange={handleInputChange}
+                                            placeholder="linkedin.com/in/you"
+                                        />
+                                    </Field>
+                                    <Field
+                                        label={
+                                            <>
+                                                X (Twitter){" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            name="x"
+                                            value={formData.x}
+                                            onChange={handleInputChange}
+                                            placeholder="@handle"
+                                        />
+                                    </Field>
+                                    <Field
+                                        label={
+                                            <>
+                                                Instagram{" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            name="instagram"
+                                            value={formData.instagram}
+                                            onChange={handleInputChange}
+                                            placeholder="@username"
+                                        />
+                                    </Field>
+                                    <Field
+                                        label={
+                                            <>
+                                                YouTube / TikTok{" "}
+                                                <span className="text-foreground-subtle font-normal">
+                                                    (optional)
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <Input
+                                            name="youtube"
+                                            value={formData.youtube}
+                                            onChange={handleInputChange}
+                                            placeholder="@channel"
+                                        />
+                                    </Field>
+                                </div>
+
+                                <Field
+                                    label={
+                                        <>
+                                            Portfolio / Website{" "}
+                                            <span className="text-foreground-subtle font-normal">
+                                                (optional)
+                                            </span>
+                                        </>
+                                    }
+                                >
+                                    <Input
+                                        name="website"
+                                        value={formData.website}
+                                        onChange={handleInputChange}
+                                        placeholder="https://yourportfolio.com"
+                                    />
                                 </Field>
 
                                 {/* Turnstile */}
