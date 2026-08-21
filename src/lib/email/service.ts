@@ -42,20 +42,34 @@ async function safeSend(params: {
     replyTo?: string;
 }): Promise<EmailResult> {
     try {
-        const { data, error } = await resend.emails.send({
-            from: DEFAULT_FROM,
+        let fromAddress = DEFAULT_FROM;
+        let response = await resend.emails.send({
+            from: fromAddress,
             to: params.to,
             subject: params.subject,
             html: params.html,
             ...(params.replyTo ? { replyTo: params.replyTo } : {}),
         });
 
-        if (error) {
-            console.error('[EmailService] Resend error:', error);
-            return { success: false, error: error.message };
+        // If domain is not verified on Resend and request fails, try fallback to onboarding@resend.dev
+        if (response.error && (response.error.message.includes('domain') || response.error.message.includes('verify') || response.error.message.includes('not verified'))) {
+            console.warn('[EmailService] Primary domain unverified. Attempting fallback send with onboarding@resend.dev...');
+            fromAddress = 'Jenga365 <onboarding@resend.dev>';
+            response = await resend.emails.send({
+                from: fromAddress,
+                to: params.to,
+                subject: params.subject,
+                html: params.html,
+                ...(params.replyTo ? { replyTo: params.replyTo } : {}),
+            });
         }
 
-        return { success: true, messageId: data?.id };
+        if (response.error) {
+            console.error('[EmailService] Resend error:', response.error);
+            return { success: false, error: response.error.message };
+        }
+
+        return { success: true, messageId: response.data?.id };
     } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown email error';
         console.error('[EmailService] Exception:', message);

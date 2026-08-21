@@ -6,6 +6,7 @@ import { users, articles, moderationLog } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { createNotification } from "@/lib/notifications/service";
+import { EmailService } from "@/lib/email/service";
 import { hasCapability, parseScopes, type Capability, type Role } from "@/lib/auth/roles";
 import { publishArticleToSanity, unpublishArticleFromSanity } from "@/lib/sanity/syncArticle";
 
@@ -33,6 +34,10 @@ async function requireModeratorWithCapability(cap: Capability) {
 export async function approveUser(userId: string) {
     const mod = await requireModerator();
 
+    const targetUser = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+    });
+
     await db.update(users)
         .set({ isApproved: true, status: "active" })
         .where(eq(users.id, userId));
@@ -50,11 +55,31 @@ export async function approveUser(userId: string) {
         link: "/dashboard",
     }).catch(() => {});
 
+    if (targetUser?.email) {
+        const firstName = targetUser.name ? targetUser.name.split(" ")[0] : targetUser.email.split("@")[0];
+        const baseUrl = process.env.BETTER_AUTH_URL || "https://jenga365.org";
+        try {
+            if (targetUser.role === "Mentor") {
+                await EmailService.sendMentorApproved(targetUser.email, firstName, targetUser.email);
+            } else if (targetUser.role === "CorporatePartner") {
+                await EmailService.sendCorporateApproved(targetUser.email, firstName, "Corporate Partner");
+            } else {
+                await EmailService.sendRoleUpdated(targetUser.email, firstName, targetUser.role, `${baseUrl}/dashboard`);
+            }
+        } catch (emailErr) {
+            console.error(`[approveUser] Failed to send approval email to ${targetUser.email}:`, emailErr);
+        }
+    }
+
     return { success: true };
 }
 
 export async function rejectUser(userId: string, reason?: string) {
     const mod = await requireModerator();
+
+    const targetUser = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+    });
 
     await db.update(users)
         .set({ isApproved: false, status: "pending", rejectionReason: reason ?? null })
@@ -73,6 +98,16 @@ export async function rejectUser(userId: string, reason?: string) {
         body: reason ?? "Your application was not approved at this time. Please contact support for more information.",
         link: "/pending-approval",
     }).catch(() => {});
+
+    if (targetUser?.email) {
+        const firstName = targetUser.name ? targetUser.name.split(" ")[0] : targetUser.email.split("@")[0];
+        const reapplyDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        try {
+            await EmailService.sendMentorRejected(targetUser.email, firstName, reason || "Application not approved at this time", reapplyDate);
+        } catch (emailErr) {
+            console.error(`[rejectUser] Failed to send rejection email to ${targetUser.email}:`, emailErr);
+        }
+    }
 
     return { success: true };
 }

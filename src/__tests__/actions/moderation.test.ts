@@ -17,6 +17,7 @@ vi.mock('@/lib/db', () => ({
     insert: vi.fn(),
     update: vi.fn(),
     query: {
+        users: { findFirst: vi.fn().mockResolvedValue({ id: 'user-123', email: 'test@jenga365.org', name: 'Test User', role: 'Mentor' }) },
         articles: { findFirst: vi.fn() }
     }
   },
@@ -30,6 +31,15 @@ vi.mock('@/lib/auth/config', () => ({
   auth: {
     api: { getSession: vi.fn() },
   },
+}))
+
+vi.mock('@/lib/email/service', () => ({
+  EmailService: {
+    sendMentorApproved: vi.fn().mockResolvedValue({ success: true }),
+    sendCorporateApproved: vi.fn().mockResolvedValue({ success: true }),
+    sendMentorRejected: vi.fn().mockResolvedValue({ success: true }),
+    sendRoleUpdated: vi.fn().mockResolvedValue({ success: true }),
+  }
 }))
 
 vi.mock('@/lib/notifications/service', () => ({
