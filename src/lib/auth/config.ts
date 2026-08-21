@@ -39,6 +39,14 @@ export const auth = betterAuth({
             : {}),
     },
 
+    // Account Linking — allow Google OAuth to link to existing email/password accounts
+    account: {
+        accountLinking: {
+            enabled: true,
+            trustedProviders: ["google"],
+        },
+    },
+
     // Advanced - Let DB (Drizzle) generate UUIDs for us
     advanced: {
         // generateId has been removed in newer versions of better-auth,

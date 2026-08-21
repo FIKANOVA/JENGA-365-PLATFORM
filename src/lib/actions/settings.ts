@@ -74,3 +74,33 @@ export async function requestDataExport() {
         exportedAt: new Date().toISOString(),
     };
 }
+
+export async function deleteSelfAccountAction() {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) throw new Error("UNAUTHORIZED");
+
+    const userId = session.user.id;
+
+    // Prevent deleting the sole primary root superadmin account by accident
+    const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
+    const superadmins = (process.env.SUPERADMIN_EMAILS || process.env.SUPERADMIN_EMAIL || "")
+        .split(",")
+        .map((e) => e.trim().toLowerCase())
+        .filter(Boolean);
+
+    if (user?.email && superadmins.includes(user.email.toLowerCase()) && user.role === "SuperAdmin") {
+        const allSuperAdmins = await db.query.users.findMany({ where: eq(users.role, "SuperAdmin") });
+        if (allSuperAdmins.length <= 1) {
+            return { success: false, error: "Cannot delete the sole root SuperAdmin account." };
+        }
+    }
+
+    try {
+        // Delete user record — cascading deletes accounts, sessions, notifications, etc.
+        await db.delete(users).where(eq(users.id, userId));
+        return { success: true };
+    } catch (err: any) {
+        console.error("[deleteSelfAccountAction] error:", err);
+        return { success: false, error: err?.message || "Failed to delete account" };
+    }
+}

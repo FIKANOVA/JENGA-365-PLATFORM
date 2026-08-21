@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
-import { corporatePartners, users } from "@/lib/db/schema";
+import { corporatePartners, users, moderationLog } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -131,5 +131,43 @@ export async function updateLegacyUserRoleAction(email: string, role: "SuperAdmi
     } catch (err) {
         console.error(`Failed to update role for ${email}:`, err);
         return { error: "Failed to update user role" };
+    }
+}
+
+export async function deleteUserByAdminAction(targetUserId: string) {
+    const session = await requireSuperAdmin();
+    const adminId = session.user.id;
+
+    if (targetUserId === adminId) {
+        return { error: "You cannot delete your own account from the Admin panel. Use Account Settings instead." };
+    }
+
+    const targetUser = await db.query.users.findFirst({
+        where: eq(users.id, targetUserId)
+    });
+
+    if (!targetUser) {
+        return { error: "User not found." };
+    }
+
+    try {
+        // Log the deletion
+        await db.insert(moderationLog).values({
+            moderatorId: adminId,
+            actionType: "user_deleted",
+            targetId: targetUserId,
+            targetType: "user",
+            notes: `SuperAdmin deleted user ${targetUser.email} (${targetUser.role})`,
+        });
+
+        // Delete user (cascades to child tables)
+        await db.delete(users).where(eq(users.id, targetUserId));
+
+        revalidatePath("/dashboard/admin");
+        revalidatePath("/dashboard/people");
+        return { ok: true };
+    } catch (err: any) {
+        console.error("[deleteUserByAdminAction] failed:", err);
+        return { error: err?.message || "Failed to delete user." };
     }
 }

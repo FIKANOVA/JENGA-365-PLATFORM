@@ -16,10 +16,11 @@ import {
   Briefcase,
   ShoppingBag,
   Mail,
+  Trash2,
 } from "lucide-react";
 import { SCOPE_TIER_LABELS } from "@/lib/constants/moderator-scopes";
 import { approveUser, rejectUser, suspendUser } from "@/lib/actions/moderation";
-import { sendResetPasswordEmailAction, updateLegacyUserRoleAction } from "@/lib/actions/adminOps";
+import { sendResetPasswordEmailAction, updateLegacyUserRoleAction, deleteUserByAdminAction } from "@/lib/actions/adminOps";
 import { createModeratorInvite } from "@/lib/actions/auth";
 import { toast } from "sonner";
 import SyncStoreInventoryButton from "@/components/dashboard/shared/SyncStoreInventoryButton";
@@ -355,6 +356,25 @@ function UserActionMenu({
             className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-red-soft)] hover:text-[color:var(--brand-red)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
           >
             <Ban className="w-4 h-4" /> Suspend
+          </button>
+          <div className="h-px bg-border my-1" />
+          <button
+            onClick={() => {
+              if (window.confirm(`Are you sure you want to permanently delete user ${email || userId}? This cannot be undone.`)) {
+                startTransition(async () => {
+                  setOpen(false);
+                  const res = await deleteUserByAdminAction(userId);
+                  if (res.error) toast.error(res.error);
+                  else {
+                    toast.success("User deleted successfully");
+                    onAction();
+                  }
+                });
+              }
+            }}
+            className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-destructive text-left transition-colors hover:bg-destructive/10 focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+          >
+            <Trash2 className="w-4 h-4" /> Delete user
           </button>
         </div>
       )}
