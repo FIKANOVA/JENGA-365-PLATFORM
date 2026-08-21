@@ -54,9 +54,9 @@ export async function triggerAiProfileSynthesis() {
     try {
         const result = await synthesizeUserProfile(session.user.id);
         return result;
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.error("AI Synthesis failed:", e);
-        return { success: false, message: e.message };
+        return { success: false, message: e instanceof Error ? e.message : "Unknown error" };
     }
 }
 

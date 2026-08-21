@@ -93,9 +93,9 @@ export async function indexDocumentToPgVector(documentId: string) {
     try {
         const result = await processAndEmbedDocument(documentId);
         return result;
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.error("Index action failed:", e);
-        return { success: false, message: e.message || "Unknown error occurred" };
+        return { success: false, message: e instanceof Error ? e.message : "Unknown error occurred" };
     }
 }
 
