@@ -119,7 +119,7 @@ export async function handlePaystackWebhook(event: PaystackEvent) {
 
         default:
             // Log unhandled events for debugging
-            console.log(`[Paystack] Unhandled event: ${event.event}`);
+            console.debug(`[Paystack] Unhandled event: ${event.event}`);
     }
 }
 
