@@ -372,7 +372,8 @@ function InviteModeratorModal({
   currentUserId: string;
 }) {
   const [email, setEmail] = useState("");
-  const [scope, setScope] = useState("E");
+  const [roleToAssign, setRoleToAssign] = useState<"Moderator" | "SuperAdmin">("Moderator");
+  const [scope, setScope] = useState("all");
   const [loading, setLoading] = useState(false);
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
 
@@ -382,10 +383,10 @@ function InviteModeratorModal({
     if (!email) return;
     setLoading(true);
     try {
-      const result = await createModeratorInvite(currentUserId, email, scope);
+      const result = await createModeratorInvite(currentUserId, email, scope, roleToAssign);
       if (result.success) {
         setInviteUrl(result.inviteUrl ?? null);
-        toast.success("Moderator invite sent successfully");
+        toast.success(roleToAssign === "SuperAdmin" ? "SuperAdmin invite sent successfully" : "Moderator invite sent successfully");
       } else {
         toast.error("Failed to create invite");
       }
@@ -398,7 +399,8 @@ function InviteModeratorModal({
 
   const handleClose = () => {
     setEmail("");
-    setScope("A");
+    setRoleToAssign("Moderator");
+    setScope("all");
     setInviteUrl(null);
     onClose();
   };
@@ -414,7 +416,9 @@ function InviteModeratorModal({
         style={{ boxShadow: "var(--shadow-lg)" }}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-display-sm text-foreground">Invite moderator</h2>
+          <h2 className="text-display-sm text-foreground">
+            {roleToAssign === "SuperAdmin" ? "Invite SuperAdmin" : "Invite Moderator"}
+          </h2>
           <button
             onClick={handleClose}
             aria-label="Close"
@@ -427,9 +431,39 @@ function InviteModeratorModal({
         {!inviteUrl ? (
           <div className="space-y-5">
             <p className="text-body-sm text-foreground-muted">
-              Enter the email address and assign a moderation scope. An invite
+              Enter the email address and select the administrative role. An invite
               link will be sent to their inbox.
             </p>
+
+            <div className="space-y-1.5">
+              <label className="text-eyebrow text-foreground-muted block">
+                Role to assign
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRoleToAssign("Moderator")}
+                  className={`h-10 px-3 rounded-md text-sm font-medium border transition-colors ${
+                    roleToAssign === "Moderator"
+                      ? "border-primary bg-primary/10 text-foreground font-semibold"
+                      : "border-border text-foreground-muted hover:bg-surface-2"
+                  }`}
+                >
+                  Moderator
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRoleToAssign("SuperAdmin")}
+                  className={`h-10 px-3 rounded-md text-sm font-medium border transition-colors ${
+                    roleToAssign === "SuperAdmin"
+                      ? "border-primary bg-primary/10 text-foreground font-semibold"
+                      : "border-border text-foreground-muted hover:bg-surface-2"
+                  }`}
+                >
+                  SuperAdmin
+                </button>
+              </div>
+            </div>
 
             <div className="space-y-1.5">
               <label className="text-eyebrow text-foreground-muted block">
@@ -440,26 +474,32 @@ function InviteModeratorModal({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={INPUT_CLASS}
-                placeholder="moderator@example.com"
+                placeholder={roleToAssign === "SuperAdmin" ? "admin@example.com" : "moderator@example.com"}
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-eyebrow text-foreground-muted block">
-                Moderation scope
-              </label>
-              <select
-                value={scope}
-                onChange={(e) => setScope(e.target.value)}
-                className={INPUT_CLASS}
-              >
-                {SCOPE_OPTIONS.map((s) => (
-                  <option key={s.value} value={s.value}>
-                    {s.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {roleToAssign === "Moderator" ? (
+              <div className="space-y-1.5">
+                <label className="text-eyebrow text-foreground-muted block">
+                  Moderation scope
+                </label>
+                <select
+                  value={scope}
+                  onChange={(e) => setScope(e.target.value)}
+                  className={INPUT_CLASS}
+                >
+                  {SCOPE_OPTIONS.map((s) => (
+                    <option key={s.value} value={s.value}>
+                      {s.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="p-3 rounded-md bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300">
+                ⚠️ SuperAdmin has unrestricted root permissions across the entire platform, revenue, user data, and settings.
+              </div>
+            )}
 
             <button
               onClick={handleSend}

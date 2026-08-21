@@ -78,12 +78,13 @@ export async function finishAdminInvite(token: string) {
 }
 
 /**
- * SuperAdmin creates a moderator invite: generates token, stores it, sends email.
+ * SuperAdmin creates an admin or moderator invite: generates token, stores it, sends email.
  */
 export async function createModeratorInvite(
     inviterId: string,
     inviteeEmail: string,
-    moderationScope: string
+    moderationScope: string = "all",
+    roleAssigned: "Moderator" | "SuperAdmin" = "Moderator"
 ) {
     try {
         const token = randomUUID();
@@ -92,14 +93,14 @@ export async function createModeratorInvite(
         await db.insert(inviteLinks).values({
             inviterId,
             token,
-            roleAssigned: "Moderator",
-            inviteeEmail,
-            moderationScope,
+            roleAssigned,
+            inviteeEmail: inviteeEmail.trim().toLowerCase(),
+            moderationScope: roleAssigned === "SuperAdmin" ? "all" : moderationScope,
             isUsed: false,
             expiresAt,
         });
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? (process.env.BETTER_AUTH_URL || "https://jenga365.org");
         const inviteUrl = `${appUrl}/moderator-invite/${token}`;
 
         // Fire-and-forget email
@@ -107,9 +108,9 @@ export async function createModeratorInvite(
             inviteeEmail,
             inviteeEmail.split("@")[0],
             "SuperAdmin",
-            [moderationScope],
+            [roleAssigned === "SuperAdmin" ? "SuperAdmin (Full Platform Administration)" : moderationScope],
             inviteUrl
-        ).catch((err) => console.error("Moderator invite email failed:", err));
+        ).catch((err) => console.error("Admin/Moderator invite email failed:", err));
 
         return { success: true, inviteUrl };
     } catch (err: any) {

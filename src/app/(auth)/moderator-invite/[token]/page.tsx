@@ -63,8 +63,8 @@ export default function ModeratorInvitePage() {
 
 
     const [inviteeEmail, setInviteeEmail] = useState("");
+    const [inviteRole, setInviteRole] = useState<string>("Moderator");
     const [moderationScope, setModerationScopeValue] = useState<string | null>(null);
-
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [signature, setSignature] = useState("");
@@ -80,6 +80,9 @@ export default function ModeratorInvitePage() {
                 } else {
                     setInviteeEmail(result.data.email);
                     setModerationScopeValue(result.data.moderationScope ?? null);
+                    if (result.data.role) {
+                        setInviteRole(result.data.role);
+                    }
                 }
             } catch {
                 setInviteError("Could not validate invite link.");
@@ -112,8 +115,9 @@ export default function ModeratorInvitePage() {
             }
 
             if (result?.data?.user?.id) {
-                await setUserRole(result.data.user.id, "Moderator");
-                if (moderationScope) {
+                const roleToSet = (inviteRole as "Moderator" | "SuperAdmin") || "Moderator";
+                await setUserRole(result.data.user.id, roleToSet);
+                if (moderationScope && roleToSet === "Moderator") {
                     await setModeratorScope(result.data.user.id, moderationScope);
                 }
             }
@@ -121,7 +125,7 @@ export default function ModeratorInvitePage() {
             const ndaResult = await signNDA({
                 signatureName: signature,
                 ndaVersion: "MOD-2025-V1",
-                role: "Moderator",
+                role: inviteRole === "SuperAdmin" ? "SuperAdmin" : "Moderator",
                 additionalDeclarations: [true],
                 documentHash: "5d993e7646468b440ed9f4ed1408b34963bff3ebb1fc978e7ded013dd65d0b33",
             });
