@@ -23,6 +23,7 @@ export type EmailTemplateType =
     | 'session_logged'              // T16
     | 'password_reset'              // T17
     | 'nda_update'                  // T18
+    | 'role_updated'                // T19
     ;
 
 export interface EmailResult {
@@ -281,6 +282,18 @@ export class EmailService {
     }
 
     // ──────────────────────────────────────────────────────
+    //  T19: Role Updated
+    // ──────────────────────────────────────────────────────
+    static async sendRoleUpdated(to: string, firstName: string, newRole: string, dashboardUrl: string) {
+        const html = templates.roleUpdatedEmail(firstName, newRole, dashboardUrl);
+        return safeSend({
+            to,
+            subject: `Your Jenga365 account role has been updated to ${newRole}`,
+            html,
+        });
+    }
+
+    // ──────────────────────────────────────────────────────
     //  HTML preview (for testing pages — no actual send)
     // ──────────────────────────────────────────────────────
     static getPreviewHtml(templateType: EmailTemplateType): string {
@@ -322,6 +335,8 @@ export class EmailService {
                 return templates.passwordResetEmail(previewData.firstName, previewData.resetUrl);
             case 'nda_update':
                 return templates.ndaUpdateEmail(previewData.firstName, previewData.role, previewData.version);
+            case 'role_updated':
+                return templates.roleUpdatedEmail(previewData.firstName, previewData.role, 'https://jenga365.org/dashboard');
             default:
                 return '<p>Unknown template type</p>';
         }

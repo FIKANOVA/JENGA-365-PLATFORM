@@ -2,7 +2,8 @@
 
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
-import { corporatePartners, users, moderationLog } from "@/lib/db/schema";
+import { corporatePartners, users, moderationLog, notifications } from "@/lib/db/schema";
+import { EmailService } from "@/lib/email/service";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -123,10 +124,50 @@ export async function importLegacyUsersAction(legacyUsers: string[]) {
 }
 
 export async function updateLegacyUserRoleAction(email: string, role: "SuperAdmin" | "Moderator" | "CorporatePartner" | "NGO" | "Mentor" | "Mentee") {
-    await requireSuperAdmin();
+    const session = await requireSuperAdmin();
+    const adminId = session.user.id;
 
     try {
-        await db.update(users).set({ role }).where(eq(users.email, email));
+        const targetUser = await db.query.users.findFirst({
+            where: eq(users.email, email),
+        });
+
+        const oldRole = targetUser?.role || "Mentee";
+
+        // Update user role and ensure account is active and approved
+        await db.update(users).set({ 
+            role, 
+            isApproved: true, 
+            status: "active" 
+        }).where(eq(users.email, email));
+
+        if (targetUser) {
+            // In-app notification
+            await db.insert(notifications).values({
+                userId: targetUser.id,
+                type: "general",
+                title: "Role Updated",
+                body: `Your account role has been updated to ${role}. Your dashboard permissions have been updated.`,
+                link: "/dashboard",
+            });
+
+            // Audit log
+            await db.insert(moderationLog).values({
+                moderatorId: adminId,
+                actionType: "role_updated",
+                targetId: targetUser.id,
+                targetType: "user",
+                notes: `SuperAdmin changed role for ${email} from ${oldRole} to ${role}`,
+            });
+
+            // Transactional email notification
+            const firstName = targetUser.name ? targetUser.name.split(" ")[0] : email.split("@")[0];
+            const baseUrl = process.env.BETTER_AUTH_URL || "https://jenga365.org";
+            await EmailService.sendRoleUpdated(email, firstName, role, `${baseUrl}/dashboard`);
+        }
+
+        revalidatePath("/dashboard/admin");
+        revalidatePath("/dashboard/people");
         return { ok: true };
     } catch (err) {
         console.error(`Failed to update role for ${email}:`, err);

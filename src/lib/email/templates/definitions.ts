@@ -577,3 +577,27 @@ export const ndaUpdateEmail = (firstName: string, role: string, version: string)
   `;
     return wrap(subject, content);
 };
+
+// T19: ROLE UPDATED
+export const roleUpdatedEmail = (firstName: string, newRole: string, dashboardUrl: string) => {
+    const subject = `Your Jenga365 account role has been updated to ${newRole}`;
+    const content = `
+    ${HERO_BANNER('#2D6A4F', '🛡️', 'ROLE UPDATED', 'Account Permissions Updated')}
+    <tr>
+      <td style="padding:40px;">
+        <p style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#1A1A1A;margin:0 0 16px;">Hello ${firstName},</p>
+        <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;color:#4A4A4A;line-height:1.8;margin:0 0 24px;">
+          An administrator has updated your account role on Jenga365 to <strong style="color:#2D6A4F;">${newRole}</strong>.
+        </p>
+        <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#666666;line-height:1.6;margin:0 0 24px;">
+          Your login credentials remain the same. The next time you sign in (with Google or your email password), you will be directed to your new <strong>${newRole} Dashboard</strong>.
+        </p>
+        ${BUTTON('Access Your Dashboard →', dashboardUrl, 'primary')}
+        <p style="font-size:12px;color:#8A8A8A;font-family:Courier New,monospace;text-align:center;margin-top:24px;">
+          If you believe this change was made in error, please contact your administrator.
+        </p>
+      </td>
+    </tr>
+  `;
+    return wrap(subject, content);
+};
