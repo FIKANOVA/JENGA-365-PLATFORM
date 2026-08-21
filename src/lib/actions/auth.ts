@@ -59,8 +59,8 @@ export async function validateAdminInvite(token: string) {
                 moderationScope: invite.moderationScope ?? null,
             }
         };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
 }
 
@@ -73,8 +73,8 @@ export async function finishAdminInvite(token: string) {
             .set({ isUsed: true })
             .where(eq(inviteLinks.token, token));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
 }
 
@@ -114,8 +114,8 @@ export async function createModeratorInvite(
         ).catch((err) => console.error("Admin/Moderator invite email failed:", err));
 
         return { success: true, inviteUrl };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
 }
 
@@ -128,10 +128,10 @@ export async function setUserRole(
     role: "Mentee" | "Mentor" | "CorporatePartner" | "NGO" | "Moderator" | "SuperAdmin"
 ) {
     try {
-        await db.update(users).set({ role } as any).where(eq(users.id, userId));
+        await db.update(users).set({ role }).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
 }
 
@@ -140,10 +140,10 @@ export async function setUserRole(
  */
 export async function setModeratorScope(userId: string, scope: string) {
     try {
-        await db.update(users).set({ moderationScope: scope } as any).where(eq(users.id, userId));
+        await db.update(users).set({ moderationScope: scope }).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
 }
 
@@ -154,8 +154,8 @@ export async function saveUserMetadata(userId: string, metadata: Record<string, 
     try {
         await db.update(users).set({ metadata }).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
 }
 
@@ -167,10 +167,10 @@ export async function setUserRoleAndApprove(
     role: "Mentee" | "Mentor" | "CorporatePartner" | "NGO" | "Moderator" | "SuperAdmin"
 ) {
     try {
-        await db.update(users).set({ role, isApproved: true } as any).where(eq(users.id, userId));
+        await db.update(users).set({ role, isApproved: true }).where(eq(users.id, userId));
         return { success: true };
-    } catch (err: any) {
-        return { success: false, error: err.message };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
 }
 
@@ -179,15 +179,15 @@ export async function setUserRoleAndApprove(
  */
 export async function requestPasswordResetAction(email: string) {
     try {
-        await (auth.api as any).forgetPassword({
+        await (auth.api as unknown as { forgetPassword: (args: { body: { email: string; redirectTo: string } }) => Promise<void> }).forgetPassword({
             body: {
                 email: email.trim().toLowerCase(),
                 redirectTo: "/reset-password",
             }
         });
         return { success: true };
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("[requestPasswordResetAction] error:", err);
-        return { success: false, error: err?.message || "Failed to send reset link" };
+        return { success: false, error: err instanceof Error ? err.message : "Failed to send reset link" };
     }
 }
