@@ -23,4 +23,15 @@ describe('isSessionExpired', () => {
   it('returns true for undefined', () => {
     expect(isSessionExpired(undefined)).toBe(true)
   })
+
+  it('returns true if an unexpected error occurs during date parsing', () => {
+    // Simulate an error thrown inside the try block to hit the catch block.
+    // We cast to any because the function expects string | null | undefined.
+    const throwingObject = {
+      toString: () => {
+        throw new Error('Simulated exception')
+      }
+    }
+    expect(isSessionExpired(throwingObject as any)).toBe(true)
+  })
 })
