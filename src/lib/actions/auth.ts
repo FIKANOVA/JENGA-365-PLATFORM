@@ -128,7 +128,7 @@ export async function setUserRole(
     role: "Mentee" | "Mentor" | "CorporatePartner" | "NGO" | "Moderator" | "SuperAdmin"
 ) {
     try {
-        await db.update(users).set({ role } as any).where(eq(users.id, userId));
+        await db.update(users).set({ role }).where(eq(users.id, userId));
         return { success: true };
     } catch (err: unknown) {
         return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
@@ -140,7 +140,7 @@ export async function setUserRole(
  */
 export async function setModeratorScope(userId: string, scope: string) {
     try {
-        await db.update(users).set({ moderationScope: scope } as any).where(eq(users.id, userId));
+        await db.update(users).set({ moderationScope: scope }).where(eq(users.id, userId));
         return { success: true };
     } catch (err: unknown) {
         return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
@@ -167,7 +167,7 @@ export async function setUserRoleAndApprove(
     role: "Mentee" | "Mentor" | "CorporatePartner" | "NGO" | "Moderator" | "SuperAdmin"
 ) {
     try {
-        await db.update(users).set({ role, isApproved: true } as any).where(eq(users.id, userId));
+        await db.update(users).set({ role, isApproved: true }).where(eq(users.id, userId));
         return { success: true };
     } catch (err: unknown) {
         return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
@@ -179,7 +179,7 @@ export async function setUserRoleAndApprove(
  */
 export async function requestPasswordResetAction(email: string) {
     try {
-        await (auth.api as any).forgetPassword({
+        await (auth.api as unknown as { forgetPassword: (args: { body: { email: string; redirectTo: string } }) => Promise<void> }).forgetPassword({
             body: {
                 email: email.trim().toLowerCase(),
                 redirectTo: "/reset-password",
