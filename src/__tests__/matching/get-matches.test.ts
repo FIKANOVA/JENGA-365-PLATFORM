@@ -1,5 +1,3 @@
-// TODO: rewrite — tests deprecated `menteeGoalCategories` arg. Phase 2.1 (a6d9766)
-// switched matching to `menteeId` + normalized `user_goal_tags` DB join.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 vi.mock('@/lib/auth/config', () => ({
