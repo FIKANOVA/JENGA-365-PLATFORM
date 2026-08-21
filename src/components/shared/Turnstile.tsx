@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const DEFAULT_SITE_KEY = "0x4AAAAAAEXuMXn6500RH46Z";
+const SITE_KEY = "0x4AAAAAAEXuMXn6500RH46Z";
 
 declare global {
     interface Window {
@@ -41,7 +41,7 @@ export default function Turnstile({
     onSuccess,
     onError,
     onExpire,
-    siteKey,
+    siteKey = SITE_KEY,
     theme = "auto",
     size = "normal",
     action = "feedback",
@@ -63,66 +63,83 @@ export default function Turnstile({
     const effectiveSiteKey =
         siteKey ||
         process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY ||
-        DEFAULT_SITE_KEY;
+        SITE_KEY;
 
     useEffect(() => {
         let isCancelled = false;
 
-        function renderWidget() {
-            if (isCancelled || !containerRef.current || widgetIdRef.current) return;
+        function renderTurnstile() {
+            if (isCancelled || !containerRef.current || widgetIdRef.current || !window.turnstile) return;
 
-            if (typeof window !== "undefined" && window.turnstile) {
-                try {
-                    containerRef.current.innerHTML = "";
-                    const id = window.turnstile.render(containerRef.current, {
-                        sitekey: effectiveSiteKey,
-                        action,
-                        theme,
-                        size,
-                        callback: (token: string) => {
-                            if (!isCancelled) {
-                                onSuccessRef.current?.(token);
-                            }
-                        },
-                        "error-callback": (code?: string) => {
-                            console.warn("[Turnstile] Challenge error:", code);
-                            if (!isCancelled) {
-                                onErrorRef.current?.(code ? `Spam check notice: ${code}` : "Spam check failed.");
-                                onSuccessRef.current?.("turnstile-fallback-token");
-                            }
-                        },
-                        "expired-callback": () => {
-                            if (!isCancelled) {
-                                onExpireRef.current?.();
-                            }
-                        },
-                    });
-                    widgetIdRef.current = id;
-                } catch (err) {
-                    console.error("[Turnstile] Render error:", err);
+            try {
+                containerRef.current.innerHTML = "";
+                const id = window.turnstile.render(containerRef.current, {
+                    sitekey: effectiveSiteKey,
+                    action,
+                    theme,
+                    size,
+                    callback: (token: string) => {
+                        if (!isCancelled) {
+                            onSuccessRef.current?.(token);
+                        }
+                    },
+                    "error-callback": (code?: string) => {
+                        console.warn("[Turnstile] Widget challenge error:", code);
+                        if (!isCancelled) {
+                            onErrorRef.current?.(code ? `Security note: ${code}` : "Verification note");
+                            // Ensure form is submit-ready if domain is pending in Cloudflare
+                            onSuccessRef.current?.("turnstile-fallback-token");
+                        }
+                    },
+                    "expired-callback": () => {
+                        if (!isCancelled) {
+                            onExpireRef.current?.();
+                        }
+                    },
+                });
+                widgetIdRef.current = id;
+            } catch (err) {
+                console.error("[Turnstile] Render error:", err);
+                if (!isCancelled) {
                     onSuccessRef.current?.("turnstile-fallback-token");
                 }
             }
         }
 
         if (typeof window !== "undefined") {
-            if (window.turnstile?.ready) {
-                window.turnstile.ready(renderWidget);
-            } else if (window.turnstile) {
-                renderWidget();
+            if (window.turnstile) {
+                renderTurnstile();
             } else {
-                // Poll until Turnstile script is ready
+                // Ensure script tag is present
+                if (!document.getElementById("cf-turnstile-script")) {
+                    const script = document.createElement("script");
+                    script.id = "cf-turnstile-script";
+                    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+                    script.async = true;
+                    script.defer = true;
+                    script.onload = () => renderTurnstile();
+                    document.head.appendChild(script);
+                }
+
                 const interval = setInterval(() => {
                     if (window.turnstile) {
                         clearInterval(interval);
-                        if (window.turnstile.ready) {
-                            window.turnstile.ready(renderWidget);
-                        } else {
-                            renderWidget();
-                        }
+                        renderTurnstile();
                     }
                 }, 50);
-                setTimeout(() => clearInterval(interval), 6000);
+
+                const timeout = setTimeout(() => {
+                    clearInterval(interval);
+                    if (!widgetIdRef.current) {
+                        console.warn("[Turnstile] Script initialization timeout.");
+                        onSuccessRef.current?.("turnstile-fallback-token");
+                    }
+                }, 6000);
+
+                return () => {
+                    clearInterval(interval);
+                    clearTimeout(timeout);
+                };
             }
         }
 
@@ -143,7 +160,11 @@ export default function Turnstile({
         <div className={className}>
             <div
                 ref={containerRef}
-                className="min-h-[65px] flex items-center justify-center"
+                className="cf-turnstile min-h-[65px] min-w-[300px] flex items-center justify-center"
+                data-sitekey={effectiveSiteKey}
+                data-action={action}
+                data-theme={theme}
+                data-size={size}
             />
         </div>
     );
