@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { CartProvider } from "@/lib/cartContext";
 import { DonateProvider } from "@/components/shared/DonateProvider";
@@ -48,7 +49,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -56,6 +56,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        <Script
+          id="cf-turnstile-script"
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body className="font-sans antialiased bg-background text-foreground">
         <DonateProvider>
           <CartProvider>
@@ -71,4 +78,3 @@ export default function RootLayout({
     </html>
   );
 }
-

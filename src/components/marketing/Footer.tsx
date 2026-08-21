@@ -44,10 +44,13 @@ const socials = [
     { icon: Mail, href: "mailto:info@jenga365.org", label: "Email" },
 ];
 
+import Turnstile from "@/components/shared/Turnstile";
+
 function NewsletterForm() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [subscribed, setSubscribed] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -56,12 +59,17 @@ function NewsletterForm() {
             return;
         }
 
+        if (!turnstileToken) {
+            toast.error("Please complete the spam check.");
+            return;
+        }
+
         setLoading(true);
         try {
             const res = await fetch("/api/newsletter/subscribe", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: email.trim() }),
+                body: JSON.stringify({ email: email.trim(), turnstileToken }),
             });
 
             const data = await res.json();
@@ -101,9 +109,19 @@ function NewsletterForm() {
                 required
                 className="w-full bg-transparent border-b border-white/10 pb-3 text-sm font-sans text-white placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />
+            <div className="py-1">
+                <Turnstile
+                    action="subscribe"
+                    theme="dark"
+                    size="compact"
+                    onSuccess={(token) => setTurnstileToken(token)}
+                    onError={() => setTurnstileToken(null)}
+                    onExpire={() => setTurnstileToken(null)}
+                />
+            </div>
             <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !turnstileToken}
                 className="flex items-center gap-2 text-[9px] text-white/50 hover:text-white transition-colors font-bold group disabled:opacity-50"
             >
                 {loading ? "Subscribing..." : "Subscribe"}

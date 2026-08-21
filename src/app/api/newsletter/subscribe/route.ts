@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 import { resend, DEFAULT_FROM } from "@/lib/email/resend";
 import { buildNewsletterWelcomeEmail } from "@/lib/email/templates";
 
+import { verifyTurnstileToken } from "@/lib/turnstile";
+
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { email } = body;
+        const { email, turnstileToken } = body;
 
         if (!email || typeof email !== "string") {
             return NextResponse.json(
@@ -18,6 +20,19 @@ export async function POST(req: Request) {
         if (!emailRegex.test(email.trim())) {
             return NextResponse.json(
                 { error: "Please enter a valid email address." },
+                { status: 400 }
+            );
+        }
+
+        const clientIp =
+            req.headers.get("cf-connecting-ip") ||
+            req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+            null;
+
+        const verifyResult = await verifyTurnstileToken(turnstileToken, clientIp, "subscribe");
+        if (!verifyResult.success) {
+            return NextResponse.json(
+                { error: verifyResult.error || "Spam check failed. Please refresh and try again." },
                 { status: 400 }
             );
         }
