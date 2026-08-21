@@ -77,17 +77,15 @@ export async function synthesizeUserProfile(userId: string) {
 
     // 5. Granular Chunking — delete stale chunks first, then insert fresh ones atomically
     const chunks = splitIntoProfessionalChunks(cvText);
+    const chunkEmbeddings = await Promise.all(chunks.map(chunk => generateProfileEmbedding(chunk)));
     await db.transaction(async (tx) => {
-        // Delete ALL existing chunks for this user before inserting new ones.
-        // Without this, every re-synthesis appends 5 more rows (chunk accumulation bug).
         await tx.delete(userChunks).where(eq(userChunks.userId, userId));
 
-        for (const chunk of chunks) {
-            const chunkEmbedding = await generateProfileEmbedding(chunk);
+        for (let i = 0; i < chunks.length; i++) {
             await tx.insert(userChunks).values({
                 userId,
-                content: chunk,
-                embedding: chunkEmbedding,
+                content: chunks[i],
+                embedding: chunkEmbeddings[i],
                 chunkType: "experience",
             });
         }
