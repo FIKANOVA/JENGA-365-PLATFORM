@@ -15,7 +15,12 @@ export const metadata: Metadata = {
 };
 
 export default async function MenteeDashboardPage() {
-    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch (e) {
+        console.error("[MenteeDashboardPage] session fetch failed:", e);
+    }
 
     if (!session?.user?.id) {
         redirect("/login");
@@ -23,16 +28,36 @@ export default async function MenteeDashboardPage() {
 
     const userId = session.user.id;
 
-    // Fetch fresh user record safely
-    const dbUser = await db.query.users.findFirst({
-        where: eq(users.id, userId),
-    }).catch(() => null);
+    let dbUser = null;
+    let matches: any[] = [];
+    let pathway: any = null;
+    let journalEntries: any[] = [];
 
-    const [matches, pathway, journalEntries] = await Promise.all([
-        getAiMentorMatches().catch(() => []),
-        getMenteeLearningPathway(userId).catch(() => null),
-        getMenteeMoodJournal(userId).catch(() => []),
-    ]);
+    try {
+        dbUser = await db.query.users.findFirst({
+            where: eq(users.id, userId),
+        });
+    } catch (err) {
+        console.error("[MenteeDashboard] dbUser query failed:", err);
+    }
+
+    try {
+        matches = await getAiMentorMatches();
+    } catch (err) {
+        console.error("[MenteeDashboard] matches query failed:", err);
+    }
+
+    try {
+        pathway = await getMenteeLearningPathway(userId);
+    } catch (err) {
+        console.error("[MenteeDashboard] pathway query failed:", err);
+    }
+
+    try {
+        journalEntries = await getMenteeMoodJournal(userId);
+    } catch (err) {
+        console.error("[MenteeDashboard] journal query failed:", err);
+    }
 
     const userName = dbUser?.name ?? session.user.name ?? "there";
 
@@ -43,17 +68,19 @@ export default async function MenteeDashboardPage() {
           }
         : null;
 
+    const sanitizedJournal = (journalEntries || []).map((j: any) => ({
+        id: String(j.id || Math.random()),
+        recordedAt: j.recordedAt ? new Date(j.recordedAt).toISOString() : new Date().toISOString(),
+        moodScore: Number(j.moodScore) || 3,
+        notes: j.notes ?? null,
+    }));
+
     return (
         <MenteeDashboard
             userName={userName}
             matches={matches || []}
             pathway={sanitizedPathway}
-            journalEntries={(journalEntries || []).map((j: any) => ({
-                id: String(j.id),
-                recordedAt: j.recordedAt ? new Date(j.recordedAt).toISOString() : new Date().toISOString(),
-                moodScore: Number(j.moodScore) || 3,
-                notes: j.notes ?? null,
-            }))}
+            journalEntries={sanitizedJournal}
             ndaSigned={Boolean(dbUser?.ndaSigned ?? (session.user as any)?.ndaSigned)}
             onboarded={Boolean(dbUser?.onboarded ?? (session.user as any)?.onboarded)}
             hasMentorMatch={(matches || []).length > 0}

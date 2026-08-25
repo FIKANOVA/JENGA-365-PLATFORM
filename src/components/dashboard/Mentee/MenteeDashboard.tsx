@@ -71,7 +71,7 @@ export default function MenteeDashboard({
                             Jenga365 Mentee
                         </p>
                         <h2 className="text-display-sm text-foreground">
-                            Welcome back, {userName.split(" ")[0]}
+                            Welcome back, {(userName || "there").split(" ")[0]}
                         </h2>
                     </div>
                     <button
