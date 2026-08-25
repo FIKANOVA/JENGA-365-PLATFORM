@@ -354,8 +354,6 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
                         <li>
                             <Link
                                 href="/dashboard"
-                                target="_blank"
-                                rel="noopener noreferrer"
                                 role="menuitem"
                                 onClick={() => setOpen(false)}
                                 className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-white/10 text-white"

@@ -11,18 +11,24 @@ const ROLE_REDIRECTS: Record<string, string> = {
     SuperAdmin: "/dashboard/admin",
 };
 
+function normalizeRole(r?: string | null): string {
+    if (!r) return "Mentee";
+    const lower = r.toLowerCase().replace(/[-_]/g, "");
+    if (lower === "superadmin" || lower === "admin") return "SuperAdmin";
+    if (lower === "moderator") return "Moderator";
+    if (lower === "mentor") return "Mentor";
+    if (lower === "corporatepartner" || lower === "partner" || lower === "corporate") return "CorporatePartner";
+    if (lower === "ngo") return "NGO";
+    return "Mentee";
+}
+
 export default async function DashboardRootPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
 
     if (!session) redirect("/login");
 
     const user = session.user as { role?: string; ndaSigned?: boolean };
-    const role = user.role ?? "Mentee";
-
-    // Org partners (corporate + NGO) sign an NDA at registration; gate until signed.
-    if ((role === "CorporatePartner" || role === "NGO") && !user.ndaSigned) {
-        redirect("/legal/nda");
-    }
+    const role = normalizeRole(user.role);
 
     redirect(ROLE_REDIRECTS[role] ?? "/dashboard/mentee");
 }
