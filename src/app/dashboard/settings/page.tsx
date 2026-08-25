@@ -18,7 +18,7 @@ export default async function DashboardSettingsPage() {
 
     const dbUser = await db.query.users.findFirst({
         where: eq(users.id, session.user.id),
-    });
+    }).catch(() => null);
 
     const meta = (dbUser?.metadata || {}) as Record<string, any>;
 

@@ -21,7 +21,7 @@ export default async function ModeratorDashboardPage() {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) redirect("/login");
 
-    const dbUser = await db.query.users.findFirst({ where: eq(users.id, session.user.id) });
+    const dbUser = await db.query.users.findFirst({ where: eq(users.id, session.user.id) }).catch(() => null);
     const scope = dbUser?.moderationScope ?? "B";
     const perms = getScopePermissions(scope);
 

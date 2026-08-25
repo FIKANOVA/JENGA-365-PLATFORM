@@ -45,10 +45,15 @@ export default async function DashboardLayout({
     const pathname = headersList.get("x-pathname") || headersList.get("x-invoke-path") || "";
 
     // Query live DB status to avoid stale 5-minute session cookieCache
-    const dbUser = await db.query.users.findFirst({
-        where: eq(users.id, session.user.id),
-        columns: { intakeCompleted: true, onboarded: true },
-    });
+    let dbUser = null;
+    try {
+        dbUser = await db.query.users.findFirst({
+            where: eq(users.id, session.user.id),
+            columns: { intakeCompleted: true, onboarded: true },
+        });
+    } catch (err) {
+        console.error("[DashboardLayout] Live DB lookup failed, falling back to session data:", err);
+    }
 
     // Gate: Intake must be complete for Mentees
     const intakeCompleted = dbUser?.intakeCompleted ?? sessionUser.intakeCompleted ?? false;

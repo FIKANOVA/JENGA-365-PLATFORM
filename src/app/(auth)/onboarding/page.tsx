@@ -16,10 +16,15 @@ export default async function OnboardingPage({
     if (!session) redirect("/login");
 
     const sessionUser = session.user as any;
-    const dbUser = await db.query.users.findFirst({
-        where: eq(users.id, session.user.id),
-        columns: { role: true, ndaSigned: true, emailVerified: true, onboarded: true, intakeCompleted: true },
-    });
+    let dbUser = null;
+    try {
+        dbUser = await db.query.users.findFirst({
+            where: eq(users.id, session.user.id),
+            columns: { role: true, ndaSigned: true, emailVerified: true, onboarded: true, intakeCompleted: true },
+        });
+    } catch (err) {
+        console.error("[OnboardingPage] Live DB lookup failed, falling back to session data:", err);
+    }
 
     const user = { ...sessionUser, ...dbUser };
 

@@ -23,9 +23,10 @@ export default async function NgoDashboardPage() {
     const dbUser = await db.query.users.findFirst({
         where: eq(users.id, user.id),
         columns: { metadata: true, partnerId: true },
-    });
+    }).catch(() => null);
 
-    if (dbUser?.metadata?.orgType !== "NGO") {
+    const userMetadata = dbUser?.metadata as Record<string, unknown> | undefined;
+    if (user.role !== "NGO" && userMetadata?.orgType !== "NGO") {
         redirect("/dashboard/partner");
     }
 
