@@ -63,10 +63,10 @@ export default async function DashboardLayout({
     // Note: AI Interview is no longer a hard gate. It is surfaced in-dashboard
     // via the AI Interview nav link for profile enhancement and matching improvement.
 
-    // Only enforce redirect when we have a reliable pathname AND the user is on the wrong dashboard
-    // Exempt: /dashboard/settings (shared across all roles), /dashboard/[role]/studio
-    const isSharedRoute = pathname.startsWith("/dashboard/settings") || pathname === "/dashboard";
-    if (pathname && !isSharedRoute && !pathname.startsWith(correctDashboard)) {
+    // Only enforce redirect when a user tries to access a different role's root dashboard
+    const otherRoleDashboards = Object.values(roleDashboardMap).filter((d) => d !== correctDashboard);
+    const isAccessingOtherRole = otherRoleDashboards.some((d) => pathname.startsWith(d));
+    if (pathname && isAccessingOtherRole) {
         redirect(correctDashboard);
     }
 

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Sparkles, MapPin, ArrowRight, CheckCircle } from "lucide-react";
