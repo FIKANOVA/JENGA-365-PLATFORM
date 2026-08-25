@@ -89,13 +89,11 @@ export default function AvatarUpload({
                     className={`${sizeClasses} rounded-full overflow-hidden border-2 border-border bg-[color:var(--surface-2)] flex items-center justify-center shrink-0 shadow-sm relative`}
                 >
                     {previewUrl ? (
-                        <Image
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
                             src={previewUrl}
                             alt={userName}
-                            fill
-                            sizes="(max-width: 768px) 100px, 128px"
-                            className="object-cover"
-                            priority
+                            className="w-full h-full object-cover"
                         />
                     ) : (
                         <span className="font-bold text-foreground-muted select-none">

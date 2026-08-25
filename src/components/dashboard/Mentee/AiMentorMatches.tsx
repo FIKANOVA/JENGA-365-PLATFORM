@@ -82,12 +82,11 @@ function MatchTile({
           style={{ background: "var(--surface-2)" }}
         >
           {mentor.image ? (
-            <Image
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
               src={mentor.image}
               alt={mentor.name || "Mentor"}
-              fill
-              sizes="(max-width: 768px) 56px, 64px"
-              className="object-cover"
+              className="w-full h-full object-cover"
             />
           ) : (
             <span className="text-foreground-muted select-none">{initial}</span>
