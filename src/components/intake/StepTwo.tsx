@@ -42,7 +42,7 @@ export default function StepTwo({
     <section className="flex flex-col gap-8">
       {/* Academic Standing */}
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-[var(--md-on-surface)]">
+        <p className="font-semibold text-foreground text-body">
           How&apos;s your academic standing?
         </p>
         <div className="flex flex-wrap gap-3" role="group" aria-label="How's your academic standing?">
@@ -55,10 +55,10 @@ export default function StepTwo({
                 onClick={() => onChange('academicStanding', option)}
                 aria-pressed={isSelected}
                 className={`
-                  flex-1 min-w-[100px] px-4 py-4 rounded-md text-sm font-medium border-2 transition-colors cursor-pointer text-center
+                  flex-1 min-w-[100px] px-4 py-3.5 rounded-md text-sm font-medium transition-all cursor-pointer text-center
                   ${isSelected
-                    ? 'bg-[var(--md-primary-container,#d0e8ff)] border-[var(--md-primary)] text-[var(--md-on-surface)]'
-                    : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)]'
+                    ? 'border-2 border-[var(--brand-green)] bg-[var(--brand-green-soft)] text-foreground font-semibold shadow-sm'
+                    : 'border border-border bg-background text-foreground hover:border-[var(--brand-green)] hover:bg-[var(--surface-1)]'
                   }
                 `}
               >
@@ -71,11 +71,11 @@ export default function StepTwo({
 
       {/* Career Direction */}
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-[var(--md-on-surface)]">
+        <p className="font-semibold text-foreground text-body">
           What are you working toward?{' '}
-          <span className="font-normal text-[var(--md-on-surface-variant)] text-xs">(pick up to 3)</span>
+          <span className="font-normal text-foreground-muted text-xs">(pick up to 3)</span>
         </p>
-        <div className="flex flex-wrap gap-2" role="group" aria-label="What are you working toward?">
+        <div className="flex flex-wrap gap-2.5" role="group" aria-label="What are you working toward?">
           {CAREER_TAGS.map((tag) => {
             const isSelected = careerTags.includes(tag)
             const isDisabled = !isSelected && maxTagsReached
@@ -87,12 +87,12 @@ export default function StepTwo({
                 aria-pressed={isSelected}
                 disabled={isDisabled}
                 className={`
-                  px-4 py-2 rounded-full text-sm font-medium border-2 transition-colors
+                  px-4 py-2 rounded-full text-sm font-medium transition-all
                   ${isDisabled
-                    ? 'opacity-40 cursor-not-allowed border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)]'
+                    ? 'opacity-40 cursor-not-allowed border border-border bg-[var(--surface-2)] text-foreground-muted'
                     : isSelected
-                      ? 'bg-[var(--md-primary)] border-[var(--md-primary)] text-white cursor-pointer'
-                      : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)] cursor-pointer'
+                      ? 'border-2 border-[var(--brand-green)] bg-[var(--brand-green)] text-white shadow-sm font-semibold cursor-pointer'
+                      : 'border border-border bg-background text-foreground hover:border-[var(--brand-green)] hover:bg-[var(--surface-1)] cursor-pointer'
                   }
                 `}
               >
@@ -115,19 +115,19 @@ export default function StepTwo({
           placeholder="Tell us more about your career aspirations…"
           rows={4}
           maxLength={MAX_FREE_TEXT}
-          className="w-full rounded-md border-2 border-[var(--md-outline-variant)] bg-transparent px-4 py-3 text-sm text-[var(--md-on-surface)] placeholder:text-[var(--md-on-surface-variant)] focus:border-[var(--md-primary)] focus:outline-none resize-none transition-colors"
+          className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-[var(--foreground-subtle)] focus:border-[var(--brand-green)] focus:outline-none resize-none transition-colors"
         />
-        <p className="text-right text-xs text-[var(--md-on-surface-variant)]">
+        <p className="text-right text-xs text-foreground-muted">
           {careerFreeText.length} / {MAX_FREE_TEXT}
         </p>
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex justify-between">
+      <div className="flex justify-between pt-2">
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-2.5 rounded-full text-sm font-semibold border-2 border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)] transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full text-sm font-medium border border-border bg-background text-foreground hover:bg-[var(--surface-1)] transition-all cursor-pointer"
         >
           ← Back
         </button>
@@ -136,10 +136,10 @@ export default function StepTwo({
           onClick={onNext}
           disabled={!canProceed}
           className={`
-            px-6 py-2.5 rounded-full text-sm font-semibold transition-colors
+            inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all
             ${canProceed
-              ? 'bg-[var(--md-primary)] text-white hover:opacity-90 cursor-pointer'
-              : 'bg-[var(--md-outline-variant)] text-[var(--foreground-subtle)] cursor-not-allowed opacity-50'
+              ? 'bg-[var(--brand-green)] text-white hover:opacity-90 shadow-sm cursor-pointer'
+              : 'bg-[var(--surface-3)] text-[var(--foreground-subtle)] cursor-not-allowed opacity-60'
             }
           `}
         >

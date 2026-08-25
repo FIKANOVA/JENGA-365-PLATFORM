@@ -19,10 +19,10 @@ export default function StepOne({ q1, q2, onChange, onNext }: StepOneProps) {
     <section className="flex flex-col gap-8">
       {/* Question 1 */}
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-[var(--md-on-surface)]">
+        <p className="font-semibold text-foreground text-body">
           How often do you feel in control of your situation?
         </p>
-        <div className="flex flex-wrap gap-2" role="group" aria-label="How often do you feel in control of your situation?">
+        <div className="flex flex-wrap gap-2.5" role="group" aria-label="How often do you feel in control of your situation?">
           {Q1_OPTIONS.map((option) => {
             const isSelected = q1 === option
             return (
@@ -32,10 +32,10 @@ export default function StepOne({ q1, q2, onChange, onNext }: StepOneProps) {
                 onClick={() => onChange('q1', option)}
                 aria-pressed={isSelected}
                 className={`
-                  px-4 py-2 rounded-full text-sm font-medium border-2 transition-colors cursor-pointer
+                  px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer
                   ${isSelected
-                    ? 'bg-[var(--md-primary)] border-[var(--md-primary)] text-white'
-                    : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)]'
+                    ? 'border-2 border-[var(--brand-green)] bg-[var(--brand-green)] text-white shadow-sm font-semibold'
+                    : 'border border-border bg-background text-foreground hover:border-[var(--brand-green)] hover:bg-[var(--surface-1)]'
                   }
                 `}
               >
@@ -48,10 +48,10 @@ export default function StepOne({ q1, q2, onChange, onNext }: StepOneProps) {
 
       {/* Question 2 */}
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-[var(--md-on-surface)]">
+        <p className="font-semibold text-foreground text-body">
           How well are you managing pressure and stress right now?
         </p>
-        <div className="flex flex-wrap gap-2" role="group" aria-label="How well are you managing pressure and stress right now?">
+        <div className="flex flex-wrap gap-2.5" role="group" aria-label="How well are you managing pressure and stress right now?">
           {Q2_OPTIONS.map((option) => {
             const isSelected = q2 === option
             return (
@@ -61,10 +61,10 @@ export default function StepOne({ q1, q2, onChange, onNext }: StepOneProps) {
                 onClick={() => onChange('q2', option)}
                 aria-pressed={isSelected}
                 className={`
-                  px-4 py-2 rounded-full text-sm font-medium border-2 transition-colors cursor-pointer
+                  px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer
                   ${isSelected
-                    ? 'bg-[var(--md-primary)] border-[var(--md-primary)] text-white'
-                    : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)]'
+                    ? 'border-2 border-[var(--brand-green)] bg-[var(--brand-green)] text-white shadow-sm font-semibold'
+                    : 'border border-border bg-background text-foreground hover:border-[var(--brand-green)] hover:bg-[var(--surface-1)]'
                   }
                 `}
               >
@@ -76,16 +76,16 @@ export default function StepOne({ q1, q2, onChange, onNext }: StepOneProps) {
       </div>
 
       {/* Next button */}
-      <div className="flex justify-end">
+      <div className="flex justify-end pt-2">
         <button
           type="button"
           onClick={onNext}
           disabled={!canProceed}
           className={`
-            px-6 py-2.5 rounded-full text-sm font-semibold transition-colors
+            inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all
             ${canProceed
-              ? 'bg-[var(--md-primary)] text-white hover:opacity-90 cursor-pointer'
-              : 'bg-[var(--md-outline-variant)] text-[var(--foreground-subtle)] cursor-not-allowed opacity-50'
+              ? 'bg-[var(--brand-green)] text-white hover:opacity-90 shadow-sm cursor-pointer'
+              : 'bg-[var(--surface-3)] text-[var(--foreground-subtle)] cursor-not-allowed opacity-60'
             }
           `}
         >

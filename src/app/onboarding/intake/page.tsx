@@ -75,8 +75,20 @@ export default function IntakePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-lg">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 py-12">
+      <div className="w-full max-w-xl bg-background border border-border rounded-xl p-6 sm:p-8 shadow-sm">
+        <div className="text-center space-y-1.5 mb-8">
+          <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
+            Phase 2 · Diagnostic Intake
+          </p>
+          <h1 className="text-display-sm text-foreground">
+            Set up your mentorship profile
+          </h1>
+          <p className="text-body-sm text-foreground-muted max-w-md mx-auto">
+            Answer a few quick questions to help us match you with the ideal mentors and pathways.
+          </p>
+        </div>
+
         <IntakeProgress currentStep={currentStep} stepLabels={STEP_LABELS} />
 
         <div className="mt-8">
@@ -112,7 +124,7 @@ export default function IntakePage() {
           )}
 
           {error && (
-            <p className="mt-4 text-sm text-red-600 text-center" role="alert">
+            <p className="mt-4 text-sm text-[var(--brand-red)] text-center" role="alert">
               {error}
             </p>
           )}

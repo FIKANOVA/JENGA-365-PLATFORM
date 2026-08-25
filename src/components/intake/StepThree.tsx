@@ -65,11 +65,11 @@ export default function StepThree({
     <section className="flex flex-col gap-8">
       {/* Support Types */}
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-[var(--md-on-surface)]">
+        <p className="font-semibold text-foreground text-body">
           What kind of support do you need?{' '}
-          <span className="font-normal text-[var(--md-on-surface-variant)] text-xs">(pick up to 2)</span>
+          <span className="font-normal text-foreground-muted text-xs">(pick up to 2)</span>
         </p>
-        <div className="flex flex-wrap gap-2" role="group" aria-label="What kind of support do you need?">
+        <div className="flex flex-wrap gap-2.5" role="group" aria-label="What kind of support do you need?">
           {SUPPORT_TYPES.map((type) => {
             const isSelected = supportTypes.includes(type)
             const isDisabled = !isSelected && maxSupportTypesReached
@@ -81,12 +81,12 @@ export default function StepThree({
                 aria-pressed={isSelected}
                 disabled={isDisabled}
                 className={`
-                  px-4 py-2 rounded-full text-sm font-medium border-2 transition-colors
+                  px-4 py-2 rounded-full text-sm font-medium transition-all
                   ${isDisabled
-                    ? 'opacity-40 cursor-not-allowed border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)]'
+                    ? 'opacity-40 cursor-not-allowed border border-border bg-[var(--surface-2)] text-foreground-muted'
                     : isSelected
-                      ? 'bg-[var(--md-primary)] border-[var(--md-primary)] text-white cursor-pointer'
-                      : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)] cursor-pointer'
+                      ? 'border-2 border-[var(--brand-green)] bg-[var(--brand-green)] text-white shadow-sm font-semibold cursor-pointer'
+                      : 'border border-border bg-background text-foreground hover:border-[var(--brand-green)] hover:bg-[var(--surface-1)] cursor-pointer'
                   }
                 `}
               >
@@ -99,7 +99,7 @@ export default function StepThree({
 
       {/* Mentorship Style */}
       <div className="flex flex-col gap-3">
-        <p className="font-semibold text-[var(--md-on-surface)]">
+        <p className="font-semibold text-foreground text-body">
           How do you want to be mentored?
         </p>
         <div className="flex flex-col gap-3" role="radiogroup" aria-label="How do you want to be mentored?">
@@ -113,15 +113,15 @@ export default function StepThree({
                 aria-checked={isSelected}
                 onClick={() => onChange('preferredMentorshipStyle', value)}
                 className={`
-                  w-full text-left px-5 py-4 rounded-md border-2 transition-colors cursor-pointer
+                  w-full text-left px-5 py-4 rounded-md transition-all cursor-pointer
                   ${isSelected
-                    ? 'bg-[var(--md-primary-container,#d0e8ff)] border-[var(--md-primary)] text-[var(--md-on-surface)]'
-                    : 'bg-transparent border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)]'
+                    ? 'border-2 border-[var(--brand-green)] bg-[var(--brand-green-soft)] text-foreground font-semibold shadow-sm'
+                    : 'border border-border bg-background text-foreground hover:border-[var(--brand-green)] hover:bg-[var(--surface-1)]'
                   }
                 `}
               >
-                <span className="block font-semibold text-sm">{value}</span>
-                <span className="block text-xs mt-0.5 opacity-80">{description}</span>
+                <span className="block font-semibold text-sm text-foreground">{value}</span>
+                <span className="block text-xs mt-0.5 text-foreground-muted font-normal">{description}</span>
               </button>
             )
           })}
@@ -129,11 +129,11 @@ export default function StepThree({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex justify-between">
+      <div className="flex justify-between pt-2">
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-2.5 rounded-full text-sm font-semibold border-2 border-[var(--md-outline-variant)] text-[var(--md-on-surface-variant)] hover:border-[var(--md-primary)] hover:text-[var(--md-primary)] transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full text-sm font-medium border border-border bg-background text-foreground hover:bg-[var(--surface-1)] transition-all cursor-pointer"
         >
           ← Back
         </button>
@@ -142,10 +142,10 @@ export default function StepThree({
           onClick={onSubmit}
           disabled={!canSubmit}
           className={`
-            flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors
+            inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all
             ${canSubmit
-              ? 'bg-[var(--md-primary)] text-white hover:opacity-90 cursor-pointer'
-              : 'bg-[var(--md-outline-variant)] text-[var(--foreground-subtle)] cursor-not-allowed opacity-50'
+              ? 'bg-[var(--brand-green)] text-white hover:opacity-90 shadow-sm cursor-pointer'
+              : 'bg-[var(--surface-3)] text-[var(--foreground-subtle)] cursor-not-allowed opacity-60'
             }
           `}
         >

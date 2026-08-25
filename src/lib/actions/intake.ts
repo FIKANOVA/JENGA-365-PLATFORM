@@ -35,44 +35,61 @@ export async function submitDiagnosticIntake(formData: IntakeFormData) {
 
   // Atomic: intake row + resilience baseline + intakeCompleted flip ship together
   // or not at all. Prevents a dashboard-accessible mentee with no baseline.
-  await db.transaction(async (tx) => {
-    await tx.insert(menteeIntake).values({
-      userId,
-      academicStanding: formData.academicStanding,
-      careerTags: formData.careerTags,
-      careerFreeText: formData.careerFreeText || null,
-      supportTypes: formData.supportTypes,
-      preferredMentorshipStyle: formData.preferredMentorshipStyle,
-    })
-
-    await tx.insert(resilienceAssessments).values({
-      userId,
-      score,
-      q1Response: formData.q1,
-      q2Response: formData.q2,
-      identityResponse: null,
-      isBaseline: true,
-      reassessmentDueDate: addMonths(new Date(), 6),
-    })
-
-    // Seed normalized goal-alignment tags from the mentee's career interests.
-    // Drives the 10% goal-alignment term in matching (CLAUDE.md §4 / §10.2).
-    if (formData.careerTags.length > 0) {
+  try {
+    await db.transaction(async (tx) => {
       await tx
-        .insert(userGoalTags)
-        .values(formData.careerTags.map((category) => ({ userId, category })))
-        .onConflictDoNothing()
-    }
+        .insert(menteeIntake)
+        .values({
+          userId,
+          academicStanding: formData.academicStanding,
+          careerTags: formData.careerTags,
+          careerFreeText: formData.careerFreeText || null,
+          supportTypes: formData.supportTypes,
+          preferredMentorshipStyle: formData.preferredMentorshipStyle,
+        })
+        .onConflictDoUpdate({
+          target: menteeIntake.userId,
+          set: {
+            academicStanding: formData.academicStanding,
+            careerTags: formData.careerTags,
+            careerFreeText: formData.careerFreeText || null,
+            supportTypes: formData.supportTypes,
+            preferredMentorshipStyle: formData.preferredMentorshipStyle,
+          },
+        })
 
-    await tx
-      .update(users)
-      .set({
-        intakeCompleted: true,
-        onboarded: true,
-        ...(embedding !== null ? { embedding, embeddingStale: false } : { embeddingStale: true }),
-      } as any)
-      .where(eq(users.id, userId))
-  })
+      await tx.insert(resilienceAssessments).values({
+        userId,
+        score,
+        q1Response: formData.q1,
+        q2Response: formData.q2,
+        identityResponse: null,
+        isBaseline: true,
+        reassessmentDueDate: addMonths(new Date(), 6),
+      })
 
-  redirect("/dashboard")
+      // Seed normalized goal-alignment tags from the mentee's career interests.
+      // Drives the 10% goal-alignment term in matching (CLAUDE.md §4 / §10.2).
+      if (formData.careerTags && formData.careerTags.length > 0) {
+        await tx
+          .insert(userGoalTags)
+          .values(formData.careerTags.map((category) => ({ userId, category })))
+          .onConflictDoNothing()
+      }
+
+      await tx
+        .update(users)
+        .set({
+          intakeCompleted: true,
+          onboarded: true,
+          ...(embedding !== null ? { embedding, embeddingStale: false } : { embeddingStale: true }),
+        } as any)
+        .where(eq(users.id, userId))
+    })
+  } catch (dbError) {
+    console.error("[intake] Database transaction failed:", dbError)
+    throw dbError
+  }
+
+  redirect("/dashboard/mentee")
 }

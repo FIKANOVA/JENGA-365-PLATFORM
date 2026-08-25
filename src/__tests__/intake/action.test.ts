@@ -13,6 +13,7 @@ vi.mock('@/lib/db', () => {
   const insertMock = vi.fn().mockReturnValue({
     values: vi.fn().mockReturnValue({
       onConflictDoNothing: vi.fn().mockResolvedValue([]),
+      onConflictDoUpdate: vi.fn().mockResolvedValue([]),
     }),
   })
   const updateMock = vi.fn().mockReturnValue({
@@ -87,6 +88,7 @@ describe('submitDiagnosticIntake', () => {
     vi.mocked(db.insert).mockReturnValue({
       values: vi.fn().mockReturnValue({
         onConflictDoNothing: vi.fn().mockResolvedValue([]),
+        onConflictDoUpdate: vi.fn().mockResolvedValue([]),
       }),
     } as any)
     vi.mocked(db.update).mockReturnValue({

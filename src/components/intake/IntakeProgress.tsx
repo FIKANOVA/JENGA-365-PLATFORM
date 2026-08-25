@@ -10,7 +10,6 @@ export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgre
         const stepNumber = (index + 1) as 1 | 2 | 3
         const isCompleted = stepNumber < currentStep
         const isActive = stepNumber === currentStep
-        const isUpcoming = stepNumber > currentStep
 
         return (
           <div key={stepNumber} className="flex items-center">
@@ -20,12 +19,12 @@ export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgre
               <div
                 aria-current={isActive ? "step" : undefined}
                 className={`
-                  w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-colors
+                  w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-colors
                   ${isCompleted
-                    ? "bg-[var(--md-primary-container)] border-[var(--md-primary-container)] text-white"
+                    ? "bg-[var(--brand-green)] border-2 border-[var(--brand-green)] text-white shadow-sm"
                     : isActive
-                    ? "bg-[var(--md-primary)] border-[var(--md-primary)] text-white"
-                    : "bg-transparent border-[var(--md-outline-variant)] text-[var(--foreground-subtle)]"
+                    ? "bg-[var(--brand-green)] border-2 border-[var(--brand-green)] text-white shadow-sm"
+                    : "bg-background border-2 border-border text-[var(--foreground-subtle)]"
                   }
                 `}
               >
@@ -34,11 +33,11 @@ export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgre
 
               {/* Label */}
               <span
-                className={`text-xs tracking-wide leading-tight text-center max-w-[72px] ${
+                className={`text-xs tracking-wide leading-tight text-center max-w-[80px] ${
                   isActive
-                    ? "font-bold text-[var(--md-on-surface)]"
+                    ? "font-semibold text-foreground"
                     : isCompleted
-                    ? "font-semibold text-[var(--md-on-surface-variant)]"
+                    ? "font-medium text-foreground-muted"
                     : "font-normal text-[var(--foreground-subtle)]"
                 }`}
               >
@@ -51,8 +50,8 @@ export default function IntakeProgress({ currentStep, stepLabels }: IntakeProgre
               <div
                 className={`w-16 h-0.5 mb-5 mx-1 transition-colors ${
                   stepNumber < currentStep
-                    ? "bg-[var(--md-primary-container)]"
-                    : "bg-[var(--md-outline-variant)]"
+                    ? "bg-[var(--brand-green)]"
+                    : "bg-border"
                 }`}
               />
             )}
