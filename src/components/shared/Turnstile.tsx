@@ -81,6 +81,12 @@ export default function Turnstile({
             if (isCancelled || !containerRef.current || widgetIdRef.current || !window.turnstile) return;
 
             try {
+                if (widgetIdRef.current && window.turnstile?.remove) {
+                    try {
+                        window.turnstile.remove(widgetIdRef.current);
+                    } catch {}
+                    widgetIdRef.current = null;
+                }
                 containerRef.current.innerHTML = "";
                 const id = window.turnstile.render(containerRef.current, {
                     sitekey: keyToUse,

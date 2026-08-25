@@ -36,11 +36,18 @@ export default async function MenteeDashboardPage() {
 
     const userName = dbUser?.name ?? session.user.name ?? "there";
 
+    const sanitizedPathway = pathway
+        ? {
+              progress: Number((pathway as any).progress) || 0,
+              milestones: Array.isArray((pathway as any).milestones) ? (pathway as any).milestones : [],
+          }
+        : null;
+
     return (
         <MenteeDashboard
             userName={userName}
             matches={matches || []}
-            pathway={pathway}
+            pathway={sanitizedPathway}
             journalEntries={(journalEntries || []).map((j: any) => ({
                 id: String(j.id),
                 recordedAt: j.recordedAt ? new Date(j.recordedAt).toISOString() : new Date().toISOString(),
