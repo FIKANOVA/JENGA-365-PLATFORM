@@ -3,14 +3,21 @@ import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 export default async function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
+    let session = null;
+    try {
+        session = await auth.api.getSession({
+            headers: await headers(),
+        });
+    } catch {
+        // ignore
+    }
 
     if (!session) {
         redirect("/login");
@@ -20,7 +27,7 @@ export default async function DashboardLayout({
         id: string;
         role?: string;
     };
-    const effectiveRole = sessionUser.role ?? "Mentee";
+    const effectiveRole = normalizeRole(sessionUser.role);
 
     return (
         <DashboardShell role={effectiveRole}>

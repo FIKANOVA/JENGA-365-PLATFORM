@@ -64,7 +64,7 @@ export default function NgoDashboard({ orgName, mouStatus, exchangeLog }: NgoDas
             </header>
 
             {/* MOU Status Banner */}
-            {mouStatus?.signed && (
+            {mouStatus?.signed ? (
                 <div
                     className="flex items-center gap-3 rounded-md border px-5 py-3"
                     style={{
@@ -77,12 +77,37 @@ export default function NgoDashboard({ orgName, mouStatus, exchangeLog }: NgoDas
                     <span className="text-label">
                         Resource Exchange MOU active
                         {mouStatus.signedAt
-                            ? ` — signed ${new Date(mouStatus.signedAt).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}`
+                            ? ` — signed ${String(mouStatus.signedAt).split("T")[0]}`
                             : ""}
                         {mouStatus.expiresAt
-                            ? ` · expires ${new Date(mouStatus.expiresAt).toLocaleDateString("en-KE", { day: "2-digit", month: "short", year: "numeric" })}`
+                            ? ` · expires ${String(mouStatus.expiresAt).split("T")[0]}`
                             : ""}
                     </span>
+                </div>
+            ) : (
+                <div
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-md border p-5"
+                    style={{
+                        borderColor: "var(--border)",
+                        background: "var(--surface-1)",
+                    }}
+                >
+                    <div className="space-y-1">
+                        <p className="text-label font-semibold text-foreground">
+                            Resource Exchange MOU Pending Signature
+                        </p>
+                        <p className="text-body-sm text-foreground-muted">
+                            Complete and sign your platform MOU to formalize resource allocation and volunteer workforce deployment.
+                        </p>
+                    </div>
+                    <Link
+                        href="/dashboard/ngo/mou"
+                        className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md text-label font-medium text-white shrink-0 hover:opacity-90 transition-opacity"
+                        style={{ background: "var(--brand-green)" }}
+                    >
+                        Sign MOU agreement
+                        <ArrowRight className="w-4 h-4" />
+                    </Link>
                 </div>
             )}
 

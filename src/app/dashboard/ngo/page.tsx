@@ -47,16 +47,28 @@ export default async function NgoDashboardPage() {
             : Promise.resolve(null),
     ]);
 
-    // If MOU not yet signed, send to MOU signing page
-    if (!mouStatus?.signed) {
-        redirect("/dashboard/ngo/mou");
-    }
+    const sanitizedMouStatus = mouStatus
+        ? {
+              signed: Boolean(mouStatus.signed),
+              signedAt: mouStatus.signedAt ? new Date(mouStatus.signedAt).toISOString() : null,
+              resourceTypes: Array.isArray(mouStatus.resourceTypes) ? mouStatus.resourceTypes : null,
+              expiresAt: mouStatus.expiresAt ? new Date(mouStatus.expiresAt).toISOString() : null,
+          }
+        : null;
+
+    const sanitizedLog = (exchangeLog || []).map((e: any) => ({
+        id: String(e.id || Math.random()),
+        resourceType: String(e.resourceType || "Resource"),
+        quantity: e.quantity != null ? Number(e.quantity) : null,
+        notes: e.notes ? String(e.notes) : null,
+        exchangedAt: e.exchangedAt ? new Date(e.exchangedAt).toISOString() : null,
+    }));
 
     return (
         <NgoDashboard
             orgName={partner?.orgName ?? user.name ?? "Your Organisation"}
-            mouStatus={mouStatus}
-            exchangeLog={exchangeLog}
+            mouStatus={sanitizedMouStatus as any}
+            exchangeLog={sanitizedLog as any}
         />
     );
 }
