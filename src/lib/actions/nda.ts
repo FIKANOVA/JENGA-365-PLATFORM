@@ -51,7 +51,9 @@ export async function signNDA(payload: z.infer<typeof signNDASchema>) {
 
     // Determine redirect
     let redirectTo = "/dashboard";
-    if (validated.role === "Mentee") redirectTo = "/check-email";
+    if (validated.role === "Mentee") {
+        redirectTo = (user as any).emailVerified ? "/onboarding/intake" : "/check-email";
+    }
     else if (validated.role === "Mentor") redirectTo = "/pending-approval?role=Mentor";
     else if (validated.role === "CorporatePartner") redirectTo = "/pending-approval?role=Corporate Partner";
     else if (validated.role === "NGO") redirectTo = "/pending-approval?role=NGO Partner";

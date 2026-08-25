@@ -31,6 +31,20 @@ export default function OnboardingClient() {
         }
     };
 
+    const handleSkip = async () => {
+        setIsFinishing(true);
+        try {
+            const result = await completeOnboarding("AI interview skipped during onboarding.");
+            if (result.success) {
+                router.push(result.redirectTo);
+            } else {
+                router.push("/onboarding/intake");
+            }
+        } catch {
+            router.push("/onboarding/intake");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-background flex items-center justify-center px-6 py-12">
             <div className="mx-auto w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
@@ -95,7 +109,7 @@ export default function OnboardingClient() {
                 </aside>
 
                 {/* Main */}
-                <main className="md:col-span-2">
+                <main className="md:col-span-2 space-y-4">
                     {isFinishing ? (
                         <div
                             className="h-[500px] flex flex-col items-center justify-center rounded-md border border-border bg-background p-10 text-center"
@@ -113,7 +127,20 @@ export default function OnboardingClient() {
                             </p>
                         </div>
                     ) : (
-                        <AIInterviewerChat onComplete={handleComplete} />
+                        <>
+                            <AIInterviewerChat onComplete={handleComplete} />
+                            <div className="flex justify-between items-center px-1 text-body-sm text-foreground-muted">
+                                <span>Prefer a standard form?</span>
+                                <button
+                                    type="button"
+                                    onClick={handleSkip}
+                                    className="text-label hover:underline transition-colors"
+                                    style={{ color: "var(--brand-green)" }}
+                                >
+                                    Continue to Diagnostic Intake →
+                                </button>
+                            </div>
+                        </>
                     )}
                 </main>
             </div>

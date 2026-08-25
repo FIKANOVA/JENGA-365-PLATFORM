@@ -68,6 +68,7 @@ export async function submitDiagnosticIntake(formData: IntakeFormData) {
       .update(users)
       .set({
         intakeCompleted: true,
+        onboarded: true,
         ...(embedding !== null ? { embedding, embeddingStale: false } : { embeddingStale: true }),
       } as any)
       .where(eq(users.id, userId))

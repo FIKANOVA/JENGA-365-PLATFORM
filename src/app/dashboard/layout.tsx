@@ -3,6 +3,9 @@ import DashboardHeader from "@/components/dashboard/shared/DashboardHeader";
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export default async function DashboardLayout({
     children,
@@ -18,6 +21,7 @@ export default async function DashboardLayout({
     }
 
     const sessionUser = session.user as {
+        id: string;
         role?: string;
         intakeCompleted?: boolean;
     };
@@ -40,8 +44,14 @@ export default async function DashboardLayout({
     const headersList = await headers();
     const pathname = headersList.get("x-pathname") || headersList.get("x-invoke-path") || "";
 
+    // Query live DB status to avoid stale 5-minute session cookieCache
+    const dbUser = await db.query.users.findFirst({
+        where: eq(users.id, session.user.id),
+        columns: { intakeCompleted: true, onboarded: true },
+    });
+
     // Gate: Intake must be complete for Mentees
-    const intakeCompleted = sessionUser.intakeCompleted ?? false;
+    const intakeCompleted = dbUser?.intakeCompleted ?? sessionUser.intakeCompleted ?? false;
     if (userRole === "Mentee" && !intakeCompleted) {
         redirect("/onboarding/intake");
     }

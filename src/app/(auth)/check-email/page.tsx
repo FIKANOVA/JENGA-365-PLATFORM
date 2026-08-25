@@ -19,7 +19,7 @@ function CheckEmailContent() {
         try {
             await authClient.sendVerificationEmail({
                 email,
-                callbackURL: "/onboarding",
+                callbackURL: "/onboarding/intake",
             });
             setResent(true);
         } catch {

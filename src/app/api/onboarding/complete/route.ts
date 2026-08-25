@@ -18,18 +18,30 @@ export async function POST(req: Request) {
     const { profileSummary, ...profileData } = await req.json();
 
     // 1. Generate text embedding from profile summary
-    const embedding = await generateProfileEmbedding(profileSummary);
+    let embedding: number[] | null = null;
+    try {
+        if (profileSummary) {
+            embedding = await generateProfileEmbedding(profileSummary);
+        }
+    } catch (err) {
+        console.error("[onboarding/complete] Embedding generation failed:", err);
+    }
 
     // 2. Update user profile with embedding and metadata
+    const sessionUser = session.user as { role?: string; isApproved?: boolean };
+    const isMentee = sessionUser.role === "Mentee";
+
     await db
         .update(users)
         .set({
             ...profileData,
-            embedding,
-            isApproved: false, // Defaults to false until moderator approval
+            onboarded: true,
+            ...(embedding ? { embedding, embeddingStale: false } : {}),
+            isApproved: isMentee ? true : (sessionUser.isApproved ?? false),
         })
         .where(eq(users.id, session.user.id));
 
-    // 3. Redirect to NDA (handled by client or return URL)
-    return NextResponse.json({ success: true, redirectUrl: "/legal/nda" });
+    // 3. Redirect URL
+    const redirectUrl = isMentee ? "/dashboard/mentee" : "/pending-approval";
+    return NextResponse.json({ success: true, redirectUrl });
 }

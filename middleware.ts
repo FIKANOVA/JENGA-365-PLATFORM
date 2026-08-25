@@ -133,14 +133,9 @@ export function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL("/dashboard/partner", request.url));
         }
 
-        // Mentee: intake gate on dashboard routes
-        if (role === "Mentee" && !intakeCompleted && pathname.startsWith("/dashboard")) {
-            if (!pathname.startsWith("/onboarding/intake")) {
-                const url = new URL("/onboarding/intake", request.url);
-                url.searchParams.set("next", pathname);
-                return NextResponse.redirect(url);
-            }
-        }
+        // Mentee intake gating is enforced server-side in DashboardLayout using
+        // live database queries to avoid false-positive redirect loops caused by
+        // edge session cookieCache staleness.
 
         // Capability-gated routes
         const cap = capabilityForRoute(pathname);

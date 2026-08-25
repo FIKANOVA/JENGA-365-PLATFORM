@@ -98,16 +98,15 @@ export default function VerifyEmailPage() {
                                     Email verified
                                 </h1>
                                 <p className="text-body-sm text-foreground-muted">
-                                    Your email has been confirmed. Let&apos;s set up your platform
-                                    agreement.
+                                    Your email has been confirmed. Let&apos;s set up your mentorship profile.
                                 </p>
                             </div>
-                            <Link href="/legal/nda" className="w-full">
+                            <Link href="/onboarding/intake" className="w-full">
                                 <button
                                     className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-label font-medium text-white transition-opacity hover:opacity-90"
                                     style={{ background: "var(--brand-green)" }}
                                 >
-                                    Continue to agreement <ArrowRight className="h-4 w-4" />
+                                    Continue to onboarding <ArrowRight className="h-4 w-4" />
                                 </button>
                             </Link>
                         </motion.div>
@@ -145,7 +144,7 @@ export default function VerifyEmailPage() {
                                         try {
                                             await authClient.sendVerificationEmail({
                                                 email: "",
-                                                callbackURL: "/legal/nda",
+                                                callbackURL: "/onboarding/intake",
                                             });
                                             toast.success(
                                                 "New verification link sent — check your inbox.",

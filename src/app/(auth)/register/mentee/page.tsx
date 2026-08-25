@@ -123,7 +123,7 @@ export default function MenteeRegisterPage() {
                     authClient
                         .sendVerificationEmail({
                             email: formData.email,
-                            callbackURL: "/onboarding",
+                            callbackURL: "/onboarding/intake",
                         })
                         .catch(() => {});
                 });
