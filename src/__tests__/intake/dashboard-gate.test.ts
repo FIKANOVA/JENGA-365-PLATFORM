@@ -8,71 +8,30 @@ import { describe, it, expect } from 'vitest'
 // The actual integration is verified by E2E testing.
 
 /**
- * Mirrors the gate condition in src/app/dashboard/layout.tsx:
- *   const intakeCompleted = (session.user as any).intakeCompleted ?? false
- *   if (userRole === 'Mentee' && !intakeCompleted) redirect('/onboarding/intake')
+ * In the new non-blocking dashboard architecture:
+ * All users can directly access their role dashboard without forced redirects,
+ * and profile completeness is managed in-dashboard with action links.
  */
-function shouldRedirectToIntake(role: string, intakeCompleted: boolean): boolean {
-  return role === 'Mentee' && !intakeCompleted
+function shouldAllowDashboardAccess(role: string, intakeCompleted: boolean): boolean {
+  return true;
 }
 
-describe('Dashboard intake gate — shouldRedirectToIntake()', () => {
-  // ── Mentee cases ──────────────────────────────────────────────────────────
-  describe('Mentee role', () => {
-    it('redirects when intakeCompleted is false', () => {
-      expect(shouldRedirectToIntake('Mentee', false)).toBe(true)
+describe('Dashboard access policy — shouldAllowDashboardAccess()', () => {
+  describe('All roles allow direct dashboard access', () => {
+    it('Mentee with incomplete intake can access dashboard', () => {
+      expect(shouldAllowDashboardAccess('Mentee', false)).toBe(true)
     })
 
-    it('does NOT redirect when intakeCompleted is true', () => {
-      expect(shouldRedirectToIntake('Mentee', true)).toBe(false)
-    })
-  })
-
-  // ── Non-Mentee roles pass through regardless of intakeCompleted ───────────
-  describe('Mentor role', () => {
-    it('does NOT redirect when intakeCompleted is false', () => {
-      expect(shouldRedirectToIntake('Mentor', false)).toBe(false)
+    it('Mentee with complete intake can access dashboard', () => {
+      expect(shouldAllowDashboardAccess('Mentee', true)).toBe(true)
     })
 
-    it('does NOT redirect when intakeCompleted is true', () => {
-      expect(shouldRedirectToIntake('Mentor', true)).toBe(false)
-    })
-  })
-
-  describe('SuperAdmin role', () => {
-    it('does NOT redirect when intakeCompleted is false', () => {
-      expect(shouldRedirectToIntake('SuperAdmin', false)).toBe(false)
+    it('Mentor can access dashboard regardless of completeness', () => {
+      expect(shouldAllowDashboardAccess('Mentor', false)).toBe(true)
     })
 
-    it('does NOT redirect when intakeCompleted is true', () => {
-      expect(shouldRedirectToIntake('SuperAdmin', true)).toBe(false)
-    })
-  })
-
-  describe('Moderator role', () => {
-    it('does NOT redirect regardless of intakeCompleted', () => {
-      expect(shouldRedirectToIntake('Moderator', false)).toBe(false)
-      expect(shouldRedirectToIntake('Moderator', true)).toBe(false)
-    })
-  })
-
-  describe('CorporatePartner role', () => {
-    it('does NOT redirect regardless of intakeCompleted', () => {
-      expect(shouldRedirectToIntake('CorporatePartner', false)).toBe(false)
-      expect(shouldRedirectToIntake('CorporatePartner', true)).toBe(false)
-    })
-  })
-
-  // ── Default / nullish intakeCompleted (layout uses ?? false) ─────────────
-  describe('nullish intakeCompleted handling', () => {
-    it('Mentee with undefined intakeCompleted (treated as false) redirects', () => {
-      const intakeCompleted = (undefined as unknown as boolean) ?? false
-      expect(shouldRedirectToIntake('Mentee', intakeCompleted)).toBe(true)
-    })
-
-    it('Mentee with null intakeCompleted (treated as false) redirects', () => {
-      const intakeCompleted = (null as unknown as boolean) ?? false
-      expect(shouldRedirectToIntake('Mentee', intakeCompleted)).toBe(true)
+    it('SuperAdmin can access dashboard', () => {
+      expect(shouldAllowDashboardAccess('SuperAdmin', false)).toBe(true)
     })
   })
 })

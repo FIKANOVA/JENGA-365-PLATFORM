@@ -1,15 +1,23 @@
 "use client";
 
-import { Plus, Smile, CheckCircle2, Circle } from "lucide-react";
+import Link from "next/link";
+import { Plus, Smile, CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import LearningPathwayTracker from "./LearningPathwayTracker";
 import AiMentorMatches from "./AiMentorMatches";
 
 interface MentorMatch {
     id: string;
     name: string | null;
+    image?: string | null;
+    title?: string;
     locationRegion: string | null;
     matchPercentage: number;
-    insights: { profileMatch: number; deepSkillMatch?: number; goalAlignment?: number };
+    insights: {
+        profileMatch: number;
+        deepSkillMatch?: number;
+        goalAlignment?: number;
+        reason?: string;
+    };
 }
 
 interface PathwayData {
@@ -43,8 +51,15 @@ export default function MenteeDashboard({
     onboarded = false,
     hasMentorMatch = false,
 }: MenteeDashboardProps) {
-    const completed = [ndaSigned, onboarded, hasMentorMatch].filter(Boolean).length;
-    const allComplete = completed === 3;
+    const checklistSteps = [
+        { label: "Sign your platform NDA", done: ndaSigned, href: "/legal/nda", action: "Sign now" },
+        { label: "Complete diagnostic profile intake", done: onboarded, href: "/onboarding/intake", action: "Complete profile" },
+        { label: "Refine AI Profile & Interview", done: onboarded, href: "/dashboard/profile", action: "Start interview" },
+        { label: "Explore & connect with AI mentors", done: hasMentorMatch, href: "/dashboard/people", action: "Browse mentors" },
+    ];
+    const completedCount = checklistSteps.filter((s) => s.done).length;
+    const allComplete = completedCount === checklistSteps.length;
+    const completenessPct = Math.round((completedCount / checklistSteps.length) * 100);
 
     return (
         <div className="mx-auto max-w-6xl px-6 lg:px-8 py-6 lg:py-8 grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
@@ -53,7 +68,7 @@ export default function MenteeDashboard({
                 <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-border pb-6">
                     <div className="space-y-1.5">
                         <p className="text-eyebrow" style={{ color: "var(--brand-green)" }}>
-                            Jenga365 member
+                            Jenga365 Mentee
                         </p>
                         <h2 className="text-display-sm text-foreground">
                             Welcome back, {userName.split(" ")[0]}
@@ -68,44 +83,71 @@ export default function MenteeDashboard({
                     </button>
                 </header>
 
-                {/* Getting started checklist */}
+                {/* Getting started checklist & profile completeness */}
                 {!allComplete && (
                     <section
                         className="rounded-md border border-border bg-background p-6 space-y-4"
                         style={{ boxShadow: "var(--shadow-sm)" }}
                     >
                         <div className="flex items-center justify-between">
-                            <h3 className="text-headline text-foreground">
-                                Getting started
-                            </h3>
-                            <span className="text-body-sm text-foreground-muted">
-                                {completed}/3 complete
+                            <div className="space-y-1">
+                                <h3 className="text-headline text-foreground">
+                                    Profile Completeness
+                                </h3>
+                                <p className="text-body-sm text-foreground-muted">
+                                    Complete these steps to maximize your mentorship matches.
+                                </p>
+                            </div>
+                            <span className="text-label font-semibold text-foreground bg-[color:var(--surface-2)] px-2.5 py-1 rounded-full">
+                                {completenessPct}% complete
                             </span>
                         </div>
-                        <ul className="space-y-3">
-                            {[
-                                { label: "Sign your NDA", done: ndaSigned },
-                                { label: "Complete onboarding interview", done: onboarded },
-                                { label: "Get matched with a mentor", done: hasMentorMatch },
-                            ].map((step) => (
-                                <li key={step.label} className="flex items-center gap-3">
-                                    {step.done ? (
-                                        <CheckCircle2
-                                            className="h-4 w-4 shrink-0"
-                                            style={{ color: "var(--brand-green)" }}
-                                        />
-                                    ) : (
-                                        <Circle className="h-4 w-4 shrink-0 text-foreground-subtle" />
+
+                        {/* Progress Bar */}
+                        <div className="w-full bg-[color:var(--surface-2)] h-2 rounded-full overflow-hidden">
+                            <div
+                                className="h-full transition-all duration-500 rounded-full"
+                                style={{
+                                    width: `${completenessPct}%`,
+                                    background: "var(--brand-green)",
+                                }}
+                            />
+                        </div>
+
+                        <ul className="space-y-2.5 pt-2">
+                            {checklistSteps.map((step) => (
+                                <li
+                                    key={step.label}
+                                    className="flex items-center justify-between p-2.5 rounded-md hover:bg-[color:var(--surface-1)] transition-colors border border-border/50"
+                                >
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        {step.done ? (
+                                            <CheckCircle2
+                                                className="h-4 w-4 shrink-0"
+                                                style={{ color: "var(--brand-green)" }}
+                                            />
+                                        ) : (
+                                            <Circle className="h-4 w-4 shrink-0 text-foreground-subtle" />
+                                        )}
+                                        <span
+                                            className={`text-body-sm truncate ${
+                                                step.done
+                                                    ? "line-through text-foreground-muted"
+                                                    : "text-foreground font-medium"
+                                            }`}
+                                        >
+                                            {step.label}
+                                        </span>
+                                    </div>
+                                    {!step.done && (
+                                        <Link
+                                            href={step.href}
+                                            className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--brand-green)] hover:underline shrink-0 ml-2"
+                                        >
+                                            {step.action}
+                                            <ArrowRight className="h-3 w-3" />
+                                        </Link>
                                     )}
-                                    <span
-                                        className={`text-body-sm ${
-                                            step.done
-                                                ? "line-through text-foreground-muted"
-                                                : "text-foreground"
-                                        }`}
-                                    >
-                                        {step.label}
-                                    </span>
                                 </li>
                             ))}
                         </ul>

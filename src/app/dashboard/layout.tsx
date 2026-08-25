@@ -43,26 +43,6 @@ export default async function DashboardLayout({
     const headersList = await headers();
     const pathname = headersList.get("x-pathname") || headersList.get("x-invoke-path") || "";
 
-    // Query live DB status to avoid stale 5-minute session cookieCache
-    let dbUser = null;
-    try {
-        dbUser = await db.query.users.findFirst({
-            where: eq(users.id, session.user.id),
-            columns: { intakeCompleted: true, onboarded: true },
-        });
-    } catch (err) {
-        console.error("[DashboardLayout] Live DB lookup failed, falling back to session data:", err);
-    }
-
-    // Gate: Intake must be complete for Mentees
-    const intakeCompleted = dbUser?.intakeCompleted ?? sessionUser.intakeCompleted ?? false;
-    if (userRole === "Mentee" && !intakeCompleted) {
-        redirect("/onboarding/intake");
-    }
-
-    // Note: AI Interview is no longer a hard gate. It is surfaced in-dashboard
-    // via the AI Interview nav link for profile enhancement and matching improvement.
-
     // Only enforce redirect when a user tries to access a different role's root dashboard
     const otherRoleDashboards = Object.values(roleDashboardMap).filter((d) => d !== correctDashboard);
     const isAccessingOtherRole = otherRoleDashboards.some((d) => pathname.startsWith(d));
