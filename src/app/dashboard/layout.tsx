@@ -1,5 +1,4 @@
-import RoleSidebar from "@/components/dashboard/RoleSidebar";
-import DashboardHeader from "@/components/dashboard/shared/DashboardHeader";
+import DashboardShell from "@/components/dashboard/DashboardShell";
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -72,14 +71,8 @@ export default async function DashboardLayout({
     }
 
     return (
-        <div className="flex h-screen overflow-hidden bg-muted/5">
-            <RoleSidebar role={effectiveRole} />
-            <div className="flex-1 flex flex-col min-w-0 h-screen">
-                <DashboardHeader />
-                <main className="flex-1 overflow-y-auto min-h-0">
-                    {children}
-                </main>
-            </div>
-        </div>
+        <DashboardShell role={effectiveRole}>
+            {children}
+        </DashboardShell>
     );
 }
