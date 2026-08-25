@@ -10,7 +10,7 @@ import { auth } from "@/lib/auth/config"
 import { computeResilienceScore } from "@/lib/intake/scoring"
 import { buildEmbeddingText } from "@/lib/intake/embedding"
 import { generateProfileEmbedding } from "@/lib/ai/embeddings"
-import type { IntakeFormData } from "@/lib/intake/types"
+import type { IntakeFormData, CareerTag, SupportType, MentorshipStyle } from "@/lib/intake/types"
 
 export async function submitDiagnosticIntake(formData: IntakeFormData) {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -20,13 +20,47 @@ export async function submitDiagnosticIntake(formData: IntakeFormData) {
   }
 
   const userId = session.user.id
-  const score = computeResilienceScore(formData.q1, formData.q2)
+
+  // Validate and sanitize data to satisfy Postgres constraints
+  const safeQ1 = formData.q1 || "Sometimes"
+  const safeQ2 = formData.q2 || "Managing"
+  const rawScore = computeResilienceScore(safeQ1, safeQ2)
+  const score = Math.max(1, Math.min(10, isNaN(rawScore) ? 5 : rawScore))
+
+  const safeAcademicStanding = ["Good", "Probation", "Honors"].includes(formData.academicStanding)
+    ? formData.academicStanding
+    : "Good"
+
+  const safeCareerTags: CareerTag[] = (formData.careerTags && formData.careerTags.length > 0)
+    ? formData.careerTags.slice(0, 3)
+    : (["Software Engineering"] as CareerTag[])
+
+  const safeCareerFreeText = formData.careerFreeText
+    ? formData.careerFreeText.slice(0, 280)
+    : null
+
+  const safeSupportTypes: SupportType[] = (formData.supportTypes && formData.supportTypes.length > 0)
+    ? formData.supportTypes.slice(0, 2)
+    : (["Career Guidance"] as SupportType[])
+
+  const safeMentorshipStyle: MentorshipStyle = ["Strict", "Supportive", "Mixed"].includes(formData.preferredMentorshipStyle as MentorshipStyle)
+    ? (formData.preferredMentorshipStyle as MentorshipStyle)
+    : "Mixed"
 
   // Embedding generation is OUTSIDE the transaction: it's an external API call
   // that should not hold a DB connection. Failure must not roll back the intake.
   let embedding: number[] | null = null
   try {
-    const embeddingText = buildEmbeddingText(formData)
+    const embeddingText = buildEmbeddingText({
+      ...formData,
+      academicStanding: safeAcademicStanding,
+      careerTags: safeCareerTags,
+      careerFreeText: safeCareerFreeText || "",
+      supportTypes: safeSupportTypes,
+      preferredMentorshipStyle: safeMentorshipStyle,
+      q1: safeQ1,
+      q2: safeQ2,
+    })
     embedding = await generateProfileEmbedding(embeddingText)
   } catch {
     // Embedding API failure: intake data is preserved; embeddingStale=true
@@ -41,28 +75,28 @@ export async function submitDiagnosticIntake(formData: IntakeFormData) {
         .insert(menteeIntake)
         .values({
           userId,
-          academicStanding: formData.academicStanding,
-          careerTags: formData.careerTags,
-          careerFreeText: formData.careerFreeText || null,
-          supportTypes: formData.supportTypes,
-          preferredMentorshipStyle: formData.preferredMentorshipStyle,
+          academicStanding: safeAcademicStanding,
+          careerTags: safeCareerTags,
+          careerFreeText: safeCareerFreeText,
+          supportTypes: safeSupportTypes,
+          preferredMentorshipStyle: safeMentorshipStyle,
         })
         .onConflictDoUpdate({
           target: menteeIntake.userId,
           set: {
-            academicStanding: formData.academicStanding,
-            careerTags: formData.careerTags,
-            careerFreeText: formData.careerFreeText || null,
-            supportTypes: formData.supportTypes,
-            preferredMentorshipStyle: formData.preferredMentorshipStyle,
+            academicStanding: safeAcademicStanding,
+            careerTags: safeCareerTags,
+            careerFreeText: safeCareerFreeText,
+            supportTypes: safeSupportTypes,
+            preferredMentorshipStyle: safeMentorshipStyle,
           },
         })
 
       await tx.insert(resilienceAssessments).values({
         userId,
         score,
-        q1Response: formData.q1,
-        q2Response: formData.q2,
+        q1Response: safeQ1,
+        q2Response: safeQ2,
         identityResponse: null,
         isBaseline: true,
         reassessmentDueDate: addMonths(new Date(), 6),
@@ -70,10 +104,10 @@ export async function submitDiagnosticIntake(formData: IntakeFormData) {
 
       // Seed normalized goal-alignment tags from the mentee's career interests.
       // Drives the 10% goal-alignment term in matching (CLAUDE.md §4 / §10.2).
-      if (formData.careerTags && formData.careerTags.length > 0) {
+      if (safeCareerTags.length > 0) {
         await tx
           .insert(userGoalTags)
-          .values(formData.careerTags.map((category) => ({ userId, category })))
+          .values(safeCareerTags.map((category) => ({ userId, category })))
           .onConflictDoNothing()
       }
 
@@ -91,5 +125,5 @@ export async function submitDiagnosticIntake(formData: IntakeFormData) {
     throw dbError
   }
 
-  redirect("/dashboard/mentee")
+  return { success: true, redirectTo: "/dashboard/mentee" }
 }

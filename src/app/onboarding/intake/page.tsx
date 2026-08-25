@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import IntakeProgress from "@/components/intake/IntakeProgress"
 import SubmittingScreen from "@/components/intake/SubmittingScreen"
 import StepOne from "@/components/intake/StepOne"
@@ -44,6 +45,7 @@ const STEP_LABELS: [string, string, string] = [
 ]
 
 export default function IntakePage() {
+  const router = useRouter()
   const [formState, setFormState] = useState<FormState>(INITIAL_STATE)
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -57,20 +59,30 @@ export default function IntakePage() {
     setIsSubmitting(true)
     setError(null)
     try {
-      await submitDiagnosticIntake(formState as IntakeFormData)
-      // redirect happens inside the action — this line may never run
+      const result = await submitDiagnosticIntake(formState as IntakeFormData)
+      if (result && typeof result === "object" && result.success === false) {
+        setIsSubmitting(false)
+        setError(result.error || "Failed to complete profile. Please try again.")
+        return
+      }
+      if (result && typeof result === "object" && result.redirectTo) {
+        router.push(result.redirectTo)
+      } else {
+        router.push("/dashboard/mentee")
+      }
     } catch (err: unknown) {
-      // Next.js redirect throws a special error — don't treat it as a failure
       if (
         err &&
         typeof err === "object" &&
         "digest" in err &&
         String((err as { digest: unknown }).digest).startsWith("NEXT_REDIRECT")
       ) {
-        return // successful redirect — do nothing
+        return // successful redirect
       }
+      console.error("[intake] Submission error:", err)
       setIsSubmitting(false)
-      setError("Something went wrong. Please try again.")
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again."
+      setError(msg)
     }
   }
 
