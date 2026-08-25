@@ -1,9 +1,13 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
 import MenteeDashboard from "@/components/dashboard/Mentee/MenteeDashboard";
 import { getAiMentorMatches } from "@/lib/actions/matching";
 import { getMenteeLearningPathway, getMenteeMoodJournal } from "@/lib/db/queries/dashboard";
+import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "Mentee Dashboard | Jenga365",
@@ -11,27 +15,46 @@ export const metadata: Metadata = {
 };
 
 export default async function MenteeDashboardPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    const userId = session?.user?.id;
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        redirect("/login");
+    }
+
+    if (!session?.user?.id) {
+        redirect("/login");
+    }
+
+    const userId = session.user.id;
+
+    // Fetch fresh user record safely
+    const dbUser = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+    }).catch(() => null);
 
     const [matches, pathway, journalEntries] = await Promise.all([
-        userId ? getAiMentorMatches().catch(() => []) : Promise.resolve([]),
-        userId ? getMenteeLearningPathway(userId).catch(() => null) : Promise.resolve(null),
-        userId ? getMenteeMoodJournal(userId).catch(() => []) : Promise.resolve([]),
+        getAiMentorMatches().catch(() => []),
+        getMenteeLearningPathway(userId).catch(() => null),
+        getMenteeMoodJournal(userId).catch(() => []),
     ]);
 
-    const userName = session?.user?.name ?? "there";
-    const user = session?.user as any;
+    const userName = dbUser?.name ?? session.user.name ?? "there";
 
     return (
         <MenteeDashboard
             userName={userName}
-            matches={matches}
+            matches={matches || []}
             pathway={pathway}
-            journalEntries={journalEntries}
-            ndaSigned={user?.ndaSigned ?? false}
-            onboarded={user?.onboarded ?? false}
-            hasMentorMatch={matches.length > 0}
+            journalEntries={(journalEntries || []).map((j: any) => ({
+                id: String(j.id),
+                recordedAt: j.recordedAt ? new Date(j.recordedAt) : new Date(),
+                moodScore: Number(j.moodScore) || 3,
+                notes: j.notes ?? null,
+            }))}
+            ndaSigned={Boolean(dbUser?.ndaSigned ?? (session.user as any)?.ndaSigned)}
+            onboarded={Boolean(dbUser?.onboarded ?? (session.user as any)?.onboarded)}
+            hasMentorMatch={(matches || []).length > 0}
         />
     );
 }

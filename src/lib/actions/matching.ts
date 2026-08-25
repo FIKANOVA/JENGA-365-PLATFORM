@@ -64,23 +64,27 @@ export async function triggerAiProfileSynthesis() {
  * Gets the best mentor matches for the currently logged in mentee.
  */
 export async function getAiMentorMatches() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) return [];
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) return [];
 
-    const user = await db.query.users.findFirst({
-        where: eq(users.id, session.user.id),
-        columns: { embedding: true, embeddingStale: true },
-    });
+        const user = await db.query.users.findFirst({
+            where: eq(users.id, session.user.id),
+            columns: { embedding: true, embeddingStale: true },
+        });
 
-    if (!user?.embedding || user.embeddingStale) return [];
+        if (!user?.embedding || user.embeddingStale) return [];
+        if (!Array.isArray(user.embedding) || user.embedding.length === 0) return [];
 
-    if (!Array.isArray(user.embedding)) return [];
-
-    return getMentorMatches({
-        menteeEmbedding: user.embedding as number[],
-        menteeId: session.user.id,
-        limit: 5,
-    });
+        return await getMentorMatches({
+            menteeEmbedding: user.embedding as number[],
+            menteeId: session.user.id,
+            limit: 5,
+        });
+    } catch (err) {
+        console.error("[getAiMentorMatches] Failed to get matches:", err);
+        return [];
+    }
 }
 /**
  * Gets the best mentor matches for a specific mentee (used by Partners/Moderators).

@@ -74,71 +74,81 @@ export async function getMentorMatches(params: {
         `
         : sql<number>`0.0`;
 
-    const semanticScore = sql<number>`(1 - (${cosineDistance(users.embedding, menteeEmbedding)}))`;
+    try {
+        const semanticScore = sql<number>`
+            case 
+                when ${users.embedding} is not null then greatest(0.0, least(1.0, 1.0 - (${cosineDistance(users.embedding, menteeEmbedding)})))
+                else 0.5
+            end
+        `;
 
-    const totalScore = sql<number>`
-        (${W.semantic} * ${semanticScore})
-        + (${W.location} * ${locationScore})
-        + (${W.availability} * ${availabilityScore})
-        + (${W.goal} * ${goalScore})
-        + (${W.affiliation} * ${partnerScore})
-        + (${W.completeness} * ${completenessScore})
-    `;
+        const totalScore = sql<number>`
+            (${W.semantic} * ${semanticScore})
+            + (${W.location} * ${locationScore})
+            + (${W.availability} * ${availabilityScore})
+            + (${W.goal} * ${goalScore})
+            + (${W.affiliation} * ${partnerScore})
+            + (${W.completeness} * ${completenessScore})
+        `;
 
-    const results = await db
-        .select({
-            id: users.id,
-            name: users.name,
-            image: users.image,
-            metadata: users.metadata,
-            locationRegion: users.locationRegion,
-            profileScore: semanticScore,
-            goalScore,
-            totalScore,
-        })
-        .from(users)
-        .leftJoin(activePairCounts, eq(users.id, activePairCounts.mentorId))
-        .leftJoin(assetCounts, eq(users.id, assetCounts.userId))
-        .where(
-            and(
-                eq(users.role, "Mentor"),
-                eq(users.isApproved, true),
-                eq(users.status, "active"),
-                sql`coalesce(${activePairCounts.activeCount}, 0) < 2`,
+        const results = await db
+            .select({
+                id: users.id,
+                name: users.name,
+                image: users.image,
+                metadata: users.metadata,
+                locationRegion: users.locationRegion,
+                profileScore: semanticScore,
+                goalScore,
+                totalScore,
+            })
+            .from(users)
+            .leftJoin(activePairCounts, eq(users.id, activePairCounts.mentorId))
+            .leftJoin(assetCounts, eq(users.id, assetCounts.userId))
+            .where(
+                and(
+                    eq(users.role, "Mentor"),
+                    eq(users.isApproved, true),
+                    eq(users.status, "active"),
+                    sql`coalesce(${activePairCounts.activeCount}, 0) < 2`,
+                )
             )
-        )
-        .orderBy(desc(totalScore))
-        .limit(limit);
+            .orderBy(desc(totalScore))
+            .limit(limit);
 
-    return results.map((r) => {
-        const matchPct = Math.round((Number(r.totalScore) || 0) * 100);
-        const profileMatch = Math.round((Number(r.profileScore) || 0) * 100);
-        const goalAlignment = Math.round((Number(r.goalScore) || 0) * 100);
-        const meta = (r.metadata || {}) as Record<string, any>;
+        return results.map((r) => {
+            const matchPct = Math.round((Number(r.totalScore) || 0) * 100);
+            const profileMatch = Math.round((Number(r.profileScore) || 0) * 100);
+            const goalAlignment = Math.round((Number(r.goalScore) || 0) * 100);
+            const meta = (r.metadata || {}) as Record<string, any>;
 
-        let reason = "Recommended based on your diagnostic profile";
-        if (Number(r.goalScore) > 0.5 && Number(r.profileScore) > 0.8) {
-            reason = "Strong alignment in career goals and technical expertise";
-        } else if (Number(r.goalScore) > 0.5) {
-            reason = "Direct match on your key career learning goals";
-        } else if (r.locationRegion) {
-            reason = `Top mentor in ${r.locationRegion} with strong background match`;
-        } else if (Number(r.profileScore) > 0.85) {
-            reason = "High synergy in professional background and mentorship style";
-        }
+            let reason = "Recommended based on your diagnostic profile";
+            if (Number(r.goalScore) > 0.5 && Number(r.profileScore) > 0.8) {
+                reason = "Strong alignment in career goals and technical expertise";
+            } else if (Number(r.goalScore) > 0.5) {
+                reason = "Direct match on your key career learning goals";
+            } else if (r.locationRegion) {
+                reason = `Top mentor in ${r.locationRegion} with strong background match`;
+            } else if (Number(r.profileScore) > 0.85) {
+                reason = "High synergy in professional background and mentorship style";
+            }
 
-        return {
-            id: r.id,
-            name: r.name,
-            image: r.image ?? null,
-            title: (meta.profession || meta.professionalTitle || "Mentor") as string,
-            locationRegion: r.locationRegion,
-            matchPercentage: Math.max(1, Math.min(99, matchPct)),
-            insights: {
-                profileMatch,
-                goalAlignment,
-                reason,
-            },
-        };
-    });
+            return {
+                id: r.id,
+                name: r.name,
+                image: r.image ?? null,
+                title: (meta.profession || meta.professionalTitle || "Mentor") as string,
+                locationRegion: r.locationRegion,
+                matchPercentage: Math.max(1, Math.min(99, matchPct)),
+                insights: {
+                    profileMatch,
+                    goalAlignment,
+                    reason,
+                },
+            };
+        });
+    } catch (err) {
+        console.error("[getMentorMatches] query error:", err);
+        return [];
+    }
 }
