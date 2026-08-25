@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { GraduationCap, Sparkles, Building2, Leaf, ArrowRight, ChevronDown } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
+import { getDashboardHref } from "@/lib/auth/roles";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -188,9 +189,7 @@ export default function StakeholdersDeepDive() {
                                                                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                                                     {isAuthenticated ? (
                                                                         <Link
-                                                                            href="/dashboard"
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
+                                                                            href={getDashboardHref((session?.user as any)?.role)}
                                                                             className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-5 sm:pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-all duration-300 hover:shadow-lg shadow-sm"
                                                                             style={{ background: s.color }}
                                                                         >

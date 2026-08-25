@@ -32,6 +32,8 @@ export default async function DashboardSettingsPage() {
 
     return (
         <SettingsPage
+            userId={session.user.id}
+            role={dbUser?.role ?? (session.user as any)?.role ?? "Mentee"}
             initialName={dbUser?.name ?? session.user.name ?? ""}
             initialEmail={dbUser?.email ?? session.user.email ?? ""}
             initialImage={dbUser?.image ?? session.user.image ?? null}

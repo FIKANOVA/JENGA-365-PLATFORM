@@ -7,6 +7,7 @@ import { getPublicMentors } from "@/lib/db/queries/users";
 import UserProfileGrid from "@/components/marketing/profiles/UserProfileGrid";
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
+import { getDashboardHref } from "@/lib/auth/roles";
 
 export const metadata = {
     title: "Mentors | Jenga365",
@@ -50,7 +51,7 @@ export default async function MentorsPage() {
                 <div className="flex flex-wrap items-center gap-3">
                     {isAuthenticated ? (
                         <Link
-                            href="/dashboard"
+                            href={getDashboardHref((session?.user as any)?.role)}
                             className="inline-flex h-11 items-center gap-2 rounded-md px-5 text-label font-medium text-white transition-opacity hover:opacity-90"
                             style={{ background: "var(--brand-green)" }}
                         >

@@ -30,8 +30,6 @@ export default function NotFound() {
                         </Link>
                         <Link
                             href="/dashboard"
-                            target="_blank"
-                            rel="noopener noreferrer"
                             className="inline-flex h-11 items-center justify-center rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
                         >
                             Go to dashboard

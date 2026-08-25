@@ -187,3 +187,43 @@ export async function getPublicCommunityProfiles(limit = 36): Promise<PublicProf
         return [];
     }
 }
+
+export async function getPublicProfileById(id: string): Promise<PublicProfile | null> {
+    try {
+        const u = await db.query.users.findFirst({
+            where: eq(users.id, id),
+            columns: {
+                id: true,
+                name: true,
+                image: true,
+                role: true,
+                locationRegion: true,
+                metadata: true,
+                createdAt: true,
+            },
+        });
+        if (!u) return null;
+
+        const meta = (u.metadata || {}) as Record<string, any>;
+        return {
+            id: u.id,
+            name: u.name || "Community Member",
+            image: u.image || null,
+            role: u.role,
+            locationRegion: u.locationRegion || "Kenya",
+            profession: meta.profession || meta.professionalTitle || meta.sport || meta.contactTitle || meta.title || u.role,
+            bio: meta.bio || meta.motivation || meta.goals || meta.notes || null,
+            linkedIn: meta.linkedIn || null,
+            x: meta.x || meta.twitter || null,
+            instagram: meta.instagram || null,
+            youtube: meta.youtube || null,
+            tiktok: meta.tiktok || null,
+            website: meta.website || null,
+            orgName: meta.orgName || meta.company || meta.club || meta.school || null,
+            createdAt: u.createdAt,
+        };
+    } catch (e) {
+        console.error("[getPublicProfileById] query error:", e);
+        return null;
+    }
+}

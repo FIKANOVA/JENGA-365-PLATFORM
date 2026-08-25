@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import UserAvatar from "@/components/shared/UserAvatar";
 import Logo from "@/components/shared/Logo";
 import NotificationBell from "@/components/shared/NotificationBell";
+import { getDashboardHref } from "@/lib/auth/roles";
 import { cn } from "@/lib/utils";
 
 const ROLE_NAV: Record<string, { label: string, href: string }[]> = {
@@ -86,7 +87,7 @@ export default function AuthenticatedHeader({
                 <div className="flex items-center gap-6">
                     <div className="hidden md:flex items-center gap-4">
                         <Link 
-                            href="/dashboard"
+                            href={getDashboardHref(userRole)}
                             className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2.5 rounded font-black text-eyebrow hover:bg-primary hover:text-white transition-all shadow-lg shadow-slate-900/10"
                         >
                             Dashboard

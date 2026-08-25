@@ -21,6 +21,7 @@ import {
     ShieldAlert,
     PanelLeftClose,
     PanelLeftOpen,
+    Eye,
     X,
 } from "lucide-react";
 import { signOut } from "@/lib/auth/client";
@@ -63,7 +64,8 @@ export default function RoleSidebar({ role }: RoleSidebarProps) {
         { href: "/dashboard/journal", label: "Journal", icon: BookOpen, roles: ["Mentee"] },
         { href: "/dashboard/ngo/mou", label: "MOU agreement", icon: FileText, roles: ["NGO"] },
         { href: "/dashboard/stats", label: "Impact stats", icon: BarChart3, roles: ["Mentor", "CorporatePartner", "NGO", "SuperAdmin"] },
-        { href: "/dashboard/profile", label: "AI interview", icon: BrainCircuit, roles: ["Mentee", "Mentor", "CorporatePartner", "NGO"] },
+        { href: "/dashboard/profile", label: "AI profile", icon: BrainCircuit, roles: ["Mentee", "Mentor", "CorporatePartner", "NGO"] },
+        { href: "/profile", label: "Rendered profile", icon: Eye },
         { href: "/dashboard/articles", label: "My articles", icon: PenSquare, roles: ["Mentor", "Mentee"] },
         { href: studioHref, label: "Sanity Studio", icon: PenSquare, roles: ["SuperAdmin", "Moderator", "CorporatePartner", "NGO"], external: true },
         { href: "/events", label: "Events", icon: CalendarDays, roles: ["SuperAdmin", "Moderator"] },

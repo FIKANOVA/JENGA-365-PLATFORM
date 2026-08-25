@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
+import { getDashboardHref } from "@/lib/auth/roles";
 
 function fmt(n: number | undefined | null): string {
     if (n === undefined || n === null || !Number.isFinite(Number(n)) || Number(n) <= 0) return "—";
@@ -59,7 +60,7 @@ export default async function ImpactSocialPage() {
                     </Link>
                     {isAuthenticated ? (
                         <Link
-                            href="/dashboard"
+                            href={getDashboardHref((session?.user as any)?.role)}
                             className="inline-flex items-center gap-2 h-11 rounded-md border border-border bg-background px-5 text-label text-foreground transition-colors hover:bg-[color:var(--surface-2)]"
                         >
                             Go to Dashboard

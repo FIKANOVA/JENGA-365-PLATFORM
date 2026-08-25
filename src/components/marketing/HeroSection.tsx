@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
+import { getDashboardHref } from "@/lib/auth/roles";
 import { urlFor } from "@/lib/sanity/client";
 
 interface SanityImage {
@@ -150,7 +151,7 @@ export default function HeroSection({ heroImage, copy }: HeroSectionProps) {
                     >
                         {isAuthenticated ? (
                             <Link
-                                href="/dashboard"
+                                href={getDashboardHref((session?.user as any)?.role)}
                                 className="inline-flex w-full sm:w-auto items-center justify-between gap-3 h-12 pl-7 pr-1.5 rounded-full font-medium text-white transition-colors hover:bg-[#004d00] shadow-lg whitespace-nowrap"
                                 style={{ background: "var(--brand-green)" }}
                             >

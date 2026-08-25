@@ -17,6 +17,26 @@ export function normalizeRole(r?: string | null): Role {
     return "Mentee";
 }
 
+export function getDashboardHref(role?: string | null): string {
+    const r = normalizeRole(role);
+    switch (r) {
+        case "Mentee":
+            return "/dashboard/mentee";
+        case "Mentor":
+            return "/dashboard/mentor";
+        case "CorporatePartner":
+            return "/dashboard/partner";
+        case "NGO":
+            return "/dashboard/ngo";
+        case "Moderator":
+            return "/dashboard/moderator";
+        case "SuperAdmin":
+            return "/dashboard/admin";
+        default:
+            return "/dashboard/mentee";
+    }
+}
+
 /** Both org-partner roles share partner surfaces (impact stats, partner profile, studio). */
 export function isPartnerRole(role: string | null | undefined): boolean {
     const norm = normalizeRole(role);

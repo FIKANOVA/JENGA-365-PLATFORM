@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ShieldCheck, Leaf, AlertTriangle, ArrowRight } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
+import { getDashboardHref } from "@/lib/auth/roles";
 
 interface SweatEquityBandProps {
     readonly bgImage?: string | null;
@@ -52,7 +53,7 @@ export default function SweatEquityBand({ bgImage }: SweatEquityBandProps) {
                         <div className="mt-10">
                             {isAuthenticated ? (
                                 <Link
-                                    href="/dashboard"
+                                    href={getDashboardHref((session?.user as any)?.role)}
                                     className="group/btn inline-flex max-w-full items-center justify-between gap-3 h-12 pl-6 pr-1.5 rounded-full text-sm sm:text-base font-medium text-white transition-opacity hover:opacity-90 shadow-lg"
                                     style={{ background: "var(--brand-green)" }}
                                 >

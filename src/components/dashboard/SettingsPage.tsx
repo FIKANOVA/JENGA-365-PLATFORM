@@ -9,6 +9,8 @@ import { authClient, signOut } from "@/lib/auth/client";
 import AvatarUpload from "@/components/shared/AvatarUpload";
 
 interface SettingsPageProps {
+    userId?: string;
+    role?: string;
     initialName?: string;
     initialEmail?: string;
     initialImage?: string | null;
@@ -28,6 +30,8 @@ interface SettingsPageProps {
 type TwoFAStep = "idle" | "confirm-password" | "show-qr" | "verify-code" | "done" | "disable-confirm";
 
 export default function SettingsPage({
+    userId,
+    role = "Mentee",
     initialName = "",
     initialEmail = "",
     initialImage = null,
@@ -240,9 +244,20 @@ export default function SettingsPage({
 
                 {/* ── Profile ──────────────────────────────────────────────── */}
                 <section className="border border-border/50 rounded-md bg-card p-6 shadow-sm space-y-6">
-                    <div className="flex items-center gap-3 mb-2">
-                        <User className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
-                        <h2 className="text-headline text-foreground">Profile</h2>
+                    <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+                        <div className="flex items-center gap-3">
+                            <User className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
+                            <h2 className="text-headline text-foreground">Profile</h2>
+                        </div>
+                        {userId && (
+                            <Link
+                                href={`/profile/${userId}`}
+                                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md border border-border bg-background hover:bg-[color:var(--surface-2)] text-foreground transition-colors"
+                            >
+                                <Eye className="w-3.5 h-3.5" style={{ color: "var(--brand-green)" }} />
+                                <span>View Rendered Profile</span>
+                            </Link>
+                        )}
                     </div>
 
                     <div className="pb-4 border-b border-border/50">

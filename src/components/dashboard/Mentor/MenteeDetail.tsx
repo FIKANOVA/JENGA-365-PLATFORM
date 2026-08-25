@@ -8,7 +8,7 @@ export default function MenteeDetail({ id }: { id: string }) {
         <div className="flex-1 bg-background p-6 md:p-12 h-full overflow-y-auto w-full">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 mb-8 text-eyebrow text-foreground-muted">
-                <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
+                <Link href="/dashboard/mentor" className="hover:text-foreground transition-colors">Dashboard</Link>
                 <ChevronRight className="w-3 h-3" />
                 <Link href="/dashboard/people" className="hover:text-foreground transition-colors">Mentees</Link>
                 <ChevronRight className="w-3 h-3" />

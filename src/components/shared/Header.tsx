@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Heart, ShoppingBag, ChevronDown, LayoutDashboard, Settings, LogOut, LifeBuoy } from "lucide-react";
+import { Menu, X, Heart, ShoppingBag, ChevronDown, LayoutDashboard, User, Settings, LogOut, LifeBuoy } from "lucide-react";
 import Logo from "@/components/shared/Logo";
 import UserAvatar from "@/components/shared/UserAvatar";
 import NotificationBell from "@/components/shared/NotificationBell";
 import RoleBadge from "@/components/shared/RoleBadge";
 import DonateButton from "@/components/shared/DonateButton";
 import { useSession, signOut } from "@/lib/auth/client";
+import { getDashboardHref } from "@/lib/auth/roles";
 import { cn } from "@/lib/utils";
 
 /**
@@ -301,10 +302,13 @@ function PublicHeader({ scrolled, hideHeader, light, mobileOpen, setMobileOpen }
 }
 
 // ── Avatar dropdown for authenticated users ──────────────────────────────────
-function AvatarMenu({ name, image, role, light }: { name: string; image?: string; role?: string; light: boolean }) {
+function AvatarMenu({ name, image, role, userId, light }: { name: string; image?: string; role?: string; userId?: string; light: boolean }) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const ref = useRef<HTMLDivElement>(null);
+
+    const dashboardHref = getDashboardHref(role);
+    const profileHref = userId ? `/profile/${userId}` : "/dashboard/profile";
 
     useEffect(() => {
         function onDocClick(e: MouseEvent) {
@@ -353,13 +357,24 @@ function AvatarMenu({ name, image, role, light }: { name: string; image?: string
                     <ul className="py-1">
                         <li>
                             <Link
-                                href="/dashboard"
+                                href={dashboardHref}
                                 role="menuitem"
                                 onClick={() => setOpen(false)}
                                 className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-white/10 text-white"
                             >
                                 <LayoutDashboard className="h-4 w-4" aria-hidden />
                                 My Dashboard
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href={profileHref}
+                                role="menuitem"
+                                onClick={() => setOpen(false)}
+                                className="flex items-center gap-2.5 px-4 py-2.5 text-body-sm hover:bg-white/10 text-white"
+                            >
+                                <User className="h-4 w-4" aria-hidden />
+                                View Profile
                             </Link>
                         </li>
                         <li>
@@ -415,7 +430,7 @@ function AuthenticatedHeader({
     mobileOpen,
     setMobileOpen,
 }: {
-    user: { name?: string | null; image?: string | null; role?: string | null };
+    user: { id?: string; name?: string | null; image?: string | null; role?: string | null };
     scrolled: boolean;
     hideHeader: boolean;
     light: boolean;
@@ -428,7 +443,7 @@ function AuthenticatedHeader({
             scrolled={scrolled}
             hideHeader={hideHeader}
             light={light}
-            drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} onClose={() => setMobileOpen(false)} /> : null}
+            drawer={mobileOpen ? <MobileDrawer isAuthenticated={true} userRole={user.role ?? undefined} userId={user.id} onClose={() => setMobileOpen(false)} /> : null}
         >
             <div className="flex items-center gap-4">
                 <Logo size="md" tone={light ? "light" : "default"} />
@@ -440,7 +455,7 @@ function AuthenticatedHeader({
                 <GlobalCTAs light={light} />
                 <span className={cn("hidden sm:inline-block h-5 w-px mx-1", light ? "bg-white/25" : "bg-border")} aria-hidden />
                 <NotificationBell />
-                <AvatarMenu name={displayName} image={user.image ?? undefined} role={user.role ?? undefined} light={light} />
+                <AvatarMenu name={displayName} image={user.image ?? undefined} role={user.role ?? undefined} userId={user.id} light={light} />
 
                 <button
                     type="button"
@@ -460,7 +475,9 @@ function AuthenticatedHeader({
 }
 
 // ── Mobile drawer (shared, render outside Shell for full-width) ──────────────
-function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; onClose: () => void }) {
+function MobileDrawer({ isAuthenticated, userRole, userId, onClose }: { isAuthenticated: boolean; userRole?: string; userId?: string; onClose: () => void }) {
+    const dashboardHref = getDashboardHref(userRole);
+    const profileHref = userId ? `/profile/${userId}` : "/dashboard/profile";
     const navGroups = isAuthenticated
         ? NAV_GROUPS.map(group => ({
             ...group,
@@ -471,6 +488,25 @@ function MobileDrawer({ isAuthenticated, onClose }: { isAuthenticated: boolean; 
     return (
         <div className="md:hidden border-t border-border/60 bg-background/80 backdrop-blur-xl backdrop-saturate-150 max-h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="mx-auto max-w-7xl px-6 py-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] flex flex-col gap-1">
+                {isAuthenticated && (
+                    <div className="flex flex-col gap-1 pb-2 border-b border-border mb-1">
+                        <Link
+                            href={dashboardHref}
+                            onClick={onClose}
+                            className="flex items-center gap-2.5 px-3 py-2.5 rounded-md hover:bg-surface-2 text-body font-medium text-foreground"
+                        >
+                            <LayoutDashboard className="h-4 w-4" style={{ color: "var(--brand-green)" }} /> My Dashboard
+                        </Link>
+                        <Link
+                            href={profileHref}
+                            onClick={onClose}
+                            className="flex items-center gap-2.5 px-3 py-2.5 rounded-md hover:bg-surface-2 text-body font-medium text-foreground"
+                        >
+                            <User className="h-4 w-4" style={{ color: "var(--brand-green)" }} /> View Profile
+                        </Link>
+                    </div>
+                )}
+
                 {navGroups.map((group) => (
                     <details key={group.label} className="group/section">
                         <summary className="flex items-center justify-between px-3 py-3 rounded-md hover:bg-surface-2 text-body text-foreground cursor-pointer list-none">
@@ -606,6 +642,7 @@ export default function Header() {
     return isAuthenticated && session?.user ? (
         <AuthenticatedHeader
             user={{
+                id: session.user.id,
                 name: session.user.name ?? "User",
                 image: (session.user as { image?: string | null }).image ?? null,
                 role: (session.user as { role?: string | null }).role ?? null,
