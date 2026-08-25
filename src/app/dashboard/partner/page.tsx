@@ -10,6 +10,8 @@ import { eq, desc } from "drizzle-orm";
 
 import { redirect } from "next/navigation";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 export const metadata: Metadata = {
     title: "Partner Impact Portal | Jenga365",
     description: "Welcome to your Jenga365 Corporate Partner Impact Portal.",
@@ -23,7 +25,7 @@ export default async function PartnerDashboardPage() {
         // ignore
     }
     if (!session?.user) redirect("/login");
-    const role = (session.user as any)?.role;
+    const role = normalizeRole((session.user as any)?.role);
     if (role !== "CorporatePartner" && role !== "SuperAdmin") {
         redirect("/dashboard");
     }

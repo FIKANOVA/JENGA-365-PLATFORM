@@ -5,6 +5,8 @@ import AdminDashboard from "@/components/dashboard/Admin/AdminDashboard";
 import { getAllUsers } from "@/lib/db/queries/dashboard";
 import { auth } from "@/lib/auth/config";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 export const metadata: Metadata = {
     title: "SuperAdmin Hub | Jenga365",
     description: "Welcome to your Jenga365 Superadmin Control Center.",
@@ -18,7 +20,7 @@ export default async function AdminDashboardPage() {
         // ignore
     }
     if (!session?.user) redirect("/login");
-    if ((session.user as any).role !== "SuperAdmin") redirect("/dashboard");
+    if (normalizeRole((session.user as any)?.role) !== "SuperAdmin") redirect("/dashboard");
 
     const allUsers = await getAllUsers().catch(() => []);
 

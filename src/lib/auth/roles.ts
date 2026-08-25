@@ -6,9 +6,21 @@ export type Role =
     | "Moderator"
     | "SuperAdmin";
 
+export function normalizeRole(r?: string | null): Role {
+    if (!r) return "Mentee";
+    const lower = r.toLowerCase().replace(/[-_]/g, "");
+    if (lower === "superadmin" || lower === "admin") return "SuperAdmin";
+    if (lower === "moderator") return "Moderator";
+    if (lower === "mentor") return "Mentor";
+    if (lower === "corporatepartner" || lower === "partner" || lower === "corporate") return "CorporatePartner";
+    if (lower === "ngo") return "NGO";
+    return "Mentee";
+}
+
 /** Both org-partner roles share partner surfaces (impact stats, partner profile, studio). */
 export function isPartnerRole(role: string | null | undefined): boolean {
-    return role === "CorporatePartner" || role === "NGO";
+    const norm = normalizeRole(role);
+    return norm === "CorporatePartner" || norm === "NGO";
 }
 
 export type ModeratorScope = "mentor_applications" | "corporate" | "content" | "all";

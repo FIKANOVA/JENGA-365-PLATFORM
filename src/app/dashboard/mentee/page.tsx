@@ -9,6 +9,8 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 export const metadata: Metadata = {
     title: "Mentee Dashboard | Jenga365",
     description: "Welcome to your Jenga365 Mentee Dashboard.",
@@ -26,7 +28,7 @@ export default async function MenteeDashboardPage() {
         redirect("/login");
     }
 
-    const role = (session.user as any)?.role;
+    const role = normalizeRole((session.user as any)?.role);
     if (role !== "Mentee" && role !== "SuperAdmin") {
         redirect("/dashboard");
     }
@@ -80,15 +82,30 @@ export default async function MenteeDashboardPage() {
         notes: j.notes ?? null,
     }));
 
+    const sanitizedMatches = (Array.isArray(matches) ? matches : []).map((m: any) => ({
+        id: String(m.id || ""),
+        name: m.name ? String(m.name) : null,
+        image: m.image ? String(m.image) : null,
+        title: String(m.title || "Mentor"),
+        locationRegion: m.locationRegion ? String(m.locationRegion) : null,
+        matchPercentage: Number(m.matchPercentage) || 0,
+        insights: {
+            profileMatch: Number(m.insights?.profileMatch) || 0,
+            deepSkillMatch: m.insights?.deepSkillMatch !== undefined ? Number(m.insights.deepSkillMatch) : undefined,
+            goalAlignment: m.insights?.goalAlignment !== undefined ? Number(m.insights.goalAlignment) : undefined,
+            reason: m.insights?.reason ? String(m.insights.reason) : undefined,
+        },
+    }));
+
     return (
         <MenteeDashboard
             userName={userName}
-            matches={matches || []}
+            matches={sanitizedMatches}
             pathway={sanitizedPathway}
             journalEntries={sanitizedJournal}
             ndaSigned={Boolean(dbUser?.ndaSigned ?? (session.user as any)?.ndaSigned)}
             onboarded={Boolean(dbUser?.onboarded ?? (session.user as any)?.onboarded)}
-            hasMentorMatch={(matches || []).length > 0}
+            hasMentorMatch={sanitizedMatches.length > 0}
         />
     );
 }

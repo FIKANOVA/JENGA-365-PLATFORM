@@ -6,6 +6,7 @@ import { getNgoMouStatus, getNgoExchangeLog } from "@/lib/actions/ngoWorkflow";
 import { db } from "@/lib/db";
 import { corporatePartners, users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { normalizeRole } from "@/lib/auth/roles";
 import NgoDashboard from "@/components/dashboard/NGO/NgoDashboard";
 
 export const metadata: Metadata = {
@@ -14,10 +15,16 @@ export const metadata: Metadata = {
 };
 
 export default async function NgoDashboardPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) redirect("/login");
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
 
     const user = session.user as any;
+    const role = normalizeRole(user.role);
 
     // Guard: only NGO org type may access this dashboard
     const dbUser = await db.query.users.findFirst({
@@ -26,7 +33,7 @@ export default async function NgoDashboardPage() {
     }).catch(() => null);
 
     const userMetadata = dbUser?.metadata as Record<string, unknown> | undefined;
-    if (user.role !== "NGO" && userMetadata?.orgType !== "NGO" && user.role !== "SuperAdmin") {
+    if (role !== "NGO" && userMetadata?.orgType !== "NGO" && role !== "SuperAdmin") {
         redirect("/dashboard");
     }
 

@@ -9,6 +9,8 @@ import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { getScopePermissions } from "@/lib/constants/moderator-scopes";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 export const metadata: Metadata = {
     title: "Moderator Hub | Jenga365",
     description: "Welcome to your Jenga365 Moderator Hub.",
@@ -25,7 +27,7 @@ export default async function ModeratorDashboardPage() {
         // ignore
     }
     if (!session?.user) redirect("/login");
-    const role = (session.user as any)?.role;
+    const role = normalizeRole((session.user as any)?.role);
     if (role !== "Moderator" && role !== "SuperAdmin") {
         redirect("/dashboard");
     }

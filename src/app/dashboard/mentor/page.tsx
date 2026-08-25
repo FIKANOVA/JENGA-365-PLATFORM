@@ -10,6 +10,8 @@ import {
 
 import { redirect } from "next/navigation";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 export const metadata: Metadata = {
     title: "Mentor Dashboard | Jenga365",
     description: "Welcome to your Jenga365 Mentor Dashboard.",
@@ -23,7 +25,7 @@ export default async function MentorDashboardPage() {
         // ignore
     }
     if (!session?.user) redirect("/login");
-    const role = (session.user as any)?.role;
+    const role = normalizeRole((session.user as any)?.role);
     if (role !== "Mentor" && role !== "SuperAdmin") {
         redirect("/dashboard");
     }

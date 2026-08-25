@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import {
     capabilityForRoute,
     hasCapability,
+    normalizeRole,
     parseScopes,
     type ModeratorScope,
     type Role,
@@ -119,7 +120,8 @@ export function middleware(request: NextRequest) {
     }
 
     if (sessionUser) {
-        const { role, moderationScope, ndaSigned, intakeCompleted } = sessionUser;
+        const role = normalizeRole(sessionUser.role);
+        const { moderationScope, ndaSigned, intakeCompleted } = sessionUser;
         const isOrgPartner = role === "CorporatePartner" || role === "NGO";
 
         // Org partners (corporate + NGO) sign an NDA at registration — gate until signed.
