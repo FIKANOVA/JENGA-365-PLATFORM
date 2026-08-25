@@ -26,8 +26,8 @@ export default async function NgoDashboardPage() {
     }).catch(() => null);
 
     const userMetadata = dbUser?.metadata as Record<string, unknown> | undefined;
-    if (user.role !== "NGO" && userMetadata?.orgType !== "NGO") {
-        redirect("/dashboard/partner");
+    if (user.role !== "NGO" && userMetadata?.orgType !== "NGO" && user.role !== "SuperAdmin") {
+        redirect("/dashboard");
     }
 
     const [mouStatus, exchangeLog, partner] = await Promise.all([

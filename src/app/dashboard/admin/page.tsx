@@ -11,8 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminDashboardPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
+    if ((session.user as any).role !== "SuperAdmin") redirect("/dashboard");
 
     const allUsers = await getAllUsers().catch(() => []);
 

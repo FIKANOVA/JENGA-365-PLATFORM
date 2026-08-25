@@ -1,13 +1,23 @@
-import { auth } from "@/lib/auth/config"
-import { headers } from "next/headers"
-import PowerHourForm from "./PowerHourForm"
+import { auth } from "@/lib/auth/config";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import PowerHourForm from "./PowerHourForm";
 
 export default async function PowerHourPage() {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
+    let session = null;
+    try {
+        session = await auth.api.getSession({
+            headers: await headers(),
+        });
+    } catch {
+        // ignore
+    }
 
-  if (!session?.user) return null
+    if (!session?.user) redirect("/login");
+    const role = (session.user as any)?.role;
+    if (role !== "Mentor" && role !== "SuperAdmin") {
+        redirect("/dashboard");
+    }
 
-  return <PowerHourForm mentorId={session.user.id} />
+    return <PowerHourForm mentorId={session.user.id} />;
 }

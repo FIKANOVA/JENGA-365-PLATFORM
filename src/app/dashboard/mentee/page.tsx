@@ -26,6 +26,11 @@ export default async function MenteeDashboardPage() {
         redirect("/login");
     }
 
+    const role = (session.user as any)?.role;
+    if (role !== "Mentee" && role !== "SuperAdmin") {
+        redirect("/dashboard");
+    }
+
     const userId = session.user.id;
 
     let dbUser = null;

@@ -18,8 +18,17 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function ModeratorDashboardPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
+    const role = (session.user as any)?.role;
+    if (role !== "Moderator" && role !== "SuperAdmin") {
+        redirect("/dashboard");
+    }
 
     const dbUser = await db.query.users.findFirst({ where: eq(users.id, session.user.id) }).catch(() => null);
     const scope = dbUser?.moderationScope ?? "B";

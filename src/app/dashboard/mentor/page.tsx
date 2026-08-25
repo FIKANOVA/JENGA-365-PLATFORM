@@ -8,14 +8,26 @@ import {
     getMentorUpcomingSessions,
 } from "@/lib/db/queries/dashboard";
 
+import { redirect } from "next/navigation";
+
 export const metadata: Metadata = {
     title: "Mentor Dashboard | Jenga365",
     description: "Welcome to your Jenga365 Mentor Dashboard.",
 };
 
 export default async function MentorDashboardPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    const userId = session?.user?.id;
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
+    const role = (session.user as any)?.role;
+    if (role !== "Mentor" && role !== "SuperAdmin") {
+        redirect("/dashboard");
+    }
+    const userId = session.user.id;
 
     const [pendingRequests, activeMentees, upcomingSessions] = await Promise.all([
         userId ? getMentorPendingRequests(userId).catch(() => []) : [],

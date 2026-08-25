@@ -131,17 +131,25 @@ export function middleware(request: NextRequest) {
             }
         }
 
-        // Keep the two partner portals separated.
-        if (role === "NGO" && pathname.startsWith("/dashboard/partner")) {
-            return NextResponse.redirect(new URL("/dashboard/ngo", request.url));
+        // Strict Role-Based Dashboard Access Control
+        if (pathname.startsWith("/dashboard/admin") && role !== "SuperAdmin") {
+            return NextResponse.redirect(new URL("/dashboard", request.url));
         }
-        if (role === "CorporatePartner" && pathname.startsWith("/dashboard/ngo")) {
-            return NextResponse.redirect(new URL("/dashboard/partner", request.url));
+        if (pathname.startsWith("/dashboard/moderator") && role !== "Moderator" && role !== "SuperAdmin") {
+            return NextResponse.redirect(new URL("/dashboard", request.url));
         }
-
-        // Mentee intake gating is enforced server-side in DashboardLayout using
-        // live database queries to avoid false-positive redirect loops caused by
-        // edge session cookieCache staleness.
+        if (pathname.startsWith("/dashboard/mentor") && role !== "Mentor" && role !== "SuperAdmin") {
+            return NextResponse.redirect(new URL("/dashboard", request.url));
+        }
+        if (pathname.startsWith("/dashboard/partner") && role !== "CorporatePartner" && role !== "SuperAdmin") {
+            return NextResponse.redirect(new URL("/dashboard", request.url));
+        }
+        if (pathname.startsWith("/dashboard/ngo") && role !== "NGO" && role !== "SuperAdmin") {
+            return NextResponse.redirect(new URL("/dashboard", request.url));
+        }
+        if (pathname.startsWith("/dashboard/mentee") && role !== "Mentee" && role !== "SuperAdmin") {
+            return NextResponse.redirect(new URL("/dashboard", request.url));
+        }
 
         // Capability-gated routes
         const cap = capabilityForRoute(pathname);

@@ -8,14 +8,26 @@ import { db } from "@/lib/db";
 import { corporatePartners, users, events } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 
+import { redirect } from "next/navigation";
+
 export const metadata: Metadata = {
     title: "Partner Impact Portal | Jenga365",
     description: "Welcome to your Jenga365 Corporate Partner Impact Portal.",
 };
 
 export default async function PartnerDashboardPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    const partnerId = (session?.user as any)?.partnerId as string | undefined;
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
+    const role = (session.user as any)?.role;
+    if (role !== "CorporatePartner" && role !== "SuperAdmin") {
+        redirect("/dashboard");
+    }
+    const partnerId = (session.user as any)?.partnerId as string | undefined;
 
     const [csrStats, partner, sponsoredMentors, upcomingEvents] = await Promise.all([
         partnerId ? getCsrStats(partnerId).catch(() => null) : Promise.resolve(null),
