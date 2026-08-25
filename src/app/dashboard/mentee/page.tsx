@@ -48,7 +48,7 @@ export default async function MenteeDashboardPage() {
             pathway={pathway}
             journalEntries={(journalEntries || []).map((j: any) => ({
                 id: String(j.id),
-                recordedAt: j.recordedAt ? new Date(j.recordedAt) : new Date(),
+                recordedAt: j.recordedAt ? new Date(j.recordedAt).toISOString() : new Date().toISOString(),
                 moodScore: Number(j.moodScore) || 3,
                 notes: j.notes ?? null,
             }))}

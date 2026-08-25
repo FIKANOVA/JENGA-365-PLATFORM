@@ -19,7 +19,7 @@ interface PathwayData {
 
 interface JournalEntry {
     id: string;
-    recordedAt: Date;
+    recordedAt: string | Date;
     moodScore: number;
     notes: string | null;
 }

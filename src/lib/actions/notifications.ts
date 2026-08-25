@@ -10,27 +10,47 @@ import {
 } from "@/lib/notifications/service";
 
 export async function getNotificationsAction() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) return [];
-    return getUnreadNotifications(session.user.id, 10);
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) return [];
+        return await getUnreadNotifications(session.user.id, 10);
+    } catch (e) {
+        console.error("[getNotificationsAction] Failed:", e);
+        return [];
+    }
 }
 
 export async function getUnreadCountAction(): Promise<number> {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) return 0;
-    return getUnreadCount(session.user.id);
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) return 0;
+        return await getUnreadCount(session.user.id);
+    } catch (e) {
+        console.error("[getUnreadCountAction] Failed:", e);
+        return 0;
+    }
 }
 
 export async function markNotificationReadAction(notificationId: string) {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) throw new Error("UNAUTHORIZED");
-    await markAsRead(notificationId, session.user.id);
-    return { success: true };
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) return { success: false, error: "UNAUTHORIZED" };
+        await markAsRead(notificationId, session.user.id);
+        return { success: true };
+    } catch (e) {
+        console.error("[markNotificationReadAction] Failed:", e);
+        return { success: false, error: "Failed to mark as read" };
+    }
 }
 
 export async function markAllNotificationsReadAction() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) throw new Error("UNAUTHORIZED");
-    await markAllAsRead(session.user.id);
-    return { success: true };
+    try {
+        const session = await auth.api.getSession({ headers: await headers() });
+        if (!session?.user?.id) return { success: false, error: "UNAUTHORIZED" };
+        await markAllAsRead(session.user.id);
+        return { success: true };
+    } catch (e) {
+        console.error("[markAllNotificationsReadAction] Failed:", e);
+        return { success: false, error: "Failed to mark all as read" };
+    }
 }
