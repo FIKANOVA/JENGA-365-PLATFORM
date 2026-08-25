@@ -65,7 +65,7 @@ export async function submitDiagnosticIntake(formData: IntakeFormData) {
       embedding = await generateProfileEmbedding(embeddingText)
     } catch {
       // Embedding API failure: intake data is preserved; embeddingStale=true
-      // signals Amani should regenerate on next dashboard visit.
+      // signals Jenga AI should regenerate on next dashboard visit.
     }
 
     // Atomic: intake row + resilience baseline + intakeCompleted flip ship together

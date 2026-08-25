@@ -26,7 +26,7 @@ vi.mock('@/lib/db/schema', () => ({
 vi.mock('@/lib/ai/embeddings', () => ({
   generateProfileEmbedding: vi.fn().mockResolvedValue(new Array(768).fill(0.1)),
 }))
-vi.mock('@ai-sdk/google', () => ({ google: vi.fn(() => 'model') }))
+vi.mock('@ai-sdk/google', () => ({ createGoogleGenerativeAI: vi.fn(() => vi.fn(() => 'model')), google: vi.fn(() => 'model') }))
 vi.mock('ai', () => ({ generateText: vi.fn().mockResolvedValue({ text: 'profile summary' }) }))
 vi.mock('pdf-parse', () => ({ default: vi.fn().mockResolvedValue({ text: 'Software engineer with 10 years of experience in TypeScript and React. Led multiple teams and shipped production systems at scale.' }) }))
 vi.mock('drizzle-orm', () => ({ eq: vi.fn(() => 'eq') }))

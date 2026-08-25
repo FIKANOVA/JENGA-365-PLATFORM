@@ -1,5 +1,9 @@
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { embed } from "ai";
+
+const google = createGoogleGenerativeAI({
+    apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || "",
+});
 
 // Note: Gemini's text-embedding-004 produces 768-dimensional vectors.
 // Ensure your Neon DB schema uses vector(768) for the embedding column.

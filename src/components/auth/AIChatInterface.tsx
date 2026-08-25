@@ -20,7 +20,7 @@ interface AIChatInterfaceProps {
 export default function AIChatInterface({
     initialMessage,
     onComplete,
-    agentName = "Amani",
+    agentName = "Jenga AI",
     agentRole = "AI ONBOARDING SPECIALIST"
 }: AIChatInterfaceProps) {
     const [messages, setMessages] = useState<Message[]>([

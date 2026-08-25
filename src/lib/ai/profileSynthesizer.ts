@@ -2,9 +2,13 @@ import { db } from "@/lib/db";
 import { users, userProfileAssets, userChunks } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { generateProfileEmbedding } from "./embeddings";
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 import * as pdfParseModule from "pdf-parse";
+
+const google = createGoogleGenerativeAI({
+    apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || "",
+});
 
 const pdfParse = (pdfParseModule as any).default || pdfParseModule;
 

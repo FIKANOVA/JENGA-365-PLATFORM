@@ -8,7 +8,7 @@ import AIProfileClient from "./AIProfileClient";
 
 export const metadata: Metadata = {
     title: "Profile & AI Interview | Jenga365",
-    description: "View your rendered profile and refine your profile with Amani AI.",
+    description: "View your rendered profile and refine your profile with Jenga AI.",
 };
 
 const ALLOWED_ROLES = ["Mentee", "Mentor", "CorporatePartner", "NGO", "Moderator", "SuperAdmin"];

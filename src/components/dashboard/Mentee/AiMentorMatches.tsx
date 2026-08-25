@@ -158,7 +158,7 @@ export default function AiMentorMatches({
       <div className="flex items-center justify-between">
         <h3 className="text-headline text-foreground">AI Mentor Recommendations</h3>
         <span className="text-xs text-foreground-muted">
-          Updated dynamically via Amani AI
+          Updated dynamically via Jenga AI
         </span>
       </div>
 

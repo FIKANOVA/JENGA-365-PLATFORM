@@ -135,7 +135,7 @@ export default function AIProfileClient({ profile, userId }: AIProfileClientProp
                     <div>
                         <h1 className="text-display-md text-foreground mb-1">AI profile interview</h1>
                         <p className="text-body-sm text-foreground-muted">
-                            Chat with Amani AI to refine your profile. A stronger profile improves your match quality.
+                            Chat with Jenga AI to refine your profile. A stronger profile improves your match quality.
                             This is optional — you have full platform access regardless.
                         </p>
                     </div>
@@ -146,7 +146,7 @@ export default function AIProfileClient({ profile, userId }: AIProfileClientProp
                     >
                         <p className="text-eyebrow text-foreground-muted uppercase tracking-wider font-semibold">What happens</p>
                         <ul className="text-body-sm text-foreground space-y-1 list-disc list-inside">
-                            <li>Amani guides you through a short 5-phase structured conversation</li>
+                            <li>Jenga AI guides you through a short 5-phase structured conversation</li>
                             <li>Your responses generate an updated profile embedding stored securely</li>
                             <li>The embedding dynamically surfaces higher-quality mentor/mentee matches</li>
                             <li>You can retake the interview whenever your goals or experience evolve</li>
@@ -179,7 +179,11 @@ export default function AIProfileClient({ profile, userId }: AIProfileClientProp
                     )}
 
                     {state === "interviewing" && (
-                        <AIInterviewer onComplete={handleComplete} />
+                        <AIInterviewer
+                            onComplete={handleComplete}
+                            role={profile?.role}
+                            userName={profile?.name ?? undefined}
+                        />
                     )}
 
                     {state === "synthesizing" && (

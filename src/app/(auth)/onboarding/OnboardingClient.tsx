@@ -123,7 +123,7 @@ export default function OnboardingClient() {
                                 Finalizing your profile…
                             </h2>
                             <p className="mt-2 text-body-sm text-foreground-muted">
-                                Amani AI is synthesizing your impact roadmap.
+                                Jenga AI is synthesizing your impact roadmap.
                             </p>
                         </div>
                     ) : (
