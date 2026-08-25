@@ -73,7 +73,12 @@ const ROLE_CARDS: Record<EffectiveRole, ContentCard[]> = {
 };
 
 export default async function ContentPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
 
     const effectiveRole = await resolveEffectiveRole(

@@ -1,14 +1,20 @@
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { normalizeRole } from "@/lib/auth/roles";
 import { getMyDirectory } from "@/lib/actions/userSearch";
 import DirectoryView from "@/components/dashboard/shared/DirectoryView";
 
 export default async function PeoplePage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) redirect("/login");
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
 
-    const role = (session.user as { role?: string }).role;
+    const role = normalizeRole((session.user as any)?.role);
 
     // SuperAdmin has the full user-management table on the admin hub.
     if (role === "SuperAdmin") redirect("/dashboard/admin");
@@ -16,6 +22,6 @@ export default async function PeoplePage() {
     if (role === "CorporatePartner" || role === "NGO") redirect("/mentors");
 
     // Mentee → assigned mentor(s); Mentor → assigned mentees; Moderator → scoped directory.
-    const data = await getMyDirectory();
-    return <DirectoryView data={data} />;
+    const data = await getMyDirectory().catch(() => ({ self: null, records: [] }));
+    return <DirectoryView data={data as any} />;
 }

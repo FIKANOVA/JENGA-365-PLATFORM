@@ -19,13 +19,18 @@ const NEON_TO_ROW_STATUS: Record<string, ArticleStatus> = {
 };
 
 export default async function MyArticlesPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login?next=/dashboard/articles");
 
     const rows = await db.query.articles.findMany({
         where: and(eq(articles.authorId, session.user.id), isNull(articles.deletedAt)),
         orderBy: [desc(articles.lastEditedAt)],
-    });
+    }).catch(() => []);
 
     return (
         <div className="flex-1 p-8 lg:p-12 bg-background min-h-screen">

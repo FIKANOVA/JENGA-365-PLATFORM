@@ -8,6 +8,8 @@ import ArticleEditorClient from "@/components/dashboard/articles/ArticleEditorCl
 import { hydrateCoAuthors } from "@/lib/actions/userSearch";
 import { portableToMarkdown } from "@/lib/sanity/markdownPortable";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 export const dynamic = "force-dynamic";
 
 function refToUrl(ref: string): string | null {
@@ -25,15 +27,20 @@ export default async function EditArticlePage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect(`/login?next=/dashboard/articles/${id}/edit`);
 
     const article = await db.query.articles.findFirst({
         where: and(eq(articles.id, id), isNull(articles.deletedAt)),
-    });
+    }).catch(() => null);
     if (!article) notFound();
 
-    const role = (session.user as { role?: string }).role;
+    const role = normalizeRole((session.user as any)?.role);
     const owns = article.authorId === session.user.id;
     const canEdit = owns || role === "SuperAdmin" || role === "Moderator";
     const canFeature = role === "SuperAdmin" || role === "Moderator";

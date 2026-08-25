@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
+import { normalizeRole } from "@/lib/auth/roles";
 import CorporateInviteForm from "@/components/dashboard/Admin/CorporateInviteForm";
 
 export const metadata: Metadata = {
@@ -10,9 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CorporateInvitePage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
-    if ((session.user as { role?: string }).role !== "SuperAdmin") redirect("/dashboard");
+    if (normalizeRole((session.user as any)?.role) !== "SuperAdmin") redirect("/dashboard");
 
     return (
         <div className="mx-auto max-w-2xl px-6 lg:px-8 py-8">

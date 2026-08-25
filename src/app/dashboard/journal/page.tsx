@@ -5,8 +5,13 @@ import { getMenteeMoodJournal } from "@/lib/db/queries/dashboard";
 import { Smile, Meh, Frown } from "lucide-react";
 
 export default async function JournalPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) redirect("/login");
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
     const userId = session.user.id;
 
     const entries = await getMenteeMoodJournal(userId).catch(() => []);

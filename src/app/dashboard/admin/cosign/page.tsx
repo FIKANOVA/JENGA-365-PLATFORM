@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { suspensionCosigns, users } from "@/lib/db/schema";
 import { and, eq, desc, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
+import { normalizeRole } from "@/lib/auth/roles";
 import CosignList, { type CosignRow } from "@/components/dashboard/Admin/CosignList";
 
 export const metadata: Metadata = {
@@ -14,9 +15,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CosignPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
-    if ((session.user as { role?: string }).role !== "SuperAdmin") redirect("/dashboard");
+    if (normalizeRole((session.user as any)?.role) !== "SuperAdmin") redirect("/dashboard");
 
     const target = alias(users, "target_user");
     const requester = alias(users, "requesting_user");

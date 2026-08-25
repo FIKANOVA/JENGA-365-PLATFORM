@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth/config";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { normalizeRole } from "@/lib/auth/roles";
 import PowerHourForm from "./PowerHourForm";
 
 export default async function PowerHourPage() {
@@ -14,7 +15,7 @@ export default async function PowerHourPage() {
     }
 
     if (!session?.user) redirect("/login");
-    const role = (session.user as any)?.role;
+    const role = normalizeRole((session.user as any)?.role);
     if (role !== "Mentor" && role !== "SuperAdmin") {
         redirect("/dashboard");
     }

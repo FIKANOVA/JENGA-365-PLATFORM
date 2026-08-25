@@ -1,5 +1,6 @@
 import { getSession } from "@/lib/auth/server";
 import { redirect } from "next/navigation";
+import { normalizeRole } from "@/lib/auth/roles";
 import { fetchProducts } from "@/lib/sanity/queries";
 import { getMerchandiseMap } from "@/lib/actions/merchandise";
 import Link from "next/link";
@@ -7,9 +8,16 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import InventoryStockEditor from "@/components/dashboard/moderator/InventoryStockEditor";
 
 export default async function ModeratorInventoryPage() {
-    const session = await getSession();
-    if (!session || !["Moderator", "SuperAdmin"].includes((session.user as any).role)) {
-        redirect("/login");
+    let session = null;
+    try {
+        session = await getSession();
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
+    const role = normalizeRole((session.user as any)?.role);
+    if (role !== "Moderator" && role !== "SuperAdmin") {
+        redirect("/dashboard");
     }
 
     const [products, stockMap] = await Promise.all([

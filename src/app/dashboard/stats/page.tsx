@@ -4,15 +4,22 @@ import { redirect } from "next/navigation";
 import { getGlobalImpactStats } from "@/lib/actions/marketing";
 import { BarChart3, Clock, Users, TrendingUp, Trees, Leaf } from "lucide-react";
 
+import { normalizeRole } from "@/lib/auth/roles";
+
 function fmt(n: number | undefined | null): string {
     if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) return "—";
     return n.toLocaleString();
 }
 
 export default async function StatsPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session) redirect("/login");
-    const role = (session.user as any).role as string;
+    const role = normalizeRole((session.user as any)?.role);
     if (!["Mentor", "CorporatePartner", "NGO", "SuperAdmin"].includes(role)) redirect("/dashboard");
 
     const stats = await getGlobalImpactStats();

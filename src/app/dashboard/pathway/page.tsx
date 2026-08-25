@@ -5,8 +5,13 @@ import { getMenteeLearningPathway } from "@/lib/db/queries/dashboard";
 import LearningPathwayTracker from "@/components/dashboard/Mentee/LearningPathwayTracker";
 
 export default async function PathwayPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) redirect("/login");
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
     const userId = session.user.id;
 
     const pathway = await getMenteeLearningPathway(userId).catch(() => null);

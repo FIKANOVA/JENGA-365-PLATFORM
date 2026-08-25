@@ -3,13 +3,18 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { ndaDocuments, ndaSignatures, users } from "@/lib/db/schema";
-import { count, desc, eq } from "drizzle-orm";
+import { normalizeRole } from "@/lib/auth/roles";
 import NDAManager, { type NdaVersionRow } from "@/components/dashboard/Admin/NDAManager";
 
 export default async function NDAManagerPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
-    if ((session.user as any).role !== "SuperAdmin") redirect("/dashboard");
+    if (normalizeRole((session.user as any)?.role) !== "SuperAdmin") redirect("/dashboard");
 
     const [docs, totalRow] = await Promise.all([
         db.select().from(ndaDocuments).orderBy(desc(ndaDocuments.createdAt)),

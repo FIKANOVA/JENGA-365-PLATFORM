@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
+import { normalizeRole } from "@/lib/auth/roles";
 import MenteeDetail from "@/components/dashboard/Mentor/MenteeDetail";
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export default async function MenteeDetailPage({ params }: { params: Promise<{ i
     }
 
     if (!session?.user) redirect("/login");
-    const role = (session.user as any)?.role;
+    const role = normalizeRole((session.user as any)?.role);
     if (role !== "Mentor" && role !== "SuperAdmin") {
         redirect("/dashboard");
     }

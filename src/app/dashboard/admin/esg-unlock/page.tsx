@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { corporateUnlockMilestones, corporatePartners, users } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
+import { normalizeRole } from "@/lib/auth/roles";
 import EsgUnlockPanel, { type MilestoneRow, type PartnerLookerRow } from "@/components/dashboard/Admin/EsgUnlockPanel";
 
 export const metadata: Metadata = {
@@ -13,9 +14,14 @@ export const metadata: Metadata = {
 };
 
 export default async function EsgUnlockPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
-    if ((session.user as { role?: string }).role !== "SuperAdmin") redirect("/dashboard");
+    if (normalizeRole((session.user as any)?.role) !== "SuperAdmin") redirect("/dashboard");
 
     const [milestoneRows, partnerRows] = await Promise.all([
         db
