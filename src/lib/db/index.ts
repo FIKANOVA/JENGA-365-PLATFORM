@@ -110,7 +110,12 @@ if (!connectionString || connectionString.includes('dummy') || connectionString.
     } as any;
 } else {
     const client = neon(connectionString);
-    dbClient = drizzle(client, { schema });
+    const drizzleClient = drizzle(client, { schema });
+    // Polyfill db.transaction for neon-http to support sequential writes over stateless HTTP
+    (drizzleClient as any).transaction = async (cb: (tx: any) => Promise<any>) => {
+        return await cb(drizzleClient);
+    };
+    dbClient = drizzleClient;
 }
 
 export const db = dbClient;

@@ -89,6 +89,8 @@ export async function getMentorMatches(params: {
         .select({
             id: users.id,
             name: users.name,
+            image: users.image,
+            metadata: users.metadata,
             locationRegion: users.locationRegion,
             profileScore: semanticScore,
             goalScore,
@@ -108,14 +110,35 @@ export async function getMentorMatches(params: {
         .orderBy(desc(totalScore))
         .limit(limit);
 
-    return results.map((r) => ({
-        id: r.id,
-        name: r.name,
-        locationRegion: r.locationRegion,
-        matchPercentage: Math.round((Number(r.totalScore) || 0) * 100),
-        insights: {
-            profileMatch: Math.round((Number(r.profileScore) || 0) * 100),
-            goalAlignment: Math.round((Number(r.goalScore) || 0) * 100),
-        },
-    }));
+    return results.map((r) => {
+        const matchPct = Math.round((Number(r.totalScore) || 0) * 100);
+        const profileMatch = Math.round((Number(r.profileScore) || 0) * 100);
+        const goalAlignment = Math.round((Number(r.goalScore) || 0) * 100);
+        const meta = (r.metadata || {}) as Record<string, any>;
+
+        let reason = "Recommended based on your diagnostic profile";
+        if (Number(r.goalScore) > 0.5 && Number(r.profileScore) > 0.8) {
+            reason = "Strong alignment in career goals and technical expertise";
+        } else if (Number(r.goalScore) > 0.5) {
+            reason = "Direct match on your key career learning goals";
+        } else if (r.locationRegion) {
+            reason = `Top mentor in ${r.locationRegion} with strong background match`;
+        } else if (Number(r.profileScore) > 0.85) {
+            reason = "High synergy in professional background and mentorship style";
+        }
+
+        return {
+            id: r.id,
+            name: r.name,
+            image: r.image ?? null,
+            title: (meta.profession || meta.professionalTitle || "Mentor") as string,
+            locationRegion: r.locationRegion,
+            matchPercentage: Math.max(1, Math.min(99, matchPct)),
+            insights: {
+                profileMatch,
+                goalAlignment,
+                reason,
+            },
+        };
+    });
 }

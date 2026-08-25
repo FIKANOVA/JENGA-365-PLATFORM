@@ -3,15 +3,18 @@
 import { useState, useTransition } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { updateAuthorProfile } from "@/lib/actions/authorProfile";
+import AvatarUpload from "@/components/shared/AvatarUpload";
 
 interface AuthorProfileFormProps {
     readonly initialBio: string;
     readonly initialTitle: string;
+    readonly initialImage?: string | null;
 }
 
-export default function AuthorProfileForm({ initialBio, initialTitle }: AuthorProfileFormProps) {
+export default function AuthorProfileForm({ initialBio, initialTitle, initialImage }: AuthorProfileFormProps) {
     const [bio, setBio] = useState(initialBio);
     const [title, setTitle] = useState(initialTitle);
+    const [imageUrl, setImageUrl] = useState<string | null>(initialImage || null);
     const [pending, start] = useTransition();
     const [savedAt, setSavedAt] = useState<Date | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -33,6 +36,18 @@ export default function AuthorProfileForm({ initialBio, initialTitle }: AuthorPr
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2 pb-4 border-b border-border/60">
+                <label className="text-label text-foreground block">
+                    Author Photo
+                </label>
+                <AvatarUpload
+                    currentImageUrl={imageUrl}
+                    userName="Author"
+                    onAvatarChange={(newUrl) => setImageUrl(newUrl)}
+                    size="md"
+                />
+            </div>
+
             <div className="space-y-2">
                 <label htmlFor="title" className="text-label text-foreground">
                     Professional title

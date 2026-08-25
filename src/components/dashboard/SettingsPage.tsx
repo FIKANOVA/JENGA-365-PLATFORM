@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import { Save, Download, Shield, User, Loader2, Check, X, Copy, Eye, EyeOff, PenSquare, ArrowRight, AlertTriangle, Trash2 } from "lucide-react";
 import { updateProfile, requestDataExport, deleteSelfAccountAction } from "@/lib/actions/settings";
 import { authClient, signOut } from "@/lib/auth/client";
+import AvatarUpload from "@/components/shared/AvatarUpload";
 
 interface SettingsPageProps {
     initialName?: string;
     initialEmail?: string;
+    initialImage?: string | null;
     initialLocationRegion?: string;
     initialProfession?: string;
     initialBio?: string;
@@ -28,6 +30,7 @@ type TwoFAStep = "idle" | "confirm-password" | "show-qr" | "verify-code" | "done
 export default function SettingsPage({
     initialName = "",
     initialEmail = "",
+    initialImage = null,
     initialLocationRegion = "",
     initialProfession = "",
     initialBio = "",
@@ -41,6 +44,7 @@ export default function SettingsPage({
 }: SettingsPageProps) {
     const router = useRouter();
     const [name, setName] = useState(initialName);
+    const [imageUrl, setImageUrl] = useState<string | null>(initialImage);
     const [locationRegion, setLocationRegion] = useState(initialLocationRegion);
     const [profession, setProfession] = useState(initialProfession);
     const [bio, setBio] = useState(initialBio);
@@ -239,6 +243,18 @@ export default function SettingsPage({
                     <div className="flex items-center gap-3 mb-2">
                         <User className="w-5 h-5" style={{ color: "var(--brand-green)" }} />
                         <h2 className="text-headline text-foreground">Profile</h2>
+                    </div>
+
+                    <div className="pb-4 border-b border-border/50">
+                        <label className="block text-xs font-semibold text-foreground-muted uppercase tracking-wider mb-3">
+                            Profile Picture
+                        </label>
+                        <AvatarUpload
+                            currentImageUrl={imageUrl}
+                            userName={name || "User"}
+                            onAvatarChange={(newUrl) => setImageUrl(newUrl)}
+                            size="md"
+                        />
                     </div>
 
                     <form onSubmit={handleSaveProfile} className="space-y-4">

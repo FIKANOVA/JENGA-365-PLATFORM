@@ -26,6 +26,7 @@ export default async function DashboardSettingsPage() {
         <SettingsPage
             initialName={dbUser?.name ?? session.user.name ?? ""}
             initialEmail={dbUser?.email ?? session.user.email ?? ""}
+            initialImage={dbUser?.image ?? session.user.image ?? null}
             initialLocationRegion={dbUser?.locationRegion ?? ""}
             initialProfession={meta.profession || meta.professionalTitle || ""}
             initialBio={meta.bio || ""}

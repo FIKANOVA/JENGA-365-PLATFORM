@@ -24,6 +24,7 @@ export default async function AuthorProfilePage() {
                 <AuthorProfileForm
                     initialBio={profile.bio}
                     initialTitle={profile.professionalTitle}
+                    initialImage={(session.user as any)?.image ?? null}
                 />
             </div>
         </div>

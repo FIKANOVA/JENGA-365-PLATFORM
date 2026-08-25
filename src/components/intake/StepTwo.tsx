@@ -2,6 +2,7 @@
 
 import type { AcademicStanding, CareerTag } from '@/lib/intake/types'
 import { CAREER_TAGS } from '@/lib/intake/types'
+import AvatarUpload from '@/components/shared/AvatarUpload'
 
 const MAX_CAREER_TAGS = 3
 const MAX_FREE_TEXT = 280
@@ -40,6 +41,13 @@ export default function StepTwo({
 
   return (
     <section className="flex flex-col gap-8">
+      {/* Optional Avatar Upload */}
+      <div className="flex flex-col gap-2 p-4 rounded-lg border border-border/60 bg-[var(--surface-1)]">
+        <p className="font-semibold text-foreground text-sm">
+          Profile Photo <span className="font-normal text-xs text-foreground-muted">(optional)</span>
+        </p>
+        <AvatarUpload userName="Mentee" size="sm" />
+      </div>
       {/* Academic Standing */}
       <div className="flex flex-col gap-3">
         <p className="font-semibold text-foreground text-body">
