@@ -139,7 +139,7 @@ function MatchTile({
           <InsightChip label="Goals" value={mentor.insights.goalAlignment} />
         )}
         <Link
-          href={`/dashboard/mentor/mentees/${mentor.id}`}
+          href={`/mentors/${mentor.id}`}
           className="ml-auto inline-flex items-center gap-1 text-xs font-semibold hover:underline"
           style={{ color: "var(--brand-green)" }}
         >

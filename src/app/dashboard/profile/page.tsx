@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/config";
 import { redirect } from "next/navigation";
+import { normalizeRole } from "@/lib/auth/roles";
 import AIProfileClient from "./AIProfileClient";
 
 export const metadata: Metadata = {
@@ -9,14 +10,19 @@ export const metadata: Metadata = {
     description: "Refine your profile with Amani AI to improve your mentor match quality.",
 };
 
-const ALLOWED_ROLES = ["Mentee", "Mentor", "CorporatePartner", "NGO"];
+const ALLOWED_ROLES = ["Mentee", "Mentor", "CorporatePartner", "NGO", "SuperAdmin"];
 
 export default async function AIProfilePage() {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) redirect("/login");
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
+    if (!session?.user) redirect("/login");
 
-    const user = session.user as any;
-    if (!ALLOWED_ROLES.includes(user.role)) redirect("/dashboard");
+    const role = normalizeRole((session.user as any)?.role);
+    if (!ALLOWED_ROLES.includes(role)) redirect("/dashboard");
 
     return (
         <div className="flex-1 p-8 lg:p-12 bg-background min-h-screen">

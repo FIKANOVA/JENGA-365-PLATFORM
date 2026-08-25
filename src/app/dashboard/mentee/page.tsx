@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
 import MenteeDashboard from "@/components/dashboard/Mentee/MenteeDashboard";
-import { getAiMentorMatches } from "@/lib/actions/matching";
+import { getMentorMatches } from "@/lib/db/queries/matching";
 import { getMenteeLearningPathway, getMenteeMoodJournal } from "@/lib/db/queries/dashboard";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
@@ -49,7 +49,13 @@ export default async function MenteeDashboardPage() {
     }
 
     try {
-        matches = await getAiMentorMatches();
+        if (dbUser?.embedding && !dbUser.embeddingStale && Array.isArray(dbUser.embedding) && dbUser.embedding.length > 0) {
+            matches = await getMentorMatches({
+                menteeEmbedding: dbUser.embedding as number[],
+                menteeId: userId,
+                limit: 5,
+            });
+        }
     } catch (err) {
         console.error("[MenteeDashboard] matches query failed:", err);
     }

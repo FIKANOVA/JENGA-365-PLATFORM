@@ -51,6 +51,14 @@ function matchesPrefix(pathname: string, routes: string[]): boolean {
 }
 
 export function middleware(request: NextRequest) {
+    const host = request.headers.get("host") || "";
+    if (host.startsWith("www.jenga365.org")) {
+        const url = request.nextUrl.clone();
+        url.host = "jenga365.org";
+        url.protocol = "https";
+        return NextResponse.redirect(url, { status: 301 });
+    }
+
     const { pathname } = request.nextUrl;
 
     if (

@@ -57,9 +57,11 @@ export default function MenteeRegisterPage() {
         setError(null);
         setSocialLoading(true);
         try {
+            const origin = typeof window !== "undefined" ? window.location.origin : "https://jenga365.org";
             await signIn.social({
                 provider: "google",
-                callbackURL: "/onboarding",
+                callbackURL: `${origin}/onboarding`,
+                errorCallbackURL: `${origin}/login`,
             });
         } catch {
             setError("Failed to sign up with Google. Please try again.");

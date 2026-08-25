@@ -38,9 +38,12 @@ export default function LoginForm() {
         setError(null);
         setSocialLoading(true);
         try {
+            const origin = typeof window !== "undefined" ? window.location.origin : "https://jenga365.org";
+            const targetUrl = callbackUrl.startsWith("/") ? `${origin}${callbackUrl}` : callbackUrl;
             await signIn.social({
                 provider: "google",
-                callbackURL: callbackUrl,
+                callbackURL: targetUrl,
+                errorCallbackURL: `${origin}/login`,
             });
         } catch {
             setError("Failed to sign in with Google. Please try again.");
