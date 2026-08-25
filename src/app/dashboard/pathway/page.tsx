@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { getMenteeLearningPathway } from "@/lib/db/queries/dashboard";
 import LearningPathwayTracker from "@/components/dashboard/Mentee/LearningPathwayTracker";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function PathwayPage() {
     let session = null;
     try {

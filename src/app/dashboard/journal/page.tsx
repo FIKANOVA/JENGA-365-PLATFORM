@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { getMenteeMoodJournal } from "@/lib/db/queries/dashboard";
 import { Smile, Meh, Frown } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function JournalPage() {
     let session = null;
     try {

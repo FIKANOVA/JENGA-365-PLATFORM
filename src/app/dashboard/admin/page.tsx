@@ -12,6 +12,9 @@ export const metadata: Metadata = {
     description: "Welcome to your Jenga365 Superadmin Control Center.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AdminDashboardPage() {
     let session = null;
     try {

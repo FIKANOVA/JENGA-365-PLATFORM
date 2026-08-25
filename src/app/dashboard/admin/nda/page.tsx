@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
 import { db } from "@/lib/db";
 import { ndaDocuments, ndaSignatures, users } from "@/lib/db/schema";
+import { count, desc, eq } from "drizzle-orm";
 import { normalizeRole } from "@/lib/auth/roles";
 import NDAManager, { type NdaVersionRow } from "@/components/dashboard/Admin/NDAManager";
 

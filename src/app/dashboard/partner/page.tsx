@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     description: "Welcome to your Jenga365 Corporate Partner Impact Portal.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function PartnerDashboardPage() {
     let session = null;
     try {

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     description: "Track your Resource Exchange contributions and volunteer workforce mobilised through Jenga365.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function NgoDashboardPage() {
     let session = null;
     try {

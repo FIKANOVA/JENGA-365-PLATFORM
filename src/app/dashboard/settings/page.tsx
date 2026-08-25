@@ -12,8 +12,16 @@ export const metadata: Metadata = {
     description: "Manage your Jenga365 profile and account security.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function DashboardSettingsPage() {
-    const session = await auth.api.getSession({ headers: await headers() });
+    let session = null;
+    try {
+        session = await auth.api.getSession({ headers: await headers() });
+    } catch {
+        // ignore
+    }
     if (!session?.user) redirect("/login");
 
     const dbUser = await db.query.users.findFirst({

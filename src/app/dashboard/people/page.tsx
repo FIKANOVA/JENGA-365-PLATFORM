@@ -5,6 +5,9 @@ import { normalizeRole } from "@/lib/auth/roles";
 import { getMyDirectory } from "@/lib/actions/userSearch";
 import DirectoryView from "@/components/dashboard/shared/DirectoryView";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function PeoplePage() {
     let session = null;
     try {

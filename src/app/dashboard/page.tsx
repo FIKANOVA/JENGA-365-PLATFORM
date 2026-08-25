@@ -15,6 +15,9 @@ const ROLE_REDIRECTS: Record<string, string> = {
     SuperAdmin: "/dashboard/admin",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function DashboardRootPage() {
     let session = null;
     try {

@@ -11,6 +11,9 @@ function fmt(n: number | undefined | null): string {
     return n.toLocaleString();
 }
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function StatsPage() {
     let session = null;
     try {

@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth/config";
 import { normalizeRole } from "@/lib/auth/roles";
 import { getAllUsers } from "@/lib/db/queries/dashboard";
 import ShadowView, { type ShadowUser } from "@/components/dashboard/Admin/ShadowView";

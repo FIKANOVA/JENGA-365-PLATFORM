@@ -12,6 +12,9 @@ export const metadata: Metadata = {
 
 const ALLOWED_ROLES = ["Mentee", "Mentor", "CorporatePartner", "NGO", "SuperAdmin"];
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AIProfilePage() {
     let session = null;
     try {
