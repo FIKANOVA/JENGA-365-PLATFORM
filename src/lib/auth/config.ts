@@ -48,13 +48,9 @@ export const auth = betterAuth({
         },
     },
 
-    // Advanced - Cross-subdomain cookie handling and secure session transport
+    // Advanced - Secure session transport
     advanced: {
         useSecureCookies: process.env.NODE_ENV === "production",
-        crossSubDomainCookies: {
-            enabled: process.env.NODE_ENV === "production",
-            domain: process.env.NODE_ENV === "production" ? ".jenga365.org" : undefined,
-        },
         defaultCookieAttributes: {
             sameSite: "lax",
             secure: process.env.NODE_ENV === "production",

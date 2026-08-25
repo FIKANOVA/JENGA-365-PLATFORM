@@ -201,7 +201,7 @@ export default function MenteeDashboard({
                                     >
                                         <div className="flex justify-between items-start mb-1.5 gap-2">
                                             <span className="text-body-sm text-foreground-muted">
-                                                {new Date(entry.recordedAt).toLocaleDateString()}
+                                                {String(entry.recordedAt).split("T")[0]}
                                             </span>
                                             <span
                                                 className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-label font-medium shrink-0"
