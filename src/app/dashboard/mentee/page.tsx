@@ -15,12 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function MenteeDashboardPage() {
-    let session = null;
-    try {
-        session = await auth.api.getSession({ headers: await headers() });
-    } catch {
-        redirect("/login");
-    }
+    const session = await auth.api.getSession({ headers: await headers() }).catch(() => null);
 
     if (!session?.user?.id) {
         redirect("/login");

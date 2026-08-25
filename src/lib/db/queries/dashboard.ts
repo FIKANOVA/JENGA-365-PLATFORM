@@ -12,31 +12,41 @@ import { eq, and, desc, or, gte, inArray } from "drizzle-orm";
 // ── Mentee ────────────────────────────────────────────────────────────────────
 
 export async function getMenteeLearningPathway(menteeId: string) {
-    // Find the mentee's active pair
-    const pair = await db.query.mentorshipPairs.findFirst({
-        where: and(
-            eq(mentorshipPairs.menteeId, menteeId),
-            or(
-                eq(mentorshipPairs.status, "active"),
-                eq(mentorshipPairs.status, "pending")
-            )
-        ),
-    });
+    try {
+        // Find the mentee's active pair
+        const pair = await db.query.mentorshipPairs.findFirst({
+            where: and(
+                eq(mentorshipPairs.menteeId, menteeId),
+                or(
+                    eq(mentorshipPairs.status, "active"),
+                    eq(mentorshipPairs.status, "pending")
+                )
+            ),
+        });
 
-    if (!pair) return null;
+        if (!pair) return null;
 
-    return db.query.learningPathways.findFirst({
-        where: eq(learningPathways.pairId, pair.id),
-    });
+        return await db.query.learningPathways.findFirst({
+            where: eq(learningPathways.pairId, pair.id),
+        });
+    } catch (err) {
+        console.error("[getMenteeLearningPathway] error:", err);
+        return null;
+    }
 }
 
 export async function getMenteeMoodJournal(menteeId: string, limit = 5) {
-    return db
-        .select()
-        .from(moodJournal)
-        .where(eq(moodJournal.menteeId, menteeId))
-        .orderBy(desc(moodJournal.recordedAt))
-        .limit(limit);
+    try {
+        return await db
+            .select()
+            .from(moodJournal)
+            .where(eq(moodJournal.menteeId, menteeId))
+            .orderBy(desc(moodJournal.recordedAt))
+            .limit(limit);
+    } catch (err) {
+        console.error("[getMenteeMoodJournal] error:", err);
+        return [];
+    }
 }
 
 export async function getMenteeSessions(menteeId: string, limit = 5) {
