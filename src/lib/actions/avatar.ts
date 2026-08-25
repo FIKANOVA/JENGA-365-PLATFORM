@@ -34,6 +34,9 @@ export async function uploadAvatarAction(formData: FormData): Promise<{
             return { success: false, error: "Image size exceeds 5MB limit." };
         }
 
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
         let imageUrl: string | null = null;
 
         // Try uploading to Sanity Asset CDN first
