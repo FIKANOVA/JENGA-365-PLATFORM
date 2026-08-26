@@ -157,8 +157,8 @@ export const pendingApprovalMentorEmail = (firstName: string, fullName: string, 
 
         ${DIVIDER}
         <p style="font-size:10px;color:#BB0000;font-family:Courier New,monospace;text-transform:uppercase;letter-spacing:3px;margin:24px 0 16px;">WHILE YOU WAIT</p>
-        ${INFO_ROW('📖', 'Browse our public articles at jenga365.com/articles')}
-        ${INFO_ROW('🏉', 'See upcoming events at jenga365.com/events')}
+        ${INFO_ROW('📖', 'Browse our public articles at jenga365.org/articles')}
+        ${INFO_ROW('🏉', 'See upcoming events at jenga365.org/events')}
         
         <div style="margin-top:24px;">
            ${BUTTON('Edit My Profile →', '/pending-approval', 'ghost')}
@@ -198,7 +198,7 @@ export const pendingApprovalCorporateEmail = (firstName: string, orgName: string
         ${INFO_ROW('⚪', 'Admin Approval')}
 
         <div style="margin-top:24px;">
-          ${BUTTON('Explore Jenga365 →', 'https://jenga365.com', 'ghost')}
+          ${BUTTON('Explore Jenga365 →', 'https://jenga365.org', 'ghost')}
         </div>
       </td>
     </tr>

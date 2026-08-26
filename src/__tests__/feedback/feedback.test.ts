@@ -14,7 +14,7 @@ vi.mock("@/lib/email/resend", () => ({
             send: vi.fn().mockResolvedValue({ id: "mock-email-id" }),
         },
     },
-    DEFAULT_FROM: "Jenga365 <noreply@jenga365.com>",
+    DEFAULT_FROM: "Jenga365 <noreply@jenga365.org>",
 }));
 
 describe("Feedback API Route", () => {

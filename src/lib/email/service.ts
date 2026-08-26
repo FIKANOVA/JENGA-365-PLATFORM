@@ -374,10 +374,10 @@ export class EmailService {
     static getTestData(templateType: EmailTemplateType): Record<string, any> {
         const base = {
             firstName: 'Amani',
-            email: 'amani@jenga365.com',
+            email: 'amani@jenga365.org',
             fullName: 'Amani Wangari',
             role: 'Mentor',
-            verifyUrl: 'https://jenga365.com/verify-email/test-token-123',
+            verifyUrl: 'https://jenga365.org/verify-email/test-token-123',
             token: 'test-token-123',
             title: 'Rugby Development Coach',
             submittedAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -402,10 +402,10 @@ export class EmailService {
             impact: 'Your donation provides rugby equipment for 5 youth players for an entire season.',
             adminName: 'Super Admin',
             scopes: ['Content Moderation', 'User Approvals', 'Event Management'],
-            inviteUrl: 'https://jenga365.com/admin-setup/invite-token-456',
+            inviteUrl: 'https://jenga365.org/admin-setup/invite-token-456',
             mentorFirstName: 'Amani',
             nextSteps: '1. Practice the tackle drills we reviewed\n2. Watch the video analysis shared in your dashboard\n3. Complete the fitness log by Friday',
-            resetUrl: 'https://jenga365.com/reset-password/reset-token-789',
+            resetUrl: 'https://jenga365.org/reset-password/reset-token-789',
             version: '2025.06.2',
         };
         return base;

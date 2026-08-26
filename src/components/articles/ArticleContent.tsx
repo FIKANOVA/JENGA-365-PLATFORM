@@ -137,6 +137,7 @@ export default function ArticleContent({ author, coAuthors, content, publishedAt
                                     const href = (value?.href ?? "") as string;
                                     const isSafe =
                                         href.startsWith("/") ||
+                                        href.startsWith("https://jenga365.org") ||
                                         href.startsWith("https://jenga365.com");
                                     return isSafe ? (
                                         <a href={href} rel="noopener noreferrer">
