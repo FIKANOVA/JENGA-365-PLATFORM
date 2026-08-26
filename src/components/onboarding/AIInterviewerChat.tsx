@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useState, useEffect, useRef, type FormEvent, type KeyboardEvent } from "react";
+import { useState, useEffect, useRef, useMemo, type FormEvent, type KeyboardEvent } from "react";
 import {
     Send,
     Bot,
@@ -27,10 +27,10 @@ interface AIInterviewerProps {
 
 function getMessageText(message: { parts?: Array<{ type: string; text?: string }>; content?: string }): string {
     if (message.parts && Array.isArray(message.parts)) {
-        return message.parts
+        const textParts = message.parts
             .filter((p) => p.type === "text" && p.text)
-            .map((p) => p.text!)
-            .join("");
+            .map((p) => p.text!);
+        if (textParts.length > 0) return textParts.join("");
     }
     return typeof message.content === "string" ? message.content : "";
 }
@@ -45,10 +45,15 @@ const PHASES = [
 
 export default function AIInterviewer({ onComplete, role = "Mentee", userName }: AIInterviewerProps) {
     const [inputValue, setInputValue] = useState("");
+    const transport = useMemo(
+        () =>
+            new DefaultChatTransport({
+                api: "/api/chat",
+            }),
+        []
+    );
     const { messages, sendMessage, status, error, regenerate, setMessages } = useChat({
-        transport: new DefaultChatTransport({
-            api: "/api/chat",
-        }),
+        transport,
     });
     const scrollRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);

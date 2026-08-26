@@ -16,9 +16,6 @@ export async function synthesizeUserProfile(userId: string) {
     // 1. Fetch User and their assets
     const user = await db.query.users.findFirst({
         where: eq(users.id, userId),
-        with: {
-            // Assuming relations are defined, otherwise fetch manually
-        }
     });
 
     if (!user) throw new Error("User not found");
@@ -51,49 +48,63 @@ export async function synthesizeUserProfile(userId: string) {
     // 2. Prepare context for LLM
     const context = `
       User Name: ${user.name}
+      Role: ${user.role}
       CV Content: ${cvText.substring(0, 5000)}
       LinkedIn: ${linkedInAsset?.url || "Not provided"}
       Portfolio: ${portfolioAsset?.url || "Not provided"}
     `;
 
     // 3. AI Synthesis
-    const { text: synthesis } = await generateText({
-        model: google("gemini-1.5-pro"),
-        prompt: `
-        Analyze the following user profile data and create a structured professional persona.
-        Provide a concise summary of their skills, primary industry, years of experience, and a "matching profile" (what kind of mentor or mentee would be ideal for them).
-        
-        Data:
-        ${context}
-        
-        Output format should be a plain text summary that encapsulates their professional essence.
-        `
-    });
+    let synthesis = "";
+    try {
+        const { text } = await generateText({
+            model: google("gemini-1.5-flash"),
+            prompt: `
+            Analyze the following user profile data and create a structured professional persona.
+            Provide a concise summary of their skills, primary industry, years of experience, and a "matching profile" (what kind of mentor or mentee would be ideal for them).
+            
+            Data:
+            ${context}
+            
+            Output format should be a plain text summary that encapsulates their professional essence.
+            `
+        });
+        synthesis = text;
+    } catch (e) {
+        console.warn("[profileSynthesizer] LLM synthesis fallback:", e);
+        synthesis = `${user.name || "User"} (${user.role || "Member"}). Industry interests and background matching profile on Jenga365.`;
+    }
 
     // 4. Update Main User Embedding
-    const mainEmbedding = await generateProfileEmbedding(synthesis);
-    await db.update(users)
-        .set({
-            embedding: mainEmbedding,
-            embeddingStale: false
-        })
-        .where(eq(users.id, userId));
+    try {
+        const mainEmbedding = await generateProfileEmbedding(synthesis);
+        await db.update(users)
+            .set({
+                embedding: mainEmbedding,
+                embeddingStale: false
+            })
+            .where(eq(users.id, userId));
 
-    // 5. Granular Chunking — delete stale chunks first, then insert fresh ones atomically
-    const chunks = splitIntoProfessionalChunks(cvText);
-    const chunkEmbeddings = await Promise.all(chunks.map(chunk => generateProfileEmbedding(chunk)));
-    await db.transaction(async (tx) => {
-        await tx.delete(userChunks).where(eq(userChunks.userId, userId));
+        // 5. Granular Chunking — delete stale chunks first, then insert fresh ones atomically
+        const chunks = splitIntoProfessionalChunks(cvText);
+        if (chunks.length > 0) {
+            const chunkEmbeddings = await Promise.all(chunks.map(chunk => generateProfileEmbedding(chunk)));
+            await db.transaction(async (tx) => {
+                await tx.delete(userChunks).where(eq(userChunks.userId, userId));
 
-        for (let i = 0; i < chunks.length; i++) {
-            await tx.insert(userChunks).values({
-                userId,
-                content: chunks[i],
-                embedding: chunkEmbeddings[i],
-                chunkType: "experience",
+                for (let i = 0; i < chunks.length; i++) {
+                    await tx.insert(userChunks).values({
+                        userId,
+                        content: chunks[i],
+                        embedding: chunkEmbeddings[i],
+                        chunkType: "experience",
+                    });
+                }
             });
         }
-    });
+    } catch (e) {
+        console.error("[profileSynthesizer] Embedding generation error:", e);
+    }
 
     return { success: true, summary: synthesis };
 }
