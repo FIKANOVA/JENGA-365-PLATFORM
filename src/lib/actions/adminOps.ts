@@ -173,7 +173,7 @@ export async function updateLegacyUserRoleAction(email: string, role: "SuperAdmi
 
             // Transactional email notification
             const firstName = targetUser.name ? targetUser.name.split(" ")[0] : email.split("@")[0];
-            const baseUrl = process.env.BETTER_AUTH_URL || "https://jenga365.org";
+            const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org").replace(/\/+$/, "");
             await EmailService.sendRoleUpdated(email, firstName, role, `${baseUrl}/dashboard`);
         }
 

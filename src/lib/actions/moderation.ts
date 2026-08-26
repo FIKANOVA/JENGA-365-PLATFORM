@@ -57,7 +57,7 @@ export async function approveUser(userId: string) {
 
     if (targetUser?.email) {
         const firstName = targetUser.name ? targetUser.name.split(" ")[0] : targetUser.email.split("@")[0];
-        const baseUrl = process.env.BETTER_AUTH_URL || "https://jenga365.org";
+        const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org").replace(/\/+$/, "");
         try {
             if (targetUser.role === "Mentor") {
                 await EmailService.sendMentorApproved(targetUser.email, firstName, targetUser.email);

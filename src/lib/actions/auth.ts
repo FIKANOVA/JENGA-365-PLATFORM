@@ -101,7 +101,8 @@ export async function createModeratorInvite(
             expiresAt,
         });
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? (process.env.BETTER_AUTH_URL || "https://jenga365.org");
+        const rawUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org";
+        const appUrl = rawUrl.replace(/\/+$/, "");
         const inviteUrl = `${appUrl}/moderator-invite/${token}`;
 
         // Fire-and-forget email
@@ -116,6 +117,40 @@ export async function createModeratorInvite(
         return { success: true, inviteUrl };
     } catch (err: unknown) {
         return { success: false, error: err instanceof Error ? err.message : "An unknown error occurred" };
+    }
+}
+
+/**
+ * Returns list of recent administrative invites with their active/used status.
+ */
+export async function getAdminInvites() {
+    try {
+        const rawUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org";
+        const appUrl = rawUrl.replace(/\/+$/, "");
+
+        const list = await db.query.inviteLinks.findMany({
+            where: and(
+                eq(inviteLinks.roleAssigned, "Moderator")
+            ),
+            orderBy: (t, { desc }) => [desc(t.createdAt)],
+            limit: 30,
+        });
+
+        const formatted = list.map((inv) => ({
+            id: inv.id,
+            email: inv.inviteeEmail,
+            role: inv.roleAssigned,
+            scope: inv.moderationScope,
+            isUsed: inv.isUsed,
+            isExpired: new Date() > inv.expiresAt,
+            expiresAt: inv.expiresAt,
+            createdAt: inv.createdAt,
+            inviteUrl: `${appUrl}/moderator-invite/${inv.token}`,
+        }));
+
+        return { success: true, data: formatted };
+    } catch (err: unknown) {
+        return { success: false, error: err instanceof Error ? err.message : "Failed to load invites", data: [] };
     }
 }
 
