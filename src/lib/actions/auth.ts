@@ -214,10 +214,11 @@ export async function setUserRoleAndApprove(
  */
 export async function requestPasswordResetAction(email: string) {
     try {
-        await (auth.api as unknown as { forgetPassword: (args: { body: { email: string; redirectTo: string } }) => Promise<void> }).forgetPassword({
+        const baseUrl = getBaseUrl();
+        await (auth.api as any).requestPasswordReset({
             body: {
                 email: email.trim().toLowerCase(),
-                redirectTo: "/reset-password",
+                redirectTo: `${baseUrl}/reset-password`,
             }
         });
         return { success: true };
