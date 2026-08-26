@@ -8,6 +8,7 @@ import { eq, inArray } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import crypto from "crypto";
+import { getBaseUrl } from "@/lib/utils/url";
 
 async function requireSuperAdmin() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -173,7 +174,7 @@ export async function updateLegacyUserRoleAction(email: string, role: "SuperAdmi
 
             // Transactional email notification
             const firstName = targetUser.name ? targetUser.name.split(" ")[0] : email.split("@")[0];
-            const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org").replace(/\/+$/, "");
+            const baseUrl = getBaseUrl();
             await EmailService.sendRoleUpdated(email, firstName, role, `${baseUrl}/dashboard`);
         }
 

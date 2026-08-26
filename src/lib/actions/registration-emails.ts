@@ -1,6 +1,7 @@
 "use server";
 
 import { EmailService } from "@/lib/email/service";
+import { getBaseUrl } from "@/lib/utils/url";
 
 export async function sendMenteeRegistrationEmail(
     email: string,
@@ -27,10 +28,11 @@ export async function sendMentorRegistrationEmails(
     hash: string,
     signatureId: string,
     submittedAt: string,
-    appBaseUrl: string
+    _appBaseUrl?: string
 ) {
+    const baseUrl = getBaseUrl();
     return Promise.all([
-        EmailService.sendRegistrationConfirmation(email, firstName, "Mentor", `${appBaseUrl}/verify-email`),
+        EmailService.sendRegistrationConfirmation(email, firstName, "Mentor", `${baseUrl}/verify-email`),
         EmailService.sendNDASignedConfirmation(email, firstName, "Mentor", `${firstName} ${lastName}`, hash, signatureId),
         EmailService.sendMentorPendingApproval(email, firstName, `${firstName} ${lastName}`, professionalTitle, submittedAt),
     ]).catch((err: Error) => console.error("Mentor email delivery failed:", err));
@@ -43,10 +45,11 @@ export async function sendCorporateRegistrationEmails(
     hash: string,
     signatureId: string,
     submittedAt: string,
-    appBaseUrl: string
+    _appBaseUrl?: string
 ) {
+    const baseUrl = getBaseUrl();
     return Promise.all([
-        EmailService.sendRegistrationConfirmation(email, contactName, "Corporate Partner", `${appBaseUrl}/verify-email`),
+        EmailService.sendRegistrationConfirmation(email, contactName, "Corporate Partner", `${baseUrl}/verify-email`),
         EmailService.sendNDASignedConfirmation(email, contactName, "Corporate Partner", `${contactName} (${orgName})`, hash, signatureId),
         EmailService.sendCorporatePendingApproval(email, contactName, orgName, submittedAt),
     ]).catch((err: Error) => console.error("Corporate email delivery failed:", err));

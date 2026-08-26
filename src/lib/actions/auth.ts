@@ -78,6 +78,8 @@ export async function finishAdminInvite(token: string) {
     }
 }
 
+import { getBaseUrl } from "@/lib/utils/url";
+
 /**
  * SuperAdmin creates an admin or moderator invite: generates token, stores it, sends email.
  */
@@ -101,8 +103,7 @@ export async function createModeratorInvite(
             expiresAt,
         });
 
-        const rawUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org";
-        const appUrl = rawUrl.replace(/\/+$/, "");
+        const appUrl = getBaseUrl();
         const inviteUrl = `${appUrl}/moderator-invite/${token}`;
 
         // Fire-and-forget email
@@ -125,8 +126,7 @@ export async function createModeratorInvite(
  */
 export async function getAdminInvites() {
     try {
-        const rawUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org";
-        const appUrl = rawUrl.replace(/\/+$/, "");
+        const appUrl = getBaseUrl();
 
         const list = await db.query.inviteLinks.findMany({
             where: and(

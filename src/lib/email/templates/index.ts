@@ -39,15 +39,26 @@ export const EMAIL_SHELL_END = `
 
 export const EMAIL_HEADER = `
 <tr>
-  <td style="background-color:#1A1A1A;padding:24px 40px;">
-    <table width="100%" cellpadding="0" cellspacing="0">
+  <td style="background-color:#1A1A1A;padding:20px 40px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
       <tr>
-        <td>
-          <span style="font-family:Georgia,serif;font-size:22px;font-style:italic;font-weight:900;color:#FFFFFF;letter-spacing:-0.5px;">Jenga365</span>
-          <span style="font-size:11px;font-family:Courier New,monospace;text-transform:uppercase;letter-spacing:3px;color:#BB0000;margin-left:16px;">Platform</span>
+        <td style="vertical-align:middle;">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="vertical-align:middle;padding-right:12px;">
+                <a href="https://jenga365.org" style="text-decoration:none;display:inline-block;">
+                  <img src="https://jenga365.org/assets/logos/Jenga365%20logo.svg" alt="Jenga365 Logo" width="40" height="40" style="display:block;border-radius:50%;background:#ffffff;padding:2px;border:0;outline:none;" />
+                </a>
+              </td>
+              <td style="vertical-align:middle;">
+                <span style="font-family:Georgia,serif;font-size:22px;font-style:italic;font-weight:900;color:#FFFFFF;letter-spacing:-0.5px;display:inline-block;vertical-align:middle;">Jenga365</span>
+                <span style="font-size:10px;font-family:Courier New,monospace;text-transform:uppercase;letter-spacing:2px;color:#BB0000;margin-left:8px;vertical-align:middle;">Platform</span>
+              </td>
+            </tr>
+          </table>
         </td>
-        <td align="right">
-          <table cellpadding="0" cellspacing="0">
+        <td align="right" style="vertical-align:middle;">
+          <table cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td style="width:20px;height:4px;background:#BB0000;"></td>
               <td style="width:4px;"></td>
@@ -81,6 +92,9 @@ export const EMAIL_FOOTER = (unsubscribeUrl: string = '#') => `
           <p style="margin:0;font-size:11px;color:#4A4A4A;font-family:Courier New,monospace;text-align:center;line-height:1.8;">
             © 2026 Jenga365 · Nairobi, Kenya<br>
             <a href="mailto:info@jenga365.org" style="color:#BB0000;text-decoration:none;">info@jenga365.org</a> · +254-741-058-917
+          </p>
+          <p style="margin:10px 0 0;font-size:11px;color:#8A8A8A;font-family:Courier New,monospace;text-align:center;">
+            Platform engineered by <a href="https://fikanova.com/" target="_blank" rel="noopener noreferrer" style="color:#BB0000;text-decoration:none;font-weight:700;">Fikanova</a>
           </p>
           <p style="margin:12px 0 0;font-size:10px;color:#4A4A4A;font-family:Courier New,monospace;text-align:center;">
             <a href="${unsubscribeUrl}" style="color:#4A4A4A;text-decoration:underline;">Unsubscribe</a> · 

@@ -6,6 +6,7 @@ import { twoFactor, admin } from "better-auth/plugins";
 import * as schema from "@/lib/db/schema";
 
 import { randomUUID } from "node:crypto";
+import { getBaseUrl } from "@/lib/utils/url";
 
 export const auth = betterAuth({
     // Database — let Better Auth manage its own tables (user, session, account, verification)
@@ -22,7 +23,7 @@ export const auth = betterAuth({
     }),
 
     // Base URL — used for building callback URLs and cookie domains
-    baseURL: process.env.BETTER_AUTH_URL ?? "https://jenga365.org",
+    baseURL: getBaseUrl(),
 
     // Secret — used for signing sessions and encrypting tokens
     secret: process.env.BETTER_AUTH_SECRET,

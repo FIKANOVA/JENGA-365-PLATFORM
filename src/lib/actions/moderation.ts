@@ -9,6 +9,7 @@ import { createNotification } from "@/lib/notifications/service";
 import { EmailService } from "@/lib/email/service";
 import { hasCapability, parseScopes, type Capability, type Role } from "@/lib/auth/roles";
 import { publishArticleToSanity, unpublishArticleFromSanity } from "@/lib/sanity/syncArticle";
+import { getBaseUrl } from "@/lib/utils/url";
 
 async function requireModerator() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -57,7 +58,7 @@ export async function approveUser(userId: string) {
 
     if (targetUser?.email) {
         const firstName = targetUser.name ? targetUser.name.split(" ")[0] : targetUser.email.split("@")[0];
-        const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || process.env.BETTER_AUTH_URL || "https://jenga365.org").replace(/\/+$/, "");
+        const baseUrl = getBaseUrl();
         try {
             if (targetUser.role === "Mentor") {
                 await EmailService.sendMentorApproved(targetUser.email, firstName, targetUser.email);
