@@ -47,14 +47,15 @@ export const auth = betterAuth({
             trustedProviders: ["google"],
             requireLocalEmailVerified: false,
         },
+        skipStateCookieCheck: true,
     },
 
     // Advanced - Secure session transport
     advanced: {
-        useSecureCookies: process.env.NODE_ENV === "production",
+        useSecureCookies: getBaseUrl().startsWith("https://"),
         defaultCookieAttributes: {
             sameSite: "lax",
-            secure: process.env.NODE_ENV === "production",
+            secure: getBaseUrl().startsWith("https://"),
         },
     },
 

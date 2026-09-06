@@ -87,12 +87,20 @@ export function parseScopes(scopeString?: string | null): ModeratorScope[] {
     if (!scopeString) return [];
     try {
         const parsed = JSON.parse(scopeString);
-        if (!Array.isArray(parsed)) return [];
-        const valid: ModeratorScope[] = ["mentor_applications", "corporate", "content", "all"];
-        return parsed.filter((v): v is ModeratorScope => valid.includes(v));
+        if (Array.isArray(parsed)) {
+            const valid: ModeratorScope[] = ["mentor_applications", "corporate", "content", "all"];
+            return parsed.filter((v): v is ModeratorScope => valid.includes(v));
+        }
     } catch {
-        return [];
+        // Fall back to plain string or legacy tier code
     }
+
+    const s = scopeString.trim();
+    if (s === "all" || s === "E") return ["all"];
+    if (s === "content" || s === "B") return ["content"];
+    if (s === "mentor_applications" || s === "A") return ["mentor_applications"];
+    if (s === "corporate") return ["corporate"];
+    return [];
 }
 
 export function encodeScopes(scopes: ModeratorScope[]): string {

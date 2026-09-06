@@ -54,7 +54,7 @@ vi.mock('drizzle-orm', () => ({
   inArray: vi.fn((col, val) => ({ inArray: { col, val } })),
 }))
 
-import { upsertMerchandiseStock } from '@/lib/actions/merchandise'
+import { upsertMerchandiseStock, setMerchandiseStockCount } from '@/lib/actions/merchandise'
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -222,5 +222,59 @@ describe('upsertMerchandiseStock', () => {
 
     expect(mockRevalidatePath).toHaveBeenCalledWith('/shop')
     expect(mockRevalidatePath).toHaveBeenCalledWith('/dashboard/moderator/inventory')
+  })
+})
+
+describe('setMerchandiseStockCount', () => {
+  it('updates stock count for an existing product', async () => {
+    const mockReturning = vi.fn().mockResolvedValue([{ id: 'merch-1', stockCount: 15, isActive: true }])
+    const mockWhere = vi.fn().mockReturnValue({ returning: mockReturning })
+    const mockSet = vi.fn().mockReturnValue({ where: mockWhere })
+    mockUpdate.mockReturnValue({ set: mockSet })
+
+    const result = await setMerchandiseStockCount('sanity-prod-1', 15, true)
+
+    expect(result).toEqual({ success: true })
+    expect(mockRequireCapability).toHaveBeenCalledWith('UPSERT_MERCHANDISE_STOCK')
+    expect(mockSet).toHaveBeenCalledWith({ stockCount: 15, isActive: true })
+    expect(mockRevalidatePath).toHaveBeenCalledWith('/shop')
+    expect(mockRevalidatePath).toHaveBeenCalledWith('/dashboard/moderator/inventory')
+  })
+
+  it('rejects invalid stock count values', async () => {
+    await expect(setMerchandiseStockCount('sanity-prod-1', -1, true)).rejects.toThrow('INVALID_STOCK_COUNT')
+    await expect(setMerchandiseStockCount('sanity-prod-1', 1.5, true)).rejects.toThrow('INVALID_STOCK_COUNT')
+  })
+
+  it('auto-syncs from Sanity and inserts if product is not in database', async () => {
+    // First update returns empty
+    const mockReturning = vi.fn().mockResolvedValue([])
+    const mockWhere = vi.fn().mockReturnValue({ returning: mockReturning })
+    const mockSet = vi.fn().mockReturnValue({ where: mockWhere })
+    mockUpdate.mockReturnValue({ set: mockSet })
+
+    // Sanity returns product
+    mockFetch.mockResolvedValueOnce({
+      _id: 'sanity-prod-new',
+      title: 'New Product',
+      price: 50,
+      description: 'Desc',
+      category: 'Apparel'
+    })
+
+    const mockInsertReturning = vi.fn().mockResolvedValue([{ id: 'merch-inserted', stockCount: 5 }])
+    const mockValues = vi.fn().mockReturnValue({ returning: mockInsertReturning })
+    mockInsert.mockReturnValue({ values: mockValues })
+
+    const result = await setMerchandiseStockCount('sanity-prod-new', 5, true)
+
+    expect(result).toEqual({ success: true })
+    expect(mockFetch).toHaveBeenCalled()
+    expect(mockValues).toHaveBeenCalledWith(expect.objectContaining({
+      sanityProductId: 'sanity-prod-new',
+      name: 'New Product',
+      stockCount: 5,
+      isActive: true,
+    }))
   })
 })

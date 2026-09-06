@@ -69,3 +69,30 @@ describe('hasCapability', () => {
     });
 });
 
+describe('parseScopes', () => {
+    it('parses valid JSON array strings', async () => {
+        const { parseScopes } = await import('@/lib/auth/roles');
+        expect(parseScopes('["content", "all"]')).toEqual(['content', 'all']);
+        expect(parseScopes('["mentor_applications"]')).toEqual(['mentor_applications']);
+    });
+
+    it('parses plain strings and legacy scope codes', async () => {
+        const { parseScopes } = await import('@/lib/auth/roles');
+        expect(parseScopes('all')).toEqual(['all']);
+        expect(parseScopes('E')).toEqual(['all']);
+        expect(parseScopes('content')).toEqual(['content']);
+        expect(parseScopes('B')).toEqual(['content']);
+        expect(parseScopes('mentor_applications')).toEqual(['mentor_applications']);
+        expect(parseScopes('A')).toEqual(['mentor_applications']);
+        expect(parseScopes('corporate')).toEqual(['corporate']);
+    });
+
+    it('returns empty array for invalid, null or empty inputs', async () => {
+        const { parseScopes } = await import('@/lib/auth/roles');
+        expect(parseScopes(null)).toEqual([]);
+        expect(parseScopes(undefined)).toEqual([]);
+        expect(parseScopes('')).toEqual([]);
+        expect(parseScopes('invalid_code')).toEqual([]);
+    });
+});
+

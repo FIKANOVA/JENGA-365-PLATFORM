@@ -8,6 +8,14 @@ import { client as sanityClient } from "@/lib/sanity/client";
 import { groq } from "next-sanity";
 import { revalidatePath } from "next/cache";
 
+function safeRevalidate(path: string) {
+    try {
+        revalidatePath(path);
+    } catch {
+        // Safe when run outside of Next.js server action request context
+    }
+}
+
 const sanityCatalogQuery = groq`*[_type == "product"] {
   _id,
   title,
@@ -144,8 +152,8 @@ export async function upsertMerchandiseStock(): Promise<MerchandiseSyncResult> {
 
     await Promise.all(promises);
 
-    revalidatePath("/shop");
-    revalidatePath("/dashboard/moderator/inventory");
+    safeRevalidate("/shop");
+    safeRevalidate("/dashboard/moderator/inventory");
 
     return {
         success: true,
@@ -197,15 +205,70 @@ export async function setMerchandiseStockCount(
         throw new Error("INVALID_STOCK_COUNT");
     }
 
-    const [row] = await db.update(merchandise)
+    let [row] = await db.update(merchandise)
         .set({ stockCount, isActive })
         .where(eq(merchandise.sanityProductId, sanityProductId))
         .returning();
 
+    if (!row) {
+        // If product was created in Sanity but not yet synced to Neon, fetch metadata and insert it
+        try {
+            const product = await sanityClient.fetch<SanityCatalogProduct | null>(
+                groq`*[_type == "product" && _id == $id][0] {
+                    _id,
+                    title,
+                    category,
+                    price,
+                    description,
+                    isActive,
+                    "mainImageUrl": mainImage.asset->url,
+                    "galleryUrls": gallery[].asset->url,
+                    variants[] {
+                        sku,
+                        label,
+                        size,
+                        color,
+                        priceOverride
+                    }
+                }`,
+                { id: sanityProductId }
+            );
+
+            if (product && product.title && product.price != null) {
+                const variantsJson = (product.variants ?? [])
+                    .filter((v) => v.sku && v.label)
+                    .map((v) => ({
+                        sku: v.sku as string,
+                        label: v.label as string,
+                        size: v.size ?? undefined,
+                        color: v.color ?? undefined,
+                        priceOverride: v.priceOverride ?? undefined,
+                    }));
+
+                const [inserted] = await db.insert(merchandise).values({
+                    sanityProductId: product._id,
+                    name: product.title,
+                    description: product.description ?? null,
+                    category: product.category ?? null,
+                    price: String(product.price),
+                    stockCount,
+                    imageUrl: product.mainImageUrl ?? null,
+                    imageGallery: (product.galleryUrls ?? []).filter((url): url is string => !!url),
+                    variants: variantsJson.length ? variantsJson : null,
+                    isActive,
+                    lastSyncedAt: new Date(),
+                }).returning();
+                row = inserted;
+            }
+        } catch (fetchErr) {
+            console.error("[setMerchandiseStockCount] Failed to auto-sync from Sanity:", fetchErr);
+        }
+    }
+
     if (!row) throw new Error("MERCHANDISE_NOT_FOUND");
 
-    revalidatePath("/shop");
-    revalidatePath("/dashboard/moderator/inventory");
+    safeRevalidate("/shop");
+    safeRevalidate("/dashboard/moderator/inventory");
     return { success: true as const };
 }
 

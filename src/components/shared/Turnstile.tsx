@@ -82,10 +82,11 @@ export default function Turnstile({
 
             try {
                 if (widgetIdRef.current && window.turnstile?.remove) {
-                    try {
-                        window.turnstile.remove(widgetIdRef.current);
-                    } catch {}
+                    const oldId = widgetIdRef.current;
                     widgetIdRef.current = null;
+                    try {
+                        window.turnstile.remove(oldId);
+                    } catch {}
                 }
                 containerRef.current.innerHTML = "";
                 const id = window.turnstile.render(containerRef.current, {

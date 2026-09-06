@@ -21,15 +21,23 @@ export default function InventoryStockEditor({ sanityProductId, initialStock, in
     const handleSave = () => {
         startTransition(async () => {
             try {
-                await setMerchandiseStockCount(sanityProductId, stockCount, isActive);
+                const res = await setMerchandiseStockCount(sanityProductId, stockCount, isActive);
+                if (res && "success" in res && !res.success) {
+                    toast.error((res as { error?: string }).error || "Failed to update stock");
+                    return;
+                }
                 toast.success("Stock updated");
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : String(err);
-                const isNotFound = errorMessage.includes("MERCHANDISE_NOT_FOUND");
-
-                toast.error(isNotFound
-                    ? "Run \"Sync Store Inventory\" first to register this product"
-                    : "Failed to update stock");
+                if (errorMessage.includes("UNAUTHORIZED")) {
+                    toast.error("You must be logged in to update stock");
+                } else if (errorMessage.includes("FORBIDDEN")) {
+                    toast.error("You do not have permission to update stock");
+                } else if (errorMessage.includes("MERCHANDISE_NOT_FOUND")) {
+                    toast.error("Run \"Sync Store Inventory\" first to register this product");
+                } else {
+                    toast.error("Failed to update stock");
+                }
             }
         });
     };

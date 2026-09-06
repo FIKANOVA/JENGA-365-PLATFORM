@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth/config";
-import { hasCapability, parseScopes, type Capability, type ModeratorScope, type Role } from "@/lib/auth/roles";
+import { hasCapability, parseScopes, normalizeRole, type Capability, type ModeratorScope } from "@/lib/auth/roles";
 import { headers } from "next/headers";
 
 export async function requireCapability(cap: Capability): Promise<void> {
@@ -7,7 +7,8 @@ export async function requireCapability(cap: Capability): Promise<void> {
     if (!session?.user) {
         throw new Error("UNAUTHORIZED");
     }
-    const role = (session.user as { role?: string }).role as Role | undefined;
+    const rawRole = (session.user as { role?: string }).role;
+    const role = normalizeRole(rawRole);
     const scopeString = (session.user as { moderationScope?: string }).moderationScope;
     const scopes: ModeratorScope[] = parseScopes(scopeString);
     if (!role || !hasCapability(role, scopes, cap)) {
