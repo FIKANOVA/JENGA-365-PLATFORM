@@ -79,8 +79,11 @@ export default function RoleSidebar({ role }: RoleSidebarProps) {
     const isActive = (href: string) => pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
 
     const handleSignOut = async () => {
-        await signOut();
-        router.push("/login");
+        try {
+            await signOut();
+        } finally {
+            window.location.href = "/login?logout=true";
+        }
     };
 
     return (

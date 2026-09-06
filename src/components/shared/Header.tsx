@@ -322,8 +322,7 @@ function AvatarMenu({ name, image, role, userId, light }: { name: string; image?
         try {
             await signOut();
         } finally {
-            router.push("/");
-            router.refresh();
+            window.location.href = "/";
         }
     }
 

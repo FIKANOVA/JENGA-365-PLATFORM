@@ -1037,3 +1037,16 @@ export const vPartnerImpactTemplate = pgView("v_partner_impact_template", {
     mentorshipHoursTotal: integer("mentorship_hours_total"),
     youthEngagedActive: integer("youth_engaged_active"),
 }).existing();
+
+export const betaFeedback = pgTable("beta_feedback", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    category: varchar("category", { length: 50 }).notNull(),
+    rating: integer("rating"),
+    message: text("message").notNull(),
+    email: varchar("email", { length: 255 }),
+    path: varchar("path", { length: 255 }).default("/"),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+    status: varchar("status", { length: 50 }).default("new").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+

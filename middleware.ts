@@ -33,6 +33,7 @@ interface SessionData {
     session?: {
         user?: CookieUser;
     };
+    user?: CookieUser;
     expiresAt?: number;
 }
 
@@ -90,19 +91,21 @@ export function middleware(request: NextRequest) {
         request.cookies.get("__Secure-better-auth.session_data") ??
         request.cookies.get("better-auth.session_data");
 
+    const hasValidToken = Boolean(sessionToken?.value && sessionToken.value.trim() !== "");
     let isAuthenticated = false;
     let sessionUser: CookieUser | null = null;
 
-    if (sessionToken) {
-        // Session token present = authenticated. The actual token expiry is
-        // enforced server-side by Better Auth on every API call.
+    if (hasValidToken) {
         isAuthenticated = true;
-        if (sessionDataCookie) {
+        if (sessionDataCookie?.value) {
             const data = parseSessionDataCookie(sessionDataCookie.value);
             if (data) {
                 const expired = data.expiresAt ? data.expiresAt < Date.now() : false;
-                if (!expired) {
-                    sessionUser = data.session?.user ?? null;
+                if (expired) {
+                    isAuthenticated = false;
+                    sessionUser = null;
+                } else {
+                    sessionUser = data.user ?? data.session?.user ?? null;
                 }
             }
         }
@@ -124,7 +127,26 @@ export function middleware(request: NextRequest) {
 
     // ── AUTHENTICATED ─────────────────────────────────────────────────────────
     if (matchesPrefix(pathname, AUTH_ONLY_ROUTES)) {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
+        const searchParams = request.nextUrl.searchParams;
+        const isExplicitAuthIntent =
+            searchParams.has("reason") ||
+            searchParams.has("logout") ||
+            searchParams.has("signedOut") ||
+            searchParams.has("error") ||
+            searchParams.has("deleted") ||
+            searchParams.get("reason") === "idle_timeout";
+
+        if (!isExplicitAuthIntent) {
+            return NextResponse.redirect(new URL("/dashboard", request.url));
+        }
+
+        // When user explicitly visits login with logout/idle intent, clear any lingering stale cookies
+        const response = NextResponse.next();
+        response.cookies.delete("__Secure-better-auth.session_token");
+        response.cookies.delete("better-auth.session_token");
+        response.cookies.delete("__Secure-better-auth.session_data");
+        response.cookies.delete("better-auth.session_data");
+        return response;
     }
 
     if (sessionUser) {

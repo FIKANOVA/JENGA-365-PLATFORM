@@ -19,7 +19,9 @@
     "partner:looker": "dotenv -e .env -- tsx scripts/setup-partner-looker.ts",
     "kobo:forms": "node scripts/kobo-forms/generate.js",
     "seed:partners": "dotenv -e .env -- tsx scripts/seed/seed-partners.ts",
-    "migrate:wordpress": "dotenv -e .env -- tsx scripts/seed/migrate-wordpress.ts"
+    "migrate:wordpress": "dotenv -e .env -- tsx scripts/seed/migrate-wordpress.ts",
+    "betterleaks": "betterleaks dir --verbose .",
+    "deslop": "deslop"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.42",
@@ -88,6 +90,7 @@
     "@types/react-dom": "^19",
     "@types/ws": "^8.18.1",
     "@vitest/coverage-v8": "^4.1.2",
+    "docx": "^9.7.1",
     "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9.19.0",

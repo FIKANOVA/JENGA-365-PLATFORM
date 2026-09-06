@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { resend, DEFAULT_FROM } from "@/lib/email/resend";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { escapeHtml } from "@/lib/utils";
+import { db } from "@/lib/db";
+import { betaFeedback } from "@/lib/db/schema";
 
 const FEEDBACK_RECIPIENT =
     process.env.FEEDBACK_EMAIL ||
@@ -53,13 +55,16 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        // 3. Verify Cloudflare Turnstile token
+        // 3. Verify Cloudflare Turnstile token (support both "beta_feedback" and legacy "feedback" actions)
         const clientIp =
             req.headers.get("cf-connecting-ip") ||
             req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
             null;
 
-        const verifyResult = await verifyTurnstileToken(turnstileToken, clientIp, "feedback");
+        let verifyResult = await verifyTurnstileToken(turnstileToken, clientIp, "beta_feedback");
+        if (!verifyResult.success && verifyResult.error?.includes("mismatch")) {
+            verifyResult = await verifyTurnstileToken(turnstileToken, clientIp, "feedback");
+        }
 
         if (!verifyResult.success) {
             return NextResponse.json(
@@ -77,7 +82,20 @@ export async function POST(req: NextRequest) {
         const safeRating = rating && rating >= 1 && rating <= 5 ? `${rating} / 5 Stars` : "Not provided";
         const timestamp = new Date().toUTCString();
 
-        // 5. Send notification email via Resend
+        // 5. Persist feedback directly to PostgreSQL so it is never lost even if email fails
+        try {
+            await db.insert(betaFeedback).values({
+                category: safeCategoryKey,
+                rating: rating && rating >= 1 && rating <= 5 ? rating : null,
+                message: message.trim(),
+                email: email?.trim() || null,
+                path: path?.trim() || "/",
+            });
+        } catch (dbErr) {
+            console.error("[Feedback API] Failed to save feedback to database:", dbErr);
+        }
+
+        // 6. Send notification email via Resend
         try {
             await resend.emails.send({
                 from: DEFAULT_FROM,

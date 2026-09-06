@@ -30,6 +30,12 @@ export default function SessionIdleTimeout() {
     const lastActivityRef = useRef<number>(Date.now());
     const isLoggingOutRef = useRef<boolean>(false);
     const throttleTimerRef = useRef<number>(0);
+    const showWarningRef = useRef<boolean>(false);
+    const lastMousePosRef = useRef<{ x: number; y: number } | null>(null);
+
+    useEffect(() => {
+        showWarningRef.current = showWarning;
+    }, [showWarning]);
 
     // Update activity timestamp locally and in localStorage
     const recordActivity = useCallback(() => {
@@ -47,10 +53,10 @@ export default function SessionIdleTimeout() {
         }
 
         // If warning dialog is showing and user acts, dismiss warning
-        if (showWarning) {
+        if (showWarningRef.current) {
             setShowWarning(false);
         }
-    }, [showWarning]);
+    }, []);
 
     // Handle logout due to inactivity
     const handleIdleLogout = useCallback(async () => {
@@ -60,6 +66,7 @@ export default function SessionIdleTimeout() {
 
         try {
             localStorage.removeItem(STORAGE_KEY);
+            localStorage.setItem("jenga365_logout_broadcast", String(Date.now()));
         } catch {
             // ignore
         }
@@ -71,7 +78,13 @@ export default function SessionIdleTimeout() {
         } finally {
             toast.error("You have been signed out due to inactivity for security.");
             const currentCallback = encodeURIComponent(pathname || "/dashboard");
-            router.push(`/login?reason=idle_timeout&callbackUrl=${currentCallback}`);
+            const targetUrl = `/login?reason=idle_timeout&callbackUrl=${currentCallback}`;
+            try {
+                router.push(targetUrl);
+            } catch {}
+            if (typeof window !== "undefined") {
+                window.location.href = targetUrl;
+            }
         }
     }, [pathname, router]);
 
@@ -118,6 +131,12 @@ export default function SessionIdleTimeout() {
 
         // Listen to cross-tab storage changes
         const handleStorageChange = (e: StorageEvent) => {
+            if (e.key === "jenga365_logout_broadcast" && !isLoggingOutRef.current) {
+                isLoggingOutRef.current = true;
+                window.location.href = `/login?reason=idle_timeout`;
+                return;
+            }
+
             if (e.key === STORAGE_KEY && e.newValue) {
                 const updatedTime = Number(e.newValue);
                 if (!isNaN(updatedTime)) {
@@ -130,22 +149,35 @@ export default function SessionIdleTimeout() {
         };
         window.addEventListener("storage", handleStorageChange);
 
-        // Activity event listeners
-        const activityEvents: (keyof WindowEventMap)[] = [
+        // Activity event listeners with mouse threshold to prevent trackpad drift resets
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!lastMousePosRef.current) {
+                lastMousePosRef.current = { x: e.clientX, y: e.clientY };
+                return;
+            }
+            const dx = e.clientX - lastMousePosRef.current.x;
+            const dy = e.clientY - lastMousePosRef.current.y;
+            if (dx * dx + dy * dy > 225) { // At least 15px distance
+                lastMousePosRef.current = { x: e.clientX, y: e.clientY };
+                recordActivity();
+            }
+        };
+
+        const discreteEvents: (keyof WindowEventMap)[] = [
             "mousedown",
-            "mousemove",
             "keydown",
             "scroll",
             "touchstart",
             "click",
         ];
 
-        const handleUserActivity = () => {
+        const handleDiscreteActivity = () => {
             recordActivity();
         };
 
-        activityEvents.forEach((eventName) => {
-            window.addEventListener(eventName, handleUserActivity, { passive: true });
+        window.addEventListener("mousemove", handleMouseMove, { passive: true });
+        discreteEvents.forEach((eventName) => {
+            window.addEventListener(eventName, handleDiscreteActivity, { passive: true });
         });
 
         // When returning to tab (laptop wake, tab switch, mobile return)
@@ -206,7 +238,7 @@ export default function SessionIdleTimeout() {
                 setShowWarning(true);
                 setSecondsRemaining(Math.max(1, Math.round(remaining / 1000)));
             } else {
-                if (showWarning) {
+                if (showWarningRef.current) {
                     setShowWarning(false);
                 }
             }
@@ -215,13 +247,14 @@ export default function SessionIdleTimeout() {
         return () => {
             clearInterval(intervalId);
             window.removeEventListener("storage", handleStorageChange);
-            activityEvents.forEach((eventName) => {
-                window.removeEventListener(eventName, handleUserActivity);
+            window.removeEventListener("mousemove", handleMouseMove);
+            discreteEvents.forEach((eventName) => {
+                window.removeEventListener(eventName, handleDiscreteActivity);
             });
             document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
             window.removeEventListener("focus", handleVisibilityOrFocus);
         };
-    }, [session?.user, recordActivity, handleIdleLogout, showWarning]);
+    }, [session?.user, recordActivity, handleIdleLogout]);
 
     if (!session?.user || !showWarning) {
         return null;

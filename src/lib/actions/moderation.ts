@@ -5,16 +5,25 @@ import { db } from "@/lib/db";
 import { users, articles, moderationLog } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { createNotification } from "@/lib/notifications/service";
 import { EmailService } from "@/lib/email/service";
-import { hasCapability, parseScopes, type Capability, type Role } from "@/lib/auth/roles";
+import { hasCapability, parseScopes, normalizeRole, type Capability, type Role } from "@/lib/auth/roles";
 import { publishArticleToSanity, unpublishArticleFromSanity } from "@/lib/sanity/syncArticle";
 import { getBaseUrl } from "@/lib/utils/url";
+
+function safeRevalidate(path: string) {
+    try {
+        revalidatePath(path);
+    } catch {
+        // Ignored when invoked outside of Next.js server action request context (e.g. CLI/tests)
+    }
+}
 
 async function requireModerator() {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) throw new Error("UNAUTHORIZED");
-    const role = (session.user as any).role as string;
+    const role = normalizeRole((session.user as any).role);
     if (!["Moderator", "SuperAdmin"].includes(role)) throw new Error("FORBIDDEN");
     return session.user;
 }
@@ -72,6 +81,9 @@ export async function approveUser(userId: string) {
         }
     }
 
+    safeRevalidate("/dashboard/admin");
+    safeRevalidate("/dashboard/people");
+
     return { success: true };
 }
 
@@ -82,8 +94,15 @@ export async function rejectUser(userId: string, reason?: string) {
         where: eq(users.id, userId),
     });
 
+    const reapplyEligibleAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
     await db.update(users)
-        .set({ isApproved: false, status: "pending", rejectionReason: reason ?? null })
+        .set({
+            isApproved: false,
+            status: "rejected",
+            rejectionReason: reason ?? null,
+            reapplyEligibleAt,
+        })
         .where(eq(users.id, userId));
 
     await db.insert(moderationLog).values({
@@ -92,6 +111,8 @@ export async function rejectUser(userId: string, reason?: string) {
         targetId: userId,
         targetType: "user",
         notes: reason,
+    }).catch((logErr) => {
+        console.error("[rejectUser] Failed to write moderation log:", logErr);
     });
 
     createNotification(userId, "user_rejected", {
@@ -102,13 +123,16 @@ export async function rejectUser(userId: string, reason?: string) {
 
     if (targetUser?.email) {
         const firstName = targetUser.name ? targetUser.name.split(" ")[0] : targetUser.email.split("@")[0];
-        const reapplyDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        const reapplyDate = reapplyEligibleAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
         try {
             await EmailService.sendMentorRejected(targetUser.email, firstName, reason || "Application not approved at this time", reapplyDate);
         } catch (emailErr) {
             console.error(`[rejectUser] Failed to send rejection email to ${targetUser.email}:`, emailErr);
         }
     }
+
+    safeRevalidate("/dashboard/admin");
+    safeRevalidate("/dashboard/people");
 
     return { success: true };
 }
@@ -132,6 +156,9 @@ export async function suspendUser(userId: string) {
         body: "Your Jenga365 account has been suspended. Please contact support for assistance.",
         link: "/contact",
     }).catch(() => {});
+
+    safeRevalidate("/dashboard/admin");
+    safeRevalidate("/dashboard/people");
 
     return { success: true };
 }

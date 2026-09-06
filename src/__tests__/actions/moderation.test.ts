@@ -27,6 +27,10 @@ vi.mock('next/headers', () => ({
   headers: vi.fn().mockResolvedValue(new Headers()),
 }))
 
+vi.mock('next/cache', () => ({
+  revalidatePath: vi.fn(),
+}))
+
 vi.mock('@/lib/auth/config', () => ({
   auth: {
     api: { getSession: vi.fn() },
@@ -129,7 +133,12 @@ describe('User Moderation Actions', () => {
             const result = await rejectUser('user-1', 'Incomplete profile')
 
             expect(result.success).toBe(true)
-            expect(mockSet).toHaveBeenCalledWith({ isApproved: false, status: 'pending', rejectionReason: 'Incomplete profile' })
+            expect(mockSet).toHaveBeenCalledWith(expect.objectContaining({
+                isApproved: false,
+                status: 'rejected',
+                rejectionReason: 'Incomplete profile',
+                reapplyEligibleAt: expect.any(Date),
+            }))
             expect(mockWhere).toHaveBeenCalled()
             expect(mockValues).toHaveBeenCalledWith(expect.objectContaining({
                 moderatorId: 'mod-1',
@@ -149,7 +158,12 @@ describe('User Moderation Actions', () => {
             const result = await rejectUser('user-1')
 
             expect(result.success).toBe(true)
-            expect(mockSet).toHaveBeenCalledWith({ isApproved: false, status: 'pending', rejectionReason: null })
+            expect(mockSet).toHaveBeenCalledWith(expect.objectContaining({
+                isApproved: false,
+                status: 'rejected',
+                rejectionReason: null,
+                reapplyEligibleAt: expect.any(Date),
+            }))
             expect(mockWhere).toHaveBeenCalled()
             expect(mockValues).toHaveBeenCalledWith(expect.objectContaining({
                 notes: undefined

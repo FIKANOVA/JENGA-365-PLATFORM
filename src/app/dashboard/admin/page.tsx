@@ -29,7 +29,7 @@ export default async function AdminDashboardPage() {
 
     const stats = [
         { label: "Total Users", value: String(allUsers.length), trend: "neutral" as const, change: "Live from DB" },
-        { label: "Pending Approval", value: String(allUsers.filter(u => !u.isApproved).length), trend: "neutral" as const, change: "" },
+        { label: "Pending Approval", value: String(allUsers.filter(u => !u.isApproved && u.status === "pending").length), trend: "neutral" as const, change: "" },
         { label: "Active Mentors", value: String(allUsers.filter(u => u.role === "Mentor" && u.isApproved).length), trend: "up" as const, change: "" },
         { label: "Active Mentees", value: String(allUsers.filter(u => u.role === "Mentee" && u.isApproved).length), trend: "up" as const, change: "" },
     ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   Filter,
   MoreVertical,
@@ -214,13 +215,21 @@ function ExpandableUserRow({
           </span>
         </td>
         <td className="p-4">
-          {!user.isApproved ? (
+          {!user.isApproved && user.status === "pending" ? (
             <button
               onClick={() => onSelectUser(user)}
               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border border-amber-500/30 bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 transition-colors cursor-pointer"
               title="Click to review and approve user"
             >
               <Eye className="w-3 h-3" /> Review & Approve
+            </button>
+          ) : user.status === "rejected" ? (
+            <button
+              onClick={() => onSelectUser(user)}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border border-red-500/30 bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors cursor-pointer"
+              title={user.rejectionReason ? `Rejected: ${user.rejectionReason}` : "Application rejected. Click to review or reconsider."}
+            >
+              <XCircle className="w-3 h-3" /> Rejected
             </button>
           ) : (
             <span
@@ -258,7 +267,14 @@ function ExpandableUserRow({
                 )}
               </button>
             )}
-            <UserActionMenu userId={user.id} onAction={onAction} email={user.email} userRole={user.role} />
+            <UserActionMenu
+              userId={user.id}
+              onAction={onAction}
+              email={user.email}
+              userRole={user.role}
+              isApproved={user.isApproved}
+              userStatus={user.status}
+            />
           </div>
         </td>
       </tr>
@@ -289,11 +305,15 @@ function UserActionMenu({
   onAction,
   email,
   userRole,
+  isApproved,
+  userStatus,
 }: {
   userId: string;
   onAction: () => void;
   email?: string;
   userRole?: string;
+  isApproved?: boolean;
+  userStatus?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -311,11 +331,15 @@ function UserActionMenu({
   const run = (action: () => Promise<{ success: boolean }>, label: string) => {
     startTransition(async () => {
       setOpen(false);
-      const result = await action();
-      if (result.success) {
-        toast.success(`User ${label} successfully`);
-        onAction();
-      } else {
+      try {
+        const result = await action();
+        if (result.success) {
+          toast.success(`User ${label} successfully`);
+          onAction();
+        } else {
+          toast.error(`Failed to ${label} user`);
+        }
+      } catch {
         toast.error(`Failed to ${label} user`);
       }
     });
@@ -336,18 +360,36 @@ function UserActionMenu({
           className="absolute right-0 top-12 z-20 bg-background border border-border/70 rounded-md w-48 p-1 text-body-sm"
           style={{ boxShadow: "var(--shadow-lg)" }}
         >
-          <button
-            onClick={() => run(() => approveUser(userId), "approved")}
-            className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-green-soft)] hover:text-[color:var(--brand-green)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
-          >
-            <CheckCircle className="w-4 h-4" /> Approve
-          </button>
-          <button
-            onClick={() => run(() => rejectUser(userId), "rejected")}
-            className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-gold-soft)] hover:text-[color:var(--brand-gold-strong)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
-          >
-            <XCircle className="w-4 h-4" /> Reject
-          </button>
+          {userStatus === "rejected" ? (
+            <button
+              onClick={() => run(() => approveUser(userId), "approved")}
+              className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-green-soft)] hover:text-[color:var(--brand-green)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+            >
+              <CheckCircle className="w-4 h-4" /> Reconsider & Approve
+            </button>
+          ) : !isApproved ? (
+            <>
+              <button
+                onClick={() => run(() => approveUser(userId), "approved")}
+                className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-green-soft)] hover:text-[color:var(--brand-green)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+              >
+                <CheckCircle className="w-4 h-4" /> Approve
+              </button>
+              <button
+                onClick={() => run(() => rejectUser(userId), "rejected")}
+                className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-gold-soft)] hover:text-[color:var(--brand-gold-strong)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+              >
+                <XCircle className="w-4 h-4" /> Reject
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => run(() => rejectUser(userId), "rejected")}
+              className="flex items-center gap-2 w-full min-h-11 px-3 rounded-md text-foreground text-left transition-colors hover:bg-[color:var(--brand-gold-soft)] hover:text-[color:var(--brand-gold-strong)] focus-visible:outline-none focus-visible:[box-shadow:var(--shadow-ring)]"
+            >
+              <XCircle className="w-4 h-4" /> Reject / Revoke
+            </button>
+          )}
           <div className="h-px bg-border my-1" />
           {email && (
             <button
@@ -460,7 +502,7 @@ function UserDetailsModal({
       if (res.success) {
         toast.success(`Application rejected for ${user.name || user.email}`);
         user.isApproved = false;
-        user.status = "pending";
+        user.status = "rejected";
         onAction();
         onClose();
       } else {
@@ -712,19 +754,21 @@ function UserDetailsModal({
           <div className="flex items-center gap-2">
             {!user.isApproved ? (
               <>
-                <button
-                  onClick={handleReject}
-                  disabled={isPending}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md border border-amber-500/40 bg-amber-500/10 text-xs font-semibold text-amber-500 hover:bg-amber-500/20 transition-colors disabled:opacity-50 cursor-pointer"
-                >
-                  <XCircle className="w-4 h-4" /> {showRejectInput ? "Confirm Reject" : "Reject Application"}
-                </button>
+                {user.status !== "rejected" && (
+                  <button
+                    onClick={handleReject}
+                    disabled={isPending}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md border border-amber-500/40 bg-amber-500/10 text-xs font-semibold text-amber-500 hover:bg-amber-500/20 transition-colors disabled:opacity-50 cursor-pointer"
+                  >
+                    <XCircle className="w-4 h-4" /> {showRejectInput ? "Confirm Reject" : "Reject Application"}
+                  </button>
+                )}
                 <button
                   onClick={handleApprove}
                   disabled={isPending}
                   className="inline-flex items-center gap-1.5 px-5 py-2 rounded-md bg-green-600 hover:bg-green-700 active:scale-95 text-white text-xs font-bold transition-all shadow-md disabled:opacity-50 cursor-pointer"
                 >
-                  <CheckCircle className="w-4 h-4" /> Approve User
+                  <CheckCircle className="w-4 h-4" /> {user.status === "rejected" ? "Reconsider & Approve" : "Approve User"}
                 </button>
               </>
             ) : (
@@ -971,18 +1015,27 @@ export default function AdminDashboard({
   stats = DEFAULT_STATS,
   currentUserId,
 }: AdminDashboardProps) {
+  const router = useRouter();
+  const [userList, setUserList] = useState<UserRow[]>(users);
   const [roleFilter, setRoleFilter] = useState("All Roles");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserRow | null>(null);
-  const handleAction = () => {}; // triggers re-render via toast feedback
+
+  useEffect(() => {
+    setUserList(users);
+  }, [users]);
+
+  const handleAction = () => {
+    router.refresh();
+  };
 
   useEffect(() => {
     setCurrentPage(1);
   }, [roleFilter, search]);
 
-  const filtered = users.filter((u) => {
+  const filtered = userList.filter((u) => {
     const matchesRole =
       roleFilter === "All Roles"
         ? true

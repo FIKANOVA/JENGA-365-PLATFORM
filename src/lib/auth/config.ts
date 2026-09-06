@@ -267,7 +267,7 @@ export const auth = betterAuth({
         updateAge: 60 * 60 * 24,              // Refresh session every 24h of activity
         cookieCache: {
             enabled: true,
-            maxAge: 60 * 5,
+            maxAge: 60,
             // Fields carried in the session_data cookie (proxy reads these at edge):
             // role, moderationScope, ndaSigned, intakeCompleted
             // All user.additionalFields are included automatically by Better Auth.

@@ -1,0 +1,18 @@
+# deslop configuration
+
+[models]
+# Model to use for scanning/planning (detecting slop)
+planning = "claude-4.5-opus-high"
+
+# Model to use for executing fixes
+executing = "claude-4.5-opus-high"
+
+# Model to use for verification (fixing build/test failures)
+verification = "claude-4.5-opus-high"
+
+[verification]
+# Maximum retry attempts when verification fails
+maxRetries = 3
+
+# Timeout per verification command in seconds
+timeout = 300
