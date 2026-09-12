@@ -8,6 +8,7 @@ vi.mock('@/lib/db/schema', () => ({
 vi.mock('drizzle-orm', () => ({
   eq: vi.fn((_col, val) => ({ eq: val })),
   and: vi.fn((...args) => args),
+  inArray: vi.fn((_col, vals) => ({ inArray: vals })),
 }))
 
 vi.mock('@/lib/notifications/service', () => ({
@@ -80,9 +81,12 @@ function setupComplianceScenario(
     if (call === 1) {
       return { from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(mentors.map((m) => ({ id: m.id }))) }) } as any
     }
-    const mentor = mentors[call - 2]
-    const row = mentor?.tracker ? [{ id: 'tracker-1', ...mentor.tracker }] : []
-    return { from: vi.fn().mockReturnValue({ where: vi.fn().mockReturnValue({ limit: vi.fn().mockResolvedValue(row) }) }) } as any
+    // For N+1 prefetch, we return all trackers for mentors
+    const rows = mentors
+      .filter((m) => m.tracker)
+      .map((m) => ({ mentorId: m.id, id: 'tracker-1', ...m.tracker }))
+
+    return { from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(rows) }) } as any
   })
 
   return { mockSet }

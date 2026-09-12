@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { mentorCommitmentTracker, users } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { createNotification } from "@/lib/notifications/service";
 
 export const dynamic = "force-dynamic";
@@ -58,17 +58,29 @@ export async function GET(req: Request) {
         let checked = 0;
         let failed = 0;
 
-        for (const mentor of activeMentors) {
-            const [tracker] = await db
-                .select()
-                .from(mentorCommitmentTracker)
-                .where(
-                    and(
-                        eq(mentorCommitmentTracker.mentorId, mentor.id),
-                        eq(mentorCommitmentTracker.month, prevMonth)
-                    )
+        const mentorIds = activeMentors.map((m) => m.id);
+
+        if (mentorIds.length === 0) {
+            return NextResponse.json({ success: true, month: prevMonth, checked, failed });
+        }
+
+        const allTrackers = await db
+            .select()
+            .from(mentorCommitmentTracker)
+            .where(
+                and(
+                    inArray(mentorCommitmentTracker.mentorId, mentorIds),
+                    eq(mentorCommitmentTracker.month, prevMonth)
                 )
-                .limit(1);
+            );
+
+        const trackerMap = new Map();
+        for (const tracker of allTrackers) {
+            trackerMap.set(tracker.mentorId, tracker);
+        }
+
+        for (const mentor of activeMentors) {
+            const tracker = trackerMap.get(mentor.id);
 
             if (tracker && (tracker.hoursLogged ?? 0) >= 60) {
                 // Already met — nothing to do
@@ -102,7 +114,7 @@ export async function GET(req: Request) {
         }
 
         return NextResponse.json({ success: true, month: prevMonth, checked, failed });
-    } catch (err: any) {
-        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    } catch (err: unknown) {
+        return NextResponse.json({ success: false, error: err instanceof Error ? err.message : "Unknown error" }, { status: 500 });
     }
 }
