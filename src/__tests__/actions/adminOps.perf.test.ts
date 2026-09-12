@@ -40,7 +40,10 @@ describe("importLegacyUsersAction Performance", () => {
     (auth.api.getSession as any).mockResolvedValue({
       user: { role: "SuperAdmin" }
     });
-    (auth.api.signUpEmail as any).mockResolvedValue({});
+    (auth.api.signUpEmail as any).mockImplementation(async () => {
+        await new Promise(r => setTimeout(r, 10));
+        return {};
+    });
   });
 
   it("should benchmark importLegacyUsersAction", async () => {
@@ -55,7 +58,7 @@ describe("importLegacyUsersAction Performance", () => {
         return [];
     });
 
-    const numUsers = 500;
+    const numUsers = 50;
     const legacyUsers = Array.from({ length: numUsers }, (_, i) => `user${i}@example.com`);
 
     const start = performance.now();
