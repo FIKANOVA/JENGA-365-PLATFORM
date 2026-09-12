@@ -24,27 +24,23 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    try {
-        // BUG-02 FIX: Two separate queries — donations and sessionsLog are unrelated tables
-        const [[donationStats], [sessionStats]] = await Promise.all([
-            db.select({ totalAmount: sum(donations.amount) }).from(donations),
-            db.select({
-                totalMinutes: sum(sessionsLog.durationMinutes),
-                youthCount: countDistinct(sessionsLog.pairId),
-            }).from(sessionsLog),
-        ]);
+    // BUG-02 FIX: Two separate queries — donations and sessionsLog are unrelated tables
+    const [[donationStats], [sessionStats]] = await Promise.all([
+        db.select({ totalAmount: sum(donations.amount) }).from(donations),
+        db.select({
+            totalMinutes: sum(sessionsLog.durationMinutes),
+            youthCount: countDistinct(sessionsLog.pairId),
+        }).from(sessionsLog),
+    ]);
 
-        await db.insert(impactReports).values({
-            reportPeriod: new Date().toLocaleString("default", { month: "long", year: "numeric" }),
-            totalDonations: donationStats?.totalAmount || "0",
-            totalMentorshipHours: Math.floor((Number(sessionStats?.totalMinutes) || 0) / 60),
-            youthEngaged: Number(sessionStats?.youthCount) || 0,
-            clinicsHeld: 0,
-        });
+    await db.insert(impactReports).values({
+        reportPeriod: new Date().toLocaleString("default", { month: "long", year: "numeric" }),
+        totalDonations: donationStats?.totalAmount || "0",
+        totalMentorshipHours: Math.floor((Number(sessionStats?.totalMinutes) || 0) / 60),
+        youthEngaged: Number(sessionStats?.youthCount) || 0,
+        clinicsHeld: 0,
+    });
 
-        return NextResponse.json({ success: true, message: "Nightly impact report generated." });
-    } catch (err: any) {
-        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
-    }
+    return NextResponse.json({ success: true, message: "Nightly impact report generated." });
 }
 
