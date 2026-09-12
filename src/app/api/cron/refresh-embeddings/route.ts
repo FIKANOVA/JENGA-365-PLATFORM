@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { and, eq, isNull, or } from "drizzle-orm";
 import { synthesizeUserProfile } from "@/lib/ai/profileSynthesizer";
+import pLimit from "p-limit";
 
 // Bounded per-run batch so a backlog can't blow the function timeout or token budget.
 // The cron runs daily; large backlogs drain over several runs.
@@ -32,15 +33,18 @@ export async function GET(request: NextRequest) {
     let refreshed = 0;
     const failures: string[] = [];
 
-    for (const row of stale) {
-        try {
-            await synthesizeUserProfile(row.id);
-            refreshed += 1;
-        } catch (err) {
-            console.error(`[refresh-embeddings] user ${row.id} failed:`, err);
-            failures.push(row.id);
-        }
-    }
+    const limit = pLimit(5);
+    await Promise.all(
+        stale.map(row => limit(async () => {
+            try {
+                await synthesizeUserProfile(row.id);
+                refreshed += 1;
+            } catch (err) {
+                console.error(`[refresh-embeddings] user ${row.id} failed:`, err);
+                failures.push(row.id);
+            }
+        }))
+    );
 
     return NextResponse.json({
         scanned: stale.length,
