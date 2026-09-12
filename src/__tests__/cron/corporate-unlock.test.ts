@@ -13,12 +13,6 @@ vi.mock('@/lib/actions/corporateUnlock', () => ({
   checkAndUnlockMilestones: vi.fn().mockResolvedValue(undefined),
 }))
 
-vi.mock('@/lib/db', () => ({
-  db: {
-    delete: vi.fn(() => ({ where: vi.fn() })),
-  },
-}))
-
 vi.mock('@/lib/db/schema', () => ({
   rateLimitBuckets: { name: 'rate_limit_buckets' },
 }))
@@ -29,6 +23,7 @@ vi.mock('drizzle-orm', () => ({
 
 import { GET } from '@/app/api/cron/corporate-unlock/route'
 import { checkAndUnlockMilestones } from '@/lib/actions/corporateUnlock'
+import { db } from '@/lib/db'
 
 const CRON_SECRET = 'test-cron-secret-unlock'
 
@@ -45,11 +40,15 @@ describe('Corporate Unlock cron — auth guard', () => {
   it('returns 401 when Authorization header is missing', async () => {
     const res = await GET(makeRequest())
     expect(res.status).toBe(401)
+    expect(checkAndUnlockMilestones).not.toHaveBeenCalled()
+    expect(db.delete).not.toHaveBeenCalled()
   })
 
   it('returns 401 when Authorization header has wrong secret', async () => {
     const res = await GET(makeRequest('Bearer wrong'))
     expect(res.status).toBe(401)
+    expect(checkAndUnlockMilestones).not.toHaveBeenCalled()
+    expect(db.delete).not.toHaveBeenCalled()
   })
 
   it('returns 200 { ok: true } with correct secret', async () => {
