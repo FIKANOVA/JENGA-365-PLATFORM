@@ -142,4 +142,16 @@ describe('BUG-02: SQL correctness', () => {
     expect(insertedRow.totalMentorshipHours).toBe(0)
     expect(insertedRow.youthEngaged).toBe(0)
   })
+
+  it('bubbles up unhandled exceptions', async () => {
+    // Arrange: Mock DB throwing an error
+    vi.spyOn(db, 'select').mockImplementationOnce(() => {
+      throw new Error('Database Error')
+    })
+
+    const req = makeRequest(`Bearer ${TEST_CRON_SECRET}`)
+
+    // Act & Assert: Expect route handler to throw
+    await expect(GET(req)).rejects.toThrow('Database Error')
+  })
 })
