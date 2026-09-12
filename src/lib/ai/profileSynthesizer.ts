@@ -92,14 +92,13 @@ export async function synthesizeUserProfile(userId: string) {
             await db.transaction(async (tx) => {
                 await tx.delete(userChunks).where(eq(userChunks.userId, userId));
 
-                for (let i = 0; i < chunks.length; i++) {
-                    await tx.insert(userChunks).values({
-                        userId,
-                        content: chunks[i],
-                        embedding: chunkEmbeddings[i],
-                        chunkType: "experience",
-                    });
-                }
+                const valuesToInsert = chunks.map((chunk, i) => ({
+                    userId,
+                    content: chunk,
+                    embedding: chunkEmbeddings[i],
+                    chunkType: "experience",
+                }));
+                await tx.insert(userChunks).values(valuesToInsert);
             });
         }
     } catch (e) {
