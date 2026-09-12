@@ -1,9 +1,9 @@
 "use client";
 
 import NextLink from "next/link";
-import { useSession } from "@/lib/auth/client";
 import { format } from "date-fns";
 import { MapPin, ArrowRight, Calendar } from "lucide-react";
+import DOMPurify from "isomorphic-dompurify";
 
 interface JenEvent {
     _id: string;
@@ -55,9 +55,6 @@ interface EventsSectionProps {
 }
 
 export default function EventsSection({ events = [] }: EventsSectionProps) {
-    const { data: session } = useSession();
-    const isAuthenticated = !!session?.user;
-
     const displayEvents = (events && events.length > 0 ? events : FALLBACK_EVENTS).slice(0, 3);
 
     return (
@@ -85,11 +82,15 @@ export default function EventsSection({ events = [] }: EventsSectionProps) {
                         // If there is a Luma iframe, render it directly and enforce width 100%
                         if (event.lumaEventIframe) {
                             const responsiveIframe = event.lumaEventIframe.replace(/width="[^"]+"/, 'width="100%"');
+                            const sanitizedIframe = DOMPurify.sanitize(responsiveIframe, {
+                                ADD_TAGS: ['iframe'],
+                                ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'src', 'width', 'height', 'style', 'class', 'aria-hidden', 'tabindex']
+                            });
                             return (
                                 <div 
                                     key={event._id} 
                                     className="w-full flex justify-center"
-                                    dangerouslySetInnerHTML={{ __html: responsiveIframe }}
+                                    dangerouslySetInnerHTML={{ __html: sanitizedIframe }}
                                 />
                             );
                         }
