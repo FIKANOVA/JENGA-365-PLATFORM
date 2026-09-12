@@ -142,4 +142,13 @@ describe('BUG-02: SQL correctness', () => {
     expect(insertedRow.totalMentorshipHours).toBe(0)
     expect(insertedRow.youthEngaged).toBe(0)
   })
+
+  it('bubbles up database errors instead of swallowing them in a try/catch', async () => {
+    vi.mocked(db.select).mockImplementationOnce(() => {
+      throw new Error('Database connection failed')
+    })
+
+    const req = makeRequest(`Bearer ${TEST_CRON_SECRET}`)
+    await expect(GET(req)).rejects.toThrow('Database connection failed')
+  })
 })
