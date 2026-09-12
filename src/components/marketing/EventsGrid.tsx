@@ -9,9 +9,31 @@ import { ArrowRight, Ticket } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
 import DOMPurify from "isomorphic-dompurify";
 
+export interface EventItem {
+    _id: string;
+    title?: string;
+    description?: string;
+    date?: string | null;
+    image?: string | null;
+    type?: string | null;
+    isOnline?: boolean;
+    slug?: { current: string };
+    eventDate?: string;
+    eventTime?: string;
+    eventFormat?: "in-person" | "virtual" | "hybrid";
+    locationName?: string;
+    locationCity?: string;
+    locationCountry?: string;
+    capacity?: number;
+    price?: number;
+    category?: string;
+    isFeatured?: boolean;
+    mainImage?: unknown;
+    lumaEventIframe?: string;
+}
+
 interface EventsGridProps {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    events: any[];
+    events: EventItem[];
     /** Array of event IDs that the current user has already registered for */
     registeredEventIds?: string[];
 }

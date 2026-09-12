@@ -28,8 +28,9 @@ export default function DangerZoneSection() {
             } else {
                 setDeleteError(res.error || "Failed to delete account.");
             }
-        } catch (err: any) {
-            setDeleteError(err?.message || "Something went wrong.");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "Something went wrong.";
+            setDeleteError(message);
         } finally {
             setDeletingAccount(false);
         }

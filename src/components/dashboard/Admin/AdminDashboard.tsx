@@ -23,7 +23,7 @@ export default function AdminDashboard({
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserRow | null>(null);
 
-  useEffect(() => { // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => {
     setUserList(users);
   }, [users]);
 
@@ -31,7 +31,7 @@ export default function AdminDashboard({
     router.refresh();
   };
 
-  useEffect(() => { // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => {
     setCurrentPage(1);
   }, [roleFilter, search]);
 
