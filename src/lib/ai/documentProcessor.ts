@@ -119,7 +119,5 @@ export async function processAndEmbedDocument(documentId: string) {
         .set({ isIndexed: true })
         .where(eq(platformDocuments.id, doc.id));
 
-    console.log(`[AI Processor] Document ${doc.id} successfully indexed and stored in pgvector.`);
-
     return { success: true, totalChunks: chunks.length };
 }
