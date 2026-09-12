@@ -7,8 +7,10 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { ArrowRight, Ticket } from "lucide-react";
 import { useSession } from "@/lib/auth/client";
+import DOMPurify from "isomorphic-dompurify";
 
 interface EventsGridProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     events: any[];
     /** Array of event IDs that the current user has already registered for */
     registeredEventIds?: string[];
@@ -41,7 +43,12 @@ export default function EventsGrid({ events = [], registeredEventIds = [] }: Eve
                         <div 
                             key={event._id}
                             className="flex justify-center"
-                            dangerouslySetInnerHTML={{ __html: event.lumaEventIframe }}
+                            dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(event.lumaEventIframe, {
+                                    ADD_TAGS: ['iframe'],
+                                    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'src', 'width', 'height', 'style', 'class']
+                                })
+                            }}
                         />
                     );
                 }
