@@ -72,11 +72,20 @@ function buildTx() {
     return tx;
 }
 
-vi.mock("@/lib/db", () => ({
-    db: {
-        transaction: vi.fn(async (fn: (tx: any) => Promise<unknown>) => fn(buildTx())),
-    },
-}));
+vi.mock("@/lib/db", () => {
+    const mockFindFirst = vi.fn();
+    return {
+        db: {
+            transaction: vi.fn(async (fn: (tx: any) => Promise<unknown>) => fn(buildTx())),
+            query: {
+                mentorshipPairs: {
+                    findFirst: mockFindFirst,
+                }
+            }
+        },
+        mockFindFirst,
+    };
+});
 
 const VALID_MENTEE = "11111111-1111-4111-8111-111111111111";
 const VALID_MENTOR = "22222222-2222-4222-8222-222222222222";
@@ -128,5 +137,32 @@ describe("assignMentor — mentor capacity guard (CLAUDE.md §5)", () => {
                 mentorId: VALID_MENTOR,
             }),
         ).rejects.toThrow("MENTOR_CAPACITY_EXCEEDED");
+    });
+});
+
+describe("acceptMentorRequest - pending request handling", () => {
+    let mockFindFirst: ReturnType<typeof vi.fn>;
+
+    beforeEach(async () => {
+        const { mockFindFirst: mf } = await import("@/lib/db");
+        mockFindFirst = mf;
+        mockFindFirst.mockReset();
+        txState.activeOther = 0;
+    });
+
+    it("throws error when request is not found", async () => {
+        mockFindFirst.mockResolvedValue(null);
+        const { acceptMentorRequest } = await import("@/lib/actions/mentorship");
+
+        await expect(acceptMentorRequest("non-existent-pair")).rejects.toThrow("Request not found or already actioned");
+    });
+
+    it("successfully accepts request when valid and under capacity", async () => {
+        const validPair = { id: "pair-1", menteeId: "mentee-1", mentorId: "admin-1", status: "pending" };
+        mockFindFirst.mockResolvedValue(validPair);
+
+        const { acceptMentorRequest } = await import("@/lib/actions/mentorship");
+
+        await expect(acceptMentorRequest("pair-1")).resolves.not.toThrow();
     });
 });
