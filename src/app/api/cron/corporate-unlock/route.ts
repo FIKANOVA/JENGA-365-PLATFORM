@@ -4,10 +4,21 @@ import { checkAndUnlockMilestones } from "@/lib/actions/corporateUnlock";
 import { db } from "@/lib/db";
 import { rateLimitBuckets } from "@/lib/db/schema";
 import { sql } from "drizzle-orm";
+import crypto from "crypto";
 
 export async function GET(request: NextRequest) {
-    const auth = request.headers.get("authorization");
-    if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    const authHeader = request.headers.get("authorization");
+    const secret = process.env.CRON_SECRET;
+
+    if (!authHeader || !secret) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const token = authHeader.replace(/^Bearer\s+/i, "");
+    const tokenBuf = Buffer.from(token);
+    const secretBuf = Buffer.from(secret);
+
+    if (tokenBuf.length !== secretBuf.length || !crypto.timingSafeEqual(tokenBuf, secretBuf)) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
