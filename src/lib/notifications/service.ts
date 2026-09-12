@@ -29,6 +29,19 @@ export async function createNotification(
     });
 }
 
+export async function createNotifications(
+    payloads: {
+        userId: string;
+        type: NotificationType;
+        title: string;
+        body: string;
+        link?: string;
+    }[]
+) {
+    if (payloads.length === 0) return;
+    await db.insert(notifications).values(payloads);
+}
+
 export async function getUnreadNotifications(userId: string, limit = 20) {
     return db.select()
         .from(notifications)

@@ -1,17 +1,20 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 vi.mock('@/lib/db/schema', () => ({
+  notifications: { id: 'id' },
   mentorCommitmentTracker: { id: 'id', mentorId: 'mentor_id', month: 'month', hoursLogged: 'hours_logged', status: 'status' },
   users: { id: 'id', role: 'role', status: 'status', isApproved: 'is_approved' },
 }))
 
 vi.mock('drizzle-orm', () => ({
+  inArray: vi.fn((_col, vals) => ({ inArray: vals })),
   eq: vi.fn((_col, val) => ({ eq: val })),
   and: vi.fn((...args) => args),
 }))
 
 vi.mock('@/lib/notifications/service', () => ({
   createNotification: vi.fn().mockResolvedValue(undefined),
+  createNotifications: vi.fn().mockResolvedValue(undefined),
 }))
 
 vi.mock('@/lib/db', () => ({
@@ -20,7 +23,7 @@ vi.mock('@/lib/db', () => ({
 
 import { GET, getPreviousMonth } from '@/app/api/cron/power-hour-check/route'
 import { db } from '@/lib/db'
-import { createNotification } from '@/lib/notifications/service'
+import { createNotifications } from '@/lib/notifications/service'
 
 const CRON_SECRET = 'test-power-hour-secret'
 
@@ -72,7 +75,8 @@ function setupComplianceScenario(
   const mockWhere = vi.fn().mockResolvedValue([])
   const mockSet = vi.fn().mockReturnValue({ where: mockWhere })
   vi.mocked(db.update).mockReturnValue({ set: mockSet } as any)
-  vi.mocked(db.insert).mockReturnValue({ values: vi.fn().mockResolvedValue([]) } as any)
+  const mockValues = vi.fn().mockReturnValue([])
+  vi.mocked(db.insert).mockImplementation(() => ({ values: mockValues }) as any)
 
   let call = 0
   vi.mocked(db.select).mockImplementation(() => {
@@ -80,12 +84,14 @@ function setupComplianceScenario(
     if (call === 1) {
       return { from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(mentors.map((m) => ({ id: m.id }))) }) } as any
     }
-    const mentor = mentors[call - 2]
-    const row = mentor?.tracker ? [{ id: 'tracker-1', ...mentor.tracker }] : []
-    return { from: vi.fn().mockReturnValue({ where: vi.fn().mockReturnValue({ limit: vi.fn().mockResolvedValue(row) }) }) } as any
+    if (call === 2) {
+      const rows = mentors.flatMap(m => m.tracker ? [{ mentorId: m.id, id: 'tracker-1', ...m.tracker }] : []);
+      return { from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue(rows) }) } as any
+    }
+    return { from: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }) } as any
   })
 
-  return { mockSet }
+  return { mockSet, mockValues }
 }
 
 describe('Power Hour cron — compliance logic', () => {
@@ -96,23 +102,35 @@ describe('Power Hour cron — compliance logic', () => {
     const { mockSet } = setupComplianceScenario([{ id: 'm-1', tracker: { hoursLogged: 45 } }])
     await GET(makeRequest(`Bearer ${CRON_SECRET}`))
     expect(mockSet).toHaveBeenCalledWith({ status: 'failed' })
-    expect(createNotification).toHaveBeenCalledOnce()
+    expect(db.insert).not.toHaveBeenCalled() // we updated via db.update
+    expect(createNotifications).toHaveBeenCalledOnce()
+
+    const calls = vi.mocked(createNotifications).mock.calls[0][0];
+    const notificationValues = calls.find((v: any) => v.type === 'general');
+    expect(notificationValues).toBeDefined()
   })
 
   it('does NOT update or notify when hoursLogged >= 60 (already met)', async () => {
     setupComplianceScenario([{ id: 'm-1', tracker: { hoursLogged: 60 } }])
     await GET(makeRequest(`Bearer ${CRON_SECRET}`))
     expect(db.update).not.toHaveBeenCalled()
-    expect(createNotification).not.toHaveBeenCalled()
+    expect(db.insert).not.toHaveBeenCalled()
+    expect(createNotifications).not.toHaveBeenCalled()
   })
 
   it('inserts a failed row with hoursLogged=0 when no tracker exists', async () => {
-    setupComplianceScenario([{ id: 'm-1', tracker: null }])
+    const { mockValues } = setupComplianceScenario([{ id: 'm-1', tracker: null }])
     await GET(makeRequest(`Bearer ${CRON_SECRET}`))
-    expect(db.insert).toHaveBeenCalledOnce()
-    const valuesCall = vi.mocked(db.insert).mock.results[0].value.values.mock.calls[0][0]
-    expect(valuesCall.hoursLogged).toBe(0)
-    expect(valuesCall.status).toBe('failed')
-    expect(createNotification).toHaveBeenCalledOnce()
+    // One for tracker
+    expect(db.insert).toHaveBeenCalledTimes(1)
+
+    const calls = mockValues.mock.calls.map(c => c[0]);
+    const trackerValues = calls.flat().find((v: any) => v.status === 'failed' && v.hoursLogged === 0);
+    expect(trackerValues).toBeDefined()
+
+    expect(createNotifications).toHaveBeenCalledOnce()
+    const notificationCalls = vi.mocked(createNotifications).mock.calls[0][0];
+    const notificationValues = notificationCalls.find((v: any) => v.type === 'general');
+    expect(notificationValues).toBeDefined()
   })
 })

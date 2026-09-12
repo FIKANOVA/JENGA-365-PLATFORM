@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { mentorCommitmentTracker, users } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
-import { createNotification } from "@/lib/notifications/service";
+import { eq, and, inArray } from "drizzle-orm";
+import { createNotifications } from "@/lib/notifications/service";
 
 export const dynamic = "force-dynamic";
 
@@ -55,20 +55,36 @@ export async function GET(req: Request) {
                 )
             );
 
-        let checked = 0;
-        let failed = 0;
+        const mentorIds = activeMentors.map((m) => m.id);
+        const trackersByMentorId = new Map();
 
-        for (const mentor of activeMentors) {
-            const [tracker] = await db
+        if (mentorIds.length > 0) {
+            const allTrackers = await db
                 .select()
                 .from(mentorCommitmentTracker)
                 .where(
                     and(
-                        eq(mentorCommitmentTracker.mentorId, mentor.id),
+                        inArray(mentorCommitmentTracker.mentorId, mentorIds),
                         eq(mentorCommitmentTracker.month, prevMonth)
                     )
-                )
-                .limit(1);
+                );
+
+            for (const t of allTrackers) {
+                if (!trackersByMentorId.has(t.mentorId)) {
+                    trackersByMentorId.set(t.mentorId, t);
+                }
+            }
+        }
+
+        let checked = 0;
+        let failed = 0;
+
+        const trackersToUpdate: string[] = [];
+        const trackersToInsert: { mentorId: string; month: string; hoursLogged: number; status: "failed" }[] = [];
+        const notificationsToInsert: Parameters<typeof createNotifications>[0] = [];
+
+        for (const mentor of activeMentors) {
+            const tracker = trackersByMentorId.get(mentor.id);
 
             if (tracker && (tracker.hoursLogged ?? 0) >= 60) {
                 // Already met — nothing to do
@@ -78,13 +94,10 @@ export async function GET(req: Request) {
 
             if (tracker) {
                 // Row exists but hours insufficient
-                await db
-                    .update(mentorCommitmentTracker)
-                    .set({ status: "failed" })
-                    .where(eq(mentorCommitmentTracker.id, tracker.id));
+                trackersToUpdate.push(tracker.id);
             } else {
                 // No sessions logged at all this month
-                await db.insert(mentorCommitmentTracker).values({
+                trackersToInsert.push({
                     mentorId: mentor.id,
                     month: prevMonth,
                     hoursLogged: 0,
@@ -92,7 +105,9 @@ export async function GET(req: Request) {
                 });
             }
 
-            await createNotification(mentor.id, "general", {
+            notificationsToInsert.push({
+                userId: mentor.id,
+                type: "general",
                 title: "Power Hour Commitment Not Met",
                 body: `You logged fewer than 60 minutes of mentoring in ${prevMonth}. Please stay on track next month.`,
             });
@@ -101,8 +116,24 @@ export async function GET(req: Request) {
             failed++;
         }
 
+        if (trackersToUpdate.length > 0) {
+            await db
+                .update(mentorCommitmentTracker)
+                .set({ status: "failed" })
+                .where(inArray(mentorCommitmentTracker.id, trackersToUpdate));
+        }
+
+        if (trackersToInsert.length > 0) {
+            await db.insert(mentorCommitmentTracker).values(trackersToInsert);
+        }
+
+        if (notificationsToInsert.length > 0) {
+            await createNotifications(notificationsToInsert);
+        }
+
         return NextResponse.json({ success: true, month: prevMonth, checked, failed });
-    } catch (err: any) {
-        return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        return NextResponse.json({ success: false, error: message }, { status: 500 });
     }
 }
