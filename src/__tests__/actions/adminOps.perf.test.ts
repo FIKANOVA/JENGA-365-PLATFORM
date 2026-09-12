@@ -62,8 +62,6 @@ describe("importLegacyUsersAction Performance", () => {
     await importLegacyUsersAction(legacyUsers);
     const end = performance.now();
 
-    console.log(`importLegacyUsersAction took ${Math.round(end - start)}ms for ${numUsers} users`);
-
     expect(end - start).toBeGreaterThan(0);
   });
 });
