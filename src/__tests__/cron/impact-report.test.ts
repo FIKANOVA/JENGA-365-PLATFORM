@@ -72,20 +72,20 @@ describe('BUG-01: auth guard', () => {
     delete process.env.CRON_SECRET
   })
 
-  it('returns 401 when Authorization header is missing', async () => {
+  it('returns 404 when Authorization header is missing', async () => {
     const req = makeRequest() // no auth header
     const res = await GET(req)
-    expect(res.status).toBe(401)
-    expect(await res.json()).toEqual({ error: 'Unauthorized' })
+    expect(res.status).toBe(404)
+    expect(await res.json()).toEqual({ error: 'Not Found' })
     expect(db.select).not.toHaveBeenCalled()
     expect(db.insert).not.toHaveBeenCalled()
   })
 
-  it('returns 401 when Authorization header has wrong secret', async () => {
+  it('returns 404 when Authorization header has wrong secret', async () => {
     const req = makeRequest('Bearer wrong-secret')
     const res = await GET(req)
-    expect(res.status).toBe(401)
-    expect(await res.json()).toEqual({ error: 'Unauthorized' })
+    expect(res.status).toBe(404)
+    expect(await res.json()).toEqual({ error: 'Not Found' })
     expect(db.select).not.toHaveBeenCalled()
     expect(db.insert).not.toHaveBeenCalled()
   })
