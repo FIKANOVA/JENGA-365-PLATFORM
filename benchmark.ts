@@ -1,12 +1,17 @@
-import { importLegacyUsersAction } from "./src/lib/actions/adminOps";
-import { db } from "./src/lib/db";
-import { users } from "./src/lib/db/schema";
-import { eq, inArray } from "drizzle-orm";
-import { auth } from "./src/lib/auth/config";
+import { db } from "@/lib/db";
+import { mentorshipPairs, sessionsLog } from "@/lib/db/schema";
+import { eq, desc } from "drizzle-orm";
+import { getMenteeSessions } from "@/lib/db/queries/dashboard";
 
-async function run() {
-    // We need to mock requireSuperAdmin since it uses auth.api.getSession with headers
-    // Actually, since we're just testing the performance of the query, we could either mock auth or use a test.
+async function runBenchmark() {
+    // Setup dummy data
+    console.log("Measuring current implementation...");
+    const start = performance.now();
+    for (let i = 0; i < 100; i++) {
+        await getMenteeSessions("dummy-mentee-id");
+    }
+    const end = performance.now();
+    console.log(`Time taken: ${end - start}ms`);
 }
 
-run();
+runBenchmark().catch(console.error);

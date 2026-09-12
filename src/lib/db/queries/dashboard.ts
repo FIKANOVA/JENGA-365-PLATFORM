@@ -60,18 +60,27 @@ export async function getMenteeSessions(menteeId: string, limit = 5) {
 
     const pairIds = pairs.map((p) => p.id);
 
-    const allSessions = await Promise.all(
-        pairIds.map((pairId) =>
-            db
-                .select()
-                .from(sessionsLog)
-                .where(eq(sessionsLog.pairId, pairId))
-                .orderBy(desc(sessionsLog.sessionDate))
-                .limit(limit)
-        )
-    );
+    const sessions = await db
+        .select()
+        .from(sessionsLog)
+        .where(inArray(sessionsLog.pairId, pairIds))
+        .orderBy(desc(sessionsLog.sessionDate));
 
-    return allSessions.flat().slice(0, limit);
+    const sessionsByPair = new Map<string, typeof sessions>();
+    const allSessions: typeof sessions = [];
+
+    for (const s of sessions) {
+        if (!sessionsByPair.has(s.pairId)) {
+            sessionsByPair.set(s.pairId, []);
+        }
+        const pairSessions = sessionsByPair.get(s.pairId)!;
+        if (pairSessions.length < limit) {
+            pairSessions.push(s);
+            allSessions.push(s);
+        }
+    }
+
+    return allSessions.slice(0, limit);
 }
 
 // ── Mentor ────────────────────────────────────────────────────────────────────
