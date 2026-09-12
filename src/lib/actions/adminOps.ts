@@ -92,7 +92,7 @@ export async function sendResetPasswordEmailAction(email: string) {
 
 export async function importLegacyUsersAction(legacyUsers: string[]) {
     await requireSuperAdmin();
-    const results = [];
+    const results: Array<{ email: string; status: "skipped" | "imported" | "error"; message?: string }> = [];
 
     // Filter out duplicates in input
     const uniqueEmails = Array.from(new Set(legacyUsers));
@@ -109,28 +109,45 @@ export async function importLegacyUsersAction(legacyUsers: string[]) {
         existingEmails = new Set(existingUsers.map(u => u.email));
     }
 
-    for (const email of uniqueEmails) {
-        try {
-            if (existingEmails.has(email)) {
-                results.push({ email, status: "skipped" });
-                continue;
+    const emailsToProcess = uniqueEmails.filter(email => {
+        if (existingEmails.has(email)) {
+            results.push({ email, status: "skipped" });
+            return false;
+        }
+        return true;
+    });
+
+    const CONCURRENCY_LIMIT = 10;
+    const executing = new Set<Promise<void>>();
+
+    for (const email of emailsToProcess) {
+        const p = (async () => {
+            try {
+                const tempPassword = crypto.randomBytes(16).toString("hex") + "A1!";
+                await auth.api.signUpEmail({
+                    body: {
+                        email,
+                        password: tempPassword,
+                        name: email.split("@")[0],
+                    }
+                });
+                results.push({ email, status: "imported" });
+            } catch (err) {
+                console.error(`Failed to import ${email}:`, err);
+                results.push({ email, status: "error", message: err instanceof Error ? err.message : String(err) });
             }
+        })();
 
-            const tempPassword = crypto.randomBytes(16).toString("hex") + "A1!";
+        executing.add(p);
+        p.finally(() => {
+            executing.delete(p);
+        });
 
-            await auth.api.signUpEmail({
-                body: {
-                    email,
-                    password: tempPassword,
-                    name: email.split("@")[0],
-                }
-            });
-            results.push({ email, status: "imported" });
-        } catch (err) {
-            console.error(`Failed to import ${email}:`, err);
-            results.push({ email, status: "error", message: err instanceof Error ? err.message : String(err) });
+        if (executing.size >= CONCURRENCY_LIMIT) {
+            await Promise.race(executing);
         }
     }
+    await Promise.all(executing);
 
     return results;
 }

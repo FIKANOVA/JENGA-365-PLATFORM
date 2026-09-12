@@ -100,8 +100,6 @@ describe('publishArticleToSanity performance benchmark', () => {
         const endTime = performance.now();
         const duration = endTime - startTime;
 
-        console.log(`Time taken with ${coAuthorIds.length} co-authors: ${duration.toFixed(2)}ms`);
-
         // Before optimization, 50 co-authors * 10ms = ~500ms + 1 author * 10ms = ~510ms
         // After optimization, all co-authors should run concurrently, taking ~10ms for all of them
         // Total time should be ~20ms
